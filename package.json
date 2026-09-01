@@ -1,0 +1,21 @@
+{
+  "name": "suraksha-ar",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AR vocational safety training and competency verification for Jharkhand mining, steel and mica workers (SIH26041)",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/**/*.test.ts",
+    "run:correct": "node --experimental-strip-types src/cli/run.ts --script correct",
+    "run:trap": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap",
+    "run:seeds": "node --experimental-strip-types src/cli/run.ts --variants 5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
