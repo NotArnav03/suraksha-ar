@@ -48,6 +48,8 @@ define('performance', { now: () => Date.now() });
 const { DrillController } = await import('../src/app/controller.ts');
 import type { Scheduler } from '../src/app/controller.ts';
 const { TierCRenderer } = await import('../src/app/render/tierC.ts');
+const { VERBS_BY_KIND } = await import('../src/app/render/contract.ts');
+const { VERB_ICON, VERB_LABEL } = await import('../src/app/render/verbs.ts');
 const { Localizer } = await import('../src/app/ui/i18n.ts');
 const { scoreSession } = await import('../src/assess/score.ts');
 const { validateScenario } = await import('../src/engine/validate.ts');
@@ -289,6 +291,75 @@ test('switching language re-renders scenario content, not just chrome', async ()
   // prop labels must switch too — the tiles are content, not decoration
   assert.ok(tiles(world).some((t) => /[ऀ-ॿ]/.test(labelOf(t))));
   controller.stop();
+});
+
+/**
+ * Content-to-affordance check.
+ *
+ * A scenario can expect `report radio` while the UI only offers equipment
+ * `inspect / use / attach` — the drill then becomes literally uncompletable, and
+ * every unit test still passes because the engine is perfectly happy. This walks
+ * the authored graph and asserts every expected action can actually be performed.
+ * It guards both tiers at once, because they share one verb table.
+ */
+test('every action the scenario expects can actually be performed in the UI', () => {
+  const kindOf = new Map(scenario.props.map((p) => [p.id, p.kind]));
+  const checked: string[] = [];
+
+  // Walk resolved variants, not the authored source: bindings hold `{{param}}`
+  // templates until a variant resolves them, and a variant that swaps in a
+  // different prop could swap in one whose kind does not offer the verb.
+  const variants = [1, 2, 3, 4, 5, 6, 7, 8].map((seed) => resolveVariant(scenario, seed));
+  for (const variant of variants) {
+  const resolveRole = (target: string) => variant.bindings[target] ?? target;
+  const check = (verb: string | undefined, target: string | undefined, where: string) => {
+    if (!verb || verb === 'wait') return; // objectless verbs are offered by the HUD
+    if (!target) return;
+    const propId = resolveRole(target);
+    const kind = kindOf.get(propId);
+    assert.ok(kind, `${where}: "${propId}" is not a declared prop`);
+    const offered = VERBS_BY_KIND[kind];
+    assert.ok(
+      offered.includes(verb as (typeof offered)[number]),
+      `${where}: a ${kind} offers [${offered.join(', ')}] but the scenario expects "${verb}"`,
+    );
+    checked.push(`${verb} ${propId}`);
+  };
+
+  for (const node of variant.nodes) {
+    const where = `${variant.variantId} ${node.id}`;
+    if (node.kind === 'expect') {
+      node.expect.forEach((e, i) => check(e.match.verb, e.match.target, `${where}.expect[${i}]`));
+      // error rules matter just as much: a fatal mistake the UI cannot express
+      // is a lesson the learner can never be taught
+      node.errors?.forEach((rule, i) =>
+        check(rule.match.verb, rule.match.target, `${where}.errors[${i}]`),
+      );
+    }
+    if (node.kind === 'observe') {
+      [...node.targets, ...(node.distractors ?? [])].forEach((target, i) =>
+        check('inspect', target, `${where}.targets[${i}]`),
+      );
+    }
+  }
+  }
+
+  assert.ok(checked.length > 100, `only ${checked.length} actions checked — the walk missed nodes`);
+  // both detectors must be reachable, since a variant can bind either
+  assert.ok(checked.some((c) => c.endsWith('detector_multi')));
+  assert.ok(checked.some((c) => c.endsWith('detector_spare')));
+});
+
+test('both tiers name every verb identically', () => {
+  // Tier A and Tier C import the same table by construction; this fails if
+  // either grows a private copy, which would mean the two tiers were asking
+  // subtly different questions and their results were no longer comparable.
+  for (const verbs of Object.values(VERBS_BY_KIND)) {
+    for (const verb of verbs) {
+      assert.ok(VERB_ICON[verb], `no icon for "${verb}"`);
+      assert.ok(VERB_LABEL[verb]?.en && VERB_LABEL[verb]?.hi, `no label for "${verb}"`);
+    }
+  }
 });
 
 after(() => {

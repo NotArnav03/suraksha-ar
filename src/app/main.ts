@@ -36,15 +36,52 @@ try {
   throw error;
 }
 
-function rendererFor(tier: Tier): WorldRenderer {
-  switch (tier) {
-    case 'C':
-      return new TierCRenderer(i18n);
-    default:
-      // Tiers A and B are contracted but not built. Falling back loudly beats
-      // mounting a renderer that will show the learner a black screen.
-      return new TierCRenderer(i18n);
+/**
+ * Ask for the AR session from inside the tap that started the drill.
+ *
+ * WebXR requires a user gesture, and this has to resolve *before* the session
+ * exists so a refusal falls back cleanly to Tier C instead of stranding the
+ * learner mid-drill with no world. `dom-overlay` is what keeps the HUD shared:
+ * the same DOM the flat tier draws floats over the camera feed.
+ */
+async function requestArSession(overlay: HTMLElement): Promise<XRSession | null> {
+  const xr = (navigator as Navigator & { xr?: XRSystem }).xr;
+  if (!xr) return null;
+  try {
+    return await xr.requestSession('immersive-ar', {
+      requiredFeatures: ['hit-test'],
+      optionalFeatures: ['dom-overlay', 'light-estimation'],
+      domOverlay: { root: overlay },
+    });
+  } catch {
+    return null;
   }
+}
+
+async function rendererFor(
+  tier: Tier,
+  overlay: HTMLElement,
+  onSessionEnd: () => void,
+): Promise<{ renderer: WorldRenderer; note: string | null }> {
+  if (tier === 'A') {
+    const session = await requestArSession(overlay);
+    if (session) {
+      // three.js is ~160 kB gzipped and useless to a phone that cannot run AR,
+      // so it is only fetched once a session has actually been granted.
+      const { TierARenderer } = await import('./render/tierA.ts');
+      return {
+        renderer: new TierARenderer(i18n, { session, overlay, onSessionEnd }),
+        note: null,
+      };
+    }
+    return {
+      renderer: new TierCRenderer(i18n),
+      note: 'AR session was refused — running the same drill in flat mode',
+    };
+  }
+  // Tier B is contracted but not built. Falling back loudly beats mounting a
+  // renderer that would show the learner a black screen.
+  return { renderer: new TierCRenderer(i18n), note: null };
 }
 
 /**
@@ -141,7 +178,7 @@ function startScreen(report: TierReport): void {
   const begin = document.createElement('button');
   begin.className = 'primary big';
   begin.textContent = i18n.language.code === 'en' ? 'Begin drill' : 'अभ्यास शुरू कीजिए';
-  begin.addEventListener('click', () => drillScreen(report));
+  begin.addEventListener('click', () => void drillScreen(report));
 
   const reset = document.createElement('button');
   reset.className = 'ghost';
@@ -154,7 +191,7 @@ function startScreen(report: TierReport): void {
   root.append(header, langRow, tierBox, progress, begin, reset);
 }
 
-function drillScreen(report: TierReport): void {
+async function drillScreen(report: TierReport): Promise<void> {
   const root = screen('drill');
   const world = document.createElement('div');
   world.className = 'world';
@@ -162,12 +199,29 @@ function drillScreen(report: TierReport): void {
   chrome.className = 'chrome';
   root.append(world, chrome);
 
+  let controller: DrillController | null = null;
+  const { renderer, note } = await rendererFor(report.serving, root, () => {
+    // The learner backed out of AR with the system gesture. Ending the drill is
+    // the honest response: a half-finished run must not be scored as a run.
+    controller?.stop();
+    startScreen(report);
+  });
+
+  if (note) {
+    root.classList.add('ar-refused');
+    const line = document.createElement('p');
+    line.className = 'reason ar-note';
+    line.textContent = note;
+    chrome.append(line);
+  }
+  if (renderer.tier === 'A') root.classList.add('ar-active');
+
   const variant = nextVariant();
-  const controller = new DrillController(variant, rendererFor(report.serving), i18n, {
+  controller = new DrillController(variant, renderer, i18n, {
     onFinish: (session) => {
       const competency = scoreSession(session);
       const attempts = saveAttempt(competency);
-      controller.stop();
+      controller?.stop();
       const results = renderResults({
         scenario,
         session,

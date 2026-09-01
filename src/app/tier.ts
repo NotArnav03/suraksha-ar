@@ -26,7 +26,7 @@ export interface TierReport {
 }
 
 /** Tiers whose renderer actually exists. Kept explicit so the gap is visible. */
-export const IMPLEMENTED: Tier[] = ['C'];
+export const IMPLEMENTED: Tier[] = ['A', 'C'];
 
 async function hasImmersiveAr(): Promise<boolean> {
   const xr = (navigator as Navigator & { xr?: XRSystem }).xr;

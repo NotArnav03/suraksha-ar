@@ -1,5 +1,6 @@
-import type { Verb, WorldEffect } from '../../engine/types.ts';
+import type { WorldEffect } from '../../engine/types.ts';
 import type { Localizer } from '../ui/i18n.ts';
+import { VERB_ICON, VERB_LABEL } from './verbs.ts';
 import type {
   Feedback,
   NodeView,
@@ -23,36 +24,6 @@ import type {
  * deliberate touches on a named action, never an accidental tap on scenery, so
  * "went in without testing" is a decision the learner made and can be shown.
  */
-
-const VERB_ICON: Record<Verb, string> = {
-  inspect: '👁',
-  use: '🔧',
-  wear: '🦺',
-  attach: '🔗',
-  open: '↥',
-  close: '↧',
-  enter: '↓',
-  exit: '↑',
-  signal: '👋',
-  report: '📻',
-  wait: '⏱',
-  answer: '💬',
-};
-
-const VERB_LABEL: Record<Verb, { en: string; hi: string }> = {
-  inspect: { en: 'Look at', hi: 'देखिए' },
-  use: { en: 'Use', hi: 'चलाइए' },
-  wear: { en: 'Put on', hi: 'पहनिए' },
-  attach: { en: 'Clip on', hi: 'बाँधिए' },
-  open: { en: 'Open', hi: 'खोलिए' },
-  close: { en: 'Close', hi: 'बंद कीजिए' },
-  enter: { en: 'Climb in', hi: 'अंदर उतरिए' },
-  exit: { en: 'Climb out', hi: 'बाहर निकलिए' },
-  signal: { en: 'Signal', hi: 'इशारा कीजिए' },
-  report: { en: 'Report to', hi: 'सूचना दीजिए' },
-  wait: { en: 'Wait', hi: 'रुकिए' },
-  answer: { en: 'Answer', hi: 'उत्तर दीजिए' },
-};
 
 const KIND_ICON: Record<PropView['kind'], string> = {
   structure: '🕳',
