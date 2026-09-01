@@ -14,7 +14,9 @@
     "run:trap": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap",
     "run:seeds": "node --experimental-strip-types src/cli/run.ts --variants 5",
     "run:certify": "node --experimental-strip-types src/cli/run.ts --attempts 4 --script correct",
-    "run:why": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap --why"
+    "run:why": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap --why",
+    "run:credential": "node --experimental-strip-types src/cli/credential.ts",
+    "run:tamper": "node --experimental-strip-types src/cli/credential.ts --tamper"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

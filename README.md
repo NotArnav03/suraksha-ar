@@ -6,13 +6,15 @@ The product thesis: the gap in the problem statement is not training delivery, i
 
 ## Where the code is now
 
-The tier-agnostic **drill engine** is built and tested. Renderers, assessment scoring and the credential are not yet.
+The **drill engine**, the **assessment** and the **credential** are built and tested. Renderers are not.
 
 ```
-src/engine/     scenario graph runtime — knows nothing about cameras or meshes
-src/scenarios/  authored scenario content (JSON)
-src/cli/        headless runner
-tests/          15 tests, node's built-in runner
+src/engine/      scenario graph runtime — knows nothing about cameras or meshes
+src/assess/      event stream -> competency vector -> certification
+src/credential/  compact signed credential, offline QR verification
+src/scenarios/   authored scenario content (JSON)
+src/cli/         headless runner and the end-to-end credential demo
+tests/           41 tests, node's built-in runner
 ```
 
 ## Try it
@@ -20,13 +22,17 @@ tests/          15 tests, node's built-in runner
 Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler).
 
 ```bash
-npm install          # devDependencies only: typescript + @types/node
-npm test             # 15 tests
-npm run check        # tsc --noEmit
+npm install             # devDependencies only: typescript + @types/node
+npm test                # 41 tests
+npm run check           # tsc --noEmit
 
-npm run run:correct  # an ideal operator walks the gas/confined-space drill
-npm run run:trap     # does everything right, then goes in after the collapsed colleague
-npm run run:seeds    # five distinct variants of the same procedure
+npm run run:correct     # an ideal operator walks the gas/confined-space drill
+npm run run:trap        # does everything right, then goes in after the collapsed colleague
+npm run run:why         # the same run, with every score traced to the node that caused it
+npm run run:seeds       # five distinct variants of the same procedure
+npm run run:certify     # four variants, aggregated, credential granted or withheld
+npm run run:credential  # the whole loop: drill -> certify -> issue -> scan -> verify offline
+npm run run:tamper      # the same loop with one payload byte flipped -> rejected
 ```
 
 More: `node --experimental-strip-types src/cli/run.ts --script sniff-test --seed 11 --lang hi --events`
@@ -47,6 +53,17 @@ Consequences that fall out of that, and which the code actually enforces:
 - **Authoring is validated hard.** `validateScenario` checks referential integrity — dangling `next` targets, unbound roles, fatal rules that route nowhere, unreachable nodes — and reports a JSON path an author can act on. Safety officers write these; a broken graph must fail at load, not halfway through a drill.
 - **Audio is first-class.** `Narration` carries per-language audio alongside text, because a module must be completable without reading a word.
 
+## The credential
+
+A granted certification issues a **51-byte signed payload** — a 160-character string, QR version 9 at error-correction level M. That size is the whole design constraint: a supervisor scans this off a cracked screen, outdoors, in a coal yard, on a handset that is not new. A JSON-LD verifiable credential is kilobytes, which is a QR so dense it stops scanning under exactly those conditions.
+
+- **ECDSA P-256, raw IEEE P1363 signatures.** Ed25519 is the nicer curve and the wrong one here: the verifier is often an older mid-range Android, and P-256 has been in WebCrypto everywhere for a decade. IEEE P1363 is exactly the encoding WebCrypto produces, so the browser verifier needs no shim.
+- **Verification is genuinely offline.** `verifyCredential` takes a trust list and a string. No network, no issuer state.
+- **The credential carries the worst attempt, not the mean.** A safety credential should be worth what the holder can do on their bad day.
+- **Nothing personal on the wire.** The worker id already printed on their card, and the competency. No name, no biometric, no photograph.
+- **The issuer refuses to mint for an ungranted certification** — a credential that can be issued without the drill is worth exactly as much as the paper one.
+- Credentials are short-lived by design, because an offline verifier cannot see a revocation list. That trade-off is stated in the verifier warnings rather than hidden.
+
 ## The authored scenario
 
 `gas-confined-space` — cleaning a settling sump at a coal handling plant pit-top. Surface location by design: non-flameproof electronics are restricted underground in gassy mines, and induction training is legally sited at the surface anyway.
@@ -59,5 +76,6 @@ English and Hindi are authored throughout; Santali (Ol Chiki) is present on two 
 
 - **Every regulation citation in the scenario JSON is a placeholder.** They name the right instruments (Mines Act 1952, Mines Vocational Training Rules 1966, DGMS confined-space guidance) but no clause numbers have been verified. Replace each `cite` with the exact provision, checked against the source, before this is shown as compliant with anything.
 - **The scenario has not been reviewed by a certified instructor.** The procedure is drawn from general confined-space practice. It needs sign-off from someone DGMS-certified before it trains anyone.
-- **No scoring yet.** `NodeResult` is the input the competency scorer will consume; the scorer, the credential and the offline QR verification are the next build.
-- **No renderer yet.** Tier A (WebXR hit-test), Tier B (marker) and Tier C (flat 2D) all attach to `DrillSession` and none exist.
+- **No renderer yet.** Tier A (WebXR hit-test), Tier B (marker) and Tier C (flat 2D) all attach to `DrillSession` and none exist. This is the next build.
+- **QR rendering is not implemented** — the credential string and its QR version are computed and asserted, but nothing draws the symbol yet. That belongs in the web client.
+- **Issuer keys are generated per run** in the demo CLI. Real deployment needs a keystore, a published trust list, and a rotation plan.
