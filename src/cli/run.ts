@@ -14,6 +14,8 @@ import { resolve as resolveText } from '../engine/text.ts';
 import type { Action, ResolvedScenario, Scenario, ScenarioNode } from '../engine/types.ts';
 import { distinctVariants, resolveVariant } from '../engine/variant.ts';
 import { ScenarioError, validateScenario } from '../engine/validate.ts';
+import { certify } from '../assess/certify.ts';
+import { scoreSession, type Competency } from '../assess/score.ts';
 
 const SCENARIO_PATH = fileURLToPath(
   new URL('../scenarios/gas-confined-space.json', import.meta.url),
@@ -47,6 +49,8 @@ interface Args {
   lang: string[];
   stepMs: number;
   events: boolean;
+  attempts: number;
+  why: boolean;
 }
 
 function parseArgs(argv: string[]): Args {
@@ -62,6 +66,8 @@ function parseArgs(argv: string[]): Args {
     lang: [...langs, 'hi', 'en'],
     stepMs: Number(get('--step') ?? 3000),
     events: argv.includes('--events'),
+    attempts: Number(get('--attempts') ?? 0),
+    why: argv.includes('--why'),
   };
 }
 
@@ -213,6 +219,170 @@ function printVariants(scenario: Scenario, count: number): void {
   }
 }
 
+
+// ── competency rendering ────────────────────────────────────────────────────
+const BAR_WIDTH = 18;
+
+function bar(score: number | null, passed: boolean | null): string {
+  if (score === null) return dim('·'.repeat(BAR_WIDTH));
+  const filled = Math.round((score / 100) * BAR_WIDTH);
+  const paint = passed === false ? red : passed === true ? green : yellow;
+  return paint('█'.repeat(filled)) + dim('░'.repeat(BAR_WIDTH - filled));
+}
+
+function printCompetency(competency: Competency, why: boolean): void {
+  const paint =
+    competency.result === 'pass' ? green : competency.result === 'fatal' ? red : yellow;
+  console.log(
+    `
+${bold('Competency vector')}  ${dim('— six dimensions, never one number')}`,
+  );
+
+  for (const d of competency.vector) {
+    const score = d.score === null ? dim('  —') : String(d.score).padStart(3);
+    const mark = d.passMark === null ? dim('    ') : dim(`≥${String(d.passMark).padStart(3)}`);
+    const tick =
+      d.passed === null ? dim('·') : d.passed ? green('✓') : red('✗');
+    const note = d.floored
+      ? red(' floored by a fatal error')
+      : d.evidence === 0
+        ? dim(' no evidence in this variant')
+        : dim(` ${d.evidence} node${d.evidence === 1 ? '' : 's'}`);
+    console.log(
+      `  ${d.dimension.padEnd(20)} ${bar(d.score, d.passed)} ${score}  ${mark} ${tick}${note}`,
+    );
+  }
+
+  const latency = competency.latency;
+  console.log(
+    dim(
+      `
+  median time to first correct action  ${
+        latency.medianTimeToFirstCorrectMs === null
+          ? '—'
+          : `${(latency.medianTimeToFirstCorrectMs / 1000).toFixed(1)}s`
+      }` +
+        `   hesitations ${latency.hesitations}` +
+        `   nodes satisfied ${competency.nodes.satisfied}/${competency.nodes.assessed}`,
+    ),
+  );
+
+  console.log(`
+  ${paint(bold(`RESULT  ${competency.result.toUpperCase()}`))}`);
+  if (competency.shortfalls.length > 0) {
+    console.log(`  ${dim('short of the mark on')} ${competency.shortfalls.join(', ')}`);
+  }
+
+  if (why) {
+    console.log(`
+${bold('Why')} ${dim('— every score traces to named nodes')}`);
+    for (const contribution of competency.contributions) {
+      if (contribution.earned === contribution.weight) continue; // full credit needs no explanation
+      const penalties = contribution.penalties
+        .map((p) => `${p.reason} -${p.amount}`)
+        .join(', ');
+      console.log(
+        `  ${contribution.nodeId.padEnd(20)} ${dim(contribution.dimension.padEnd(20))} ` +
+          `${String(contribution.earned).padStart(5)}/${contribution.weight}  ${yellow(penalties || 'node not satisfied')}`,
+      );
+    }
+  }
+}
+
+// ── one drill, start to finish ──────────────────────────────────────────────
+function runDrill(
+  variant: ResolvedScenario,
+  script: { label: string; build: () => Deviation },
+  args: Args,
+  trace: boolean,
+): { session: DrillSession; competency: Competency } {
+  const deviate = script.build();
+  let clock = 0;
+  const session = new DrillSession(variant, { now: () => clock });
+
+  let seenNode = '';
+  let guard = 0;
+  while (!session.finished && guard++ < 200) {
+    if (trace && session.node.id !== seenNode) {
+      seenNode = session.node.id;
+      console.log(nodeHeader(session.node, args.lang));
+    }
+
+    const move = deviate(session) ?? idealAction(session);
+    if (move === null) break;
+
+    clock += args.stepMs;
+    const step = move === 'acknowledge' ? session.acknowledge() : session.dispatch(move);
+
+    if (!trace) continue;
+    const paint = VERDICT_MARK[step.verdict] ?? dim;
+    if (move !== 'acknowledge') {
+      console.log(`    ${paint('•')} ${describeAction(move).padEnd(28)} ${paint(step.verdict)}`);
+    }
+    if (step.consequence) {
+      console.log(`      ${red('↳')} ${resolveText(step.consequence.text, args.lang)}`);
+    }
+    for (const effect of step.effects) {
+      console.log(`      ${dim(`↳ world: ${JSON.stringify(effect)}`)}`);
+    }
+  }
+
+  return { session, competency: scoreSession(session) };
+}
+
+function printCertification(scenario: Scenario, args: Args, script: { label: string; build: () => Deviation }): void {
+  console.log(
+    `${bold('CERTIFICATION RUN')}  ${dim(`${args.attempts} distinct variants · script "${args.script}"`)}
+`,
+  );
+
+  const variants = distinctVariants(scenario, args.attempts);
+  const results: Competency[] = [];
+
+  for (const variant of variants) {
+    const { competency } = runDrill(variant, script, args, false);
+    results.push(competency);
+    const paint =
+      competency.result === 'pass' ? green : competency.result === 'fatal' ? red : yellow;
+    const weak = competency.shortfalls.length > 0 ? dim(` short on ${competency.shortfalls.join(', ')}`) : '';
+    const fatal = competency.fatalErrors.map((e) => red(e.code)).join(', ');
+    console.log(
+      `  ${magenta(competency.variantId)}  ${paint(competency.result.toUpperCase().padEnd(5))}` +
+        `  ${dim(`permit=${String(variant.params.permit_state).padEnd(7)} gas=${variant.params.gas}`)}${weak}${fatal ? '  ' + fatal : ''}`,
+    );
+  }
+
+  const certification = certify(scenario, results);
+  const paint = certification.granted ? green : red;
+  console.log(`
+${bold('Aggregate across counted variants')}`);
+  for (const d of certification.vector) {
+    const mean = d.mean === null ? dim('  —') : String(d.mean).padStart(3);
+    const worst = d.worst === null ? dim('  —') : String(d.worst).padStart(3);
+    const ok = d.mean !== null && d.passMark !== null && d.worst !== null && d.worst >= d.passMark;
+    console.log(
+      `  ${d.dimension.padEnd(20)} ${bar(d.worst, ok)} ${dim('mean')} ${mean}  ${dim('worst')} ${worst}  ${
+        d.passMark === null ? dim('    ') : dim(`≥${d.passMark}`)
+      }`,
+    );
+  }
+
+  console.log(
+    `
+  ${paint(bold(certification.granted ? 'CREDENTIAL GRANTED' : 'CREDENTIAL WITHHELD'))}` +
+      `  ${dim(`${certification.distinctVariantsPassed}/${certification.requiredVariants} distinct variants passed`)}`,
+  );
+  for (const reason of certification.reasons) console.log(`    ${dim('·')} ${reason}`);
+  if (certification.weakest) {
+    const { dimension, mean } = certification.weakest;
+    const paintWeak = mean === 100 ? dim : yellow;
+    console.log(
+      `    ${dim('·')} weakest dimension: ${paintWeak(`${dimension} (${mean})`)}` +
+        dim(mean === 100 ? ' — nothing to target' : ' — target of the next micro-drill'),
+    );
+  }
+}
+
 // ── main ────────────────────────────────────────────────────────────────────
 async function main(): Promise<void> {
   const args = parseArgs(process.argv.slice(2));
@@ -244,51 +414,31 @@ async function main(): Promise<void> {
     return;
   }
 
-  const deviate = script.build();
-  const variant: ResolvedScenario = resolveVariant(scenario, args.seed);
-  let clock = 0;
-  const session = new DrillSession(variant, { now: () => clock });
+  if (args.attempts > 0) {
+    printCertification(scenario, args, script);
+    return;
+  }
 
+  const variant: ResolvedScenario = resolveVariant(scenario, args.seed);
   console.log(
-    `${bold('SCENARIO')}  ${variant.id} v${variant.version}  ${dim(variant.domain)}\n` +
-      `${bold('VARIANT ')}  ${magenta(variant.variantId)}  ${dim(`seed ${variant.seed}`)}\n` +
-      `${bold('PARAMS  ')}  ${Object.entries(variant.params).map(([k, v]) => `${dim(k)}=${v}`).join('  ')}\n` +
+    `${bold('SCENARIO')}  ${variant.id} v${variant.version}  ${dim(variant.domain)}
+` +
+      `${bold('VARIANT ')}  ${magenta(variant.variantId)}  ${dim(`seed ${variant.seed}`)}
+` +
+      `${bold('PARAMS  ')}  ${Object.entries(variant.params).map(([k, v]) => `${dim(k)}=${v}`).join('  ')}
+` +
       `${bold('SCRIPT  ')}  ${args.script} — ${dim(script.label)}`,
   );
 
-  let seenNode = '';
-  let guard = 0;
-  while (!session.finished && guard++ < 200) {
-    if (session.node.id !== seenNode) {
-      seenNode = session.node.id;
-      console.log(nodeHeader(session.node, args.lang));
-    }
-
-    const deviation = deviate(session);
-    const move = deviation ?? idealAction(session);
-    if (move === null) break;
-
-    clock += args.stepMs;
-    const step = move === 'acknowledge' ? session.acknowledge() : session.dispatch(move);
-    const label = move === 'acknowledge' ? dim('(acknowledged)') : describeAction(move);
-    const paint = VERDICT_MARK[step.verdict] ?? dim;
-
-    if (move !== 'acknowledge') {
-      console.log(`    ${paint('•')} ${label.padEnd(28)} ${paint(step.verdict)}`);
-    }
-    if (step.consequence) {
-      console.log(`      ${red('↳')} ${resolveText(step.consequence.text, args.lang)}`);
-    }
-    for (const effect of step.effects) {
-      console.log(`      ${dim(`↳ world: ${JSON.stringify(effect)}`)}`);
-    }
-  }
+  const { session, competency } = runDrill(variant, script, args, true);
 
   printResults(session.results);
   printSummary(session, args.lang);
+  printCompetency(competency, args.why);
 
   if (args.events) {
-    console.log(`\n${bold('Event stream')} ${dim(`(${session.events.length} events — this is what the assessment consumes)`)}`);
+    console.log(`
+${bold('Event stream')} ${dim(`(${session.events.length} events — this is what the assessment consumes)`)}`);
     for (const event of session.events) {
       console.log(dim(`  ${String(event.t).padStart(6)}ms  ${JSON.stringify(event)}`));
     }

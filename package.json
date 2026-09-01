@@ -9,10 +9,12 @@
   },
   "scripts": {
     "check": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test tests/**/*.test.ts",
+    "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
     "run:correct": "node --experimental-strip-types src/cli/run.ts --script correct",
     "run:trap": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap",
-    "run:seeds": "node --experimental-strip-types src/cli/run.ts --variants 5"
+    "run:seeds": "node --experimental-strip-types src/cli/run.ts --variants 5",
+    "run:certify": "node --experimental-strip-types src/cli/run.ts --attempts 4 --script correct",
+    "run:why": "node --experimental-strip-types src/cli/run.ts --script second-victim-trap --why"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
