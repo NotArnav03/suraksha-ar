@@ -86,6 +86,8 @@ export interface StepResult {
   events: DrillEvent[];
   effects: WorldEffect[];
   consequence?: Narration;
+  /** severity of the rule that fired, when one did — set alongside `consequence` */
+  severity?: Severity;
 }
 
 export interface SessionOptions {
@@ -217,7 +219,7 @@ export class DrillSession {
     this.events.push(...events);
 
     const step = this.#advance(rule.goto ?? node.next, t, 'wrong', events, effects);
-    return { ...step, consequence: rule.consequence };
+    return { ...step, consequence: rule.consequence, severity: rule.severity };
   }
 
   // ── internals ─────────────────────────────────────────────────────────────
@@ -296,7 +298,7 @@ export class DrillSession {
 
       if (rule.goto) {
         const step = this.#advance(rule.goto, t, 'wrong', events, effects);
-        return { ...step, consequence: rule.consequence };
+        return { ...step, consequence: rule.consequence, severity: rule.severity };
       }
       return {
         verdict: 'wrong',
@@ -306,6 +308,7 @@ export class DrillSession {
         events,
         effects,
         consequence: rule.consequence,
+        severity: rule.severity,
       };
     }
 

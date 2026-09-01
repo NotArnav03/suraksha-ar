@@ -15,7 +15,7 @@
     "noImplicitOverride": true,
     "exactOptionalPropertyTypes": false,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "webxr"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"]
 }

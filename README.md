@@ -6,15 +6,16 @@ The product thesis: the gap in the problem statement is not training delivery, i
 
 ## Where the code is now
 
-The **drill engine**, the **assessment** and the **credential** are built and tested. Renderers are not.
+The **drill engine**, the **assessment**, the **credential** and the **Tier C client** are built and tested. Tiers A and B are contracted but not implemented.
 
 ```
 src/engine/      scenario graph runtime — knows nothing about cameras or meshes
 src/assess/      event stream -> competency vector -> certification
 src/credential/  compact signed credential, offline QR verification
+src/app/         the web client: tier detection, shared HUD, Tier C world
 src/scenarios/   authored scenario content (JSON)
 src/cli/         headless runner and the end-to-end credential demo
-tests/           41 tests, node's built-in runner
+tests/           46 tests, node's built-in runner
 ```
 
 ## Try it
@@ -33,7 +34,12 @@ npm run run:seeds       # five distinct variants of the same procedure
 npm run run:certify     # four variants, aggregated, credential granted or withheld
 npm run run:credential  # the whole loop: drill -> certify -> issue -> scan -> verify offline
 npm run run:tamper      # the same loop with one payload byte flipped -> rejected
+
+npm run dev             # the client, on your LAN so a phone can reach it
+npm run build           # ~34 kB gzipped
 ```
+
+Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`.
 
 More: `node --experimental-strip-types src/cli/run.ts --script sniff-test --seed 11 --lang hi --events`
 
@@ -64,6 +70,16 @@ A granted certification issues a **51-byte signed payload** — a 160-character 
 - **The issuer refuses to mint for an ungranted certification** — a credential that can be issued without the drill is worth exactly as much as the paper one.
 - Credentials are short-lived by design, because an offline verifier cannot see a revocation list. That trade-off is stated in the verifier warnings rather than hidden.
 
+## The client
+
+`DrillController` owns the session and builds the view; a tier owns only how the world is shown and touched. Prompt, checklist, countdown and consequence banner are drawn by one shared `Hud` — a tier that drew its own countdown could quietly give its learners more time, and two credentials that cost different amounts of time are not the same credential.
+
+**Tier C is not a consolation prize.** The learner still hunts the hazard among clutter, still picks a verb rather than a right answer, and is assessed on the identical event stream. The verb sheet is load-bearing: you touch the thing, then choose what you do to it, so climbing into a confined space is a deliberate named act and never a stray tap. `WorldEffect`s drive the world — the casualty is genuinely absent from the scene until a `spawn` fires, the blower greys out when it trips, and the alarm reaches a gloved hand through `navigator.vibrate`.
+
+Tier detection reports **two** answers on the start screen: the best tier the device supports, and the tier actually being served. Conflating them is how a pitch ends up claiming AR coverage it does not have.
+
+No web fonts, no CDN. The app has to work with the radio off.
+
 ## The authored scenario
 
 `gas-confined-space` — cleaning a settling sump at a coal handling plant pit-top. Surface location by design: non-flameproof electronics are restricted underground in gassy mines, and induction training is legally sited at the surface anyway.
@@ -76,6 +92,6 @@ English and Hindi are authored throughout; Santali (Ol Chiki) is present on two 
 
 - **Every regulation citation in the scenario JSON is a placeholder.** They name the right instruments (Mines Act 1952, Mines Vocational Training Rules 1966, DGMS confined-space guidance) but no clause numbers have been verified. Replace each `cite` with the exact provision, checked against the source, before this is shown as compliant with anything.
 - **The scenario has not been reviewed by a certified instructor.** The procedure is drawn from general confined-space practice. It needs sign-off from someone DGMS-certified before it trains anyone.
-- **No renderer yet.** Tier A (WebXR hit-test), Tier B (marker) and Tier C (flat 2D) all attach to `DrillSession` and none exist. This is the next build.
-- **QR rendering is not implemented** — the credential string and its QR version are computed and asserted, but nothing draws the symbol yet. That belongs in the web client.
-- **Issuer keys are generated per run** in the demo CLI. Real deployment needs a keystore, a published trust list, and a rotation plan.
+- **Tier A (WebXR) and Tier B (marker) are not built.** Both are contracted in `render/contract.ts` and the app falls back to Tier C loudly rather than mounting a renderer that would show a black screen. Tier A is the next build.
+- **Issuing happens in the browser** in the current demo, which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
+- **Speech synthesis is a stand-in for recorded narration.** The languages this has to reach — Santali, Ho, Mundari, Kurukh — have no synthetic voice worth using. `Narration.audio` already carries the clips; they have not been recorded.

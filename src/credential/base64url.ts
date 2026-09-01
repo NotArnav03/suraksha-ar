@@ -11,6 +11,10 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 const LOOKUP = (() => {
   const table = new Int16Array(128).fill(-1);
   for (let i = 0; i < ALPHABET.length; i++) table[ALPHABET.charCodeAt(i)] = i;
+  // Decode standard base64 too. Key material arrives as SPKI in ordinary
+  // base64, and having one tolerant decoder beats two that can drift.
+  table['+'.charCodeAt(0)] = 62;
+  table['/'.charCodeAt(0)] = 63;
   return table;
 })();
 
@@ -39,6 +43,7 @@ export function fromBase64url(text: string): Uint8Array {
 
   for (let i = 0; i < clean.length; i++) {
     const code = clean.charCodeAt(i);
+    if (code === 61) break; // '=' padding
     const value = code < 128 ? LOOKUP[code]! : -1;
     if (value < 0) throw new Error(`invalid base64url character at index ${i}`);
     accumulator = (accumulator << 6) | value;
