@@ -10,5 +10,9 @@ export default defineConfig({
     // phone can reach the dev server is the whole point of testing this on real
     // hardware, so the host has to be open.
     host: true,
+    // A quick tunnel (trycloudflare.com) fronts this with HTTPS for the WebXR
+    // secure-context requirement; Vite refuses unrecognized Host headers by
+    // default, so the tunnel's hostname has to be allowed explicitly.
+    allowedHosts: ['.trycloudflare.com'],
   },
 });

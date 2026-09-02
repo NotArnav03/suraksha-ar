@@ -229,7 +229,14 @@ button:disabled { opacity: .35; pointer-events: none; }
 .ar-active { background: transparent; }
 .ar-active .world { flex: 1; padding: 0; }
 .ar-active .world canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
-.ar-active .chrome { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; }
+.ar-active .chrome {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  /* Android draws its own "exit fullscreen" toast over the bottom edge during
+     an immersive session, which can sit on top of a control placed flush at
+     bottom:0. This clearance keeps the primary action above where it lands,
+     on top of the tap-anywhere fallback wired in the Tier A renderer. */
+  padding-bottom: max(env(safe-area-inset-bottom), 28px);
+}
 .ar-active .hud { background: rgba(21, 27, 32, .93); backdrop-filter: blur(6px); }
 
 .ar-active.alarm-warning .hud { border-top: 3px solid var(--warn); }
@@ -250,3 +257,16 @@ button:disabled { opacity: .35; pointer-events: none; }
 }
 
 .ar-note { padding: 8px 14px 0; color: var(--hazard-ink); }
+
+.ar-hint-warn { border-color: var(--crit) !important; }
+
+.ar-crosshair {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 9; width: 34px; height: 34px; pointer-events: none;
+}
+.ar-crosshair::before, .ar-crosshair::after {
+  content: ""; position: absolute; background: var(--hazard);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+}
+.ar-crosshair::before { top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-1px); }
+.ar-crosshair::after { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-1px); }

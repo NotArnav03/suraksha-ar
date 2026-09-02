@@ -131,7 +131,6 @@ export class TierARenderer implements WorldRenderer {
     new THREE.MeshBasicMaterial({ color: 0xf0a02e }),
   );
   #raycaster = new THREE.Raycaster();
-  #tempMatrix = new THREE.Matrix4();
   #xrController: THREE.XRTargetRaySpace | null = null;
 
   #hitTestSource: XRHitTestSource | null = null;
@@ -145,6 +144,7 @@ export class TierARenderer implements WorldRenderer {
   #sheet = document.createElement('div');
   #readout = document.createElement('div');
   #hint = document.createElement('div');
+  #crosshair = document.createElement('div');
   #gas: { species: string; value: number; unit: string } | null = null;
   #alarm: 'none' | 'warning' | 'critical' = 'none';
 
@@ -154,6 +154,11 @@ export class TierARenderer implements WorldRenderer {
 
     this.#renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     this.#renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    // `alpha: true` only gives the canvas an alpha channel — it does not make
+    // the clear itself transparent. Without this, every frame clears to an
+    // opaque-ish default before drawing, which lays a faint black wash over
+    // the entire camera passthrough, not just where our objects are.
+    this.#renderer.setClearColor(0x000000, 0);
     this.#renderer.xr.enabled = true;
     this.#renderer.xr.setReferenceSpaceType('local');
 
@@ -175,9 +180,21 @@ export class TierARenderer implements WorldRenderer {
     host.append(this.#renderer.domElement);
 
     const overlay = this.#options.overlay;
-    // Without this, every tap on the HUD would also fire an XR `select` and be
-    // raycast into the scene — pressing "Continue" would place the site anchor.
-    overlay.addEventListener('beforexrselect', (event) => event.preventDefault());
+    // `overlay` is the whole screen — world canvas and chrome HUD both live
+    // inside it — so per the DOM Overlay spec, literally every tap anywhere is
+    // "on the overlay" and triggers this event first. Suppressing it
+    // unconditionally, as an earlier version of this code did, kills the XR
+    // `select` event for every tap everywhere, including taps on the empty
+    // floor meant to place the site: reticle shows fine (hit-test works), but
+    // nothing places and #onSelect never runs at all. Only suppress it for
+    // taps that land on one of our own interactive controls, where a plain DOM
+    // click already handles the tap and firing select too would double it up.
+    overlay.addEventListener('beforexrselect', (event) => {
+      const target = event.target as HTMLElement | null;
+      if (target?.closest('button, .sheet-card, .lang, .prompt-row')) {
+        event.preventDefault();
+      }
+    });
 
     this.#readout.className = 'readout ar';
     this.#readout.hidden = true;
@@ -191,7 +208,9 @@ export class TierARenderer implements WorldRenderer {
     this.#sheet.addEventListener('click', (event) => {
       if (event.target === this.#sheet) this.#closeSheet();
     });
-    overlay.prepend(this.#readout, this.#hint, this.#sheet);
+    this.#crosshair.className = 'ar-crosshair';
+    this.#crosshair.hidden = true;
+    overlay.prepend(this.#readout, this.#hint, this.#crosshair, this.#sheet);
 
     const session = this.#options.session;
     session.addEventListener('end', () => this.#options.onSessionEnd());
@@ -223,18 +242,34 @@ export class TierARenderer implements WorldRenderer {
   };
 
   #onSelect = (): void => {
+    // A short buzz on every registered select, before anything else, so a tap
+    // that reaches the page is distinguishable from one that never did — the
+    // two look identical to a learner when the visible result is "nothing".
+    if ('vibrate' in navigator) navigator.vibrate(30);
+
     if (!this.#placed) {
       this.#place();
       return;
     }
-    if (!this.#interactive || !this.#sheet.hidden) return;
+    if (!this.#sheet.hidden) return;
 
-    const controller = this.#xrController;
-    if (!controller) return;
-    this.#tempMatrix.identity().extractRotation(controller.matrixWorld);
-    this.#raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
-    this.#raycaster.ray.direction.set(0, 0, -1).applyMatrix4(this.#tempMatrix);
+    if (!this.#interactive) {
+      // Narration/outcome nodes have no props to tap, so any tap on the world
+      // advances them. Android draws its own "exit fullscreen" system toast
+      // over the bottom of the screen during an immersive session, and it can
+      // sit right on top of the HUD's Continue button — this is the fallback
+      // so a learner is never blocked behind that toast with no way forward.
+      this.#hooks?.acknowledge();
+      return;
+    }
 
+    // Aim from the centre of the camera view — the transient screen-tap input
+    // source three.js exposes as a "controller" is unreliable for exactly this
+    // (props were unhittable no matter where you tapped, on real hardware).
+    // The camera-forward ray is the same mechanism the floor-placement reticle
+    // already uses successfully, and it matches a "look at it, then tap" style
+    // that a phone-in-hand AR interaction wants anyway — see the crosshair.
+    this.#raycaster.setFromCamera(new THREE.Vector2(0, 0), this.#camera);
     const hits = this.#raycaster.intersectObjects(this.#root.children, true);
     for (const hit of hits) {
       const propId = this.#propIdOf(hit.object);
@@ -257,7 +292,18 @@ export class TierARenderer implements WorldRenderer {
 
   /** The site is anchored once, on the learner's own floor, and never moves again. */
   #place(): void {
-    if (!this.#reticle.visible) return;
+    if (!this.#reticle.visible) {
+      // The tap registered (see the buzz above) but hit-test has not found a
+      // plane yet — most often a shiny or low-texture floor ARCore cannot find
+      // feature points on. Say so, rather than doing nothing and leaving a
+      // learner unable to tell a missed tap from an undetected floor.
+      this.#hint.textContent =
+        this.#i18n.language.code === 'en'
+          ? 'No surface found yet — move the phone slowly over the floor'
+          : 'अभी सतह नहीं मिली — फ़ोन को धीरे-धीरे फ़र्श पर घुमाइए';
+      this.#hint.classList.add('ar-hint-warn');
+      return;
+    }
     this.#root.position.setFromMatrixPosition(this.#reticle.matrix);
     this.#root.visible = true;
     this.#placed = true;
@@ -272,7 +318,17 @@ export class TierARenderer implements WorldRenderer {
     for (const prop of view.props) {
       if (prop.visible) this.#visible.add(prop.id);
     }
-    if (this.#placed) this.#layout();
+    if (this.#placed) {
+      this.#layout();
+      this.#hint.hidden = !view.narrationOnly;
+      if (view.narrationOnly) {
+        this.#hint.textContent =
+          this.#i18n.language.code === 'en' ? 'Tap anywhere to continue' : 'आगे बढ़ने के लिए कहीं भी टैप कीजिए';
+      }
+      // Selection raycasts from screen centre, so the learner needs a fixed
+      // aim point on screen — without it, "tap the thing" has no visible target.
+      this.#crosshair.hidden = view.narrationOnly;
+    }
   }
 
   /**
@@ -454,6 +510,7 @@ export class TierARenderer implements WorldRenderer {
     this.#sheet.remove();
     this.#readout.remove();
     this.#hint.remove();
+    this.#crosshair.remove();
     this.#options.overlay.classList.remove('alarm-warning', 'alarm-critical');
     void this.#options.session.end().catch(() => undefined);
     this.#renderer.dispose();

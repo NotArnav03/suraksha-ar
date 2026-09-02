@@ -200,7 +200,11 @@ async function drillScreen(report: TierReport): Promise<void> {
   root.append(world, chrome);
 
   let controller: DrillController | null = null;
-  const { renderer, note } = await rendererFor(report.serving, root, () => {
+  // The WebXR dom-overlay root must NOT contain the presenting canvas — `world`
+  // holds that canvas, and the overlay spec's normal-DOM-event guarantee is only
+  // reliable for content outside the surface the browser is actively compositing
+  // as the XR view. Pass `chrome` (sibling of `world`), never `root`.
+  const { renderer, note } = await rendererFor(report.serving, chrome, () => {
     // The learner backed out of AR with the system gesture. Ending the drill is
     // the honest response: a half-finished run must not be scored as a run.
     controller?.stop();
