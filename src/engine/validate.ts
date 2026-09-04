@@ -1,4 +1,10 @@
-import { DIMENSIONS, type Dimension, type Scenario, type ScenarioNode } from './types.ts';
+import {
+  DIMENSIONS,
+  type Dimension,
+  type ErrorRule,
+  type Scenario,
+  type ScenarioNode,
+} from './types.ts';
 
 /**
  * Authoring-time validation.
@@ -125,6 +131,25 @@ export function validateScenario(input: unknown): Scenario {
     if (!DIMENSIONS.includes(dimension)) push(path, `unknown dimension "${dimension}"`);
   };
 
+  /**
+   * Shared by every node kind that can carry them, so a rule authored on an
+   * observe node is held to exactly the standard an expect node's rule is —
+   * above all that a fatal one names where it routes.
+   */
+  const checkErrorRules = (at: string, rules: ErrorRule[] | undefined): void => {
+    rules?.forEach((rule, i) => {
+      const target = rule.match?.target;
+      if (target && !resolvesToProp(target)) {
+        push(`${at}.errors[${i}].match.target`, `"${target}" is neither a role nor a prop id`);
+      }
+      dimensionRef(`${at}.errors[${i}].dimension`, rule.dimension);
+      nodeRef(`${at}.errors[${i}].goto`, rule.goto);
+      if (rule.severity === 'fatal' && !rule.goto) {
+        push(`${at}.errors[${i}]`, 'a fatal error must route to an outcome node via `goto`');
+      }
+    });
+  };
+
   for (const [index, node] of scenario.nodes.entries()) {
     const at = `$.nodes[${index}](${node.id})`;
     const measures = node.kind === 'expect' || node.kind === 'observe';
@@ -157,17 +182,7 @@ export function validateScenario(input: unknown): Scenario {
             push(`${at}.expect[${i}].match.target`, `"${target}" is neither a role nor a prop id`);
           }
         });
-        node.errors?.forEach((rule, i) => {
-          const target = rule.match?.target;
-          if (target && !resolvesToProp(target)) {
-            push(`${at}.errors[${i}].match.target`, `"${target}" is neither a role nor a prop id`);
-          }
-          dimensionRef(`${at}.errors[${i}].dimension`, rule.dimension);
-          nodeRef(`${at}.errors[${i}].goto`, rule.goto);
-          if (rule.severity === 'fatal' && !rule.goto) {
-            push(`${at}.errors[${i}]`, 'a fatal error must route to an outcome node via `goto`');
-          }
-        });
+        checkErrorRules(at, node.errors);
         if (node.onTimeout) {
           dimensionRef(`${at}.onTimeout.dimension`, node.onTimeout.dimension);
           nodeRef(`${at}.onTimeout.goto`, node.onTimeout.goto);
@@ -196,6 +211,7 @@ export function validateScenario(input: unknown): Scenario {
         if (!(node.minCorrect >= 1) || node.minCorrect > (node.targets?.length ?? 0)) {
           push(`${at}.minCorrect`, 'must be between 1 and targets.length');
         }
+        checkErrorRules(at, node.errors);
         if (node.onTimeout) nodeRef(`${at}.onTimeout.goto`, node.onTimeout.goto);
         break;
       }
@@ -229,7 +245,10 @@ export function validateScenario(input: unknown): Scenario {
       node.errors?.forEach((rule) => rule.goto && queue.push(rule.goto));
       if (node.onTimeout?.goto) queue.push(node.onTimeout.goto);
     }
-    if (node.kind === 'observe' && node.onTimeout?.goto) queue.push(node.onTimeout.goto);
+    if (node.kind === 'observe') {
+      node.errors?.forEach((rule) => rule.goto && queue.push(rule.goto));
+      if (node.onTimeout?.goto) queue.push(node.onTimeout.goto);
+    }
   }
   for (const node of scenario.nodes) {
     if (!reachable.has(node.id)) {

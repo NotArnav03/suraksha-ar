@@ -2,6 +2,7 @@ import type {
   Action,
   ActionMatch,
   Dimension,
+  ErrorRule,
   Expectation,
   Narration,
   ResolvedScenario,
@@ -273,44 +274,7 @@ export class DrillSession {
     }
 
     const rule = node.errors?.find((candidate) => this.#matches(candidate.match, action));
-    if (rule) {
-      const events: DrillEvent[] = [];
-      const effects: WorldEffect[] = [];
-      this.#record(t, node.id, action, 'wrong', latencyMs, hesitated);
-      events.push({
-        type: 'error',
-        t,
-        nodeId: node.id,
-        code: rule.code,
-        severity: rule.severity,
-        dimension: rule.dimension,
-      });
-      this.#current.errors.push({
-        code: rule.code,
-        severity: rule.severity,
-        dimension: rule.dimension,
-      });
-      for (const effect of rule.effects ?? []) {
-        events.push({ type: 'effect', t, nodeId: node.id, effect });
-        effects.push(effect);
-      }
-      this.events.push(...events);
-
-      if (rule.goto) {
-        const step = this.#advance(rule.goto, t, 'wrong', events, effects);
-        return { ...step, consequence: rule.consequence, severity: rule.severity };
-      }
-      return {
-        verdict: 'wrong',
-        advanced: false,
-        finished: false,
-        node,
-        events,
-        effects,
-        consequence: rule.consequence,
-        severity: rule.severity,
-      };
-    }
+    if (rule) return this.#raise(node, rule, action, t, latencyMs, hesitated);
 
     // Unmatched input is still evidence — flailing is a signal — but costs nothing.
     this.#record(t, node.id, action, 'ignored', latencyMs, hesitated);
@@ -328,6 +292,16 @@ export class DrillSession {
       this.#record(t, node.id, action, 'ignored', latencyMs, hesitated);
       return { verdict: 'ignored', advanced: false, finished: false, node, events: [], effects: [] };
     }
+
+    // Before anything counts as having been *spotted*. An observe node used to
+    // read only the target and never the verb, so climbing into the sump during
+    // the hazard survey was recorded as having correctly identified the sump —
+    // the most lethal act in the scenario, scored as competence, with no
+    // consequence shown. Authored rules win over the observation they collide
+    // with: surveying a confined space and entering it are different acts.
+    const rule = node.errors?.find((candidate) => this.#matches(candidate.match, action));
+    if (rule) return this.#raise(node, rule, action, t, latencyMs, hesitated);
+
     const target = this.resolveTarget(action.target);
     const isTarget = node.targets.some((role) => this.resolveTarget(role) === target);
     const isDistractor = (node.distractors ?? []).some(
@@ -352,6 +326,58 @@ export class DrillSession {
     const verdict: Verdict = isDistractor ? 'distractor' : 'ignored';
     this.#record(t, node.id, action, verdict, latencyMs, hesitated);
     return { verdict, advanced: false, finished: false, node, events: [], effects: [] };
+  }
+
+  /**
+   * Fire an authored error rule: record it, run its effects, and route where it
+   * says. Shared by expect and observe nodes so a rule behaves identically
+   * whichever kind of node carries it — a fatal on one cannot quietly become a
+   * scratch on the other.
+   */
+  #raise(
+    node: ScenarioNode,
+    rule: ErrorRule,
+    action: Action,
+    t: number,
+    latencyMs: number,
+    hesitated: boolean,
+  ): StepResult {
+    const events: DrillEvent[] = [];
+    const effects: WorldEffect[] = [];
+    this.#record(t, node.id, action, 'wrong', latencyMs, hesitated);
+    events.push({
+      type: 'error',
+      t,
+      nodeId: node.id,
+      code: rule.code,
+      severity: rule.severity,
+      dimension: rule.dimension,
+    });
+    this.#current.errors.push({
+      code: rule.code,
+      severity: rule.severity,
+      dimension: rule.dimension,
+    });
+    for (const effect of rule.effects ?? []) {
+      events.push({ type: 'effect', t, nodeId: node.id, effect });
+      effects.push(effect);
+    }
+    this.events.push(...events);
+
+    if (rule.goto) {
+      const step = this.#advance(rule.goto, t, 'wrong', events, effects);
+      return { ...step, consequence: rule.consequence, severity: rule.severity };
+    }
+    return {
+      verdict: 'wrong',
+      advanced: false,
+      finished: false,
+      node,
+      events,
+      effects,
+      consequence: rule.consequence,
+      severity: rule.severity,
+    };
   }
 
   #matches(match: ActionMatch, action: Action): boolean {

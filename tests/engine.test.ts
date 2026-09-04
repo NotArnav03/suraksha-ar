@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 import { makeRng, pickNumber } from '../src/engine/rng.ts';
 import { DrillSession } from '../src/engine/runtime.ts';
-import type { Action, Scenario } from '../src/engine/types.ts';
+import type { Action, Scenario, ScenarioNode } from '../src/engine/types.ts';
 import { distinctVariants, resolveVariant, sampleParams } from '../src/engine/variant.ts';
 import { ScenarioError, validateScenario } from '../src/engine/validate.ts';
 
@@ -268,4 +268,67 @@ test('pickNumber reaches both ends of a fractional range', () => {
   }
   assert.ok(seen.has(15.4), 'range floor unreachable');
   assert.ok(seen.has(19.2), 'range ceiling unreachable');
+});
+
+/**
+ * The hazard survey is a looking task, but the UI still offers every verb the
+ * prop supports while it runs. The engine used to read only the target and never
+ * the verb here, so climbing into the sump during the survey was recorded as
+ * having correctly *spotted* the sump: the most lethal act in the scenario,
+ * scored as competence, with nothing shown to the learner.
+ */
+test('entering the sump during the hazard survey is fatal, not an observation', () => {
+  const session = new DrillSession(resolveVariant(scenario, 2), { now: () => 0 });
+  session.acknowledge();
+  assert.equal(session.node.kind, 'observe');
+
+  const step = session.dispatch({ verb: 'enter', target: 'sump' });
+
+  assert.equal(step.verdict, 'wrong', 'climbing in is not a way of noticing');
+  assert.equal(session.observed.size, 0, 'it must not count toward the survey');
+  assert.equal(session.outcome, 'fatal');
+  assert.ok(step.consequence, 'the learner must be told what happened');
+  assert.equal(step.severity, 'fatal');
+  assert.ok(
+    step.effects.some((e) => e.type === 'haptic'),
+    'the consequence must be felt, not only scored',
+  );
+
+  // The debrief is the pedagogical payload — a learner reads it after the
+  // banner has gone. Routing this rule at the permit outcome, as the first
+  // version did, told someone who never reached a permit that a permit was
+  // what killed them.
+  assert.equal(session.node.id, 'outcome_fatal_survey');
+
+  const debrief = scenario.nodes.find(
+    (n): n is Extract<ScenarioNode, { kind: 'outcome' }> =>
+      n.kind === 'outcome' && n.id === 'outcome_fatal_survey',
+  );
+  const permitDebrief = scenario.nodes.find(
+    (n): n is Extract<ScenarioNode, { kind: 'outcome' }> =>
+      n.kind === 'outcome' && n.id === 'outcome_fatal_entry',
+  );
+  assert.ok(debrief, 'the survey entry needs an outcome of its own');
+  assert.ok(permitDebrief);
+  assert.notEqual(
+    debrief.summary.text.en,
+    permitDebrief.summary.text.en,
+    'a learner who never reached a permit must not be told a permit killed them',
+  );
+  assert.match(
+    debrief.summary.text.en,
+    /look/i,
+    'the debrief has to name the reflex that actually failed',
+  );
+});
+
+test('looking at a hazard during the survey still counts as spotting it', () => {
+  const session = new DrillSession(resolveVariant(scenario, 2), { now: () => 0 });
+  session.acknowledge();
+
+  const step = session.dispatch({ verb: 'inspect', target: 'sump' });
+
+  assert.equal(step.verdict, 'correct');
+  assert.equal(session.observed.size, 1);
+  assert.equal(session.outcome, null);
 });

@@ -176,6 +176,16 @@ export interface ObserveNode extends NodeBase {
   minCorrect: number;
   /** pointing at these costs nothing but is recorded as a miss-cue */
   distractors?: string[];
+  /**
+   * Acts that are wrong here regardless of what they are aimed at.
+   *
+   * An observe node asks the learner to *look*, and every verb the UI offers on
+   * a prop is still offered while it does. Without this, the node could only
+   * ever say "spotted" or "not spotted" — so climbing into the sump during the
+   * hazard survey was scored as having spotted the sump. Surveying a space and
+   * entering it are not the same act, and the scenario has to be able to say so.
+   */
+  errors?: ErrorRule[];
   window?: TimeWindow;
   onTimeout?: TimeoutRule;
   next: string;

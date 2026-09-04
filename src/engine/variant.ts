@@ -151,6 +151,24 @@ export function resolveVariant(scenario: Scenario, seed: number): ResolvedScenar
       })(),
     };
 
+    /**
+     * Every node kind rebuilds itself field by field, which means anything not
+     * named here is silently dropped. That is how observe nodes lost their
+     * error rules the moment they gained them: the expect case resolved them,
+     * the observe case simply did not mention them, and nothing failed until a
+     * fatal rule quietly stopped existing in the resolved graph. One helper, so
+     * the next kind to carry rules cannot drift the same way.
+     */
+    const resolvedErrors = (rules: ErrorRule[] | undefined) =>
+      rules
+        ? {
+            errors: rules.map((rule) => {
+              const resolved = resolveErrorRule(rule, params);
+              return resolved.goto ? { ...resolved, goto: redirect(resolved.goto) } : resolved;
+            }),
+          }
+        : {};
+
     switch (node.kind) {
       case 'brief':
         return { ...base, kind: 'brief', next: redirect(node.next) };
@@ -161,14 +179,7 @@ export function resolveVariant(scenario: Scenario, seed: number): ResolvedScenar
           ordered: node.ordered,
           expect: node.expect.map((e) => resolveExpectation(e, params)),
           ...(node.window ? { window: node.window } : {}),
-          ...(node.errors
-            ? {
-                errors: node.errors.map((rule) => {
-                  const resolved = resolveErrorRule(rule, params);
-                  return resolved.goto ? { ...resolved, goto: redirect(resolved.goto) } : resolved;
-                }),
-              }
-            : {}),
+          ...resolvedErrors(node.errors),
           ...(node.onTimeout
             ? {
                 onTimeout: (() => {
@@ -187,6 +198,7 @@ export function resolveVariant(scenario: Scenario, seed: number): ResolvedScenar
           minCorrect: node.minCorrect,
           ...(node.distractors ? { distractors: node.distractors } : {}),
           ...(node.window ? { window: node.window } : {}),
+          ...resolvedErrors(node.errors),
           ...(node.onTimeout
             ? {
                 onTimeout: (() => {

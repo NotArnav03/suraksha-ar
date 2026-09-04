@@ -4,38 +4,161 @@
   "domain": "gas_leak_confined_space",
   "title": {
     "en": "Settling sump entry — CHP pit-top",
-    "hi": "सेटलिंग सम्प में प्रवेश — सीएचपी पिट-टॉप"
+    "hi": "सेटलिंग सम्प में प्रवेश — सीएचपी पिट-टॉप",
+    "sat": "ᱥᱮᱴᱞᱤᱝ ᱥᱚᱢᱯ ᱨᱮᱭᱟᱜ — ᱥᱤᱮᱪᱯᱤ ᱯᱤᱴ-ᱴᱚᱯ"
   },
   "description": {
     "en": "You have been told to clean the settling sump at the coal handling plant. Everything before you climb in is what decides whether you climb out.",
-    "hi": "आपको कोल हैंडलिंग प्लांट के सेटलिंग सम्प की सफाई करने को कहा गया है। अंदर उतरने से पहले आप जो करते हैं, वही तय करता है कि आप बाहर आएँगे या नहीं।"
+    "hi": "आपको कोल हैंडलिंग प्लांट के सेटलिंग सम्प की सफाई करने को कहा गया है। अंदर उतरने से पहले आप जो करते हैं, वही तय करता है कि आप बाहर आएँगे या नहीं।",
+    "sat": "ᱟᱢᱟᱜ ᱠᱚᱭᱞᱟ ᱦᱮᱸᱰᱞᱤᱝ ᱯᱞᱟᱸᱴ ᱨᱮᱭᱟᱜ ᱥᱮᱴᱞᱤᱝ ᱥᱚᱢᱯ ᱫᱚ ᱥᱟᱯᱷᱟᱭ ᱞᱟᱹᱜᱤᱫ ᱢᱮᱱᱟᱢᱟ ᱾ ᱨᱮᱭᱟᱜ ᱦᱚᱨᱟ ᱟᱢ ᱡᱟᱦᱟᱸ ᱠᱟᱢᱤᱭᱟ, ᱩᱱᱮ ᱛᱮᱭᱟᱨ ᱮᱫᱟ ᱟᱢ ᱚᱰᱚᱠ ᱠᱚᱢᱭᱟ ᱟᱨ ᱵᱟᱝᱟ ᱾"
   },
-  "languages": ["en", "hi", "sat"],
+  "languages": [
+    "en",
+    "hi",
+    "sat"
+  ],
   "regulations": [
-    { "cite": "Mines Act 1952 — duty to maintain a safe working environment" },
-    { "cite": "Mines Vocational Training Rules 1966 — initial training, confined space module" },
-    { "cite": "DGMS guidance on confined space entry, gas testing and standby persons" }
+    {
+      "cite": "Mines Act 1952 — duty to maintain a safe working environment"
+    },
+    {
+      "cite": "Mines Vocational Training Rules 1966 — initial training, confined space module"
+    },
+    {
+      "cite": "DGMS guidance on confined space entry, gas testing and standby persons"
+    }
   ],
-
   "props": [
-    { "id": "sump_opening", "kind": "structure", "label": { "en": "Settling sump opening", "hi": "सेटलिंग सम्प का मुँह" } },
-    { "id": "cs_signage", "kind": "signage", "label": { "en": "Confined space warning board", "hi": "सीमित स्थान चेतावनी बोर्ड" } },
-    { "id": "permit_board", "kind": "signage", "label": { "en": "Work permit board", "hi": "कार्य परमिट बोर्ड" } },
-    { "id": "vent_fan", "kind": "equipment", "label": { "en": "Portable ventilation blower", "hi": "पोर्टेबल वेंटिलेशन ब्लोअर" } },
-    { "id": "detector_multi", "kind": "instrument", "label": { "en": "Four-gas detector", "hi": "चार-गैस डिटेक्टर" } },
-    { "id": "detector_spare", "kind": "instrument", "label": { "en": "Spare gas detector", "hi": "अतिरिक्त गैस डिटेक्टर" } },
-    { "id": "gas_readout", "kind": "instrument", "label": { "en": "Detector readout", "hi": "डिटेक्टर की रीडिंग" } },
-    { "id": "scba", "kind": "ppe", "label": { "en": "Breathing apparatus", "hi": "श्वास उपकरण" } },
-    { "id": "harness", "kind": "ppe", "label": { "en": "Full-body harness", "hi": "फुल-बॉडी हार्नेस" } },
-    { "id": "retrieval_line", "kind": "equipment", "label": { "en": "Retrieval line and tripod", "hi": "रिट्रीवल लाइन और ट्राइपॉड" } },
-    { "id": "standby_person", "kind": "person", "label": { "en": "Standby person", "hi": "स्टैंडबाई व्यक्ति" } },
-    { "id": "supervisor", "kind": "person", "label": { "en": "Shift supervisor", "hi": "शिफ्ट सुपरवाइज़र" } },
-    { "id": "radio", "kind": "equipment", "label": { "en": "Radio to control room", "hi": "कंट्रोल रूम रेडियो" } },
-    { "id": "casualty", "kind": "person", "label": { "en": "Collapsed worker", "hi": "बेहोश साथी" }, "spawned": true },
-    { "id": "toolbox", "kind": "equipment", "label": { "en": "Tool box", "hi": "औज़ार पेटी" } },
-    { "id": "wheelbarrow", "kind": "equipment", "label": { "en": "Wheelbarrow", "hi": "ठेला" } }
+    {
+      "id": "sump_opening",
+      "kind": "structure",
+      "label": {
+        "en": "Settling sump opening",
+        "hi": "सेटलिंग सम्प का मुँह"
+      }
+    },
+    {
+      "id": "cs_signage",
+      "kind": "signage",
+      "label": {
+        "en": "Confined space warning board",
+        "hi": "सीमित स्थान चेतावनी बोर्ड"
+      }
+    },
+    {
+      "id": "permit_board",
+      "kind": "signage",
+      "label": {
+        "en": "Work permit board",
+        "hi": "कार्य परमिट बोर्ड"
+      }
+    },
+    {
+      "id": "vent_fan",
+      "kind": "equipment",
+      "label": {
+        "en": "Portable ventilation blower",
+        "hi": "पोर्टेबल वेंटिलेशन ब्लोअर"
+      }
+    },
+    {
+      "id": "detector_multi",
+      "kind": "instrument",
+      "label": {
+        "en": "Four-gas detector",
+        "hi": "चार-गैस डिटेक्टर"
+      }
+    },
+    {
+      "id": "detector_spare",
+      "kind": "instrument",
+      "label": {
+        "en": "Spare gas detector",
+        "hi": "अतिरिक्त गैस डिटेक्टर"
+      }
+    },
+    {
+      "id": "gas_readout",
+      "kind": "instrument",
+      "label": {
+        "en": "Detector readout",
+        "hi": "डिटेक्टर की रीडिंग"
+      }
+    },
+    {
+      "id": "scba",
+      "kind": "ppe",
+      "label": {
+        "en": "Breathing apparatus",
+        "hi": "श्वास उपकरण"
+      }
+    },
+    {
+      "id": "harness",
+      "kind": "ppe",
+      "label": {
+        "en": "Full-body harness",
+        "hi": "फुल-बॉडी हार्नेस"
+      }
+    },
+    {
+      "id": "retrieval_line",
+      "kind": "equipment",
+      "label": {
+        "en": "Retrieval line and tripod",
+        "hi": "रिट्रीवल लाइन और ट्राइपॉड"
+      }
+    },
+    {
+      "id": "standby_person",
+      "kind": "person",
+      "label": {
+        "en": "Standby person",
+        "hi": "स्टैंडबाई व्यक्ति"
+      }
+    },
+    {
+      "id": "supervisor",
+      "kind": "person",
+      "label": {
+        "en": "Shift supervisor",
+        "hi": "शिफ्ट सुपरवाइज़र"
+      }
+    },
+    {
+      "id": "radio",
+      "kind": "equipment",
+      "label": {
+        "en": "Radio to control room",
+        "hi": "कंट्रोल रूम रेडियो"
+      }
+    },
+    {
+      "id": "casualty",
+      "kind": "person",
+      "label": {
+        "en": "Collapsed worker",
+        "hi": "बेहोश साथी"
+      },
+      "spawned": true
+    },
+    {
+      "id": "toolbox",
+      "kind": "equipment",
+      "label": {
+        "en": "Tool box",
+        "hi": "औज़ार पेटी"
+      }
+    },
+    {
+      "id": "wheelbarrow",
+      "kind": "equipment",
+      "label": {
+        "en": "Wheelbarrow",
+        "hi": "ठेला"
+      }
+    }
   ],
-
   "bindings": {
     "sump": "sump_opening",
     "signage": "cs_signage",
@@ -53,17 +176,54 @@
     "toolbox": "toolbox",
     "barrow": "wheelbarrow"
   },
-
   "params": [
-    { "id": "gas", "pick": ["hydrogen sulphide", "carbon monoxide", "methane"] },
-    { "id": "o2", "range": { "min": 15.4, "max": 19.2, "step": 0.1, "precision": 1 } },
-    { "id": "permit_state", "pick": ["valid", "expired", "absent"], "weights": [2, 1, 1] },
-    { "id": "detector_choice", "pick": ["detector_multi", "detector_spare"] },
-    { "id": "shift", "pick": ["first", "second", "night"] }
+    {
+      "id": "gas",
+      "pick": [
+        "hydrogen sulphide",
+        "carbon monoxide",
+        "methane"
+      ]
+    },
+    {
+      "id": "o2",
+      "range": {
+        "min": 15.4,
+        "max": 19.2,
+        "step": 0.1,
+        "precision": 1
+      }
+    },
+    {
+      "id": "permit_state",
+      "pick": [
+        "valid",
+        "expired",
+        "absent"
+      ],
+      "weights": [
+        2,
+        1,
+        1
+      ]
+    },
+    {
+      "id": "detector_choice",
+      "pick": [
+        "detector_multi",
+        "detector_spare"
+      ]
+    },
+    {
+      "id": "shift",
+      "pick": [
+        "first",
+        "second",
+        "night"
+      ]
+    }
   ],
-
   "start": "brief_task",
-
   "nodes": [
     {
       "id": "brief_task",
@@ -76,14 +236,20 @@
           "hi": "यह {{shift}} शिफ्ट है। सुपरवाइज़र ने कहा है कि अगले कोल वॉश से पहले सेटलिंग सम्प साफ़ कर दो। कुछ भी करने से पहले चारों ओर देखिए।"
         }
       },
-      "effects": [{ "type": "ambient", "state": "chp_yard_day" }],
+      "effects": [
+        {
+          "type": "ambient",
+          "state": "chp_yard_day"
+        }
+      ],
       "next": "observe_hazards"
     },
-
     {
       "id": "observe_hazards",
       "kind": "observe",
-      "dimensions": ["hazard_recognition"],
+      "dimensions": [
+        "hazard_recognition"
+      ],
       "prompt": {
         "text": {
           "en": "Point at everything here that tells you this is not an ordinary cleaning job.",
@@ -91,10 +257,48 @@
           "sat": "ᱱᱚᱰᱮ ᱡᱟᱦᱟᱸ ᱡᱤᱱᱤᱥ ᱠᱟᱛᱷᱟ ᱠᱚ ᱠᱟᱡᱽ ᱵᱟᱝ ᱠᱟᱱᱟ ᱠᱚ ᱩᱫᱩᱜᱽ ᱢᱮ ᱾"
         }
       },
-      "targets": ["sump", "signage", "permit_notice"],
+      "targets": [
+        "sump",
+        "signage",
+        "permit_notice"
+      ],
       "minCorrect": 2,
-      "distractors": ["toolbox", "barrow"],
-      "window": { "hesitationMs": 12000, "deadlineMs": 45000 },
+      "distractors": [
+        "toolbox",
+        "barrow"
+      ],
+      "errors": [
+        {
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
+          "code": "ENTERED_DURING_SURVEY",
+          "severity": "fatal",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "You climbed in while you were still working out what this job was. Nothing had been checked, and nobody had been told.",
+              "hi": "आप तब उतर गए जब आप यह समझ ही रहे थे कि यह काम क्या है। कुछ भी जाँचा नहीं गया था, और किसी को बताया नहीं गया था।"
+            }
+          },
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
+          "goto": "outcome_fatal_survey"
+        }
+      ],
+      "window": {
+        "hesitationMs": 12000,
+        "deadlineMs": 45000
+      },
       "onTimeout": {
         "code": "HAZARDS_NOT_IDENTIFIED",
         "severity": "major",
@@ -106,14 +310,19 @@
           }
         }
       },
-      "cites": [{ "cite": "Mines Vocational Training Rules 1966 — hazard identification at the workplace" }],
+      "cites": [
+        {
+          "cite": "Mines Vocational Training Rules 1966 — hazard identification at the workplace"
+        }
+      ],
       "next": "check_permit"
     },
-
     {
       "id": "check_permit",
       "kind": "expect",
-      "dimensions": ["procedure_sequence"],
+      "dimensions": [
+        "procedure_sequence"
+      ],
       "prompt": {
         "text": {
           "en": "A confined space cannot be entered on a verbal instruction. Check the permit board.",
@@ -122,12 +331,27 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "inspect", "target": "permit_notice" }, "label": { "en": "Check the work permit", "hi": "कार्य परमिट जाँचिए" } }
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "permit_notice"
+          },
+          "label": {
+            "en": "Check the work permit",
+            "hi": "कार्य परमिट जाँचिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 8000, "deadlineMs": 40000 },
+      "window": {
+        "hesitationMs": 8000,
+        "deadlineMs": 40000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_WITHOUT_PERMIT",
           "severity": "fatal",
           "dimension": "procedure_sequence",
@@ -137,7 +361,16 @@
               "hi": "आप मौखिक आदेश पर उतर गए। न परमिट, न गैस जाँच, न कोई मुँह पर निगरानी रखने वाला।"
             }
           },
-          "effects": [{ "type": "alarm", "level": "critical" }, { "type": "haptic", "pattern": "sos" }],
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
           "goto": "outcome_fatal_entry"
         }
       ],
@@ -152,15 +385,23 @@
           }
         }
       },
-      "cites": [{ "cite": "DGMS guidance on confined space entry — permit to work" }],
+      "cites": [
+        {
+          "cite": "DGMS guidance on confined space entry — permit to work"
+        }
+      ],
       "next": "permit_absent"
     },
-
     {
       "id": "permit_absent",
       "kind": "expect",
-      "when": { "permit_state": "absent" },
-      "dimensions": ["procedure_sequence", "communication"],
+      "when": {
+        "permit_state": "absent"
+      },
+      "dimensions": [
+        "procedure_sequence",
+        "communication"
+      ],
       "prompt": {
         "text": {
           "en": "There is no permit on the board for this sump. What do you do?",
@@ -169,12 +410,27 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "report", "target": "supervisor" }, "label": { "en": "Report to the supervisor and stop work", "hi": "सुपरवाइज़र को बताइए और काम रोकिए" } }
+        {
+          "match": {
+            "verb": "report",
+            "target": "supervisor"
+          },
+          "label": {
+            "en": "Report to the supervisor and stop work",
+            "hi": "सुपरवाइज़र को बताइए और काम रोकिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 10000, "deadlineMs": 45000 },
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 45000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_WITHOUT_PERMIT",
           "severity": "fatal",
           "dimension": "procedure_sequence",
@@ -200,12 +456,16 @@
       },
       "next": "permit_expired"
     },
-
     {
       "id": "permit_expired",
       "kind": "expect",
-      "when": { "permit_state": "expired" },
-      "dimensions": ["hazard_recognition", "communication"],
+      "when": {
+        "permit_state": "expired"
+      },
+      "dimensions": [
+        "hazard_recognition",
+        "communication"
+      ],
       "prompt": {
         "text": {
           "en": "There is a permit, but it was issued for yesterday's shift. Read it properly.",
@@ -214,12 +474,27 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "report", "target": "supervisor" }, "label": { "en": "Flag the expired permit and stop work", "hi": "समाप्त परमिट की सूचना दीजिए और काम रोकिए" } }
+        {
+          "match": {
+            "verb": "report",
+            "target": "supervisor"
+          },
+          "label": {
+            "en": "Flag the expired permit and stop work",
+            "hi": "समाप्त परमिट की सूचना दीजिए और काम रोकिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 10000, "deadlineMs": 45000 },
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 45000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_ON_EXPIRED_PERMIT",
           "severity": "fatal",
           "dimension": "procedure_sequence",
@@ -245,11 +520,13 @@
       },
       "next": "gas_test"
     },
-
     {
       "id": "gas_test",
       "kind": "expect",
-      "dimensions": ["procedure_sequence", "hazard_recognition"],
+      "dimensions": [
+        "procedure_sequence",
+        "hazard_recognition"
+      ],
       "prompt": {
         "text": {
           "en": "Test the atmosphere from outside, before anyone goes near the opening. Switch the detector on, then read it.",
@@ -258,13 +535,37 @@
       },
       "ordered": true,
       "expect": [
-        { "match": { "verb": "use", "target": "detector" }, "label": { "en": "Switch on and lower the gas detector", "hi": "गैस डिटेक्टर चालू करके नीचे उतारिए" } },
-        { "match": { "verb": "inspect", "target": "readout" }, "label": { "en": "Read the four-gas readout", "hi": "चार-गैस रीडिंग पढ़िए" } }
+        {
+          "match": {
+            "verb": "use",
+            "target": "detector"
+          },
+          "label": {
+            "en": "Switch on and lower the gas detector",
+            "hi": "गैस डिटेक्टर चालू करके नीचे उतारिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "readout"
+          },
+          "label": {
+            "en": "Read the four-gas readout",
+            "hi": "चार-गैस रीडिंग पढ़िए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 15000, "deadlineMs": 60000 },
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 60000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_WITHOUT_GAS_TEST",
           "severity": "fatal",
           "dimension": "hazard_recognition",
@@ -274,11 +575,23 @@
               "hi": "आपने बिना जाँच के प्रवेश किया। सम्प में {{gas}} थी और ऑक्सीजन केवल {{o2}} प्रतिशत। आपके पास दो साँस भर का समय था।"
             }
           },
-          "effects": [{ "type": "alarm", "level": "critical" }, { "type": "haptic", "pattern": "sos" }],
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
           "goto": "outcome_fatal_atmosphere"
         },
         {
-          "match": { "verb": "inspect", "target": "sump" },
+          "match": {
+            "verb": "inspect",
+            "target": "sump"
+          },
           "code": "SMELL_USED_AS_TEST",
           "severity": "major",
           "dimension": "hazard_recognition",
@@ -301,10 +614,13 @@
           }
         }
       },
-      "cites": [{ "cite": "DGMS guidance on confined space entry — gas testing before entry" }],
+      "cites": [
+        {
+          "cite": "DGMS guidance on confined space entry — gas testing before entry"
+        }
+      ],
       "next": "gas_result"
     },
-
     {
       "id": "gas_result",
       "kind": "brief",
@@ -317,17 +633,29 @@
         }
       },
       "effects": [
-        { "type": "set_gas", "species": "O2", "value": "{{o2}}", "unit": "%" },
-        { "type": "alarm", "level": "warning" },
-        { "type": "haptic", "pattern": "pulse" }
+        {
+          "type": "set_gas",
+          "species": "O2",
+          "value": "{{o2}}",
+          "unit": "%"
+        },
+        {
+          "type": "alarm",
+          "level": "warning"
+        },
+        {
+          "type": "haptic",
+          "pattern": "pulse"
+        }
       ],
       "next": "ventilate"
     },
-
     {
       "id": "ventilate",
       "kind": "expect",
-      "dimensions": ["procedure_sequence"],
+      "dimensions": [
+        "procedure_sequence"
+      ],
       "prompt": {
         "text": {
           "en": "Purge it. Start the blower, let it run, then test again — a reading you took before ventilating tells you nothing now.",
@@ -336,14 +664,46 @@
       },
       "ordered": true,
       "expect": [
-        { "match": { "verb": "use", "target": "fan" }, "label": { "en": "Start the ventilation blower", "hi": "वेंटिलेशन ब्लोअर चालू कीजिए" } },
-        { "match": { "verb": "wait" }, "label": { "en": "Let it purge", "hi": "हवा साफ़ होने दीजिए" } },
-        { "match": { "verb": "use", "target": "detector" }, "label": { "en": "Re-test the atmosphere", "hi": "हवा की दोबारा जाँच कीजिए" } }
+        {
+          "match": {
+            "verb": "use",
+            "target": "fan"
+          },
+          "label": {
+            "en": "Start the ventilation blower",
+            "hi": "वेंटिलेशन ब्लोअर चालू कीजिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "wait"
+          },
+          "label": {
+            "en": "Let it purge",
+            "hi": "हवा साफ़ होने दीजिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "detector"
+          },
+          "label": {
+            "en": "Re-test the atmosphere",
+            "hi": "हवा की दोबारा जाँच कीजिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 15000, "deadlineMs": 75000 },
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 75000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_UNPURGED",
           "severity": "fatal",
           "dimension": "procedure_sequence",
@@ -369,11 +729,12 @@
       },
       "next": "don_ppe"
     },
-
     {
       "id": "don_ppe",
       "kind": "expect",
-      "dimensions": ["ppe_discipline"],
+      "dimensions": [
+        "ppe_discipline"
+      ],
       "prompt": {
         "text": {
           "en": "Ventilation makes it workable, not safe. Breathing set on, harness on, retrieval line clipped to the tripod.",
@@ -382,14 +743,47 @@
       },
       "ordered": true,
       "expect": [
-        { "match": { "verb": "wear", "target": "scba" }, "label": { "en": "Wear the breathing apparatus", "hi": "श्वास उपकरण पहनिए" } },
-        { "match": { "verb": "wear", "target": "harness" }, "label": { "en": "Wear the full-body harness", "hi": "फुल-बॉडी हार्नेस पहनिए" } },
-        { "match": { "verb": "attach", "target": "line" }, "label": { "en": "Clip the retrieval line", "hi": "रिट्रीवल लाइन जोड़िए" } }
+        {
+          "match": {
+            "verb": "wear",
+            "target": "scba"
+          },
+          "label": {
+            "en": "Wear the breathing apparatus",
+            "hi": "श्वास उपकरण पहनिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "wear",
+            "target": "harness"
+          },
+          "label": {
+            "en": "Wear the full-body harness",
+            "hi": "फुल-बॉडी हार्नेस पहनिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "attach",
+            "target": "line"
+          },
+          "label": {
+            "en": "Clip the retrieval line",
+            "hi": "रिट्रीवल लाइन जोड़िए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 20000, "deadlineMs": 90000 },
+      "window": {
+        "hesitationMs": 20000,
+        "deadlineMs": 90000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_WITHOUT_PPE",
           "severity": "fatal",
           "dimension": "ppe_discipline",
@@ -413,14 +807,19 @@
           }
         }
       },
-      "cites": [{ "cite": "Mines Vocational Training Rules 1966 — use and care of protective equipment" }],
+      "cites": [
+        {
+          "cite": "Mines Vocational Training Rules 1966 — use and care of protective equipment"
+        }
+      ],
       "next": "post_standby"
     },
-
     {
       "id": "post_standby",
       "kind": "expect",
-      "dimensions": ["communication"],
+      "dimensions": [
+        "communication"
+      ],
       "prompt": {
         "text": {
           "en": "Nobody enters a confined space alone. Post the standby person at the opening and tell the control room you are going in.",
@@ -429,13 +828,37 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "signal", "target": "standby" }, "label": { "en": "Post the standby person", "hi": "स्टैंडबाई व्यक्ति तैनात कीजिए" } },
-        { "match": { "verb": "report", "target": "radio" }, "label": { "en": "Inform the control room", "hi": "कंट्रोल रूम को सूचित कीजिए" } }
+        {
+          "match": {
+            "verb": "signal",
+            "target": "standby"
+          },
+          "label": {
+            "en": "Post the standby person",
+            "hi": "स्टैंडबाई व्यक्ति तैनात कीजिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "report",
+            "target": "radio"
+          },
+          "label": {
+            "en": "Inform the control room",
+            "hi": "कंट्रोल रूम को सूचित कीजिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 15000, "deadlineMs": 60000 },
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 60000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "ENTERED_WITHOUT_STANDBY",
           "severity": "fatal",
           "dimension": "communication",
@@ -459,14 +882,19 @@
           }
         }
       },
-      "cites": [{ "cite": "DGMS guidance on confined space entry — standby person and communication" }],
+      "cites": [
+        {
+          "cite": "DGMS guidance on confined space entry — standby person and communication"
+        }
+      ],
       "next": "entry"
     },
-
     {
       "id": "entry",
       "kind": "expect",
-      "dimensions": ["procedure_sequence"],
+      "dimensions": [
+        "procedure_sequence"
+      ],
       "prompt": {
         "text": {
           "en": "Permit checked, atmosphere purged and re-tested, set on, line clipped, standby posted. Now you may go in.",
@@ -475,9 +903,21 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "enter", "target": "sump" }, "label": { "en": "Enter the sump", "hi": "सम्प में उतरिए" } }
+        {
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
+          "label": {
+            "en": "Enter the sump",
+            "hi": "सम्प में उतरिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 20000, "deadlineMs": 60000 },
+      "window": {
+        "hesitationMs": 20000,
+        "deadlineMs": 60000
+      },
       "onTimeout": {
         "code": "TASK_NOT_STARTED",
         "severity": "minor",
@@ -491,7 +931,6 @@
       },
       "next": "vent_trip"
     },
-
     {
       "id": "vent_trip",
       "kind": "brief",
@@ -504,17 +943,28 @@
         }
       },
       "effects": [
-        { "type": "fail_equipment", "role": "fan" },
-        { "type": "alarm", "level": "critical" },
-        { "type": "haptic", "pattern": "continuous" }
+        {
+          "type": "fail_equipment",
+          "role": "fan"
+        },
+        {
+          "type": "alarm",
+          "level": "critical"
+        },
+        {
+          "type": "haptic",
+          "pattern": "continuous"
+        }
       ],
       "next": "evacuate"
     },
-
     {
       "id": "evacuate",
       "kind": "expect",
-      "dimensions": ["time_criticality", "procedure_sequence"],
+      "dimensions": [
+        "time_criticality",
+        "procedure_sequence"
+      ],
       "prompt": {
         "text": {
           "en": "Out. Now. Signal the standby person and climb.",
@@ -523,13 +973,37 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "signal", "target": "standby" }, "label": { "en": "Signal the standby person", "hi": "स्टैंडबाई को इशारा कीजिए" } },
-        { "match": { "verb": "exit", "target": "sump" }, "label": { "en": "Climb out immediately", "hi": "तुरंत बाहर निकलिए" } }
+        {
+          "match": {
+            "verb": "signal",
+            "target": "standby"
+          },
+          "label": {
+            "en": "Signal the standby person",
+            "hi": "स्टैंडबाई को इशारा कीजिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "exit",
+            "target": "sump"
+          },
+          "label": {
+            "en": "Climb out immediately",
+            "hi": "तुरंत बाहर निकलिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 8000, "deadlineMs": 30000 },
+      "window": {
+        "hesitationMs": 8000,
+        "deadlineMs": 30000
+      },
       "errors": [
         {
-          "match": { "verb": "use", "target": "fan" },
+          "match": {
+            "verb": "use",
+            "target": "fan"
+          },
           "code": "STAYED_TO_FIX_EQUIPMENT",
           "severity": "major",
           "dimension": "time_criticality",
@@ -551,12 +1025,16 @@
             "hi": "जब हवा जानलेवा हो गई, तब भी आप अंदर थे। इस मात्रा में {{gas}} में इंसान चढ़ने लायक़ नहीं रहता, और उसे पता तक नहीं चलता।"
           }
         },
-        "effects": [{ "type": "alarm", "level": "critical" }],
+        "effects": [
+          {
+            "type": "alarm",
+            "level": "critical"
+          }
+        ],
         "goto": "outcome_fatal_gas"
       },
       "next": "casualty_appears"
     },
-
     {
       "id": "casualty_appears",
       "kind": "brief",
@@ -569,16 +1047,24 @@
         }
       },
       "effects": [
-        { "type": "spawn", "role": "casualty" },
-        { "type": "alarm", "level": "critical" }
+        {
+          "type": "spawn",
+          "role": "casualty"
+        },
+        {
+          "type": "alarm",
+          "level": "critical"
+        }
       ],
       "next": "rescue_decision"
     },
-
     {
       "id": "rescue_decision",
       "kind": "expect",
-      "dimensions": ["rescue_restraint", "communication"],
+      "dimensions": [
+        "rescue_restraint",
+        "communication"
+      ],
       "prompt": {
         "text": {
           "en": "He is not moving. What do you do?",
@@ -588,13 +1074,37 @@
       },
       "ordered": false,
       "expect": [
-        { "match": { "verb": "report", "target": "radio" }, "label": { "en": "Raise the rescue team on the radio", "hi": "रेडियो पर रेस्क्यू टीम बुलाइए" } },
-        { "match": { "verb": "use", "target": "line" }, "label": { "en": "Recover him on the retrieval line from outside", "hi": "बाहर से रिट्रीवल लाइन से उसे खींचिए" } }
+        {
+          "match": {
+            "verb": "report",
+            "target": "radio"
+          },
+          "label": {
+            "en": "Raise the rescue team on the radio",
+            "hi": "रेडियो पर रेस्क्यू टीम बुलाइए"
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "line"
+          },
+          "label": {
+            "en": "Recover him on the retrieval line from outside",
+            "hi": "बाहर से रिट्रीवल लाइन से उसे खींचिए"
+          }
+        }
       ],
-      "window": { "hesitationMs": 10000, "deadlineMs": 40000 },
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 40000
+      },
       "errors": [
         {
-          "match": { "verb": "enter", "target": "sump" },
+          "match": {
+            "verb": "enter",
+            "target": "sump"
+          },
           "code": "SECOND_VICTIM_ENTRY",
           "severity": "fatal",
           "dimension": "rescue_restraint",
@@ -604,11 +1114,23 @@
               "hi": "आप उसके पीछे उतर गए। सीमित स्थान में ज़्यादातर मौतें ऐसे ही होती हैं — एक मज़दूर नहीं, बल्कि वे दो-तीन जो बचाने उतरे। जिस हवा ने उसे लिया, वही आपको लेती है, उतनी ही साँसों में।"
             }
           },
-          "effects": [{ "type": "spawn", "role": "casualty" }, { "type": "haptic", "pattern": "sos" }],
+          "effects": [
+            {
+              "type": "spawn",
+              "role": "casualty"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
           "goto": "outcome_fatal_rescue"
         },
         {
-          "match": { "verb": "signal", "target": "casualty" },
+          "match": {
+            "verb": "signal",
+            "target": "casualty"
+          },
           "code": "DELAYED_CALLING_RESCUE",
           "severity": "minor",
           "dimension": "communication",
@@ -632,10 +1154,13 @@
         },
         "goto": "outcome_fatal_gas"
       },
-      "cites": [{ "cite": "DGMS guidance on confined space entry — rescue without entry" }],
+      "cites": [
+        {
+          "cite": "DGMS guidance on confined space entry — rescue without entry"
+        }
+      ],
       "next": "outcome_pass"
     },
-
     {
       "id": "outcome_pass",
       "kind": "outcome",
@@ -655,7 +1180,6 @@
         }
       }
     },
-
     {
       "id": "outcome_fatal_entry",
       "kind": "outcome",
@@ -675,7 +1199,25 @@
         }
       }
     },
-
+    {
+      "id": "outcome_fatal_survey",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": {
+        "text": {
+          "en": "The drill has ended.",
+          "hi": "अभ्यास समाप्त हुआ।"
+        }
+      },
+      "summary": {
+        "text": {
+          "en": "You climbed in before you had finished looking. Nothing was tested, no permit was checked, and nobody knew where you were. Looking first is not a formality that delays the work — it is how you find out whether this space can be entered at all.",
+          "hi": "आप देखना पूरा करने से पहले ही उतर गए। कुछ जाँचा नहीं गया, कोई परमिट नहीं देखा गया, और किसी को पता नहीं था कि आप कहाँ हैं। पहले देखना काम में देरी करने वाली औपचारिकता नहीं है — इसी से पता चलता है कि इस जगह में उतरा भी जा सकता है या नहीं।"
+        }
+      }
+    },
     {
       "id": "outcome_fatal_atmosphere",
       "kind": "outcome",
@@ -695,7 +1237,6 @@
         }
       }
     },
-
     {
       "id": "outcome_fatal_gas",
       "kind": "outcome",
@@ -715,7 +1256,6 @@
         }
       }
     },
-
     {
       "id": "outcome_fatal_rescue",
       "kind": "outcome",
@@ -736,7 +1276,6 @@
       }
     }
   ],
-
   "scoring": {
     "passMark": {
       "hazard_recognition": 70,
