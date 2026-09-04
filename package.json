@@ -22,7 +22,10 @@
     "preview": "vite preview --host",
     "phone": "node tools/phone.mjs setup",
     "phone:logs": "node tools/phone.mjs logs",
-    "phone:eval": "node tools/phone.mjs eval"
+    "phone:eval": "node tools/phone.mjs eval",
+    "l10n": "node tools/translate.mjs --report",
+    "l10n:draft": "node tools/translate.mjs --dry-run",
+    "l10n:apply": "node tools/translate.mjs --apply"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
