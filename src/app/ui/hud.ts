@@ -44,6 +44,7 @@ export class Hud {
   #timerFill = el('div', 'timer-fill');
   #timerLabel = el('span', 'timer-label');
   #banner = el('div', 'banner');
+  #pulse = el('div', 'input-pulse');
   #waitButton = el('button', 'wait-button');
   #continue = el('button', 'primary continue');
 
@@ -77,7 +78,7 @@ export class Hud {
     const panel = el('div', 'hud-panel');
     const head = el('div', 'prompt-row');
     head.append(this.#prompt, this.#listen);
-    panel.append(head, this.#timer, this.#checklist, this.#banner, this.#continue);
+    panel.append(this.#pulse, head, this.#timer, this.#checklist, this.#banner, this.#continue);
 
     this.root.append(bar, panel, this.#waitButton);
   }
@@ -164,6 +165,25 @@ export class Hud {
     this.#timerFill.style.width = `${fraction * 100}%`;
     this.#timer.classList.toggle('urgent', fraction < 0.34);
     this.#timerLabel.textContent = `${this.#i18n.ui('timeLeft')} ${Math.ceil(remaining / 1000)}s`;
+  }
+
+  /**
+   * Say that an action was received. Deliberately says nothing about whether it
+   * was the right one.
+   *
+   * A learner who taps a verb that does not apply here used to get literally
+   * nothing back — no banner, no movement — which is indistinguishable from a
+   * broken app, and was reported as exactly that. The cure cannot be to tell
+   * them they were wrong: choosing the right action is the thing being measured,
+   * and a "not that" hint hands over the answer. So this fires identically for
+   * every verdict, including the correct ones. It is a receipt, not a verdict.
+   */
+  registerInput(): void {
+    // Restart the animation even when one is already running, so two taps in
+    // quick succession read as two receipts rather than one.
+    this.#pulse.classList.remove('on');
+    void this.#pulse.offsetWidth;
+    this.#pulse.classList.add('on');
   }
 
   feedback(feedback: Feedback): void {

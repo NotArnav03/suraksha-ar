@@ -99,7 +99,7 @@ interface Harness {
   finished: { value: boolean };
 }
 
-async function mount(seed: number, lang: 'en' | 'hi' = 'en'): Promise<Harness> {
+async function mount(seed: number, lang: 'en' | 'hi' | 'sat' = 'en'): Promise<Harness> {
   const world = window.document.createElement('div') as unknown as HTMLElement;
   const chrome = window.document.createElement('div') as unknown as HTMLElement;
   window.document.body.append(world as never, chrome as never);
@@ -350,6 +350,46 @@ test('every action the scenario expects can actually be performed in the UI', ()
   assert.ok(checked.some((c) => c.endsWith('detector_spare')));
 });
 
+test('setting .hidden on every toggled element actually hides it, per the real stylesheet', async () => {
+  // Regression test for a real bug: `.sheet { display: flex; ... }` set
+  // `display` unconditionally, and an author-stylesheet declaration beats the
+  // browser's built-in `[hidden] { display: none }` regardless of selector
+  // specificity — origin is checked before specificity in the cascade. So
+  // `sheet.hidden = true` was a silent no-op: the sheet stayed laid out and
+  // visible no matter what the DOM property said. Cancel looked broken;
+  // really, nothing that ever closed a sheet had worked, on any tier, ever —
+  // it just went unnoticed because a newly opened sheet's content visually
+  // replaces the "closed" one still sitting there.
+  //
+  // This loads the actual shipped CSS (not a copy) into a real stylesheet and
+  // checks computed style, which is the only way to catch a cascade-origin
+  // bug — asserting on the `hidden` DOM property, as every other test here
+  // does for convenience, cannot see this class of bug at all.
+  // happy-dom does not implement the browser's built-in `[hidden] { display:
+  // none }` user-agent rule at all — even a bare element with zero author CSS
+  // computes `display:block` when hidden in this test environment. Real
+  // browsers apply that UA rule at lower cascade priority than any author
+  // rule, regardless of specificity; the closest honest simulation here is
+  // textual order, injecting the UA-equivalent rule before the real app CSS,
+  // which resolves identically for every tied-specificity case this guards.
+  const css = await readFile(fileURLToPath(new URL('../src/app/style.css', import.meta.url)), 'utf8');
+  const style = window.document.createElement('style');
+  style.textContent = `[hidden] { display: none; }\n${css}`;
+  window.document.head.append(style as never);
+
+  for (const className of ['sheet', 'ar-hint', 'ar-crosshair', 'readout', 'banner', 'timer']) {
+    const el = window.document.createElement('div');
+    el.className = className;
+    (el as unknown as HTMLElement).hidden = true;
+    window.document.body.append(el as never);
+    const display = window.getComputedStyle(el as never).display;
+    assert.equal(display, 'none', `.${className}[hidden] computed to display:${display}, not none`);
+    el.remove();
+  }
+
+  style.remove();
+});
+
 test('both tiers name every verb identically', () => {
   // Tier A and Tier C import the same table by construction; this fails if
   // either grows a private copy, which would mean the two tiers were asking
@@ -357,11 +397,118 @@ test('both tiers name every verb identically', () => {
   for (const verbs of Object.values(VERBS_BY_KIND)) {
     for (const verb of verbs) {
       assert.ok(VERB_ICON[verb], `no icon for "${verb}"`);
-      assert.ok(VERB_LABEL[verb]?.en && VERB_LABEL[verb]?.hi, `no label for "${verb}"`);
+      assert.ok(
+        VERB_LABEL[verb]?.en && VERB_LABEL[verb]?.hi && VERB_LABEL[verb]?.sat,
+        `"${verb}" is missing a language — a learner who picked Santali would silently see Hindi here`,
+      );
     }
   }
 });
 
+test('verb labels actually resolve to the selected language, not a hardcoded fallback', () => {
+  // Regression test for a real bug: verb labels used to be read via
+  // `code === 'en' ? labels.en : labels.hi` at every call site, so a learner
+  // who picked Santali silently kept seeing Hindi on every single verb.
+  const hi = new Localizer('hi');
+  const sat = new Localizer('sat');
+  for (const verb of Object.keys(VERB_LABEL) as (keyof typeof VERB_LABEL)[]) {
+    const hindi = hi.text(VERB_LABEL[verb]);
+    const santali = sat.text(VERB_LABEL[verb]);
+    assert.notEqual(santali, hindi, `"${verb}" reads the same in Santali as in Hindi`);
+    assert.equal(santali, VERB_LABEL[verb].sat, `"${verb}" did not resolve to its authored Santali text`);
+  }
+});
+
+test('the verb sheet renders in the language actually selected, live in the DOM', async () => {
+  const { world, chrome } = await mount(2, 'sat');
+  pressContinue(chrome); // past the narration-only brief node, where tiles are disabled
+  const tile = tiles(world).find((t) => labelOf(t).length > 0 && !t.disabled);
+  assert.ok(tile, 'no prop tile rendered');
+  tile.click();
+
+  const verbText = world.querySelector('.sheet-card .verb')?.textContent ?? '';
+  assert.match(verbText, /[᱐-᱿]/, 'expected Ol Chiki script in the Santali verb sheet');
+});
+
+test('Cancel actually closes the verb sheet without recording an action', async () => {
+  const { controller, world, chrome } = await mount(2);
+  pressContinue(chrome); // past the narration-only brief node, where tiles are disabled
+  const before = controller.session.events.length;
+
+  const tile = tiles(world).find((t) => labelOf(t).length > 0 && !t.disabled);
+  tile!.click();
+  const sheet = world.querySelector<HTMLElement>('.sheet');
+  assert.ok(sheet && !sheet.hidden, 'sheet did not open');
+
+  const cancel = [...sheet.querySelectorAll<HTMLButtonElement>('button')].find(
+    (b) => b.className === 'ghost',
+  );
+  assert.ok(cancel, 'no Cancel button found in the sheet');
+  cancel.click();
+
+  assert.ok(sheet.hidden, 'Cancel did not close the sheet');
+  assert.equal(
+    controller.session.events.length,
+    before,
+    'Cancel must not dispatch an action into the session',
+  );
+});
+
 after(() => {
   void window.happyDOM.close();
+});
+
+/**
+ * Silence is indistinguishable from a broken app.
+ *
+ * A learner who taps a verb that does not apply at this step used to get nothing
+ * back at all — which is exactly what this project was first reported as: "the
+ * buttons don't work". The receipt says the tap arrived. What it must never do
+ * is say whether the tap was right, because choosing the right action is the
+ * thing being measured.
+ */
+test('every action gets a receipt, and the receipt does not reveal the verdict', async () => {
+  const { controller, world, chrome } = await mount(2);
+  const pulse = chrome.querySelector<HTMLElement>('.input-pulse');
+  assert.ok(pulse, 'the HUD must carry an input receipt');
+
+  pressContinue(chrome);
+
+  // an action that does nothing here at all
+  assert.ok(touch(world, 'Tool box', 'Look at'), 'the distractor must be tappable');
+  assert.ok(pulse.classList.contains('on'), 'an ignored action must still be acknowledged');
+  const afterIgnored = pulse.className;
+
+  // and one that is exactly right
+  assert.ok(touch(world, 'Settling sump opening', 'Look at'));
+  assert.ok(pulse.classList.contains('on'), 'a correct action is acknowledged the same way');
+  assert.equal(pulse.className, afterIgnored, 'the receipt must not differ by verdict');
+
+  controller.stop();
+});
+
+/**
+ * A step out of order is scored as a major error against procedure_sequence.
+ * Being marked down for something you were never told about hides the mistake
+ * and reads as a bug, so it has to reach the banner like any other consequence.
+ */
+test('a step taken out of order is shown to the learner, not only scored', async () => {
+  const { controller, world, chrome } = await mount(2);
+
+  pressContinue(chrome);
+  touch(world, 'Settling sump opening', 'Look at');
+  touch(world, 'Confined space warning board', 'Look at');
+  touch(world, 'Work permit board', 'Look at');
+  touch(world, 'Shift supervisor', 'Report to');
+
+  // gas_test is ordered: the readout cannot be read before the detector is used
+  assert.match(prompt(chrome), /atmosphere/i);
+  assert.ok(touch(world, 'Detector readout', 'Look at'), 'the readout must be tappable');
+
+  const banner = chrome.querySelector<HTMLElement>('.banner');
+  assert.ok(banner && !banner.hidden, 'an out-of-order step must be shown, not silently scored');
+  assert.match(banner.className, /major/);
+  assert.ok((banner.textContent ?? '').length > 0);
+
+  controller.stop();
 });

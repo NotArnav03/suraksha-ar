@@ -9,18 +9,25 @@
 
 :root {
   --bg: #0b0f12;
+  --bg-2: #0e1317;
   --panel: #151b20;
   --panel-2: #1e262c;
   --line: #2c363d;
+  --line-soft: #232b31;
   --ink: #eef3f5;
   --ink-2: #a5b3bb;
   --ink-3: #75858e;
   --hazard: #f0a02e;
   --hazard-ink: #ffc46b;
+  --hazard-dim: #3a2b10;
   --go: #35b39c;
+  --go-dim: #102b26;
   --warn: #e0a143;
   --crit: #e4695c;
   --tap: 56px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.35);
+  --shadow-glow: 0 0 0 1px rgba(240,160,46,.18), 0 10px 30px rgba(240,160,46,.12);
   color-scheme: dark;
 }
 
@@ -29,7 +36,10 @@
 html, body {
   margin: 0;
   height: 100%;
-  background: var(--bg);
+  background:
+    radial-gradient(1200px 640px at 82% -12%, rgba(240,160,46,.10), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(53,179,156,.07), transparent 55%),
+    var(--bg);
   color: var(--ink);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
   font-size: 17px;
@@ -39,7 +49,9 @@ html, body {
 }
 
 #app { height: 100%; }
-.screen { height: 100%; display: flex; flex-direction: column; }
+.screen { height: 100%; display: flex; flex-direction: column; animation: screen-in .28s ease both; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .screen { animation: none; } }
 
 button {
   font: inherit;
@@ -52,22 +64,29 @@ button {
   padding: 12px 16px;
   cursor: pointer;
   touch-action: manipulation;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
 button:active { transform: translateY(1px); }
 button:focus-visible { outline: 3px solid var(--hazard); outline-offset: 2px; }
 button:disabled { opacity: .35; pointer-events: none; }
 
-.primary { background: var(--hazard); color: #171104; border-color: var(--hazard); }
-.primary.big { min-height: 68px; font-size: 1.15rem; }
+.primary {
+  background: linear-gradient(180deg, #ffb648, var(--hazard));
+  color: #1a1204; border-color: transparent;
+  box-shadow: var(--shadow-glow);
+}
+.primary.big { min-height: 68px; font-size: 1.15rem; letter-spacing: .01em; }
 .ghost { background: transparent; color: var(--ink-2); border-color: transparent; }
+.ghost:active { background: var(--panel-2); }
 
 /* ── start screen ───────────────────────────────────────────────────────── */
-.start { padding: 24px 20px 32px; gap: 18px; overflow-y: auto; }
+.start { padding: 28px 20px 32px; gap: 20px; overflow-y: auto; }
+.hero { display: grid; gap: 10px; }
 .eyebrow {
-  margin: 0 0 6px; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
   color: var(--hazard-ink);
 }
-.start h1 { margin: 0 0 10px; font-size: 1.7rem; line-height: 1.15; }
+.start h1 { margin: 0; font-size: 1.85rem; line-height: 1.14; letter-spacing: -.01em; text-wrap: balance; }
 .lede { margin: 0; color: var(--ink-2); }
 
 .lang { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -75,27 +94,56 @@ button:disabled { opacity: .35; pointer-events: none; }
 .lang-button {
   min-height: 40px; padding: 6px 14px; border-radius: 999px;
   background: transparent; color: var(--ink-3); border: 1px solid var(--line);
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
 }
 .lang-button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
 .panel {
-  background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 16px;
+  background: linear-gradient(180deg, var(--panel), var(--bg-2));
+  border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px;
+  box-shadow: var(--shadow-sm);
 }
 .panel h2 { margin: 0 0 10px; font-size: 1.05rem; }
 .reason { margin: 4px 0; color: var(--ink-3); font-size: .92rem; }
 
 .badge {
-  display: inline-block; padding: 3px 9px; border-radius: 999px;
-  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
   background: var(--panel-2); color: var(--ink-2); border: 1px solid var(--line);
   vertical-align: middle;
 }
-.badge.warn { background: #3a2b10; color: var(--hazard-ink); border-color: var(--hazard); }
+.badge.warn { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); }
 
-.caps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 4px; font-size: .88rem; }
-.caps .yes { color: var(--go); }
-.caps .no { color: var(--ink-3); }
+.tier-report { padding: 18px 16px; }
+.tier-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.tier-icon {
+  flex: 0 0 auto; width: 44px; height: 44px; display: grid; place-items: center;
+  font-size: 1.35rem; border-radius: 12px;
+  background: var(--hazard-dim); box-shadow: inset 0 0 0 1px rgba(240,160,46,.35);
+}
+.tier-head > div { min-width: 0; }
+.tier-eyebrow { margin: 0; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.tier-head h2 { margin: 1px 0 0; font-size: 1.15rem; }
+.tier-head .badge { margin-left: auto; flex: 0 0 auto; }
+
+.caps { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.caps li {
+  display: flex; align-items: center; gap: 10px; padding: 8px 4px;
+  border-top: 1px solid var(--line-soft); font-size: .92rem;
+}
+.caps li:first-child { border-top: none; }
+.cap-icon { flex: 0 0 auto; font-size: 1rem; width: 1.4em; text-align: center; opacity: .85; }
+.cap-label { flex: 1; color: var(--ink-2); }
+.cap-tick { flex: 0 0 auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.caps .yes .cap-tick { color: var(--go); }
+.caps .no .cap-tick { color: var(--ink-3); }
+.caps .no .cap-label { color: var(--ink-3); }
+
+.progress-card { display: grid; gap: 8px; padding: 14px 16px; }
+.progress-label { margin: 0; font-size: .92rem; color: var(--ink-2); font-weight: 600; }
+
+.start-actions { display: grid; gap: 10px; }
 
 /* ── drill ──────────────────────────────────────────────────────────────── */
 .drill { flex-direction: column; }
@@ -120,17 +168,26 @@ button:disabled { opacity: .35; pointer-events: none; }
 .tile {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 6px; min-height: 104px; padding: 10px 6px; text-align: center;
-  background: var(--panel); border-radius: 12px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm);
 }
+.tile:active { transform: translateY(1px) scale(.98); }
 .tile-icon { font-size: 1.9rem; line-height: 1; }
 .tile-label { font-size: .82rem; font-weight: 500; color: var(--ink-2); line-height: 1.25; }
 .tile.failed { border-color: var(--crit); opacity: .55; }
 .tile.failed .tile-icon { filter: grayscale(1); }
 
 .sheet {
-  position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end;
-  background: rgba(4, 7, 9, .72);
+  /* `display` lives on `:not([hidden])`, not here. An author-stylesheet rule
+     that sets `display` unconditionally beats the browser's built-in
+     `[hidden] { display: none }` regardless of selector specificity — origin
+     is checked before specificity in the cascade — so `sheet.hidden = true`
+     was silently a no-op: the sheet stayed laid out and visible no matter
+     what the DOM property said. This is why Cancel (and, invisibly, every
+     verb selection before it) never actually closed the sheet. */
+  position: fixed; inset: 0; z-index: 20; background: rgba(4, 7, 9, .72);
 }
+.sheet:not([hidden]) { display: flex; align-items: flex-end; }
 .sheet-card {
   width: 100%; background: var(--panel); border-top: 3px solid var(--hazard);
   border-radius: 16px 16px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
@@ -139,6 +196,10 @@ button:disabled { opacity: .35; pointer-events: none; }
 .sheet-card h2 { margin: 0 0 4px; font-size: 1.2rem; }
 .verb { text-align: left; min-height: 60px; font-size: 1.05rem; }
 .verb-enter, .verb-exit { border-color: var(--hazard); }
+
+/* The AR handshake can take seconds and can fail. Neither may look like a
+   crash, so the wait gets its own visible line rather than an empty screen. */
+.starting { padding: 18px 16px; text-align: center; color: var(--ink-2); }
 
 /* ── hud ────────────────────────────────────────────────────────────────── */
 .chrome { flex: 0 0 auto; }
@@ -150,13 +211,28 @@ button:disabled { opacity: .35; pointer-events: none; }
 .hud-bar .lang { margin-left: auto; }
 .hud-panel { padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); }
 
+/* The input receipt. Identical for every verdict on purpose — it reports that
+   the tap arrived, never whether it was the right tap. */
+.input-pulse {
+  height: 3px; margin: -4px 0 8px; border-radius: 999px;
+  background: var(--hazard); opacity: 0; transform: scaleX(.25);
+}
+.input-pulse.on { animation: input-pulse .42s ease-out; }
+@keyframes input-pulse {
+  0% { opacity: .9; transform: scaleX(.25); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .input-pulse.on { animation: none; opacity: .5; transform: scaleX(1); }
+}
+
 .prompt-row { display: flex; gap: 10px; align-items: flex-start; }
 .prompt { margin: 0; flex: 1; font-size: 1.06rem; font-weight: 500; }
 .prompt-row .ghost { flex: 0 0 auto; white-space: nowrap; font-size: .85rem; }
 
-.timer { position: relative; height: 10px; border-radius: 999px; background: var(--panel-2); margin: 12px 0 6px; }
-.timer-fill { height: 100%; border-radius: 999px; background: var(--go); transition: width .2s linear; }
-.timer.urgent .timer-fill { background: var(--crit); }
+.timer { position: relative; height: 10px; border-radius: 999px; background: var(--panel-2); margin: 12px 0 6px; overflow: hidden; }
+.timer-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--go), #4fd6bd); transition: width .2s linear; }
+.timer.urgent .timer-fill { background: linear-gradient(90deg, var(--crit), #ef8177); }
 .timer-label {
   position: absolute; right: 0; top: 14px; font-size: .78rem; color: var(--ink-3);
   font-variant-numeric: tabular-nums;
@@ -182,37 +258,49 @@ button:disabled { opacity: .35; pointer-events: none; }
 .continue { width: 100%; margin-top: 14px; }
 
 /* ── results ────────────────────────────────────────────────────────────── */
-.results { padding: 20px 16px 32px; gap: 16px; overflow-y: auto; }
-.outcome { padding: 18px; border-radius: 12px; border-left: 5px solid var(--line); background: var(--panel); }
-.outcome h1 { margin: 0 0 8px; font-size: 1.5rem; }
+.results { padding: 22px 16px 32px; gap: 16px; overflow-y: auto; }
+.outcome {
+  padding: 20px; border-radius: 16px; border-left: 5px solid var(--line);
+  background: linear-gradient(165deg, var(--panel), var(--bg-2)); box-shadow: var(--shadow-md);
+}
+.outcome h1 { margin: 0 0 8px; font-size: 1.55rem; letter-spacing: -.01em; }
 .outcome.pass { border-left-color: var(--go); }
+.outcome.pass h1 { color: #6fe3cb; }
 .outcome.fail { border-left-color: var(--warn); }
 .outcome.fatal { border-left-color: var(--crit); }
+.outcome.fatal h1 { color: #f29089; }
 .outcome-summary { margin: 0; color: var(--ink-2); }
 
 .errors { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.errors li { display: grid; gap: 2px; padding: 10px 12px; border-radius: 8px; background: var(--panel-2); border-left: 3px solid var(--warn); }
-.errors li.fatal { border-left-color: var(--crit); }
+.errors li {
+  display: grid; gap: 2px; padding: 11px 13px; border-radius: 10px;
+  background: var(--panel-2); border-left: 3px solid var(--warn);
+}
+.errors li.fatal { border-left-color: var(--crit); background: #241412; }
 .error-code { font-weight: 600; text-transform: capitalize; }
 .error-meta { font-size: .82rem; color: var(--ink-3); text-transform: capitalize; }
 
-.dim { display: grid; grid-template-columns: 8.5rem 1fr 2.2rem auto; gap: 10px; align-items: center; margin-bottom: 8px; }
+.dim { display: grid; grid-template-columns: 8.5rem 1fr 2.2rem auto; gap: 10px; align-items: center; margin-bottom: 10px; }
 .dim-name { font-size: .82rem; color: var(--ink-2); text-transform: capitalize; }
-.dim-track { position: relative; height: 14px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
+.dim-track { position: relative; height: 14px; border-radius: 7px; background: var(--panel-2); overflow: hidden; }
 .dim-track.empty { opacity: .4; }
-.dim-fill { height: 100%; }
-.dim-fill.over { background: var(--go); }
-.dim-fill.under { background: var(--crit); }
+.dim-fill { height: 100%; border-radius: 7px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.dim-fill.over { background: linear-gradient(90deg, var(--go), #4fd6bd); }
+.dim-fill.under { background: linear-gradient(90deg, var(--crit), #ef8177); }
 .dim-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .65; }
 .dim-score { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
 .dim-note { font-size: .7rem; color: var(--crit); text-transform: uppercase; letter-spacing: .08em; }
 
 .pips { display: flex; gap: 8px; margin: 6px 0 10px; }
-.pip { width: 30px; height: 8px; border-radius: 999px; background: var(--panel-2); }
-.pip.on { background: var(--go); }
+.pip { width: 30px; height: 8px; border-radius: 999px; background: var(--panel-2); transition: background .2s ease; }
+.pip.on { background: var(--go); box-shadow: 0 0 10px rgba(53,179,156,.5); }
 
-.credential { text-align: center; }
-.qr { width: 100%; max-width: 260px; height: auto; border-radius: 10px; background: #fff; padding: 8px; }
+.credential { text-align: center; background: linear-gradient(165deg, var(--panel), var(--bg-2)); }
+.credential h2::before { content: '🔏  '; }
+.qr {
+  width: 100%; max-width: 260px; height: auto; border-radius: 12px;
+  background: #fff; padding: 10px; box-shadow: var(--shadow-md);
+}
 
 .fatal-error {
   margin: 20px; padding: 16px; border-radius: 10px; white-space: pre-wrap;
@@ -230,14 +318,24 @@ button:disabled { opacity: .35; pointer-events: none; }
 .ar-active .world { flex: 1; padding: 0; }
 .ar-active .world canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
 .ar-active .chrome {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  /* WebXR's dom-overlay UA styling can force this element (it's the declared
+     overlay root) to its own full-viewport box regardless of what position/
+     size is set here — fighting that with `bottom:0` on `.chrome` itself is
+     unreliable. Instead let it be whatever size the browser gives it, and use
+     flex alignment to push the actual HUD to the bottom of that box either
+     way — this is correct whether the browser hands it a bottom sliver or the
+     full screen. */
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.ar-active .hud {
+  background: rgba(21, 27, 32, .93); backdrop-filter: blur(6px);
   /* Android draws its own "exit fullscreen" toast over the bottom edge during
      an immersive session, which can sit on top of a control placed flush at
-     bottom:0. This clearance keeps the primary action above where it lands,
-     on top of the tap-anywhere fallback wired in the Tier A renderer. */
+     the very bottom. This clearance keeps the primary action above where it
+     lands, on top of the tap-anywhere fallback wired in the Tier A renderer. */
   padding-bottom: max(env(safe-area-inset-bottom), 28px);
 }
-.ar-active .hud { background: rgba(21, 27, 32, .93); backdrop-filter: blur(6px); }
 
 .ar-active.alarm-warning .hud { border-top: 3px solid var(--warn); }
 .ar-active.alarm-critical .hud { border-top: 3px solid var(--crit); }

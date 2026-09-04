@@ -103,6 +103,9 @@ export class DrillController {
 
   act(action: Action): void {
     if (this.#done) return;
+    // Before dispatch, so the receipt lands even when the action changes nothing
+    // at all — that is precisely the case it exists for.
+    this.hud.registerInput();
     this.#apply(this.session.dispatch(action));
   }
 
@@ -125,10 +128,21 @@ export class DrillController {
   #apply(step: StepResult): void {
     for (const effect of step.effects) this.#renderer.effect(effect);
 
+    // A step out of order is already recorded as a major error against
+    // procedure_sequence, and used to show the learner nothing whatsoever.
+    // Being marked down for something you were never told about teaches the
+    // wrong lesson twice over — it hides the mistake and it looks like a bug.
+    // The engine raises this code itself, so the wording comes from the UI
+    // strings rather than from the scenario.
+    const outOfOrder = step.verdict === 'out_of_order';
     const feedback = {
       verdict: step.verdict,
-      consequence: step.consequence ? this.#i18n.text(step.consequence.text) : null,
-      severity: step.severity ?? null,
+      consequence: step.consequence
+        ? this.#i18n.text(step.consequence.text)
+        : outOfOrder
+          ? this.#i18n.ui('outOfOrder')
+          : null,
+      severity: step.severity ?? (outOfOrder ? ('major' as const) : null),
     };
 
     // Present first, then feed back. A fatal mistake advances to the outcome
