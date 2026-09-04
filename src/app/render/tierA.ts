@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import type { Prop, WorldEffect } from '../../engine/types.ts';
 import type { Localizer } from '../ui/i18n.ts';
+import { OverlayTaps } from './overlay-taps.ts';
 import { VERB_ICON, VERB_LABEL } from './verbs.ts';
 import type {
   Feedback,
@@ -133,7 +134,9 @@ export class TierARenderer implements WorldRenderer {
   #raycaster = new THREE.Raycaster();
   #xrController: THREE.XRTargetRaySpace | null = null;
 
+  #taps: OverlayTaps | null = null;
   #hitTestSource: XRHitTestSource | null = null;
+  #lastSelectAt = -Infinity;
   #placed = false;
   #slots = new Map<string, Slot>();
   #meshes = new Map<string, THREE.Group>();
@@ -180,29 +183,18 @@ export class TierARenderer implements WorldRenderer {
     host.append(this.#renderer.domElement);
 
     const overlay = this.#options.overlay;
-    // `overlay` is the whole screen — world canvas and chrome HUD both live
-    // inside it — so per the DOM Overlay spec, literally every tap anywhere is
-    // "on the overlay" and triggers this event first. Suppressing it
-    // unconditionally, as an earlier version of this code did, kills the XR
-    // `select` event for every tap everywhere, including taps on the empty
-    // floor meant to place the site: reticle shows fine (hit-test works), but
-    // nothing places and #onSelect never runs at all. Only suppress it for
-    // taps that land on one of our own interactive controls, where a plain DOM
-    // click already handles the tap and firing select too would double it up.
-    overlay.addEventListener('beforexrselect', (event) => {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest('button, .sheet-card, .lang, .prompt-row')) {
-        event.preventDefault();
-      }
-    });
+    // Every tap anywhere on screen is "on the overlay", so both the XR select
+    // and the DOM click contend for each one and neither is dependable alone on
+    // real hardware. `OverlayTaps` arbitrates: it keeps both channels live,
+    // works out which button the finger was over, and delivers each tap exactly
+    // once. Without it a verb press buzzed and did nothing — the click never
+    // came, and #onSelect below could only tell that *a* tap had happened.
+    this.#taps = new OverlayTaps(overlay);
 
     this.#readout.className = 'readout ar';
     this.#readout.hidden = true;
     this.#hint.className = 'ar-hint';
-    this.#hint.textContent =
-      this.#i18n.language.code === 'en'
-        ? 'Point at the ground and tap to place the work site'
-        : 'ज़मीन पर कैमरा कीजिए और साइट रखने के लिए टैप कीजिए';
+    this.#hint.textContent = this.#i18n.ui('placeHint');
     this.#sheet.className = 'sheet';
     this.#sheet.hidden = true;
     this.#sheet.addEventListener('click', (event) => {
@@ -242,16 +234,37 @@ export class TierARenderer implements WorldRenderer {
   };
 
   #onSelect = (): void => {
+    // Some Android/Chrome builds dispatch more than one `select` for what is
+    // physically a single tap. Without this guard, a tap on Cancel could fire
+    // twice: the first closes the sheet, the second — with the crosshair
+    // still resting on the same prop, since the phone hasn't moved — reopens
+    // it via the ordinary prop-selection path below. Net visible effect: a
+    // vibration, and the sheet that looks like it never closed at all.
+    const now = performance.now();
+    if (now - this.#lastSelectAt < 350) return;
+    this.#lastSelectAt = now;
+
     // A short buzz on every registered select, before anything else, so a tap
     // that reaches the page is distinguishable from one that never did — the
     // two look identical to a learner when the visible result is "nothing".
     if ('vibrate' in navigator) navigator.vibrate(30);
 
+    // The finger was on a control — a verb, Cancel, Continue, a language chip.
+    // That is the learner's actual choice, and it outranks anything the tap
+    // would otherwise mean for the world behind it.
+    if (this.#taps?.activate()) return;
+
     if (!this.#placed) {
       this.#place();
       return;
     }
-    if (!this.#sheet.hidden) return;
+    if (!this.#sheet.hidden) {
+      // Not a control, so the finger was outside the sheet's card — the same
+      // gesture as the backdrop-tap-to-close wired on `.sheet` itself. The
+      // sheet can never become a dead end a learner is stuck behind.
+      this.#closeSheet();
+      return;
+    }
 
     if (!this.#interactive) {
       // Narration/outcome nodes have no props to tap, so any tap on the world
@@ -297,10 +310,7 @@ export class TierARenderer implements WorldRenderer {
       // plane yet — most often a shiny or low-texture floor ARCore cannot find
       // feature points on. Say so, rather than doing nothing and leaving a
       // learner unable to tell a missed tap from an undetected floor.
-      this.#hint.textContent =
-        this.#i18n.language.code === 'en'
-          ? 'No surface found yet — move the phone slowly over the floor'
-          : 'अभी सतह नहीं मिली — फ़ोन को धीरे-धीरे फ़र्श पर घुमाइए';
+      this.#hint.textContent = this.#i18n.ui('noSurface');
       this.#hint.classList.add('ar-hint-warn');
       return;
     }
@@ -322,8 +332,7 @@ export class TierARenderer implements WorldRenderer {
       this.#layout();
       this.#hint.hidden = !view.narrationOnly;
       if (view.narrationOnly) {
-        this.#hint.textContent =
-          this.#i18n.language.code === 'en' ? 'Tap anywhere to continue' : 'आगे बढ़ने के लिए कहीं भी टैप कीजिए';
+        this.#hint.textContent = this.#i18n.ui('tapToContinue');
       }
       // Selection raycasts from screen centre, so the learner needs a fixed
       // aim point on screen — without it, "tap the thing" has no visible target.
@@ -419,10 +428,7 @@ export class TierARenderer implements WorldRenderer {
     for (const verb of prop.verbs) {
       const button = document.createElement('button');
       button.className = `verb verb-${verb}`;
-      const labels = VERB_LABEL[verb];
-      button.textContent = `${VERB_ICON[verb]}  ${
-        this.#i18n.language.code === 'en' ? labels.en : labels.hi
-      }`;
+      button.textContent = `${VERB_ICON[verb]}  ${this.#i18n.text(VERB_LABEL[verb])}`;
       button.addEventListener('click', () => {
         this.#closeSheet();
         this.#hooks?.act({ verb, target: prop.id });
@@ -504,6 +510,7 @@ export class TierARenderer implements WorldRenderer {
   }
 
   dispose(): void {
+    this.#taps?.dispose();
     this.#renderer.setAnimationLoop(null);
     this.#xrController?.removeEventListener('select', this.#onSelect);
     this.#hitTestSource?.cancel();
