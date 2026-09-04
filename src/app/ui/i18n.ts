@@ -31,7 +31,7 @@ export interface Language {
 export const LANGUAGES: Language[] = [
   { code: 'hi', name: 'हिन्दी', speech: 'hi-IN', chain: ['hi', 'en'] },
   { code: 'en', name: 'English', speech: 'en-IN', chain: ['en'] },
-  { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ', speech: 'hi-IN', chain: ['sat', 'hi', 'en'] },
+  { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ', speech: 'sat-IN', chain: ['sat', 'hi', 'en'] },
 ];
 
 const UI: Record<string, LocalizedText> = {
@@ -117,6 +117,73 @@ const UI: Record<string, LocalizedText> = {
   },
 };
 
+/**
+ * Which script a string is actually written in.
+ *
+ * This is not the same question as which language the learner selected, and
+ * conflating the two is why Santali was never once spoken aloud. The fallback
+ * chain means a learner who picks Santali is very often looking at Hindi, so
+ * the selection says `sat` while the screen says Devanagari; and where Santali
+ * *is* authored, it is Ol Chiki, which a Hindi voice cannot pronounce at all.
+ * The script is the honest signal for how to say what is on the screen.
+ */
+const OL_CHIKI = /[᱐-᱿]/;
+const DEVANAGARI = /[ऀ-ॿ]/;
+
+export function scriptTag(text: string): 'sat' | 'hi' | 'en' {
+  if (OL_CHIKI.test(text)) return 'sat';
+  if (DEVANAGARI.test(text)) return 'hi';
+  return 'en';
+}
+
+/** Android reports `sat_IN_#Olck`; BCP-47 wants `sat-IN`. Both reach us. */
+function primarySubtag(lang: string): string {
+  return lang.toLowerCase().replace(/_/g, '-').split('-')[0] ?? '';
+}
+
+function bcp47(lang: string): string {
+  const parts = lang.replace(/#.*$/, '').split(/[_-]/).filter(Boolean);
+  return parts.length > 1 ? `${parts[0]}-${parts[1]}` : (parts[0] ?? lang);
+}
+
+/** `sat_IN_#Olck` -> `in`, `en-IN` -> `in`, `en_US` -> `us`. */
+function region(lang: string): string {
+  return lang.toLowerCase().replace(/#.*$/, '').split(/[_-]/).filter(Boolean)[1] ?? '';
+}
+
+/**
+ * Pick the voice that can actually pronounce this script.
+ *
+ * Android lists romanised variants beside the real ones — `hi_IN_#Latn` is
+ * Hindi spelled in Latin letters and is the wrong front end for Devanagari, so
+ * a naive "first voice whose language matches" picks it roughly half the time.
+ */
+export function pickVoice(
+  voices: readonly SpeechSynthesisVoice[],
+  tag: 'sat' | 'hi' | 'en',
+): SpeechSynthesisVoice | null {
+  const candidates = voices.filter((v) => primarySubtag(v.lang) === tag);
+  if (candidates.length === 0) return null;
+
+  const score = (voice: SpeechSynthesisVoice): number => {
+    const lang = voice.lang.toLowerCase();
+    let points = 0;
+    // Ol Chiki is the script this app writes Santali in; a Santali voice for
+    // any other script would mispronounce every word.
+    if (tag === 'sat' && lang.includes('olck')) points += 4;
+    // `hi_IN_#Latn` is Hindi spelled in Latin letters — the wrong front end for
+    // Devanagari, and Android lists it right beside the real one.
+    if (lang.includes('latn') && tag !== 'en') points -= 4;
+    // An Indian English voice says "sump" and "permit" the way the supervisor
+    // saying them will. en-AU, which is what sorting alphabetically lands on,
+    // does not.
+    if (region(voice.lang) === 'in') points += 2;
+    return points;
+  };
+
+  return [...candidates].sort((a, b) => score(b) - score(a))[0]!;
+}
+
 export class Localizer {
   #language: Language;
   #voices: SpeechSynthesisVoice[] = [];
@@ -163,15 +230,31 @@ export class Localizer {
     if ('speechSynthesis' in window) speechSynthesis.cancel();
   }
 
+  /**
+   * Whether this string can be read aloud on this handset.
+   *
+   * The Listen control asks before offering itself. A button that does nothing
+   * is worse than no button on a screen a worker is already unsure of.
+   */
+  canSpeak(text: string): boolean {
+    if (!('speechSynthesis' in window) || text.length === 0) return false;
+    return pickVoice(this.#voices, scriptTag(text)) !== null;
+  }
+
   speak(text: string): void {
     if (!this.#enabled || !('speechSynthesis' in window) || text.length === 0) return;
+
+    const tag = scriptTag(text);
+    const voice = pickVoice(this.#voices, tag);
+    // Ol Chiki handed to a Devanagari voice is not a degraded reading, it is
+    // noise — and noise on a safety instruction is worse than silence, because
+    // the learner cannot tell it is wrong. Say nothing instead.
+    if (!voice) return;
+
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = this.#language.speech;
-    const voice =
-      this.#voices.find((v) => v.lang === this.#language.speech) ??
-      this.#voices.find((v) => v.lang.startsWith(this.#language.speech.split('-')[0]!));
-    if (voice) utterance.voice = voice;
+    utterance.lang = bcp47(voice.lang);
+    utterance.voice = voice;
     utterance.rate = 0.95;
     speechSynthesis.speak(utterance);
   }

@@ -157,6 +157,10 @@ export class Hud {
       }
     }
 
+    // Offered only where it works. On a handset with no voice for the script on
+    // screen, pressing it would do nothing at all.
+    this.#listen.disabled = !this.#i18n.canSpeak(view.prompt);
+
     this.#timer.hidden = view.window === null;
     if (changed) {
       this.hideBanner();
