@@ -1,6 +1,7 @@
 import type { Feedback, NodeView, Tier } from '../render/contract.ts';
 import type { Localizer } from './i18n.ts';
 import { LANGUAGES, type LangCode } from './i18n.ts';
+import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './theme.ts';
 
 /**
  * The shared instrument panel.
@@ -58,8 +59,9 @@ export class Hud {
     const bar = el('div', 'hud-bar');
     this.#tierBadge.textContent = `TIER ${tier}`;
     this.#tierBadge.title = tierLabel;
-    bar.append(this.#tierBadge, this.#languagePicker(), this.#speechToggle());
+    bar.append(this.#tierBadge, this.#languagePicker(), this.#themeToggle(), this.#speechToggle());
 
+    this.#listen.className = 'listen';
     this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
     this.#listen.addEventListener('click', () => this.speakPrompt());
 
@@ -99,7 +101,11 @@ export class Hud {
   }
 
   #syncLanguage(): void {
-    for (const button of this.root.querySelectorAll<HTMLElement>('.lang-button')) {
+    // `[data-code]` matters: the theme and speech controls share the pill
+    // styling but carry no language, so an unscoped query switched them both
+    // off every time the learner changed language — the speaker icon went dark
+    // while speech was still on.
+    for (const button of this.root.querySelectorAll<HTMLElement>('.lang-button[data-code]')) {
       button.classList.toggle('on', button.dataset.code === this.#i18n.language.code);
     }
     this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
@@ -108,8 +114,21 @@ export class Hud {
     if (this.#view) this.present(this.#view);
   }
 
+  /** Light, dark, or whatever the phone says — see theme.ts for why all three. */
+  #themeToggle(): HTMLElement {
+    let choice: ThemeChoice = loadTheme();
+    const button = el('button', 'lang-button theme-toggle', THEME_ICON[choice]);
+    button.title = this.#i18n.ui('theme');
+    button.addEventListener('click', () => {
+      choice = nextTheme(choice);
+      applyTheme(choice);
+      button.textContent = THEME_ICON[choice];
+    });
+    return button;
+  }
+
   #speechToggle(): HTMLElement {
-    const button = el('button', 'lang-button on', '🔊');
+    const button = el('button', 'lang-button speech-toggle on', '🔊');
     button.addEventListener('click', () => {
       const enabled = !this.#i18n.speechEnabled;
       this.#hooks.onSpeechToggle(enabled);

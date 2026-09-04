@@ -1,33 +1,100 @@
 /*
  * Built for the worst screen it will ever run on: a scratched budget phone,
- * outdoors, in daylight, held in a gloved hand. That rules out thin type, low
- * contrast, hairline borders and anything smaller than a thumb.
+ * outdoors, in daylight, held in a gloved hand, by someone who may be reading
+ * slowly. That rules out thin type, low contrast, hairline borders, and
+ * anything smaller than a thumb.
  *
  * No web fonts. The app has to work with the radio off, and a font that arrives
  * from a CDN is a font that does not arrive at the pit-top.
+ *
+ * ── colour ────────────────────────────────────────────────────────────────
+ * Two palettes, one set of names. Light is declared on bare `:root` and is the
+ * fallback; dark is applied both by `prefers-color-scheme` (guarded so a manual
+ * light choice still wins) and by an explicit `data-theme="dark"`. Every colour
+ * has its definition in the light block — a colour defined only inside a media
+ * query is a colour that vanishes when the query does not match.
  */
 
 :root {
-  --bg: #0b0f12;
-  --bg-2: #0e1317;
-  --panel: #151b20;
-  --panel-2: #1e262c;
-  --line: #2c363d;
-  --line-soft: #232b31;
-  --ink: #eef3f5;
-  --ink-2: #a5b3bb;
-  --ink-3: #75858e;
+  /* warm paper: for a yard in daylight */
+  --bg: #f6f2ea;
+  --bg-2: #fffdf8;
+  --panel: #fffdf8;
+  --panel-2: #efe8dc;
+  --line: #dbd1c0;
+  --line-soft: #ebe4d8;
+  --ink: #1b1915;
+  --ink-2: #4c463d;
+  --ink-3: #756d61;
+  --hazard: #b3660d;
+  --hazard-ink: #8a4e07;
+  --hazard-dim: #fbeed8;
+  --hazard-solid: #e08b1e;
+  --on-hazard: #24160300;
+  --go: #1c7663;
+  --go-dim: #dff0eb;
+  --warn: #9a6210;
+  --crit: #b1362a;
+  --crit-dim: #fbe6e3;
+  --glow: rgba(179, 102, 13, .14);
+
+  --tap: 60px;
+  --radius: 16px;
+  --shadow-sm: 0 1px 2px rgba(60, 45, 20, .08);
+  --shadow-md: 0 10px 28px rgba(60, 45, 20, .14);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* warm charcoal: for a training room after dark, and for the AR HUD */
+    --bg: #1a1815;
+    --bg-2: #201d18;
+    --panel: #24211b;
+    --panel-2: #2e2a23;
+    --line: #423b31;
+    --line-soft: #302b24;
+    --ink: #f5f0e7;
+    --ink-2: #bdb5a6;
+    --ink-3: #8d8577;
+    --hazard: #f0a02e;
+    --hazard-ink: #ffc46b;
+    --hazard-dim: #3a2b10;
+    --hazard-solid: #f0a02e;
+    --go: #3fc0a8;
+    --go-dim: #12302a;
+    --warn: #e0a143;
+    --crit: #e4695c;
+    --crit-dim: #331715;
+    --glow: rgba(240, 160, 46, .16);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
+    --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1a1815;
+  --bg-2: #201d18;
+  --panel: #24211b;
+  --panel-2: #2e2a23;
+  --line: #423b31;
+  --line-soft: #302b24;
+  --ink: #f5f0e7;
+  --ink-2: #bdb5a6;
+  --ink-3: #8d8577;
   --hazard: #f0a02e;
   --hazard-ink: #ffc46b;
   --hazard-dim: #3a2b10;
-  --go: #35b39c;
-  --go-dim: #102b26;
+  --hazard-solid: #f0a02e;
+  --go: #3fc0a8;
+  --go-dim: #12302a;
   --warn: #e0a143;
   --crit: #e4695c;
-  --tap: 56px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
-  --shadow-md: 0 8px 24px rgba(0,0,0,.35);
-  --shadow-glow: 0 0 0 1px rgba(240,160,46,.18), 0 10px 30px rgba(240,160,46,.12);
+  --crit-dim: #331715;
+  --glow: rgba(240, 160, 46, .16);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
+  --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
   color-scheme: dark;
 }
 
@@ -36,22 +103,26 @@
 html, body {
   margin: 0;
   height: 100%;
-  background:
-    radial-gradient(1200px 640px at 82% -12%, rgba(240,160,46,.10), transparent 60%),
-    radial-gradient(900px 500px at -10% 10%, rgba(53,179,156,.07), transparent 55%),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
-  font-size: 17px;
-  line-height: 1.45;
+  /*
+   * Devanagari and Ol Chiki are named explicitly. `system-ui` covers Latin and,
+   * on most Android builds, Devanagari — but Ol Chiki is frequently absent on
+   * the budget handsets this is aimed at, and an unnamed family means the
+   * browser has nothing to look for. Naming it is not a guarantee; it is the
+   * difference between "used if present" and "never tried".
+   */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto,
+    "Noto Sans", "Noto Sans Devanagari", "Noto Sans Ol Chiki", sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
 }
 
 #app { height: 100%; }
-.screen { height: 100%; display: flex; flex-direction: column; animation: screen-in .28s ease both; }
-@keyframes screen-in { from { opacity: 0; transform: translateY(6px); } }
-@media (prefers-reduced-motion: reduce) { .screen { animation: none; } }
+.screen { height: 100%; display: flex; flex-direction: column; animation: screen-in .3s ease both; }
+@keyframes screen-in { from { opacity: 0; transform: translateY(8px); } }
 
 button {
   font: inherit;
@@ -59,121 +130,144 @@ button {
   color: var(--ink);
   background: var(--panel-2);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   min-height: var(--tap);
-  padding: 12px 16px;
+  padding: 12px 18px;
   cursor: pointer;
   touch-action: manipulation;
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
 }
-button:active { transform: translateY(1px); }
-button:focus-visible { outline: 3px solid var(--hazard); outline-offset: 2px; }
-button:disabled { opacity: .35; pointer-events: none; }
+button:active { transform: translateY(1px) scale(.985); }
+button:focus-visible { outline: 3px solid var(--hazard); outline-offset: 3px; }
+button:disabled { opacity: .38; pointer-events: none; }
 
 .primary {
-  background: linear-gradient(180deg, #ffb648, var(--hazard));
-  color: #1a1204; border-color: transparent;
-  box-shadow: var(--shadow-glow);
+  background: linear-gradient(180deg, #ffb648, var(--hazard-solid));
+  color: #241603;
+  border-color: transparent;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 8px 22px var(--glow);
 }
-.primary.big { min-height: 68px; font-size: 1.15rem; letter-spacing: .01em; }
+.primary.big { min-height: 76px; font-size: 1.2rem; border-radius: var(--radius); }
 .ghost { background: transparent; color: var(--ink-2); border-color: transparent; }
 .ghost:active { background: var(--panel-2); }
 
 /* ── start screen ───────────────────────────────────────────────────────── */
-.start { padding: 28px 20px 32px; gap: 20px; overflow-y: auto; }
-.hero { display: grid; gap: 10px; }
+.start { padding: 26px 20px 34px; gap: 22px; overflow-y: auto; }
+
+.hero { display: grid; gap: 12px; }
+/* --hazard is tuned for borders and fills, where 3:1 is enough. As 13px text on
+   warm paper it measured 3.9:1, so the eyebrow takes the darker ink instead. */
 .eyebrow {
-  margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   color: var(--hazard-ink);
 }
-.start h1 { margin: 0; font-size: 1.85rem; line-height: 1.14; letter-spacing: -.01em; text-wrap: balance; }
-.lede { margin: 0; color: var(--ink-2); }
-
-.lang { display: flex; gap: 8px; flex-wrap: wrap; }
-.lang-big .lang-button { flex: 1 1 90px; min-height: var(--tap); font-size: 1.05rem; }
-.lang-button {
-  min-height: 40px; padding: 6px 14px; border-radius: 999px;
-  background: transparent; color: var(--ink-3); border: 1px solid var(--line);
-  transition: background .12s ease, color .12s ease, border-color .12s ease;
+.start h1 {
+  margin: 0; font-size: 2rem; line-height: 1.18; letter-spacing: -.015em;
+  text-wrap: balance;
 }
-.lang-button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.lede { margin: 0; color: var(--ink-2); font-size: 1.02rem; text-wrap: pretty; }
+
+/* A greeting, not a label. The first thing a nervous new worker reads should
+   tell them nothing can go wrong here, because nothing here is real. */
+.welcome {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 18px; border-radius: var(--radius);
+  background: var(--go-dim); border: 1px solid var(--go);
+}
+.welcome-icon { font-size: 1.7rem; line-height: 1.2; flex: 0 0 auto; }
+.welcome p { margin: 0; color: var(--ink); font-size: 1rem; text-wrap: pretty; }
+
+.lang { display: flex; gap: 10px; flex-wrap: wrap; }
+.lang-big .lang-button { flex: 1 1 100px; min-height: var(--tap); font-size: 1.08rem; }
+.lang-button {
+  min-height: 44px; padding: 8px 16px; border-radius: 999px;
+  background: transparent; color: var(--ink-2); border: 1.5px solid var(--line);
+  transition: background .14s ease, color .14s ease, border-color .14s ease, transform .12s ease;
+}
+.lang-button.on {
+  background: var(--ink); color: var(--bg); border-color: var(--ink);
+}
 
 .panel {
-  background: linear-gradient(180deg, var(--panel), var(--bg-2));
+  background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 14px; padding: 16px;
+  border-radius: var(--radius); padding: 18px;
   box-shadow: var(--shadow-sm);
 }
-.panel h2 { margin: 0 0 10px; font-size: 1.05rem; }
-.reason { margin: 4px 0; color: var(--ink-3); font-size: .92rem; }
+.panel h2 { margin: 0 0 12px; font-size: 1.1rem; }
+.reason { margin: 4px 0; color: var(--ink-3); font-size: .94rem; }
 
 .badge {
-  display: inline-block; padding: 3px 10px; border-radius: 999px;
-  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  display: inline-block; padding: 4px 11px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; letter-spacing: .06em;
   background: var(--panel-2); color: var(--ink-2); border: 1px solid var(--line);
   vertical-align: middle;
 }
 .badge.warn { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); }
 
-.tier-report { padding: 18px 16px; }
-.tier-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.tier-report { padding: 18px; }
+.tier-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
 .tier-icon {
-  flex: 0 0 auto; width: 44px; height: 44px; display: grid; place-items: center;
-  font-size: 1.35rem; border-radius: 12px;
-  background: var(--hazard-dim); box-shadow: inset 0 0 0 1px rgba(240,160,46,.35);
+  flex: 0 0 auto; width: 52px; height: 52px; display: grid; place-items: center;
+  font-size: 1.6rem; border-radius: 14px;
+  background: var(--hazard-dim); box-shadow: inset 0 0 0 1px var(--hazard);
 }
 .tier-head > div { min-width: 0; }
-.tier-eyebrow { margin: 0; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
-.tier-head h2 { margin: 1px 0 0; font-size: 1.15rem; }
+.tier-eyebrow { margin: 0; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.tier-head h2 { margin: 1px 0 0; font-size: 1.2rem; }
 .tier-head .badge { margin-left: auto; flex: 0 0 auto; }
 
 .caps { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
 .caps li {
-  display: flex; align-items: center; gap: 10px; padding: 8px 4px;
-  border-top: 1px solid var(--line-soft); font-size: .92rem;
+  display: flex; align-items: center; gap: 12px; padding: 10px 4px;
+  border-top: 1px solid var(--line-soft); font-size: .96rem;
 }
 .caps li:first-child { border-top: none; }
-.cap-icon { flex: 0 0 auto; font-size: 1rem; width: 1.4em; text-align: center; opacity: .85; }
+.cap-icon { flex: 0 0 auto; font-size: 1.1rem; width: 1.5em; text-align: center; }
 .cap-label { flex: 1; color: var(--ink-2); }
-.cap-tick { flex: 0 0 auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cap-tick { flex: 0 0 auto; font-weight: 700; font-size: 1.05rem; }
 .caps .yes .cap-tick { color: var(--go); }
 .caps .no .cap-tick { color: var(--ink-3); }
 .caps .no .cap-label { color: var(--ink-3); }
 
-.progress-card { display: grid; gap: 8px; padding: 14px 16px; }
-.progress-label { margin: 0; font-size: .92rem; color: var(--ink-2); font-weight: 600; }
+.progress-card { display: grid; gap: 10px; padding: 16px 18px; }
+.progress-label { margin: 0; font-size: .96rem; color: var(--ink-2); font-weight: 600; }
 
-.start-actions { display: grid; gap: 10px; }
+.start-actions { display: grid; gap: 12px; }
+
+/* Preferences that are not the drill: language is above, these sit quietly. */
+.prefs { display: flex; gap: 10px; justify-content: center; }
 
 /* ── drill ──────────────────────────────────────────────────────────────── */
 .drill { flex-direction: column; }
-.world { flex: 1; min-height: 0; overflow-y: auto; padding: 14px; position: relative; }
+.world { flex: 1; min-height: 0; overflow-y: auto; padding: 16px; position: relative; }
 .world.alarm-warning { box-shadow: inset 0 0 0 3px var(--warn); }
-.world.alarm-critical { box-shadow: inset 0 0 0 4px var(--crit); animation: pulse 1.1s ease-in-out infinite; }
-@keyframes pulse { 50% { box-shadow: inset 0 0 0 4px #7a2e27; } }
-@media (prefers-reduced-motion: reduce) { .world.alarm-critical { animation: none; } }
+.world.alarm-critical { box-shadow: inset 0 0 0 4px var(--crit); animation: alarm 1.1s ease-in-out infinite; }
+@keyframes alarm { 50% { box-shadow: inset 0 0 0 6px var(--crit); } }
 
 .readout {
-  position: sticky; top: 0; z-index: 2; margin-bottom: 12px;
-  font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.35rem;
-  text-align: center; padding: 10px; border-radius: 10px;
-  background: #0d1317; border: 2px solid var(--line); color: var(--ink-2);
+  position: sticky; top: 0; z-index: 2; margin-bottom: 14px;
+  font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.5rem;
+  text-align: center; padding: 12px; border-radius: 12px;
+  background: var(--panel); border: 2px solid var(--line); color: var(--ink-2);
 }
 .readout.warning { border-color: var(--warn); color: var(--warn); }
 .readout.critical { border-color: var(--crit); color: var(--crit); }
 
-.world-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 10px; }
-.world-grid.muted { opacity: .4; }
+.world-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px; }
+.world-grid.muted { opacity: .45; }
 
 .tile {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px; min-height: 104px; padding: 10px 6px; text-align: center;
-  background: linear-gradient(180deg, var(--panel-2), var(--panel));
-  border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm);
+  gap: 8px; min-height: 124px; padding: 12px 8px; text-align: center;
+  background: var(--panel);
+  border: 1.5px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  animation: tile-in .26s ease both;
 }
-.tile:active { transform: translateY(1px) scale(.98); }
-.tile-icon { font-size: 1.9rem; line-height: 1; }
-.tile-label { font-size: .82rem; font-weight: 500; color: var(--ink-2); line-height: 1.25; }
+@keyframes tile-in { from { opacity: 0; transform: scale(.94); } }
+.tile:active { transform: scale(.96); border-color: var(--hazard); }
+.tile-icon { font-size: 2.2rem; line-height: 1; }
+.tile-label { font-size: .9rem; font-weight: 600; color: var(--ink-2); line-height: 1.3; }
 .tile.failed { border-color: var(--crit); opacity: .55; }
 .tile.failed .tile-icon { filter: grayscale(1); }
 
@@ -185,36 +279,89 @@ button:disabled { opacity: .35; pointer-events: none; }
      was silently a no-op: the sheet stayed laid out and visible no matter
      what the DOM property said. This is why Cancel (and, invisibly, every
      verb selection before it) never actually closed the sheet. */
-  position: fixed; inset: 0; z-index: 20; background: rgba(4, 7, 9, .72);
+  position: fixed; inset: 0; z-index: 20;
+  background: rgba(20, 14, 4, .6); backdrop-filter: blur(3px);
 }
-.sheet:not([hidden]) { display: flex; align-items: flex-end; }
+.sheet:not([hidden]) { display: flex; align-items: flex-end; animation: fade-in .18s ease both; }
+@keyframes fade-in { from { opacity: 0; } }
+
 .sheet-card {
-  width: 100%; background: var(--panel); border-top: 3px solid var(--hazard);
-  border-radius: 16px 16px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
-  display: grid; gap: 10px; max-height: 78vh; overflow-y: auto;
+  width: 100%; background: var(--panel);
+  border-top: 4px solid var(--hazard-solid);
+  border-radius: 22px 22px 0 0;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  display: grid; gap: 12px; max-height: 80vh; overflow-y: auto;
+  box-shadow: var(--shadow-md);
+  animation: sheet-up .22s cubic-bezier(.2, .9, .3, 1) both;
 }
-.sheet-card h2 { margin: 0 0 4px; font-size: 1.2rem; }
-.verb { text-align: left; min-height: 60px; font-size: 1.05rem; }
-.verb-enter, .verb-exit { border-color: var(--hazard); }
+@keyframes sheet-up { from { transform: translateY(28px); } }
+.sheet-card h2 { margin: 0 0 2px; font-size: 1.3rem; text-align: center; }
+
+/*
+ * Every verb looks the same on purpose.
+ *
+ * Entry and exit used to carry a hazard-coloured border. On a node where
+ * climbing in is fatal that is a lure, and on a node where it is the correct
+ * next step it is a hint — either way the styling was answering a question the
+ * drill exists to ask.
+ */
+.verb {
+  display: flex; align-items: center; gap: 14px;
+  text-align: left; min-height: 68px; font-size: 1.1rem;
+  background: var(--panel-2);
+}
+.verb-icon { font-size: 1.5rem; flex: 0 0 auto; width: 1.5em; text-align: center; }
+.sheet-card .ghost { border: 1.5px solid var(--line); }
 
 /* The AR handshake can take seconds and can fail. Neither may look like a
    crash, so the wait gets its own visible line rather than an empty screen. */
-.starting { padding: 18px 16px; text-align: center; color: var(--ink-2); }
+.starting {
+  padding: 24px 18px; text-align: center; color: var(--ink-2); font-size: 1.02rem;
+}
+.starting::before {
+  content: ''; display: block; width: 30px; height: 30px; margin: 0 auto 14px;
+  border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--hazard);
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── hud ────────────────────────────────────────────────────────────────── */
 .chrome { flex: 0 0 auto; }
 .hud { border-top: 1px solid var(--line); background: var(--panel); }
+/*
+ * Two deliberate rows, not one row that happens to wrap.
+ *
+ * A tier badge, three language endonyms and two toggles do not fit across a
+ * 411px phone, and left to itself the bar broke "TIER C" over two lines and
+ * scattered the pills. Endonyms cannot be abbreviated away — a picker that
+ * names languages in anything but their own script helps nobody — so the
+ * languages get a row of their own and the controls keep the top one.
+ */
 .hud-bar {
-  display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 12px;
   border-bottom: 1px solid var(--line);
 }
-.hud-bar .lang { margin-left: auto; }
-.hud-panel { padding: 12px 14px calc(12px + env(safe-area-inset-bottom)); }
+.hud-bar .badge { flex: 0 0 auto; white-space: nowrap; }
+.hud-bar .theme-toggle { margin-left: auto; }
+.hud-bar .theme-toggle, .hud-bar .speech-toggle {
+  flex: 0 0 auto; min-width: 46px; padding: 4px 10px; font-size: 1.05rem;
+}
+.hud-bar .lang {
+  order: 3; flex: 1 0 100%; margin-left: 0; gap: 6px;
+  justify-content: center; flex-wrap: nowrap;
+}
+/* `[data-code]` again: the toggles wear the same pill class, and an unscoped
+   rule here gave them `flex: 1 1 auto` and stretched them across the bar. */
+.hud-bar .lang-button[data-code] {
+  min-height: 42px; padding: 4px 10px; font-size: .92rem;
+  flex: 1 1 auto; text-align: center; white-space: nowrap;
+}
+.hud-panel { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
 
 /* The input receipt. Identical for every verdict on purpose — it reports that
    the tap arrived, never whether it was the right tap. */
 .input-pulse {
-  height: 3px; margin: -4px 0 8px; border-radius: 999px;
+  height: 3px; margin: -6px 0 10px; border-radius: 999px;
   background: var(--hazard); opacity: 0; transform: scaleX(.25);
 }
 .input-pulse.on { animation: input-pulse .42s ease-out; }
@@ -222,99 +369,141 @@ button:disabled { opacity: .35; pointer-events: none; }
   0% { opacity: .9; transform: scaleX(.25); }
   100% { opacity: 0; transform: scaleX(1); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .input-pulse.on { animation: none; opacity: .5; transform: scaleX(1); }
+
+.prompt-row { display: flex; gap: 12px; align-items: flex-start; }
+.prompt {
+  margin: 0; flex: 1; font-size: 1.18rem; font-weight: 600; line-height: 1.45;
+  text-wrap: pretty;
+}
+/* Reading aloud is not a nicety here — it is how the drill reaches a worker who
+   reads slowly, so the control is a real button rather than a faint link. */
+.prompt-row .listen {
+  flex: 0 0 auto; min-height: 48px; min-width: 48px; padding: 8px 12px;
+  font-size: .9rem; background: var(--panel-2); border: 1.5px solid var(--line);
+  color: var(--ink-2); border-radius: 12px;
 }
 
-.prompt-row { display: flex; gap: 10px; align-items: flex-start; }
-.prompt { margin: 0; flex: 1; font-size: 1.06rem; font-weight: 500; }
-.prompt-row .ghost { flex: 0 0 auto; white-space: nowrap; font-size: .85rem; }
-
-.timer { position: relative; height: 10px; border-radius: 999px; background: var(--panel-2); margin: 12px 0 6px; overflow: hidden; }
-.timer-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--go), #4fd6bd); transition: width .2s linear; }
-.timer.urgent .timer-fill { background: linear-gradient(90deg, var(--crit), #ef8177); }
+.timer { position: relative; height: 12px; border-radius: 999px; background: var(--panel-2); margin: 14px 0 8px; overflow: hidden; }
+.timer-fill { height: 100%; border-radius: 999px; background: var(--go); transition: width .2s linear; }
+.timer.urgent .timer-fill { background: var(--crit); }
+/* The countdown, not decoration: it is the only thing telling a learner how
+   long they have left, so it is held to body-text contrast rather than the
+   muted tone the rest of the small print uses. */
 .timer-label {
-  position: absolute; right: 0; top: 14px; font-size: .78rem; color: var(--ink-3);
-  font-variant-numeric: tabular-nums;
+  position: absolute; right: 0; top: 16px; font-size: .88rem; font-weight: 600;
+  color: var(--ink-2); font-variant-numeric: tabular-nums;
 }
 
-.checklist { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
-.checklist-heading {
-  font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3);
-}
-.checklist li { display: flex; gap: 8px; align-items: baseline; font-size: .95rem; color: var(--ink-2); }
-.checklist li.done { color: var(--ink-3); text-decoration: line-through; }
-.tick { color: var(--hazard); font-weight: 700; }
-.checklist li.done .tick { color: var(--go); }
+.checklist { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+.checklist-heading { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+.checklist li { display: flex; gap: 10px; align-items: baseline; font-size: 1rem; color: var(--ink-2); }
+.checklist li.done { color: var(--ink-3); }
+.tick { color: var(--ink-3); font-weight: 700; flex: 0 0 auto; }
+.checklist li.done .tick { color: var(--go); animation: tick-in .3s cubic-bezier(.2, 1.4, .4, 1) both; }
+@keyframes tick-in { from { transform: scale(.4); opacity: 0; } }
 
 .banner {
-  margin-top: 12px; padding: 12px 14px; border-radius: 10px; font-size: .98rem;
-  background: #2a2010; border-left: 4px solid var(--warn); color: #f3e2c6;
+  margin-top: 14px; padding: 14px 16px; border-radius: 12px; font-size: 1rem;
+  background: var(--hazard-dim); border-left: 5px solid var(--warn); color: var(--ink);
+  animation: banner-in .22s ease both;
 }
-.banner.major { background: #2f1c12; border-color: var(--hazard); }
-.banner.fatal { background: #331715; border-color: var(--crit); color: #f6dcd8; }
+@keyframes banner-in { from { opacity: 0; transform: translateY(-4px); } }
+.banner.major { border-color: var(--hazard); }
+.banner.fatal { background: var(--crit-dim); border-color: var(--crit); }
 
-.wait-button { position: fixed; right: 14px; bottom: 50%; z-index: 5; border-radius: 999px; }
-.continue { width: 100%; margin-top: 14px; }
+.wait-button {
+  position: fixed; right: 16px; bottom: 50%; z-index: 5; border-radius: 999px;
+  background: var(--panel); border: 1.5px solid var(--hazard); color: var(--hazard);
+  box-shadow: var(--shadow-md);
+}
+.continue { width: 100%; margin-top: 16px; }
 
 /* ── results ────────────────────────────────────────────────────────────── */
-.results { padding: 22px 16px 32px; gap: 16px; overflow-y: auto; }
+.results { padding: 24px 16px 34px; gap: 18px; overflow-y: auto; }
 .outcome {
-  padding: 20px; border-radius: 16px; border-left: 5px solid var(--line);
-  background: linear-gradient(165deg, var(--panel), var(--bg-2)); box-shadow: var(--shadow-md);
+  padding: 22px; border-radius: var(--radius); border-left: 6px solid var(--line);
+  background: var(--panel); box-shadow: var(--shadow-md);
 }
-.outcome h1 { margin: 0 0 8px; font-size: 1.55rem; letter-spacing: -.01em; }
-.outcome.pass { border-left-color: var(--go); }
-.outcome.pass h1 { color: #6fe3cb; }
+.outcome h1 { margin: 0 0 10px; font-size: 1.7rem; letter-spacing: -.015em; }
+.outcome-summary { margin: 0; color: var(--ink-2); text-wrap: pretty; }
+
+/* Earned, so it is allowed to be pleased. The failure states are not. */
+.outcome.pass {
+  border-left-color: var(--go); background: var(--go-dim);
+  animation: rise .42s cubic-bezier(.2, .9, .3, 1) both;
+}
+@keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+.outcome.pass h1 { color: var(--go); }
+.outcome.pass h1::before { content: '🎉 '; }
 .outcome.fail { border-left-color: var(--warn); }
-.outcome.fatal { border-left-color: var(--crit); }
-.outcome.fatal h1 { color: #f29089; }
-.outcome-summary { margin: 0; color: var(--ink-2); }
+.outcome.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
+.outcome.fatal h1 { color: var(--crit); }
 
-.errors { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.errors { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .errors li {
-  display: grid; gap: 2px; padding: 11px 13px; border-radius: 10px;
-  background: var(--panel-2); border-left: 3px solid var(--warn);
+  display: grid; gap: 3px; padding: 13px 15px; border-radius: 12px;
+  background: var(--panel-2); border-left: 4px solid var(--warn);
 }
-.errors li.fatal { border-left-color: var(--crit); background: #241412; }
-.error-code { font-weight: 600; text-transform: capitalize; }
-.error-meta { font-size: .82rem; color: var(--ink-3); text-transform: capitalize; }
+.errors li.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
+.error-code { font-weight: 700; text-transform: capitalize; }
+.error-meta { font-size: .86rem; color: var(--ink-3); text-transform: capitalize; }
 
-.dim { display: grid; grid-template-columns: 8.5rem 1fr 2.2rem auto; gap: 10px; align-items: center; margin-bottom: 10px; }
-.dim-name { font-size: .82rem; color: var(--ink-2); text-transform: capitalize; }
-.dim-track { position: relative; height: 14px; border-radius: 7px; background: var(--panel-2); overflow: hidden; }
-.dim-track.empty { opacity: .4; }
-.dim-fill { height: 100%; border-radius: 7px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
-.dim-fill.over { background: linear-gradient(90deg, var(--go), #4fd6bd); }
-.dim-fill.under { background: linear-gradient(90deg, var(--crit), #ef8177); }
-.dim-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .65; }
-.dim-score { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
-.dim-note { font-size: .7rem; color: var(--crit); text-transform: uppercase; letter-spacing: .08em; }
+.dim { display: grid; grid-template-columns: 8.5rem 1fr 2.4rem auto; gap: 12px; align-items: center; margin-bottom: 12px; }
+.dim-name { font-size: .86rem; color: var(--ink-2); text-transform: capitalize; }
+.dim-track { position: relative; height: 16px; border-radius: 8px; background: var(--panel-2); overflow: hidden; }
+.dim-track.empty { opacity: .45; }
+.dim-fill { height: 100%; border-radius: 8px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
+.dim-fill.over { background: var(--go); }
+.dim-fill.under { background: var(--crit); }
+.dim-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .55; }
+.dim-score { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.05rem; }
+.dim-note { font-size: .72rem; color: var(--crit); text-transform: uppercase; letter-spacing: .08em; }
 
-.pips { display: flex; gap: 8px; margin: 6px 0 10px; }
-.pip { width: 30px; height: 8px; border-radius: 999px; background: var(--panel-2); transition: background .2s ease; }
-.pip.on { background: var(--go); box-shadow: 0 0 10px rgba(53,179,156,.5); }
+.pips { display: flex; gap: 10px; margin: 6px 0 10px; }
+.pip { width: 36px; height: 10px; border-radius: 999px; background: var(--panel-2); transition: background .3s ease; }
+.pip.on { background: var(--go); }
 
-.credential { text-align: center; background: linear-gradient(165deg, var(--panel), var(--bg-2)); }
+.credential { text-align: center; }
 .credential h2::before { content: '🔏  '; }
 .qr {
-  width: 100%; max-width: 260px; height: auto; border-radius: 12px;
-  background: #fff; padding: 10px; box-shadow: var(--shadow-md);
+  width: 100%; max-width: 268px; height: auto; border-radius: 14px;
+  background: #fff; padding: 12px; box-shadow: var(--shadow-md);
 }
 
 .fatal-error {
-  margin: 20px; padding: 16px; border-radius: 10px; white-space: pre-wrap;
-  background: #331715; border-left: 4px solid var(--crit); color: #f6dcd8;
-  font-family: ui-monospace, monospace; font-size: .85rem;
+  margin: 20px; padding: 16px; border-radius: 12px; white-space: pre-wrap;
+  background: var(--crit-dim); border-left: 5px solid var(--crit); color: var(--ink);
+  font-family: ui-monospace, monospace; font-size: .86rem;
 }
 
 /* ── Tier A: the HUD floating over the camera feed ──────────────────────────
  * In an immersive session the page background must be transparent or the
- * compositor shows our slate grey instead of the room. Everything the learner
- * needs stays legible against an unknown, uncontrolled backdrop, which is why
- * the panels keep their solid fills rather than going glassy.
+ * compositor shows our own ground instead of the room.
+ *
+ * The overlay pins the dark palette regardless of the app's theme. It is
+ * composited over a live camera image nobody can predict, and paper-white
+ * panels over a bright yard are both unreadable and blinding. This is the one
+ * place the learner's theme choice does not apply, and the reason is physics
+ * rather than preference.
  */
-.ar-active { background: transparent; }
+.ar-active {
+  background: transparent;
+  --panel: #24211b;
+  --panel-2: #2e2a23;
+  --line: #423b31;
+  --line-soft: #302b24;
+  --ink: #f5f0e7;
+  --ink-2: #bdb5a6;
+  --ink-3: #8d8577;
+  --hazard: #f0a02e;
+  --hazard-ink: #ffc46b;
+  --hazard-dim: #3a2b10;
+  --go: #3fc0a8;
+  --go-dim: #12302a;
+  --warn: #e0a143;
+  --crit: #e4695c;
+  --crit-dim: #331715;
+}
 .ar-active .world { flex: 1; padding: 0; }
 .ar-active .world canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
 .ar-active .chrome {
@@ -329,7 +518,7 @@ button:disabled { opacity: .35; pointer-events: none; }
   display: flex; flex-direction: column; justify-content: flex-end;
 }
 .ar-active .hud {
-  background: rgba(21, 27, 32, .93); backdrop-filter: blur(6px);
+  background: rgba(36, 33, 27, .94); backdrop-filter: blur(8px);
   /* Android draws its own "exit fullscreen" toast over the bottom edge during
      an immersive session, which can sit on top of a control placed flush at
      the very bottom. This clearance keeps the primary action above where it
@@ -342,29 +531,42 @@ button:disabled { opacity: .35; pointer-events: none; }
 
 .readout.ar {
   position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 50%;
-  transform: translateX(-50%); z-index: 12; min-width: 170px; margin: 0;
-  background: rgba(13, 19, 23, .92);
+  transform: translateX(-50%); z-index: 12; min-width: 180px; margin: 0;
+  background: rgba(26, 24, 21, .93);
 }
 
 .ar-hint {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
   z-index: 11; max-width: 78vw; text-align: center;
-  padding: 14px 18px; border-radius: 12px;
-  background: rgba(13, 19, 23, .9); border: 1px solid var(--hazard);
-  font-size: 1.02rem;
+  padding: 16px 20px; border-radius: 14px;
+  background: rgba(26, 24, 21, .92); border: 1.5px solid var(--hazard);
+  color: var(--ink); font-size: 1.05rem;
 }
-
-.ar-note { padding: 8px 14px 0; color: var(--hazard-ink); }
-
+.ar-note { padding: 10px 16px 0; color: var(--hazard-ink); }
 .ar-hint-warn { border-color: var(--crit) !important; }
 
 .ar-crosshair {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  z-index: 9; width: 34px; height: 34px; pointer-events: none;
+  z-index: 9; width: 36px; height: 36px; pointer-events: none;
 }
 .ar-crosshair::before, .ar-crosshair::after {
   content: ""; position: absolute; background: var(--hazard);
-  box-shadow: 0 0 0 1px rgba(0,0,0,.5);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .55);
 }
 .ar-crosshair::before { top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-1px); }
 .ar-crosshair::after { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-1px); }
+
+/*
+ * Motion is decoration everywhere it appears here, so all of it goes. The
+ * alarm keeps its colour and its border weight — only the pulsing stops — and
+ * the input receipt stays visible as a static bar, because both of those carry
+ * information rather than polish.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .input-pulse.on { opacity: .55; transform: scaleX(1); }
+}

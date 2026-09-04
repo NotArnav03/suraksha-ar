@@ -120,8 +120,12 @@ export class TierCRenderer implements WorldRenderer {
     for (const verb of prop.verbs) {
       const button = document.createElement('button');
       button.className = `verb verb-${verb}`;
-      const text = this.#i18n.text(VERB_LABEL[verb]);
-      button.textContent = `${VERB_ICON[verb]}  ${text}`;
+      const icon = document.createElement('span');
+      icon.className = 'verb-icon';
+      icon.textContent = VERB_ICON[verb];
+      const text = document.createElement('span');
+      text.textContent = this.#i18n.text(VERB_LABEL[verb]);
+      button.append(icon, text);
       button.addEventListener('click', () => {
         this.#closeSheet();
         this.#hooks?.act({ verb, target: prop.id });

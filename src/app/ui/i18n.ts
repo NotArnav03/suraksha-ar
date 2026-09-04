@@ -64,6 +64,13 @@ const UI: Record<string, LocalizedText> = {
   credential: { en: 'Certificate', hi: 'प्रमाणपत्र' },
   scanToVerify: { en: 'Scan to verify — works offline', hi: 'जाँचने के लिए स्कैन कीजिए — बिना इंटरनेट' },
   whatWentWrong: { en: 'What went wrong', hi: 'क्या ग़लत हुआ' },
+  theme: { en: 'Light or dark', hi: 'उजाला या अंधेरा' },
+  // The first thing a new worker reads. Nobody learns while afraid of breaking
+  // something, so say plainly that this one is safe to get wrong.
+  welcome: {
+    en: 'Nothing here is real. Take your time, try things, and find out what goes wrong — that is what this is for.',
+    hi: 'यहाँ कुछ भी असली नहीं है। आराम से कीजिए, आज़माइए, और देखिए क्या ग़लत होता है — यही इसका मक़सद है।',
+  },
   // The runtime raises STEP_OUT_OF_ORDER itself rather than from the scenario,
   // so its wording belongs here with the rest of the interface copy — the engine
   // stays free of language, and a third language cannot go missing on it.

@@ -14,6 +14,7 @@ import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
 import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
 import { Localizer, LANGUAGES, type LangCode } from './ui/i18n.ts';
+import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './ui/theme.ts';
 
 const app = document.querySelector<HTMLElement>('#app')!;
 const params = new URLSearchParams(location.search);
@@ -21,6 +22,11 @@ const workerId = params.get('worker') ?? 'JH/CHP/2291';
 const forcedTier = (params.get('tier')?.toUpperCase() as Tier | undefined) ?? undefined;
 
 const i18n = new Localizer((params.get('lang') as LangCode) ?? 'hi');
+
+// Before the first screen is built: a flash of the wrong palette is the sort of
+// thing that reads as a broken app on a slow handset.
+let theme: ThemeChoice = loadTheme();
+applyTheme(theme);
 
 let scenario: Scenario;
 try {
@@ -185,6 +191,18 @@ function startScreen(report: TierReport): void {
   description.textContent = i18n.text(scenario.description);
   hero.append(eyebrow, title, description);
 
+  // Said before anything else is asked of them. A first-week recruit who thinks
+  // they can break something will not experiment, and experimenting is the
+  // entire method here.
+  const welcome = document.createElement('div');
+  welcome.className = 'welcome';
+  const welcomeIcon = document.createElement('span');
+  welcomeIcon.className = 'welcome-icon';
+  welcomeIcon.textContent = '👋';
+  const welcomeText = document.createElement('p');
+  welcomeText.textContent = i18n.ui('welcome');
+  welcome.append(welcomeIcon, welcomeText);
+
   const langRow = document.createElement('div');
   langRow.className = 'lang lang-big';
   for (const language of LANGUAGES) {
@@ -280,7 +298,19 @@ function startScreen(report: TierReport): void {
   });
   actions.append(begin, reset);
 
-  root.append(hero, langRow, tierBox, progress, actions);
+  const prefs = document.createElement('div');
+  prefs.className = 'prefs';
+  const themeButton = document.createElement('button');
+  themeButton.className = 'lang-button';
+  themeButton.textContent = `${THEME_ICON[theme]}  ${i18n.ui('theme')}`;
+  themeButton.addEventListener('click', () => {
+    theme = nextTheme(theme);
+    applyTheme(theme);
+    themeButton.textContent = `${THEME_ICON[theme]}  ${i18n.ui('theme')}`;
+  });
+  prefs.append(themeButton);
+
+  root.append(hero, welcome, langRow, tierBox, progress, actions, prefs);
 }
 
 async function drillScreen(report: TierReport): Promise<void> {
