@@ -10,6 +10,12 @@ export default defineConfig({
     // phone can reach the dev server is the whole point of testing this on real
     // hardware, so the host has to be open.
     host: true,
+    // Fixed, and refuses to drift. `adb reverse` (see tools/phone.mjs) pins one
+    // port on the phone to one port here; if Vite quietly moved to the next
+    // free port because something else held this one, the phone would sit on a
+    // dead tunnel with no indication why. Failing to start is the honest result.
+    port: 5199,
+    strictPort: true,
     // A quick tunnel (trycloudflare.com) fronts this with HTTPS for the WebXR
     // secure-context requirement; Vite refuses unrecognized Host headers by
     // default, so the tunnel's hostname has to be allowed explicitly.

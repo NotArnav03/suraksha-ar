@@ -19,7 +19,10 @@
     "run:tamper": "node --experimental-strip-types src/cli/credential.ts --tamper",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --host"
+    "preview": "vite preview --host",
+    "phone": "node tools/phone.mjs setup",
+    "phone:logs": "node tools/phone.mjs logs",
+    "phone:eval": "node tools/phone.mjs eval"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
