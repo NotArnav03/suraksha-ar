@@ -9,8 +9,8 @@ map of *what exists, where, and how it fits together*, plus the state of the rep
 as of this writing.
 
 Last verified: 2026-09-06, against commit `6542614` on `main`.
-- `npm test` → **82/82 passing** (8 test files; see [Tests](#tests) — the count in
-  `README.md`, "48 tests", is stale and should be corrected there).
+- `npm test` → **82/82 passing** (8 test files; see [Tests](#tests) — `README.md`
+  previously said "48 tests", now corrected to match).
 - `npm run check` (`tsc --noEmit`) → clean.
 - `npm run build` → succeeds. Main bundle 113 kB / 38.7 kB gzip; Tier A's three.js
   chunk 530 kB / 134 kB gzip, loaded only when a WebXR session is actually granted.

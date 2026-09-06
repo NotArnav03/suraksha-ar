@@ -15,7 +15,7 @@ src/credential/  compact signed credential, offline QR verification
 src/app/         the web client: tier detection, shared HUD, Tier C world
 src/scenarios/   authored scenario content (JSON)
 src/cli/         headless runner and the end-to-end credential demo
-tests/           48 tests, node's built-in runner
+tests/           82 tests, node's built-in runner
 ```
 
 ## Try it
@@ -24,7 +24,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 48 tests
+npm test                # 82 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
