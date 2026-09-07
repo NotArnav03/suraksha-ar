@@ -1,6 +1,7 @@
 import './style.css';
 
-import scenarioJson from '../scenarios/gas-confined-space.json' with { type: 'json' };
+import gasScenarioJson from '../scenarios/gas-confined-space.json' with { type: 'json' };
+import fireScenarioJson from '../scenarios/fire-explosion.json' with { type: 'json' };
 
 import { scoreSession } from '../assess/score.ts';
 import { certify } from '../assess/certify.ts';
@@ -27,6 +28,16 @@ const i18n = new Localizer((params.get('lang') as LangCode) ?? 'hi');
 // thing that reads as a broken app on a slow handset.
 let theme: ThemeChoice = loadTheme();
 applyTheme(theme);
+
+const SCENARIOS: Record<string, unknown> = {
+  'gas-confined-space': gasScenarioJson,
+  'gas_leak_confined_space': gasScenarioJson,
+  'fire-explosion': fireScenarioJson,
+  'fire_explosion': fireScenarioJson,
+  'fire': fireScenarioJson,
+};
+const scenarioKey = (params.get('scenario') ?? 'gas-confined-space').toLowerCase();
+const scenarioJson = SCENARIOS[scenarioKey] ?? gasScenarioJson;
 
 let scenario: Scenario;
 try {

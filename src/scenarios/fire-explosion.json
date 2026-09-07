@@ -1,0 +1,396 @@
+{
+  "id": "fire-explosion",
+  "version": "0.1.0",
+  "domain": "fire_explosion",
+  "title": {
+    "en": "Fire & Explosion Response",
+    "hi": "आग और विस्फोट प्रतिक्रिया"
+  },
+  "description": {
+    "en": "Electrical panel fire at the pit-top. Select the correct extinguisher, apply PASS, don SCSR and evacuate without re-entering for a collapsed colleague.",
+    "hi": "पिट-टॉप पर बिजली पैनल में आग। सही अग्निशामक चुनें, PASS लागू करें, SCSR पहनें और बेहोश साथी के लिए वापस घुसे बिना बाहर निकलें।"
+  },
+  "languages": ["en", "hi", "sat"],
+  "regulations": [
+    { "cite": "Mines Act 1952 — duty to maintain a safe working environment" },
+    { "cite": "Coal Mines Regulations 2017 — fire & explosion response; PASS + SCSR procedure" },
+    { "cite": "DGMS guidance on fire fighting and self-rescuer use" }
+  ],
+  "props": [
+    { "id": "electrical_panel", "kind": "equipment", "label": { "en": "Electrical panel", "hi": "बिजली पैनल" } },
+    { "id": "fire_panel", "kind": "hazard", "label": { "en": "Panel fire", "hi": "पैनल की आग" }, "spawned": true },
+    { "id": "ext_dcp", "kind": "equipment", "label": { "en": "DCP extinguisher (blue band)", "hi": "डीसीपी अग्निशामक (नीली पट्टी)" } },
+    { "id": "ext_water", "kind": "equipment", "label": { "en": "Water extinguisher (red)", "hi": "पानी अग्निशामक (लाल)" } },
+    { "id": "ext_co2", "kind": "equipment", "label": { "en": "CO₂ extinguisher (black, horn)", "hi": "सीओ₂ अग्निशामक (काला, हॉर्न)" } },
+    { "id": "scsr", "kind": "ppe", "label": { "en": "Self-Contained Self-Rescuer", "hi": "सेल्फ-कंटेंड सेल्फ-रेस्क्यूअर" } },
+    { "id": "exit_arrow", "kind": "signage", "label": { "en": "Exit arrow", "hi": "निकास तीर" } },
+    { "id": "exit_marker", "kind": "signage", "label": { "en": "Fresh-air exit", "hi": "ताज़ी हवा निकास" } },
+    { "id": "colleague_down", "kind": "person", "label": { "en": "Collapsed worker", "hi": "बेहोश साथी" }, "spawned": true }
+  ],
+  "bindings": {
+    "panel": "electrical_panel",
+    "fire": "fire_panel",
+    "dcp": "ext_dcp",
+    "water": "ext_water",
+    "co2": "ext_co2",
+    "scsr_unit": "scsr",
+    "arrow": "exit_arrow",
+    "exit": "exit_marker",
+    "casualty": "colleague_down"
+  },
+  "params": [
+    {
+      "id": "ext_layout",
+      "pick": ["ABC", "ACB", "BAC"],
+      "weights": [2, 1, 1]
+    },
+    {
+      "id": "colleague_offset",
+      "pick": ["near", "far"]
+    }
+  ],
+  "start": "briefing",
+  "nodes": [
+    {
+      "id": "briefing",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "prompt": {
+        "text": {
+          "en": "A fire has started on the electrical panel. Put it out safely, then get to the exit.",
+          "hi": "बिजली के पैनल पर आग लग गई है। इसे सुरक्षित रूप से बुझाएँ, फिर बाहर निकलें।"
+        }
+      },
+      "effects": [{ "type": "ambient", "state": "chp_yard_day" }],
+      "next": "place_scene"
+    },
+    {
+      "id": "place_scene",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "prompt": {
+        "text": {
+          "en": "Point your phone at the wall and tap to place the scene.",
+          "hi": "अपना फ़ोन दीवार की ओर करें और दृश्य रखने के लिए टैप करें।"
+        }
+      },
+      "next": "hazard_ignition"
+    },
+    {
+      "id": "hazard_ignition",
+      "kind": "observe",
+      "dimensions": ["hazard_recognition"],
+      "prompt": {
+        "text": {
+          "en": "Something is wrong. Find the hazard.",
+          "hi": "कुछ गड़बड़ है। ख़तरे को पहचानें।"
+        }
+      },
+      "targets": ["fire"],
+      "minCorrect": 1,
+      "distractors": ["panel"],
+      "effects": [
+        { "type": "spawn", "role": "fire" },
+        { "type": "alarm", "level": "warning" },
+        { "type": "haptic", "pattern": "pulse" }
+      ],
+      "window": { "hesitationMs": 4000, "deadlineMs": 8000 },
+      "onTimeout": {
+        "code": "FIRE_NOT_RECOGNISED",
+        "severity": "major",
+        "dimension": "hazard_recognition",
+        "consequence": {
+          "text": {
+            "en": "You did not spot the fire in time. Every second matters.",
+            "hi": "आपने समय पर आग नहीं पहचानी। हर सेकंड मायने रखता है।"
+          }
+        }
+      },
+      "next": "select_extinguisher"
+    },
+    {
+      "id": "select_extinguisher",
+      "kind": "expect",
+      "dimensions": ["hazard_recognition", "procedure_sequence"],
+      "prompt": {
+        "text": {
+          "en": "Walk to the correct extinguisher for an electrical fire and tap it.",
+          "hi": "बिजली की आग के लिए सही अग्निशामक के पास जाएँ और उसे टैप करें।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": { "verb": "inspect", "target": "dcp" },
+          "label": { "en": "Select DCP extinguisher", "hi": "डीसीपी अग्निशामक चुनें" }
+        }
+      ],
+      "window": { "hesitationMs": 8000, "deadlineMs": 15000 },
+      "errors": [
+        {
+          "match": { "verb": "inspect", "target": "water" },
+          "code": "WATER_ON_ELECTRICAL_FIRE",
+          "severity": "major",
+          "dimension": "hazard_recognition",
+          "consequence": {
+            "text": {
+              "en": "Water on a live electrical fire can shock you and spread it.",
+              "hi": "जीवित बिजली की आग पर पानी झटका दे सकता है और आग फैला सकता है।"
+            }
+          },
+          "effects": [
+            { "type": "alarm", "level": "critical" },
+            { "type": "haptic", "pattern": "sos" }
+          ],
+          "goto": "induced_failure"
+        },
+        {
+          "match": { "verb": "inspect", "target": "co2" },
+          "code": "CO2_NOT_TARGET",
+          "severity": "minor",
+          "dimension": "hazard_recognition",
+          "consequence": {
+            "text": {
+              "en": "CO₂ works on electrical fires but the drill targets the powder unit. Prefer DCP here.",
+              "hi": "सीओ₂ बिजली की आग पर काम करता है, पर इस अभ्यास में पाउडर इकाई लक्षित है।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "EXTINGUISHER_NOT_SELECTED",
+        "severity": "major",
+        "dimension": "hazard_recognition",
+        "consequence": {
+          "text": {
+            "en": "No extinguisher was selected in time.",
+            "hi": "समय पर कोई अग्निशामक नहीं चुना गया।"
+          }
+        }
+      },
+      "next": "apply_pass"
+    },
+    {
+      "id": "induced_failure",
+      "kind": "expect",
+      "dimensions": ["procedure_sequence"],
+      "prompt": {
+        "text": {
+          "en": "Water on a live electrical fire can shock you and spread it. Try again — pick the powder unit.",
+          "hi": "जीवित बिजली की आग पर पानी झटका दे सकता है और आग फैला सकता है। फिर से कोशिश करें — पाउडर वाला चुनें।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": { "verb": "inspect", "target": "dcp" },
+          "label": { "en": "Select DCP extinguisher", "hi": "डीसीपी अग्निशामक चुनें" }
+        }
+      ],
+      "effects": [{ "type": "alarm", "level": "critical" }],
+      "window": { "hesitationMs": 8000, "deadlineMs": 15000 },
+      "onTimeout": {
+        "code": "RECOVERY_FAILED",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "You did not recover to the correct extinguisher.",
+            "hi": "आप सही अग्निशामक पर वापस नहीं आए।"
+          }
+        }
+      },
+      "next": "apply_pass"
+    },
+    {
+      "id": "apply_pass",
+      "kind": "expect",
+      "dimensions": ["procedure_sequence"],
+      "prompt": {
+        "text": {
+          "en": "Use PASS: Pull the pin, Aim at the base, Squeeze, Sweep side to side.",
+          "hi": "PASS का प्रयोग करें: पिन खींचें, आधार पर निशाना लगाएँ, दबाएँ, अगल-बगल घुमाएँ।"
+        }
+      },
+      "ordered": true,
+      "expect": [
+        { "match": { "verb": "open", "target": "dcp" }, "label": { "en": "Pull pin", "hi": "पिन खींचें" } },
+        { "match": { "verb": "inspect", "target": "fire" }, "label": { "en": "Aim at base", "hi": "आधार पर निशाना लगाएँ" } },
+        { "match": { "verb": "use", "target": "dcp" }, "label": { "en": "Squeeze handle", "hi": "हैंडल दबाएँ" } },
+        { "match": { "verb": "use", "target": "fire" }, "label": { "en": "Sweep side to side", "hi": "अगल-बगल घुमाएँ" } }
+      ],
+      "window": { "hesitationMs": 10000, "deadlineMs": 20000 },
+      "onTimeout": {
+        "code": "PASS_NOT_COMPLETED",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "PASS was not completed in time.",
+            "hi": "समय पर PASS पूरा नहीं हुआ।"
+          }
+        }
+      },
+      "next": "don_scsr"
+    },
+    {
+      "id": "don_scsr",
+      "kind": "expect",
+      "dimensions": ["ppe_discipline"],
+      "prompt": {
+        "text": {
+          "en": "Before moving out, put on your self-rescuer. Tap the SCSR to wear it.",
+          "hi": "बाहर निकलने से पहले अपना सेल्फ-रेस्क्यूअर पहनें। पहनने के लिए SCSR को टैप करें।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        { "match": { "verb": "wear", "target": "scsr_unit" }, "label": { "en": "Wear SCSR", "hi": "SCSR पहनें" } }
+      ],
+      "window": { "hesitationMs": 6000, "deadlineMs": 12000 },
+      "errors": [
+        {
+          "match": { "verb": "enter", "target": "exit" },
+          "code": "EXIT_WITHOUT_SCSR",
+          "severity": "major",
+          "dimension": "ppe_discipline",
+          "consequence": {
+            "text": {
+              "en": "You tried to evacuate without the self-rescuer.",
+              "hi": "आपने सेल्फ-रेस्क्यूअर के बिना बाहर निकलने की कोशिश की।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "SCSR_NOT_WORN",
+        "severity": "major",
+        "dimension": "ppe_discipline",
+        "consequence": {
+          "text": {
+            "en": "SCSR was not worn.",
+            "hi": "SCSR नहीं पहना गया।"
+          }
+        }
+      },
+      "next": "evacuate"
+    },
+    {
+      "id": "evacuate",
+      "kind": "expect",
+      "dimensions": ["procedure_sequence", "rescue_restraint", "time_criticality"],
+      "prompt": {
+        "text": {
+          "en": "Follow the arrows to fresh air. Do not stop for anything on the way.",
+          "hi": "ताज़ी हवा की ओर तीरों का अनुसरण करें। रास्ते में किसी भी चीज़ के लिए न रुकें।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        { "match": { "verb": "enter", "target": "exit" }, "label": { "en": "Reach fresh-air exit", "hi": "ताज़ी हवा निकास पर पहुँचें" } }
+      ],
+      "effects": [
+        { "type": "spawn", "role": "casualty" },
+        { "type": "spawn", "role": "arrow" },
+        { "type": "alarm", "level": "critical" }
+      ],
+      "window": { "hesitationMs": 8000, "deadlineMs": 30000 },
+      "errors": [
+        {
+          "match": { "verb": "inspect", "target": "casualty" },
+          "code": "SECOND_VICTIM_ENTRY",
+          "severity": "fatal",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "You went to the collapsed colleague before reaching safe air. This is how second-victim deaths happen.",
+              "hi": "आप सुरक्षित हवा में पहुँचने से पहले बेहोश साथी के पास गए। ऐसे ही दूसरे-शिकार की मौतें होती हैं।"
+            }
+          },
+          "goto": "outcome_fatal_rescue"
+        },
+        {
+          "match": { "verb": "enter", "target": "casualty" },
+          "code": "SECOND_VICTIM_ENTRY",
+          "severity": "fatal",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "You entered the hazard zone to rescue, adding yourself to the casualty list.",
+              "hi": "आप बचाने के लिए ख़तरे में घुसे और ख़ुद हताहत बन गए।"
+            }
+          },
+          "goto": "outcome_fatal_rescue"
+        }
+      ],
+      "onTimeout": {
+        "code": "FAILED_TO_EVACUATE",
+        "severity": "fatal",
+        "dimension": "time_criticality",
+        "consequence": {
+          "text": {
+            "en": "You did not reach fresh air in time.",
+            "hi": "आप समय पर ताज़ी हवा तक नहीं पहुँचे।"
+          }
+        },
+        "goto": "outcome_fatal_gas"
+      },
+      "next": "outcome_pass"
+    },
+    {
+      "id": "outcome_pass",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "pass",
+      "prompt": { "text": { "en": "You are at fresh air.", "hi": "आप ताज़ी हवा में हैं।" } },
+      "summary": {
+        "text": {
+          "en": "You recognised the fire, chose DCP for electrical fire, applied PASS, wore SCSR and evacuated without re-entering for the casualty. That restraint is what this drill measures.",
+          "hi": "आपने आग पहचानी, बिजली की आग के लिए डीसीपी चुना, PASS लागू किया, SCSR पहना और साथी के लिए वापस घुसे बिना बाहर निकले। वही संयम इस अभ्यास का माप है।"
+        }
+      }
+    },
+    {
+      "id": "outcome_fatal_rescue",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": { "text": { "en": "The drill has ended.", "hi": "अभ्यास समाप्त हुआ।" } },
+      "summary": {
+        "text": {
+          "en": "You went in to save the collapsed worker before reaching safe air. In a real fire, the same smoke and heat that took him takes you.",
+          "hi": "आप सुरक्षित हवा में पहुँचने से पहले बेहोश साथी को बचाने घुसे। असली आग में वही धुआँ और गर्मी जो उसे ले गई, आपको भी लेती।"
+        }
+      }
+    },
+    {
+      "id": "outcome_fatal_gas",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": { "text": { "en": "The drill has ended.", "hi": "अभ्यास समाप्त हुआ।" } },
+      "summary": {
+        "text": {
+          "en": "When the alarm sounds, the only correct action is to leave. Not to fix equipment, not to finish a task.",
+          "hi": "अलार्म बजे तो एक ही सही काम है — बाहर निकलना। उपकरण ठीक करना नहीं, काम पूरा करना नहीं।"
+        }
+      }
+    }
+  ],
+  "scoring": {
+    "passMark": {
+      "hazard_recognition": 60,
+      "procedure_sequence": 60,
+      "time_criticality": 60,
+      "ppe_discipline": 80,
+      "communication": 60,
+      "rescue_restraint": 100
+    },
+    "requiredVariants": 3
+  }
+}
