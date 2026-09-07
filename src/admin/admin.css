@@ -1,0 +1,74 @@
+/* Admin dashboard — shares the app's palette (app/style.css) and adds only
+   what a data table/summary view needs on top of it. */
+
+#admin { max-width: 980px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.admin-root { display: grid; gap: 18px; }
+
+.admin-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.admin-header h1 { margin: 2px 0 0; font-size: 1.6rem; }
+
+.admin-notice { max-width: 60ch; }
+
+.credential-input {
+  width: 100%; box-sizing: border-box; resize: vertical;
+  background: var(--panel-2); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; font: inherit; font-size: .92rem;
+}
+.admin-actions { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+.feedback { min-height: 1.4em; font-size: .92rem; }
+.feedback.good { color: var(--go); }
+.feedback.bad { color: var(--crit); }
+
+.summary-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;
+}
+.stat-card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow-sm);
+}
+.stat-n { font-size: 1.7rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat-label { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .05em; }
+.stat-card.ok .stat-n { color: var(--go); }
+.stat-card.warn .stat-n { color: var(--warn); }
+.stat-card.bad .stat-n { color: var(--crit); }
+
+.admin-table-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.admin-table-head h2 { margin: 0; }
+.admin-filters { display: flex; gap: 8px; }
+.admin-filters select {
+  background: var(--panel-2); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 8px; font: inherit; font-size: .85rem;
+}
+
+.admin-table-wrap, .admin-table { width: 100%; }
+.panel:has(.admin-table) { overflow-x: auto; }
+.admin-table { border-collapse: collapse; font-size: .88rem; white-space: nowrap; }
+.admin-table th, .admin-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-soft); }
+.admin-table th { color: var(--ink-3); font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; }
+.admin-table tbody tr:hover { background: var(--panel-2); }
+.cell-subject { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+.badge-valid { background: var(--go-dim); color: var(--go); border-color: var(--go); }
+.badge-expiring { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); }
+.badge-expired { background: var(--crit-dim); color: var(--crit); border-color: var(--crit); }
+.badge-warn { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); margin-left: 6px; }
+
+button.small { min-height: 34px; padding: 4px 10px; font-size: .82rem; }
+button.danger { color: var(--crit); }
+
+.admin-data-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.file-label {
+  display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 18px;
+  border-radius: 999px; border: 1px solid transparent; cursor: pointer; font-weight: 700;
+  color: var(--ink-2);
+}
+.file-label:hover { background: var(--panel-2); }
+
+.scan-overlay {
+  position: fixed; inset: 0; background: #000; z-index: 999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+}
+.scan-video { width: min(92vw, 480px); border-radius: 12px; }
+.scan-overlay .ghost { background: rgba(255, 255, 255, .12); color: #fff; }

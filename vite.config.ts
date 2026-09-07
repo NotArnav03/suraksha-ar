@@ -1,10 +1,23 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   // The engine, assessment and credential all live outside the app directory
   // and are imported directly — there is no separate build of the core, so the
   // web client and the Node CLI can never be running different logic.
-  build: { target: 'es2022', outDir: 'dist' },
+  build: {
+    target: 'es2022',
+    outDir: 'dist',
+    // Two pages, one deploy: the worker drill at /, the supervisor's
+    // compliance dashboard at /admin.html — both import credential/*
+    // directly, so they can never disagree about what a valid signature is.
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        admin: resolve(__dirname, 'admin.html'),
+      },
+    },
+  },
   // Relative, not '/': this build has to work identically whether it's served
   // from a domain root or a subpath (a GitHub Pages project site is exactly
   // that), and a relative base makes the same `dist/` artifact correct in
