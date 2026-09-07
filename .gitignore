@@ -4,3 +4,8 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+# Generated Android/TWA project (tools/build_apk.mjs regenerates it) - the
+# keystore in here is a signing secret and must never be committed, and the
+# rest is machine-generated and reproducible from twa-manifest.json.
+android/

@@ -26,9 +26,13 @@
     "l10n": "node tools/translate.mjs --report",
     "l10n:draft": "node tools/translate.mjs --dry-run",
     "l10n:apply": "node tools/translate.mjs --apply",
-    "icons": "node tools/make_icon.mjs"
+    "icons": "node tools/make_icon.mjs",
+    "apk:patch": "node tools/patch_bubblewrap_windows.mjs",
+    "apk:init": "node tools/build_apk.mjs",
+    "apk:build": "cd android && npx bubblewrap build"
   },
   "devDependencies": {
+    "@bubblewrap/cli": "^1.25.0",
     "@types/node": "^22.10.2",
     "@types/qrcode": "^1.5.6",
     "@types/three": "^0.185.4",

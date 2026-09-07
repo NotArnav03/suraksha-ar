@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.suraksha.ar",
+      "sha256_cert_fingerprints": [
+        "A9:23:A9:65:45:E1:63:86:DC:C3:81:7F:8F:63:04:53:E3:0F:BB:C9:05:7E:8F:27:B1:D3:30:30:59:8D:CB:66"
+      ]
+    }
+  }
+]
