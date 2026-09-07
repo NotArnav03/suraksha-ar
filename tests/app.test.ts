@@ -502,7 +502,7 @@ test('a step taken out of order is shown to the learner, not only scored', async
   touch(world, 'Shift supervisor', 'Report to');
 
   // gas_test is ordered: the readout cannot be read before the detector is used
-  assert.match(prompt(chrome), /atmosphere/i);
+  assert.match(prompt(chrome), /test the air from outside/i);
   assert.ok(touch(world, 'Detector readout', 'Look at'), 'the readout must be tappable');
 
   const banner = chrome.querySelector<HTMLElement>('.banner');

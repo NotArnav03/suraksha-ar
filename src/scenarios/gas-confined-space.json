@@ -232,8 +232,8 @@
       "weight": 0,
       "prompt": {
         "text": {
-          "en": "It is the {{shift}} shift. The supervisor tells you to clean out the settling sump before the next coal wash. Look around before you do anything.",
-          "hi": "यह {{shift}} शिफ्ट है। सुपरवाइज़र ने कहा है कि अगले कोल वॉश से पहले सेटलिंग सम्प साफ़ कर दो। कुछ भी करने से पहले चारों ओर देखिए।"
+          "en": "It is the {{shift}} shift. Your supervisor tells you to clean the settling sump. Do not touch anything yet. First, look carefully at everything around you.",
+          "hi": "यह {{shift}} शिफ्ट है। सुपरवाइज़र ने कहा है कि सेटलिंग सम्प साफ़ कर दो। अभी कुछ भी मत छुइए। पहले अपने चारों ओर ध्यान से देखिए।"
         }
       },
       "effects": [
@@ -252,8 +252,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Point at everything here that tells you this is not an ordinary cleaning job.",
-          "hi": "यहाँ जो कुछ भी बताता है कि यह सामान्य सफ़ाई का काम नहीं है, उस पर इशारा कीजिए।",
+          "en": "Look around you. Point to, or tap on, anything you see that tells you this is a dangerous job — not an ordinary cleaning job.",
+          "hi": "अपने चारों ओर देखिए। जो कुछ भी दिखे कि यह ख़तरनाक काम है — सामान्य सफ़ाई का काम नहीं — उस पर इशारा कीजिए या टैप कीजिए।",
           "sat": "ᱱᱚᱰᱮ ᱡᱟᱦᱟᱸ ᱡᱤᱱᱤᱥ ᱠᱟᱛᱷᱟ ᱠᱚ ᱠᱟᱡᱽ ᱵᱟᱝ ᱠᱟᱱᱟ ᱠᱚ ᱩᱫᱩᱜᱽ ᱢᱮ ᱾"
         }
       },
@@ -325,8 +325,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "A confined space cannot be entered on a verbal instruction. Check the permit board.",
-          "hi": "सीमित स्थान में मौखिक आदेश पर नहीं उतरा जाता। परमिट बोर्ड देखिए।"
+          "en": "Do not go near the sump yet. A spoken instruction is not enough — first, walk to the permit board and look at it.",
+          "hi": "अभी सम्प के पास मत जाइए। मौखिक आदेश काफ़ी नहीं है — पहले परमिट बोर्ड के पास जाइए और उसे देखिए।"
         }
       },
       "ordered": false,
@@ -404,8 +404,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "There is no permit on the board for this sump. What do you do?",
-          "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। आप क्या करेंगे?"
+          "en": "There is no permit on the board for this sump. Do not enter. Report this to your supervisor and stop work.",
+          "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। अंदर मत जाइए। सुपरवाइज़र को बताइए और काम रोकिए।"
         }
       },
       "ordered": false,
@@ -468,8 +468,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "There is a permit, but it was issued for yesterday's shift. Read it properly.",
-          "hi": "परमिट है, पर वह कल की शिफ्ट के लिए जारी हुआ था। उसे ठीक से पढ़िए।"
+          "en": "There is a permit on the board. But look at the date — it was issued for yesterday's shift, so it is no longer valid. Report this to your supervisor and stop work.",
+          "hi": "बोर्ड पर परमिट तो है। पर तारीख़ देखिए — यह कल की शिफ्ट के लिए जारी हुआ था, इसलिए अब मान्य नहीं है। सुपरवाइज़र को बताइए और काम रोकिए।"
         }
       },
       "ordered": false,
@@ -529,8 +529,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Test the atmosphere from outside, before anyone goes near the opening. Switch the detector on, then read it.",
-          "hi": "किसी के मुँह के पास जाने से पहले, बाहर से ही हवा की जाँच कीजिए। डिटेक्टर चालू कीजिए, फिर रीडिंग पढ़िए।"
+          "en": "Before anyone goes near the opening, test the air from outside. First, use the gas detector — switch it on and lower it into the opening. Then look at the detector screen and read the result.",
+          "hi": "मुँह के पास जाने से पहले, बाहर से ही हवा की जाँच कीजिए। पहले गैस डिटेक्टर इस्तेमाल कीजिए — उसे चालू करके मुँह में नीचे उतारिए। फिर डिटेक्टर की स्क्रीन देखकर रीडिंग पढ़िए।"
         }
       },
       "ordered": true,
@@ -658,8 +658,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Purge it. Start the blower, let it run, then test again — a reading you took before ventilating tells you nothing now.",
-          "hi": "हवा साफ़ कीजिए। ब्लोअर चालू कीजिए, चलने दीजिए, फिर दोबारा जाँच कीजिए — वेंटिलेशन से पहले की रीडिंग अब बेकार है।"
+          "en": "The air is not safe yet. First, use the ventilation blower — switch it on. Then wait for it to clear the air. After that, use the gas detector again — the old reading no longer counts.",
+          "hi": "हवा अभी सुरक्षित नहीं है। पहले वेंटिलेशन ब्लोअर इस्तेमाल कीजिए — उसे चालू कीजिए। फिर हवा साफ़ होने तक इंतज़ार कीजिए। उसके बाद गैस डिटेक्टर से दोबारा जाँच कीजिए — पुरानी रीडिंग अब मायने नहीं रखती।"
         }
       },
       "ordered": true,
@@ -737,8 +737,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Ventilation makes it workable, not safe. Breathing set on, harness on, retrieval line clipped to the tripod.",
-          "hi": "वेंटिलेशन से काम हो सकता है, पर जगह सुरक्षित नहीं हो जाती। श्वास उपकरण पहनिए, हार्नेस पहनिए, रिट्रीवल लाइन ट्राइपॉड से बाँधिए।"
+          "en": "The air is better now, but the space is still not fully safe. Wear the breathing apparatus. Wear the full-body harness. Then attach the retrieval line to the tripod.",
+          "hi": "हवा अब बेहतर है, पर जगह अभी भी पूरी तरह सुरक्षित नहीं है। श्वास उपकरण पहनिए। फुल-बॉडी हार्नेस पहनिए। फिर रिट्रीवल लाइन को ट्राइपॉड से जोड़िए।"
         }
       },
       "ordered": true,
@@ -822,8 +822,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Nobody enters a confined space alone. Post the standby person at the opening and tell the control room you are going in.",
-          "hi": "सीमित स्थान में कोई अकेला नहीं उतरता। स्टैंडबाई व्यक्ति को मुँह पर खड़ा कीजिए और कंट्रोल रूम को बताइए कि आप अंदर जा रहे हैं।"
+          "en": "You cannot go in alone. First, signal the standby person to stand at the opening. Then use the radio to report to the control room that you are going in.",
+          "hi": "आप अकेले अंदर नहीं जा सकते। पहले स्टैंडबाई व्यक्ति को इशारा करके मुँह पर खड़ा कीजिए। फिर रेडियो से कंट्रोल रूम को बताइए कि आप अंदर जा रहे हैं।"
         }
       },
       "ordered": false,
@@ -897,8 +897,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Permit checked, atmosphere purged and re-tested, set on, line clipped, standby posted. Now you may go in.",
-          "hi": "परमिट जाँचा, हवा साफ़ करके दोबारा जाँची, उपकरण पहना, लाइन बाँधी, स्टैंडबाई तैनात। अब आप उतर सकते हैं।"
+          "en": "You have checked the permit, cleared and re-tested the air, worn your equipment, and posted the standby person. Everything is ready. Now climb into the sump.",
+          "hi": "आपने परमिट जाँच लिया, हवा साफ़ करके दोबारा जाँच ली, उपकरण पहन लिया, और स्टैंडबाई तैनात कर दिया। सब कुछ तैयार है। अब सम्प में उतरिए।"
         }
       },
       "ordered": false,
@@ -938,8 +938,8 @@
       "weight": 0,
       "prompt": {
         "text": {
-          "en": "Four minutes in, the blower trips. The note in your detector changes and the alarm goes to a solid tone. {{gas}} is climbing again.",
-          "hi": "चार मिनट बाद ब्लोअर बंद हो जाता है। डिटेक्टर की आवाज़ बदल जाती है और अलार्म लगातार बजने लगता है। {{gas}} फिर बढ़ रही है।"
+          "en": "Four minutes after you climb in, the blower stops working. Your detector's alarm changes to a constant, unbroken tone. {{gas}} is rising again.",
+          "hi": "अंदर जाने के चार मिनट बाद, ब्लोअर बंद हो जाता है। आपके डिटेक्टर का अलार्म अब बिना रुके लगातार बजने लगता है। {{gas}} फिर से बढ़ रही है।"
         }
       },
       "effects": [
@@ -967,8 +967,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "Out. Now. Signal the standby person and climb.",
-          "hi": "बाहर निकलिए। अभी। स्टैंडबाई को इशारा कीजिए और ऊपर चढ़िए।"
+          "en": "Get out now. Signal the standby person. Then climb out of the sump immediately — do not stop for anything else.",
+          "hi": "अभी बाहर निकलिए। स्टैंडबाई को इशारा कीजिए। फिर तुरंत सम्प से बाहर निकलिए — किसी और चीज़ के लिए मत रुकिए।"
         }
       },
       "ordered": false,
@@ -1067,8 +1067,8 @@
       ],
       "prompt": {
         "text": {
-          "en": "He is not moving. What do you do?",
-          "hi": "वह हिल नहीं रहा। आप क्या करेंगे?",
+          "en": "He is not moving. Do NOT climb in after him. First, use the radio to call the rescue team. Then use the retrieval line to pull him out — from where you are standing, outside the sump.",
+          "hi": "वह हिल नहीं रहा। उसके पीछे अंदर मत जाइए। पहले रेडियो से रेस्क्यू टीम को बुलाइए। फिर रिट्रीवल लाइन से उसे बाहर खींचिए — वहीं से, सम्प के बाहर खड़े रहकर।",
           "sat": "ᱩᱱᱤ ᱵᱟᱝ ᱮ ᱚᱰᱚᱠ ᱠᱟᱱᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱟᱢ ᱠᱟᱢᱤᱭᱟ ?"
         }
       },
@@ -1090,8 +1090,8 @@
             "target": "line"
           },
           "label": {
-            "en": "Recover him on the retrieval line from outside",
-            "hi": "बाहर से रिट्रीवल लाइन से उसे खींचिए"
+            "en": "Pull him out using the retrieval line",
+            "hi": "रिट्रीवल लाइन से उसे बाहर खींचिए"
           }
         }
       ],
