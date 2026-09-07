@@ -91,20 +91,138 @@ function labelTexture(text: string): THREE.CanvasTexture {
   return texture;
 }
 
-function geometryFor(kind: Prop['kind']): THREE.BufferGeometry {
-  switch (kind) {
-    case 'structure':
-      return new THREE.CylinderGeometry(0.42, 0.42, 0.12, 24);
+/**
+ * What a prop is built from, in metres, positioned relative to its group's
+ * own origin (which `#layout` places at `slot.height` above the floor — see
+ * there for why that number differs by kind). Still primitives, still
+ * placeholder art (see README's "Known gaps" — this is coloured geometry,
+ * not a site twin) — but a supervisor should be recognisable as a person
+ * across a room, not read as a floating pill.
+ *
+ * Per-prop-id branches (the three extinguishers below) are precedent that
+ * already exists in this file — `#layout` special-cases `sump_opening` by
+ * id for the same reason: some things are individual enough that "kind"
+ * alone can't carry them.
+ */
+function stdMaterial(color: number, opts: THREE.MeshStandardMaterialParameters = {}): THREE.MeshStandardMaterial {
+  return new THREE.MeshStandardMaterial({ color, roughness: 0.65, metalness: 0.1, ...opts });
+}
+
+/** Head, torso, two arms, two legs — feet at the floor, not floating mid-air. */
+function personParts(color: number): THREE.Mesh[] {
+  const skin = stdMaterial(0xd9a066, { roughness: 0.75 });
+  const cloth = stdMaterial(color);
+
+  const legL = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.62, 12), cloth);
+  legL.position.set(-0.08, -0.69, 0);
+  const legR = legL.clone();
+  legR.position.x = 0.08;
+
+  const torso = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 0.58, 14), cloth);
+  torso.position.y = -0.09;
+
+  const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.045, 0.46, 10), cloth);
+  armL.position.set(-0.2, -0.12, 0);
+  armL.rotation.z = 0.12;
+  const armR = armL.clone();
+  armR.position.x = 0.2;
+  armR.rotation.z = -0.12;
+
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.115, 16, 12), skin);
+  head.position.y = 0.34;
+
+  const hardHat = new THREE.Mesh(
+    new THREE.SphereGeometry(0.125, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
+    stdMaterial(0xf0a02e, { roughness: 0.4 }),
+  );
+  hardHat.position.y = 0.4;
+
+  return [legL, legR, torso, armL, armR, head, hardHat];
+}
+
+/** An oxygen/air cylinder with a valve — what SCBA, SCSR and a harness pack all actually are. */
+function ppeParts(): THREE.Mesh[] {
+  const tank = stdMaterial(0x4a90d9);
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.07, 0.3, 16), tank);
+  const shoulder = new THREE.Mesh(new THREE.SphereGeometry(0.065, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), tank);
+  shoulder.position.y = 0.15;
+  const valve = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.07, 8), stdMaterial(0x2b3238));
+  valve.position.y = 0.23;
+  return [body, shoulder, valve];
+}
+
+/** A rimmed opening you look down into — a curb around a dark void, not a solid puck. */
+function structureParts(): THREE.Mesh[] {
+  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.06, 28), stdMaterial(0x2b3238));
+  const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.03, 28), stdMaterial(0x0b0f12, { roughness: 0.9 }));
+  hole.position.y = -0.03;
+  return [rim, hole];
+}
+
+/** A plate on a post — reads as a standing sign, not a plaque floating in the air. */
+function signageParts(): THREE.Mesh[] {
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.34, 8), stdMaterial(0x3a3f33));
+  post.position.y = -0.17;
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.22, 0.02), stdMaterial(0xf0a02e, { roughness: 0.5 }));
+  plate.position.y = 0.05;
+  return [post, plate];
+}
+
+/** A hand-held gas detector: a body with a small display, not a bare box. */
+function instrumentParts(): THREE.Mesh[] {
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.16, 0.05), stdMaterial(0x35b39c));
+  const screen = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 0.01), stdMaterial(0x0b0f12, { roughness: 0.3 }));
+  screen.position.set(0, 0.03, 0.028);
+  return [body, screen];
+}
+
+/** DCP / water / CO2 look meaningfully different, matching docs/ASSETS_FIRE_EXPLOSION.md's colour code. */
+function extinguisherParts(kind: 'dcp' | 'water' | 'co2'): THREE.Mesh[] {
+  const bodyColor = kind === 'co2' ? 0x1a1a1a : 0xc0281c;
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.32, 16), stdMaterial(bodyColor));
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.06, 10), stdMaterial(0x2b3238));
+  neck.position.y = 0.19;
+  const parts = [body, neck];
+
+  if (kind === 'dcp') {
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.058, 0.058, 0.05, 16), stdMaterial(0x2255aa));
+    band.position.y = 0.02;
+    parts.push(band);
+  }
+  if (kind === 'co2') {
+    // The horn is the tell on a CO2 unit — a real one is unmistakable even at a glance.
+    const horn = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.14, 12, 1, true), stdMaterial(0x1a1a1a));
+    horn.rotation.z = Math.PI / 2.4;
+    horn.position.set(0.09, 0.12, 0);
+    parts.push(horn);
+  }
+  return parts;
+}
+
+const EXTINGUISHER_KIND: Record<string, 'dcp' | 'water' | 'co2'> = {
+  ext_dcp: 'dcp',
+  ext_water: 'water',
+  ext_co2: 'co2',
+};
+
+/** Exported for tests/tierA-shapes.test.ts — geometry construction needs no WebGL/DOM, so it can run for real under plain Node. */
+export function partsFor(prop: PropView): THREE.Mesh[] {
+  const extinguisher = EXTINGUISHER_KIND[prop.id];
+  if (extinguisher) return extinguisherParts(extinguisher);
+
+  switch (prop.kind) {
     case 'person':
-      return new THREE.CapsuleGeometry(0.11, 0.42, 6, 12);
-    case 'signage':
-      return new THREE.BoxGeometry(0.3, 0.22, 0.02);
-    case 'instrument':
-      return new THREE.BoxGeometry(0.1, 0.16, 0.05);
+      return personParts(KIND_COLOR.person);
     case 'ppe':
-      return new THREE.SphereGeometry(0.11, 20, 14);
+      return ppeParts();
+    case 'structure':
+      return structureParts();
+    case 'signage':
+      return signageParts();
+    case 'instrument':
+      return instrumentParts();
     default:
-      return new THREE.BoxGeometry(0.2, 0.18, 0.16);
+      return [new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.18, 0.16), stdMaterial(KIND_COLOR[prop.kind]))];
   }
 }
 
@@ -384,16 +502,11 @@ export class TierARenderer implements WorldRenderer {
       -Math.cos(slot.angle) * slot.radius,
     );
 
-    const mesh = new THREE.Mesh(
-      geometryFor(prop.kind),
-      new THREE.MeshStandardMaterial({
-        color: KIND_COLOR[prop.kind],
-        roughness: 0.65,
-        metalness: 0.1,
-      }),
-    );
-    mesh.userData.propId = prop.id;
-    group.add(mesh);
+    // Every part is a child of `group`, which already carries `userData.propId`
+    // (above) — `#propIdOf` walks up the parent chain, so a tap landing on any
+    // individual part (the head, an extinguisher's horn) still resolves to
+    // this prop without each mesh needing its own tag.
+    for (const part of partsFor(prop)) group.add(part);
 
     const label = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: labelTexture(prop.label), depthTest: false }),
