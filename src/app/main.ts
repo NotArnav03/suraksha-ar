@@ -36,23 +36,48 @@ const SCENARIOS: Record<string, unknown> = {
   'fire_explosion': fireScenarioJson,
   'fire': fireScenarioJson,
 };
-const scenarioKey = (params.get('scenario') ?? 'gas-confined-space').toLowerCase();
-const scenarioJson = SCENARIOS[scenarioKey] ?? gasScenarioJson;
 
-let scenario: Scenario;
-try {
-  scenario = validateScenario(scenarioJson);
-} catch (error) {
+/**
+ * Every authored module, validated independently. A broken graph in one
+ * scenario must not take the whole app down — the learner should still be
+ * able to pick the module that *does* load, and the picker should say
+ * plainly which one failed rather than pretending it isn't there.
+ */
+const MODULES: { key: string; scenario: Scenario }[] = [];
+const MODULE_ERRORS: { key: string; error: unknown }[] = [];
+for (const [key, json] of [
+  ['gas-confined-space', gasScenarioJson],
+  ['fire-explosion', fireScenarioJson],
+] as const) {
+  try {
+    MODULES.push({ key, scenario: validateScenario(json) });
+  } catch (error) {
+    MODULE_ERRORS.push({ key, error });
+  }
+}
+
+if (MODULES.length === 0) {
   app.innerHTML = '';
   const box = document.createElement('pre');
   box.className = 'fatal-error';
-  box.textContent =
+  box.textContent = MODULE_ERRORS.map(({ key, error }) =>
     error instanceof ScenarioError
-      ? `This scenario cannot be run.\n\n${error.issues.map((i) => `${i.path}\n  ${i.message}`).join('\n\n')}`
-      : String(error);
+      ? `${key} cannot be run.\n\n${error.issues.map((i) => `${i.path}\n  ${i.message}`).join('\n\n')}`
+      : `${key}: ${String(error)}`,
+  ).join('\n\n');
   app.append(box);
-  throw error;
+  throw new Error('no scenario module validated');
 }
+
+const scenarioKey = (params.get('scenario') ?? '').toLowerCase();
+const requested: { key: string; scenario: Scenario } | undefined = Object.hasOwn(SCENARIOS, scenarioKey)
+  ? MODULES.find((m) => SCENARIOS[m.key] === SCENARIOS[scenarioKey])
+  : undefined;
+
+// A module named explicitly in the URL (deep-linking a demo, re-running a
+// specific drill) skips the picker outright. Otherwise the learner chooses.
+let scenario: Scenario = requested?.scenario ?? MODULES[0]!.scenario;
+const skipPicker = requested !== undefined;
 
 /**
  * How long the AR handshake gets before the drill goes ahead without it.
@@ -186,6 +211,59 @@ const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: string }> = {
   webgl: { en: '3D graphics', hi: '3D ग्राफ़िक्स', sat: '3D ᱪᱤᱛᱟᱹᱨ', icon: '🎮' },
   secureContext: { en: 'Secure connection', hi: 'सुरक्षित कनेक्शन', sat: 'ᱨᱚᱠᱷᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ', icon: '🔒' },
 };
+
+/** Which module to drill. Skipped when `?scenario=` names one explicitly. */
+function moduleScreen(report: TierReport): void {
+  const root = screen('start module-picker');
+
+  const hero = document.createElement('header');
+  hero.className = 'hero';
+  const eyebrow = document.createElement('p');
+  eyebrow.className = 'eyebrow';
+  eyebrow.textContent = i18n.ui('droneEyebrow');
+  const title = document.createElement('h1');
+  title.textContent = i18n.ui('chooseModule');
+  hero.append(eyebrow, title);
+
+  const langRow = document.createElement('div');
+  langRow.className = 'lang lang-big';
+  for (const language of LANGUAGES) {
+    const button = document.createElement('button');
+    button.className = `lang-button${language.code === i18n.language.code ? ' on' : ''}`;
+    button.textContent = language.name;
+    button.addEventListener('click', () => {
+      i18n.setLanguage(language.code);
+      moduleScreen(report);
+    });
+    langRow.append(button);
+  }
+
+  const list = document.createElement('div');
+  list.className = 'module-list';
+  for (const module of MODULES) {
+    const card = document.createElement('button');
+    card.className = 'panel module-card';
+    const cardTitle = document.createElement('h2');
+    cardTitle.textContent = i18n.text(module.scenario.title);
+    const cardDesc = document.createElement('p');
+    cardDesc.className = 'lede';
+    cardDesc.textContent = i18n.text(module.scenario.description);
+    card.append(cardTitle, cardDesc);
+    card.addEventListener('click', () => {
+      scenario = module.scenario;
+      startScreen(report);
+    });
+    list.append(card);
+  }
+  if (MODULE_ERRORS.length > 0) {
+    const note = document.createElement('p');
+    note.className = 'reason';
+    note.textContent = `${MODULE_ERRORS.length} module(s) failed to load and are not shown: ${MODULE_ERRORS.map((m) => m.key).join(', ')}`;
+    list.append(note);
+  }
+
+  root.append(hero, langRow, list);
+}
 
 function startScreen(report: TierReport): void {
   const root = screen('start');
@@ -321,6 +399,16 @@ function startScreen(report: TierReport): void {
   });
   prefs.append(themeButton);
 
+  // Deep-linking a specific module via `?scenario=` is a fixed choice for that
+  // session; switching only makes sense when the learner picked one themselves.
+  if (MODULES.length > 1 && !skipPicker) {
+    const switchModule = document.createElement('button');
+    switchModule.className = 'lang-button';
+    switchModule.textContent = `🔀  ${i18n.ui('changeModule')}`;
+    switchModule.addEventListener('click', () => moduleScreen(report));
+    prefs.append(switchModule);
+  }
+
   root.append(hero, welcome, langRow, tierBox, progress, actions, prefs);
 }
 
@@ -454,6 +542,8 @@ const report = await detectTier(
 
 if (params.get('demo') === 'credential') {
   credentialDemoScreen(report);
+} else if (MODULES.length > 1 && !skipPicker) {
+  moduleScreen(report);
 } else {
   startScreen(report);
 }

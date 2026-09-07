@@ -235,6 +235,16 @@ button:disabled { opacity: .38; pointer-events: none; }
 
 .start-actions { display: grid; gap: 12px; }
 
+.module-list { display: grid; gap: 14px; }
+.module-card {
+  display: block; width: 100%; text-align: left; cursor: pointer;
+  font: inherit; color: inherit;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.module-card:hover, .module-card:focus-visible { border-color: var(--ink-3); transform: translateY(-1px); }
+.module-card h2 { margin: 0 0 6px; font-size: 1.15rem; }
+.module-card .lede { font-size: .96rem; }
+
 /* Preferences that are not the drill: language is above, these sit quietly. */
 .prefs { display: flex; gap: 10px; justify-content: center; }
 

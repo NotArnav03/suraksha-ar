@@ -105,6 +105,14 @@ const UI: Record<string, LocalizedText> = {
   },
   beginDrill: { en: 'Begin drill', hi: 'अभ्यास शुरू कीजिए', sat: 'ᱟᱹᱣᱟᱛ ᱮᱛᱦᱚᱵ ᱢᱮ' },
   clearProgress: { en: 'Clear progress', hi: 'प्रगति मिटाइए', sat: 'ᱚᱰᱚᱠᱚᱜ ᱢᱮᱴᱟᱣ ᱢᱮ' },
+  chooseModule: {
+    en: 'Choose a training module',
+    hi: 'एक प्रशिक्षण मॉड्यूल चुनिए',
+  },
+  changeModule: {
+    en: 'Change module',
+    hi: 'मॉड्यूल बदलिए',
+  },
   capableTier: {
     en: '{{tier}} available',
     hi: '{{tier}} उपलब्ध',

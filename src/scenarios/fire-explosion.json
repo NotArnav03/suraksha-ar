@@ -24,7 +24,7 @@
     { "id": "ext_co2", "kind": "equipment", "label": { "en": "CO₂ extinguisher (black, horn)", "hi": "सीओ₂ अग्निशामक (काला, हॉर्न)" } },
     { "id": "scsr", "kind": "ppe", "label": { "en": "Self-Contained Self-Rescuer", "hi": "सेल्फ-कंटेंड सेल्फ-रेस्क्यूअर" } },
     { "id": "exit_arrow", "kind": "signage", "label": { "en": "Exit arrow", "hi": "निकास तीर" } },
-    { "id": "exit_marker", "kind": "signage", "label": { "en": "Fresh-air exit", "hi": "ताज़ी हवा निकास" } },
+    { "id": "exit_marker", "kind": "structure", "label": { "en": "Fresh-air exit", "hi": "ताज़ी हवा निकास" } },
     { "id": "colleague_down", "kind": "person", "label": { "en": "Collapsed worker", "hi": "बेहोश साथी" }, "spawned": true }
   ],
   "bindings": {
@@ -58,8 +58,8 @@
       "weight": 0,
       "prompt": {
         "text": {
-          "en": "A fire has started on the electrical panel. Put it out safely, then get to the exit.",
-          "hi": "बिजली के पैनल पर आग लग गई है। इसे सुरक्षित रूप से बुझाएँ, फिर बाहर निकलें।"
+          "en": "A fire has started on the electrical panel. First, put it out safely using the right extinguisher. Then get yourself to the exit.",
+          "hi": "बिजली के पैनल में आग लग गई है। पहले सही अग्निशामक से इसे सुरक्षित रूप से बुझाइए। फिर बाहर निकास तक पहुँचिए।"
         }
       },
       "effects": [{ "type": "ambient", "state": "chp_yard_day" }],
@@ -72,8 +72,8 @@
       "weight": 0,
       "prompt": {
         "text": {
-          "en": "Point your phone at the wall and tap to place the scene.",
-          "hi": "अपना फ़ोन दीवार की ओर करें और दृश्य रखने के लिए टैप करें।"
+          "en": "Take a moment to get ready. When you are ready to begin, continue.",
+          "hi": "तैयार होने के लिए एक पल लीजिए। जब तैयार हों, आगे बढ़िए।"
         }
       },
       "next": "hazard_ignition"
@@ -84,8 +84,8 @@
       "dimensions": ["hazard_recognition"],
       "prompt": {
         "text": {
-          "en": "Something is wrong. Find the hazard.",
-          "hi": "कुछ गड़बड़ है। ख़तरे को पहचानें।"
+          "en": "Look around you. Point to, or tap on, the hazard you see.",
+          "hi": "अपने चारों ओर देखिए। जो ख़तरा दिखे, उस पर इशारा कीजिए या टैप कीजिए।"
         }
       },
       "targets": ["fire"],
@@ -116,8 +116,8 @@
       "dimensions": ["hazard_recognition", "procedure_sequence"],
       "prompt": {
         "text": {
-          "en": "Walk to the correct extinguisher for an electrical fire and tap it.",
-          "hi": "बिजली की आग के लिए सही अग्निशामक के पास जाएँ और उसे टैप करें।"
+          "en": "This is an electrical fire — never use water on it. Find the powder (DCP) extinguisher, the one with a blue band. Tap on it and choose \"Look at\" to pick it.",
+          "hi": "यह बिजली की आग है — इस पर कभी पानी मत डालिए। पाउडर (डीसीपी) अग्निशामक ढूँढ़िए, जिस पर नीली पट्टी है। उसे टैप कीजिए और चुनने के लिए \"देखिए\" चुनिए।"
         }
       },
       "ordered": false,
@@ -153,8 +153,8 @@
           "dimension": "hazard_recognition",
           "consequence": {
             "text": {
-              "en": "CO₂ works on electrical fires but the drill targets the powder unit. Prefer DCP here.",
-              "hi": "सीओ₂ बिजली की आग पर काम करता है, पर इस अभ्यास में पाउडर इकाई लक्षित है।"
+              "en": "CO₂ can also be used on an electrical fire, but for this drill, use the powder (DCP) extinguisher instead.",
+              "hi": "सीओ₂ भी बिजली की आग पर काम कर सकता है, लेकिन इस अभ्यास के लिए पाउडर (डीसीपी) अग्निशामक का उपयोग कीजिए।"
             }
           }
         }
@@ -178,8 +178,8 @@
       "dimensions": ["procedure_sequence"],
       "prompt": {
         "text": {
-          "en": "Water on a live electrical fire can shock you and spread it. Try again — pick the powder unit.",
-          "hi": "जीवित बिजली की आग पर पानी झटका दे सकता है और आग फैला सकता है। फिर से कोशिश करें — पाउडर वाला चुनें।"
+          "en": "That was wrong — water is dangerous on an electrical fire. Now find the powder (DCP) extinguisher, tap on it, and choose \"Look at\" to pick it.",
+          "hi": "यह ग़लत था — बिजली की आग पर पानी ख़तरनाक है। अब पाउडर (डीसीपी) अग्निशामक ढूँढ़िए, उसे टैप कीजिए, और चुनने के लिए \"देखिए\" चुनिए।"
         }
       },
       "ordered": false,
@@ -210,8 +210,8 @@
       "dimensions": ["procedure_sequence"],
       "prompt": {
         "text": {
-          "en": "Use PASS: Pull the pin, Aim at the base, Squeeze, Sweep side to side.",
-          "hi": "PASS का प्रयोग करें: पिन खींचें, आधार पर निशाना लगाएँ, दबाएँ, अगल-बगल घुमाएँ।"
+          "en": "Now use the extinguisher. Follow these four steps, one at a time: tap the extinguisher and choose \"Open\" to pull the pin. Tap the fire and choose \"Look at\" to aim at its base. Tap the extinguisher and choose \"Use\" to squeeze the handle. Tap the fire and choose \"Use\" to sweep side to side.",
+          "hi": "अब अग्निशामक का उपयोग कीजिए। ये चार क़दम एक-एक करके कीजिए: अग्निशामक को टैप करके \"खोलिए\" चुनिए और पिन खींचिए। आग को टैप करके \"देखिए\" चुनिए और आधार पर निशाना लगाइए। अग्निशामक को टैप करके \"चलाइए\" चुनिए और हैंडल दबाइए। आग को टैप करके \"चलाइए\" चुनिए और अगल-बगल घुमाइए।"
         }
       },
       "ordered": true,
@@ -241,8 +241,8 @@
       "dimensions": ["ppe_discipline"],
       "prompt": {
         "text": {
-          "en": "Before moving out, put on your self-rescuer. Tap the SCSR to wear it.",
-          "hi": "बाहर निकलने से पहले अपना सेल्फ-रेस्क्यूअर पहनें। पहनने के लिए SCSR को टैप करें।"
+          "en": "Before you leave, put on your self-rescuer. Tap on the SCSR and choose \"Put on\" to wear it.",
+          "hi": "बाहर निकलने से पहले अपना सेल्फ-रेस्क्यूअर पहनिए। SCSR को टैप कीजिए और \"पहनिए\" चुनकर उसे पहनिए।"
         }
       },
       "ordered": false,
@@ -283,8 +283,8 @@
       "dimensions": ["procedure_sequence", "rescue_restraint", "time_criticality"],
       "prompt": {
         "text": {
-          "en": "Follow the arrows to fresh air. Do not stop for anything on the way.",
-          "hi": "ताज़ी हवा की ओर तीरों का अनुसरण करें। रास्ते में किसी भी चीज़ के लिए न रुकें।"
+          "en": "Follow the arrows to fresh air now. Do not stop for anything on the way — not even your collapsed colleague. Tap on the exit and choose \"Climb in\" to go through it and reach safety.",
+          "hi": "अभी तीरों का अनुसरण करते हुए ताज़ी हवा तक पहुँचिए। रास्ते में किसी भी चीज़ के लिए मत रुकिए — अपने बेहोश साथी के लिए भी नहीं। निकास को टैप कीजिए और सुरक्षित पहुँचने के लिए \"अंदर उतरिए\" चुनिए।"
         }
       },
       "ordered": false,
@@ -307,19 +307,6 @@
             "text": {
               "en": "You went to the collapsed colleague before reaching safe air. This is how second-victim deaths happen.",
               "hi": "आप सुरक्षित हवा में पहुँचने से पहले बेहोश साथी के पास गए। ऐसे ही दूसरे-शिकार की मौतें होती हैं।"
-            }
-          },
-          "goto": "outcome_fatal_rescue"
-        },
-        {
-          "match": { "verb": "enter", "target": "casualty" },
-          "code": "SECOND_VICTIM_ENTRY",
-          "severity": "fatal",
-          "dimension": "rescue_restraint",
-          "consequence": {
-            "text": {
-              "en": "You entered the hazard zone to rescue, adding yourself to the casualty list.",
-              "hi": "आप बचाने के लिए ख़तरे में घुसे और ख़ुद हताहत बन गए।"
             }
           },
           "goto": "outcome_fatal_rescue"

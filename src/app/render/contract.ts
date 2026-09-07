@@ -19,10 +19,10 @@ export const VERBS_BY_KIND: Record<Prop['kind'], Verb[]> = {
   structure: ['inspect', 'enter', 'exit'],
   signage: ['inspect'],
   instrument: ['inspect', 'use'],
-  equipment: ['inspect', 'use', 'attach', 'report'],
+  equipment: ['inspect', 'use', 'attach', 'open', 'report'],
   ppe: ['inspect', 'wear'],
   person: ['inspect', 'signal', 'report'],
-  hazard: ['inspect'],
+  hazard: ['inspect', 'use'],
 };
 
 export interface PropView {
