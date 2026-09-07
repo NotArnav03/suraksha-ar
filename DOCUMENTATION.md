@@ -335,7 +335,6 @@ work on one.
 | Credential issuance happens in-browser | Demo-only, explicitly named as such; now signed with a fixed key (not random per-session) so a *different* device can verify it | `src/credential/web-crypto.ts`'s `createDemoIssuer` + `src/credential/demo-trust.ts` — real issuance needs a server-side keystore, a published trust list, and key rotation, none of which exist yet |
 | Santali narration is speech-synthesized, not recorded | Stand-in | `app/ui/i18n.ts`'s `Localizer.speak()`; `Narration.audio` field already exists in `engine/types.ts` to carry real clips whenever they're recorded |
 | Santali translation is an unreviewed AI draft | Full scenario coverage (both scenarios), zero human review | `tools/translate.mjs --dictionary l10n/ai-santali-drafts.json --apply` generated it; a `l10n/sat-review.tsv` sign-off sheet tracks every line; **nothing it writes is authoritative until a Santali speaker signs off each line** — enforced by process, not by code. Three AR-handshake UI strings were deliberately left un-drafted, not just unreviewed — see the comment above `startingAr` in `i18n.ts` |
-| Digital Asset Link verification for the APK not published | Fingerprint ready, needs publishing at a domain root outside this repo | `public/.well-known/assetlinks.json`; see `docs/APK.md` |
 | Admin dashboard has no backend/sync across devices | By design for now — reads only what this device scanned | `src/admin/store.ts`'s module comment |
 
 ## 8. Localization workflow, concretely

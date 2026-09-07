@@ -68,12 +68,20 @@ the domain **root**, always, regardless of where the app itself is scoped.
 `public/.well-known/assetlinks.json` in this repo (deployed with everything
 else) lands at `notarnav03.github.io/suraksha-ar/.well-known/...`, which is
 the wrong place — GitHub Pages project sites can't serve anything at the
-account's actual root from this repo. The fingerprint is already generated
-(`keytool -list -v -keystore android/android.keystore -alias suraksha`) and
-the file is ready; it just needs to also be published at
-`notarnav03.github.io/.well-known/assetlinks.json`, which lives in the
-separate `NotArnav03/NotArnav03.github.io` repo. That's a deliberate,
-un-taken step — ask before touching a different repo.
+account's actual root from this repo. It's also published (with the user's
+explicit go-ahead to touch that separate repo) at
+`notarnav03.github.io/.well-known/assetlinks.json`, in
+`NotArnav03/NotArnav03.github.io` — confirmed live. That repo also needed a
+`.nojekyll` file added: GitHub Pages runs Jekyll by default, which excludes
+dotfiles/dot-directories (including `.well-known`) unless told not to; the
+portfolio site there is plain static HTML with no Jekyll templating in use,
+so disabling Jekyll processing changes nothing else about it — confirmed by
+checking the page still renders after the change.
+
+If the signing key is ever regenerated (`android/` is gitignored and
+reproducible, so this can happen), the fingerprint changes and this file
+needs updating in *both* places, or verification silently starts failing
+again.
 
 ## Windows-specific bugs (fixed by `tools/patch_bubblewrap_windows.mjs`)
 
