@@ -1,5 +1,6 @@
-import { fromBase64url, toBase64url } from './base64url.ts';
+import { fromBase64url } from './base64url.ts';
 import type { Signer, SignatureVerifier } from './credential.ts';
+import { DEMO_KEY_ID, DEMO_PRIVATE_KEY_PKCS8, DEMO_PUBLIC_KEY_SPKI } from './demo-trust.ts';
 
 /**
  * The browser half of the credential.
@@ -17,13 +18,6 @@ const SIGN_PARAMS = { name: 'ECDSA', hash: 'SHA-256' } as const;
 function keyMaterial(spkiBase64: string): ArrayBuffer {
   const bytes = fromBase64url(spkiBase64);
   return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
-}
-
-async function keyIdFor(spkiBase64: string): Promise<number> {
-  const digest = new Uint8Array(
-    await crypto.subtle.digest('SHA-256', new TextEncoder().encode(spkiBase64)),
-  );
-  return (digest[0]! << 8) | digest[1]!;
 }
 
 /**
@@ -68,20 +62,28 @@ export interface DemoIssuer {
  * failure this whole project exists to fix. Kept here so the end-to-end loop is
  * visible without standing up a backend, and named so it cannot be mistaken for
  * the real thing.
+ *
+ * Signs with the fixed key in `demo-trust.ts`, not a fresh random one — see
+ * that file for why: a random per-session key meant no other device (the
+ * admin dashboard, a supervisor's phone, even the same browser reopened)
+ * could ever verify what this issued.
  */
 export async function createDemoIssuer(): Promise<DemoIssuer> {
-  const pair = await crypto.subtle.generateKey(ALGORITHM, true, ['sign', 'verify']);
-  const spki = new Uint8Array(await crypto.subtle.exportKey('spki', pair.publicKey));
-  const publicKeySpki = toBase64url(spki);
-  const keyId = await keyIdFor(publicKeySpki);
+  const privateKey = await crypto.subtle.importKey(
+    'pkcs8',
+    keyMaterial(DEMO_PRIVATE_KEY_PKCS8),
+    ALGORITHM,
+    false,
+    ['sign'],
+  );
 
   return {
-    keyId,
-    publicKeySpki,
+    keyId: DEMO_KEY_ID,
+    publicKeySpki: DEMO_PUBLIC_KEY_SPKI,
     signer: {
-      keyId,
+      keyId: DEMO_KEY_ID,
       async sign(data: Uint8Array): Promise<Uint8Array> {
-        const signature = await crypto.subtle.sign(SIGN_PARAMS, pair.privateKey, data as BufferSource);
+        const signature = await crypto.subtle.sign(SIGN_PARAMS, privateKey, data as BufferSource);
         return new Uint8Array(signature);
       },
     },
