@@ -15,7 +15,7 @@
     "noImplicitOverride": true,
     "exactOptionalPropertyTypes": false,
     "skipLibCheck": true,
-    "types": ["node", "webxr"]
+    "types": ["node", "webxr", "vite/client"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"]
 }

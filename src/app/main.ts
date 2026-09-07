@@ -17,6 +17,21 @@ import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
 import { Localizer, LANGUAGES, type LangCode } from './ui/i18n.ts';
 import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './ui/theme.ts';
 
+/**
+ * Offline is the whole point — a worksite with no signal must still run the
+ * drill and check a scanned credential. Registered only in the production
+ * build: the dev server serves unbundled modules that a cache-first worker
+ * would fight with, and nothing here is exercised by the test suite.
+ */
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js').catch(() => {
+      // No offline shell is a degraded phone, not a broken app — the drill
+      // and the credential check still work with a live connection.
+    });
+  });
+}
+
 const app = document.querySelector<HTMLElement>('#app')!;
 const params = new URLSearchParams(location.search);
 const workerId = params.get('worker') ?? 'JH/CHP/2291';
