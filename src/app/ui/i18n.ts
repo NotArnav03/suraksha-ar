@@ -56,20 +56,25 @@ const UI: Record<string, LocalizedText> = {
     hi: 'आगे बढ़ने के लिए कहीं भी टैप कीजिए',
     sat: 'ᱟᱭᱳ ᱪᱟᱞᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱦᱟᱸ ᱦᱚᱸ ᱴᱮᱯ ᱢᱮ',
   },
-  timeLeft: { en: 'Time left', hi: 'बचा समय' },
-  result_pass: { en: 'Passed', hi: 'उत्तीर्ण' },
-  result_fail: { en: 'Not passed', hi: 'उत्तीर्ण नहीं' },
-  result_fatal: { en: 'Fatal outcome', hi: 'जानलेवा परिणाम' },
-  competency: { en: 'Competency', hi: 'दक्षता' },
-  credential: { en: 'Certificate', hi: 'प्रमाणपत्र' },
-  scanToVerify: { en: 'Scan to verify — works offline', hi: 'जाँचने के लिए स्कैन कीजिए — बिना इंटरनेट' },
-  whatWentWrong: { en: 'What went wrong', hi: 'क्या ग़लत हुआ' },
-  theme: { en: 'Light or dark', hi: 'उजाला या अंधेरा' },
+  timeLeft: { en: 'Time left', hi: 'बचा समय', sat: 'ᱴᱟᱲᱟᱝ ᱟᱨᱦᱚᱸ ᱢᱮᱱᱟᱜ' },
+  result_pass: { en: 'Passed', hi: 'उत्तीर्ण', sat: 'ᱯᱟᱥ ᱮᱱᱟ' },
+  result_fail: { en: 'Not passed', hi: 'उत्तीर्ण नहीं', sat: 'ᱯᱟᱥ ᱵᱟᱭ ᱦᱩᱭᱮᱱᱟ' },
+  result_fatal: { en: 'Fatal outcome', hi: 'जानलेवा परिणाम', sat: 'ᱜᱚᱲᱚ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱲᱟᱣ' },
+  competency: { en: 'Competency', hi: 'दक्षता', sat: 'ᱫᱟᱲᱮᱭᱟᱜ ᱡᱟᱹᱱᱟᱹ' },
+  credential: { en: 'Certificate', hi: 'प्रमाणपत्र', sat: 'ᱥᱟᱠᱷᱭᱟᱛ' },
+  scanToVerify: {
+    en: 'Scan to verify — works offline',
+    hi: 'जाँचने के लिए स्कैन कीजिए — बिना इंटरनेट',
+    sat: 'ᱴᱷᱤᱠ ᱵᱟᱰᱟᱭ ᱞᱟᱹᱜᱤᱫ ᱥᱠᱮᱱ ᱢᱮ — ᱚᱯᱷᱞᱟᱭᱤᱱ ᱨᱮᱦᱚᱸ ᱪᱟᱞᱟᱜᱼᱟ',
+  },
+  whatWentWrong: { en: 'What went wrong', hi: 'क्या ग़लत हुआ', sat: 'ᱚᱠᱟ ᱵᱟᱭ ᱴᱷᱤᱠ ᱦᱩᱭᱮᱱᱟ' },
+  theme: { en: 'Light or dark', hi: 'उजाला या अंधेरा', sat: 'ᱟᱨᱟᱜ ᱟᱨᱵᱟᱝ ᱧᱩᱛ' },
   // The first thing a new worker reads. Nobody learns while afraid of breaking
   // something, so say plainly that this one is safe to get wrong.
   welcome: {
     en: 'Nothing here is real. Take your time, try things, and find out what goes wrong — that is what this is for.',
     hi: 'यहाँ कुछ भी असली नहीं है। आराम से कीजिए, आज़माइए, और देखिए क्या ग़लत होता है — यही इसका मक़सद है।',
+    sat: 'ᱱᱚᱰᱮ ᱚᱠᱟ ᱦᱚᱸ ᱥᱟᱨᱤ ᱵᱟᱝᱟ ᱾ ᱴᱟᱲᱟᱝ ᱮᱢ ᱢᱮ, ᱪᱮᱥᱴᱟ ᱢᱮ, ᱟᱨ ᱵᱟᱰᱟᱭ ᱢᱮ ᱚᱠᱟ ᱵᱟᱭ ᱴᱷᱤᱠ ᱦᱩᱭ — ᱚᱱᱟ ᱛᱮᱭ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱠᱟᱱᱟ ᱾',
   },
   // The runtime raises STEP_OUT_OF_ORDER itself rather than from the scenario,
   // so its wording belongs here with the rest of the interface copy — the engine
@@ -77,10 +82,14 @@ const UI: Record<string, LocalizedText> = {
   outOfOrder: {
     en: 'Right action, wrong moment — something else has to happen first.',
     hi: 'काम सही है, समय ग़लत — इससे पहले कुछ और करना ज़रूरी है।',
+    sat: 'ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱟᱭ ᱴᱷᱤᱠ ᱚᱠᱛᱚ — ᱮᱴᱟᱜ ᱡᱤᱱᱤᱥ ᱯᱩᱭᱞᱩ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾',
   },
   // No `sat` on these three: the fallback chain hands a Santali learner the
   // Hindi line, which is honest, where invented Santali would not be. They are
-  // written to be replaced by a speaker, not by a translation engine.
+  // written to be replaced by a speaker, not by a translation engine. This is a
+  // deliberate exception to the AI-drafted pass the rest of the app's Santali
+  // went through (see l10n/sat-review.tsv) — these specifically stay Hindi-only
+  // until a speaker writes them, not until one reviews a machine draft of them.
   startingAr: {
     en: 'Starting AR — allow the camera when your phone asks',
     hi: 'AR शुरू हो रहा है — फ़ोन पूछे तो कैमरा चालू करने दीजिए',
@@ -108,10 +117,12 @@ const UI: Record<string, LocalizedText> = {
   chooseModule: {
     en: 'Choose a training module',
     hi: 'एक प्रशिक्षण मॉड्यूल चुनिए',
+    sat: 'ᱛᱨᱮᱱᱤᱝ ᱢᱳᱰᱭᱩᱞ ᱵᱟᱪᱷᱟᱣ ᱢᱮ',
   },
   changeModule: {
     en: 'Change module',
     hi: 'मॉड्यूल बदलिए',
+    sat: 'ᱢᱳᱰᱭᱩᱞ ᱵᱚᱫᱚᱞ ᱢᱮ',
   },
   capableTier: {
     en: '{{tier}} available',

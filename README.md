@@ -6,16 +6,20 @@ The product thesis: the gap in the problem statement is not training delivery, i
 
 ## Where the code is now
 
-The **drill engine**, the **assessment**, the **credential** and the **Tier A + Tier C clients** are built. Tier B (marker tracking) is contracted but not implemented.
+The **drill engine**, the **assessment**, the **credential**, the **Tier A + Tier C clients**, an installable **offline PWA shell**, a **Trusted Web Activity Android APK**, and a **web compliance dashboard** are built. Tier B (marker tracking) is contracted but not implemented. Two scenarios are authored: `gas-confined-space` and `fire-explosion`, both reachable from an in-app module picker.
+
+Live: **https://notarnav03.github.io/suraksha-ar/** (worker app) and **`/admin.html`** (compliance dashboard) — redeployed automatically on every push to `main`.
 
 ```
 src/engine/      scenario graph runtime — knows nothing about cameras or meshes
 src/assess/      event stream -> competency vector -> certification
 src/credential/  compact signed credential, offline QR verification
-src/app/         the web client: tier detection, shared HUD, Tier C world
-src/scenarios/   authored scenario content (JSON)
+src/app/         the web client: tier detection, shared HUD, module picker, Tier A/C worlds
+src/admin/       compliance dashboard — verifies scanned credentials, no backend
+src/scenarios/   authored scenario content (JSON) — gas-confined-space, fire-explosion
 src/cli/         headless runner and the end-to-end credential demo
-tests/           82 tests, node's built-in runner
+public/          PWA manifest, service worker, icons — see docs/APK.md for the Android build
+tests/           91 tests, node's built-in runner
 ```
 
 ## Try it
@@ -24,7 +28,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 82 tests
+npm test                # 91 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -39,7 +43,9 @@ npm run dev             # the client, on your LAN so a phone can reach it
 npm run build           # 35 kB gzipped, + 134 kB three.js only on AR devices
 ```
 
-Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`.
+Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion` (deep-links past the module picker).
+
+Building the Android APK is a separate, one-time-setup process — see `docs/APK.md`.
 
 More: `node --experimental-strip-types src/cli/run.ts --script sniff-test --seed 11 --lang hi --events`
 
@@ -84,20 +90,23 @@ Tier detection reports **two** answers on the start screen: the best tier the de
 
 No web fonts, no CDN. The app has to work with the radio off.
 
-## The authored scenario
+## The authored scenarios
 
-`gas-confined-space` — cleaning a settling sump at a coal handling plant pit-top. Surface location by design: non-flameproof electronics are restricted underground in gassy mines, and induction training is legally sited at the surface anyway.
+`gas-confined-space` — cleaning a settling sump at a coal handling plant pit-top. Surface location by design: non-flameproof electronics are restricted underground in gassy mines, and induction training is legally sited at the surface anyway. Eighteen or nineteen nodes depending on variant, covering permit-to-work, gas testing before entry, purge and re-test, breathing set and retrieval line, standby person, an induced ventilation failure mid-task, and the second-victim rescue decision.
 
-Eighteen or nineteen nodes depending on variant, covering permit-to-work, gas testing before entry, purge and re-test, breathing set and retrieval line, standby person, an induced ventilation failure mid-task, and the second-victim rescue decision.
+`fire-explosion` — an electrical panel fire at the pit-top: hazard recognition, choosing the correct extinguisher class (never water on a live electrical fire), the PASS technique, donning a self-rescuer, and evacuating without re-entering for a collapsed colleague — the same second-victim-restraint reflex `gas-confined-space` measures, in a different domain.
 
-English and Hindi are authored throughout; Santali (Ol Chiki) is present on two nodes only, and `availableLanguages()` reports it as unavailable rather than pretending otherwise.
+English and Hindi are authored throughout both scenarios. Santali (Ol Chiki) now covers every scenario string in both — but it is an **AI machine draft**, not a reviewed translation: every line is also recorded in `l10n/sat-review.tsv` against its English source, and none of it should be presented to a worker as verified training content until a Santali speaker has signed off each row. Three interface strings (the AR-handshake status lines) are deliberately left Hindi-only rather than machine-drafted at all — see the comment in `src/app/ui/i18n.ts`.
 
 ## Known gaps — read before pitching
 
 - **Every regulation citation in the scenario JSON is a placeholder.** They name the right instruments (Mines Act 1952, Mines Vocational Training Rules 1966, DGMS confined-space guidance) but no clause numbers have been verified. Replace each `cite` with the exact provision, checked against the source, before this is shown as compliant with anything.
-- **The scenario has not been reviewed by a certified instructor.** The procedure is drawn from general confined-space practice. It needs sign-off from someone DGMS-certified before it trains anyone.
+- **Neither scenario has been reviewed by a certified instructor.** Both procedures are drawn from general practice, not a DGMS-certified sign-off.
+- **The Santali translation is an unreviewed AI draft.** Complete coverage, but not verified — see `l10n/sat-review.tsv`. Do not present it as authoritative until a Santali speaker has checked it line by line.
+- **Digital Asset Link verification for the APK is prepared but not published.** `public/.well-known/assetlinks.json` has the right fingerprint, but Chrome checks for it at the account's domain *root* (`notarnav03.github.io/.well-known/...`), which lives in a separate repo this one doesn't touch unprompted. Until it's published there, the installed APK opens as a Chrome Custom Tab (visible URL bar) rather than fully chromeless — see `docs/APK.md`.
+- **The admin dashboard has no backend.** It verifies real signed credentials and keeps a real roster, but only of whatever this one device has scanned — see the module comment in `src/admin/store.ts` for what a real multi-supervisor deployment still needs.
 - **Tier A has never run on real hardware.** It is written against the WebXR hit-test and dom-overlay specs and it type-checks and builds, but no ARCore device has executed it in this repo. Treat it as unproven until it has been on a phone.
-- **Tier A uses primitive geometry, not models.** Coloured boxes and capsules with canvas labels, arranged on a fixed arc. Fixed slots rather than a random scatter is deliberate — two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable — but this is placeholder art, not a site twin.
+- **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher — see `src/app/render/tierA.ts`'s `partsFor`), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate — two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
 - **Tier B (marker tracking) is not built.** It is contracted in `render/contract.ts`; the app falls back to Tier C loudly rather than mounting a renderer that would show a black screen.
-- **Issuing happens in the browser** in the current demo, which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
+- **Issuing happens in the browser** in the current demo, signed with a fixed demo key (`src/credential/demo-trust.ts`, chosen deliberately over a random-per-session key so a credential can be verified on a *different* device — see that file's comment) — which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
 - **Speech synthesis is a stand-in for recorded narration.** The languages this has to reach — Santali, Ho, Mundari, Kurukh — have no synthetic voice worth using. `Narration.audio` already carries the clips; they have not been recorded.

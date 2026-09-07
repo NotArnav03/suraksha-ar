@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 /**
- * Fill in the Santali the scenario is missing, and say plainly that a machine
- * wrote it.
+ * Fill in the Santali the scenarios are missing, and say plainly that a
+ * machine wrote it.
  *
- * 82 of the scenario's 86 localised strings, and 14 of 29 interface strings,
- * have no Santali at all — so a learner who picks Santali is served Hindi by
- * the fallback chain almost everywhere. Hindi is a language many Jharkhand
- * workers read, so this is not a broken app; it is the app quietly declining to
- * be what it claims to be.
+ * Most of both scenarios' localised strings, and a chunk of the interface
+ * strings, have no Santali at all — so a learner who picks Santali is served
+ * Hindi by the fallback chain almost everywhere. Hindi is a language many
+ * Jharkhand workers read, so this is not a broken app; it is the app quietly
+ * declining to be what it claims to be.
  *
- * Translation goes through Bhashini, the Government of India's own language
- * stack (IndicTrans2 for Santali), rather than a general-purpose engine: it is
- * the service built for exactly these languages, and for a Smart India
- * Hackathon entry it is also the one a judge will recognise.
+ * Two translation sources are supported:
+ *   - Bhashini, the Government of India's own language stack (IndicTrans2 for
+ *     Santali) — the service actually built for this language pair.
+ *   - A local dictionary file (`--dictionary path.json`, `{ "English text":
+ *     "Santali text" }`) for when Bhashini credentials aren't available but a
+ *     translation — machine or human — exists some other way. Same output,
+ *     same review requirement either way; this tool doesn't care which
+ *     produced the draft, only that every draft is tracked as one.
  *
  * ── the part that matters ──────────────────────────────────────────────────
  * Machine translation of a low-resource language is a draft, not an authority.
@@ -22,11 +26,12 @@
  * l10n/sat-review.tsv against its English source, for a Santali speaker to
  * check line by line before any of it is presented to a worker as training.
  *
- *   node tools/translate.mjs --report     what is missing, translate nothing
- *   node tools/translate.mjs --dry-run    translate, print, write nothing
- *   node tools/translate.mjs --apply      translate and write
+ *   node tools/translate.mjs --report                    what is missing, translate nothing
+ *   node tools/translate.mjs --dry-run                    translate via Bhashini, print, write nothing
+ *   node tools/translate.mjs --apply                      translate via Bhashini and write
+ *   node tools/translate.mjs --dictionary FILE --apply    translate from a local dictionary and write
  *
- * Credentials come from the environment, free after registering at
+ * Bhashini credentials come from the environment, free after registering at
  * https://bhashini.gov.in/ulca/user/register :
  *   BHASHINI_USER_ID, BHASHINI_ULCA_API_KEY
  */
@@ -36,7 +41,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SCENARIO = join(ROOT, 'src/scenarios/gas-confined-space.json');
+const SCENARIOS = [
+  join(ROOT, 'src/scenarios/gas-confined-space.json'),
+  join(ROOT, 'src/scenarios/fire-explosion.json'),
+];
 const I18N = join(ROOT, 'src/app/ui/i18n.ts');
 const REVIEW = join(ROOT, 'l10n/sat-review.tsv');
 
@@ -51,6 +59,9 @@ const mode = process.argv.includes('--apply')
   : process.argv.includes('--dry-run')
     ? 'dry-run'
     : 'report';
+
+const dictionaryFlagIndex = process.argv.indexOf('--dictionary');
+const dictionaryPath = dictionaryFlagIndex === -1 ? null : process.argv[dictionaryFlagIndex + 1];
 
 // ── finding what is missing ─────────────────────────────────────────────────
 
@@ -229,13 +240,17 @@ function placeholdersSurvived(source, translated) {
 
 // ── main ────────────────────────────────────────────────────────────────────
 
-const scenario = JSON.parse(readFileSync(SCENARIO, 'utf8'));
+const parsedScenarios = SCENARIOS.map((file) => ({ file, json: JSON.parse(readFileSync(file, 'utf8')) }));
 const missingScenario = [];
-collectFromScenario(scenario, '$', missingScenario);
+for (const { file, json } of parsedScenarios) {
+  const forThisFile = [];
+  collectFromScenario(json, '$', forThisFile);
+  for (const item of forThisFile) missingScenario.push({ ...item, file });
+}
 const missingUi = collectFromUi(readFileSync(I18N, 'utf8'));
 const all = [...missingScenario, ...missingUi];
 
-console.log(`missing Santali: ${missingScenario.length} scenario, ${missingUi.length} interface`);
+console.log(`missing Santali: ${missingScenario.length} scenario (across ${SCENARIOS.length} files), ${missingUi.length} interface`);
 
 if (mode === 'report') {
   for (const item of all) console.log(`  ${item.path}\n      ${item.en.slice(0, 88)}`);
@@ -248,28 +263,52 @@ if (all.length === 0) {
   process.exit(0);
 }
 
-const creds = credentials();
-if (!creds) {
-  console.error(
-    '\nBHASHINI_USER_ID and BHASHINI_ULCA_API_KEY are not set.\n' +
-      'Register free at https://bhashini.gov.in/ulca/user/register, generate a key\n' +
-      'in your profile, then:\n\n' +
-      '  export BHASHINI_USER_ID=...\n' +
-      '  export BHASHINI_ULCA_API_KEY=...\n',
-  );
-  process.exit(1);
-}
+let results;
+if (dictionaryPath) {
+  // A dictionary translation is still a draft, exactly like a Bhashini one —
+  // the only thing that changes is where the Santali text came from. Keyed by
+  // the trimmed English source rather than by path, so one dictionary entry
+  // covers a string wherever it recurs (a prop label reused across nodes,
+  // say) without having to enumerate every path it appears at.
+  const dictionary = JSON.parse(readFileSync(dictionaryPath, 'utf8'));
+  const lookup = new Map(Object.entries(dictionary).map(([en, sat]) => [en.trim(), sat]));
+  results = [];
+  const unmatched = [];
+  for (const item of all) {
+    const sat = lookup.get(item.en.trim());
+    if (sat) results.push({ ...item, sat });
+    else unmatched.push(item);
+  }
+  console.log(`dictionary: ${results.length}/${all.length} matched`);
+  if (unmatched.length > 0) {
+    console.log(`  ${unmatched.length} string(s) have no dictionary entry and are left untranslated (Hindi fallback still applies):`);
+    for (const item of unmatched) console.log(`    ${item.path}`);
+  }
+} else {
+  const creds = credentials();
+  if (!creds) {
+    console.error(
+      '\nBHASHINI_USER_ID and BHASHINI_ULCA_API_KEY are not set, and no --dictionary was given.\n' +
+        'Register free at https://bhashini.gov.in/ulca/user/register, generate a key\n' +
+        'in your profile, then:\n\n' +
+        '  export BHASHINI_USER_ID=...\n' +
+        '  export BHASHINI_ULCA_API_KEY=...\n\n' +
+        'Or supply a local translation dictionary instead: --dictionary path/to/dict.json\n',
+    );
+    process.exit(1);
+  }
 
-const pipeline = await configurePipeline(creds);
-console.log(`pipeline ready: ${pipeline.task.config.serviceId}`);
+  const pipeline = await configurePipeline(creds);
+  console.log(`pipeline ready: ${pipeline.task.config.serviceId}`);
 
-const BATCH = 20;
-const results = [];
-for (let i = 0; i < all.length; i += BATCH) {
-  const slice = all.slice(i, i + BATCH);
-  const targets = await translateBatch(pipeline, slice.map((s) => s.en));
-  slice.forEach((item, j) => results.push({ ...item, sat: targets[j] }));
-  console.log(`  translated ${Math.min(i + BATCH, all.length)}/${all.length}`);
+  const BATCH = 20;
+  results = [];
+  for (let i = 0; i < all.length; i += BATCH) {
+    const slice = all.slice(i, i + BATCH);
+    const targets = await translateBatch(pipeline, slice.map((s) => s.en));
+    slice.forEach((item, j) => results.push({ ...item, sat: targets[j] }));
+    console.log(`  translated ${Math.min(i + BATCH, all.length)}/${all.length}`);
+  }
 }
 
 const broken = results.filter((r) => !placeholdersSurvived(r.en, r.sat));
@@ -302,8 +341,11 @@ if (mode === 'dry-run') {
 for (const item of usable) {
   if (item.node) item.node.sat = item.sat;
 }
-writeFileSync(SCENARIO, JSON.stringify(scenario, null, 2) + '\n', 'utf8');
-console.log(`wrote ${usable.filter((u) => u.node).length} scenario strings`);
+for (const { file, json } of parsedScenarios) {
+  const wroteAny = usable.some((u) => u.node && u.file === file);
+  if (wroteAny) writeFileSync(file, JSON.stringify(json, null, 2) + '\n', 'utf8');
+}
+console.log(`wrote ${usable.filter((u) => u.node).length} scenario strings across ${new Set(usable.filter((u) => u.node).map((u) => u.file)).size} file(s)`);
 
 const uiWrites = usable.filter((u) => !u.node);
 if (uiWrites.length > 0) {

@@ -8,16 +8,24 @@ codebase with no prior context. `README.md` is the pitch and the design philosop
 map of *what exists, where, and how it fits together*, plus the state of the repo
 as of this writing.
 
-Last verified: 2026-09-06, against commit `6542614` on `main`.
-- `npm test` → **82/82 passing** (8 test files; see [Tests](#tests) — `README.md`
-  previously said "48 tests", now corrected to match).
+Last verified: 2026-09-08, against commit `2014a9b` on `main`. **Sections 1-11
+below predate a large amount of what's in the repo now** (a second scenario,
+the module picker, the offline PWA shell, the Android APK, the admin
+dashboard, reshaped Tier A geometry, and full-but-unreviewed Santali
+scenario coverage) — they haven't been rewritten yet to match. `README.md`
+is current on all of that; this section and the numbers immediately below
+are current, the numbered sections after are not.
+- `npm test` → **91/91 passing** (10 test files, up from 8 — `admin.test.ts`
+  and `tierA-shapes.test.ts` are new).
 - `npm run check` (`tsc --noEmit`) → clean.
-- `npm run build` → succeeds. Main bundle 113 kB / 38.7 kB gzip; Tier A's three.js
-  chunk 530 kB / 134 kB gzip, loaded only when a WebXR session is actually granted.
-- No LICENSE file in the repo. No CI configuration (no `.github/workflows`) —
-  tests/build/typecheck are run manually.
-- Single author to date (`arnav.g1010@gmail.com`, committing as both `arnav` and
-  `NotArnav03`), 15 commits.
+- `npm run build` → succeeds, two pages now (`index.html` + `admin.html`,
+  `vite.config.ts`'s `rollupOptions.input`).
+- CI exists now: `.github/workflows/deploy-pages.yml` runs the full test
+  suite, typecheck and build on every push to `main`, then deploys to GitHub
+  Pages — this replaces the "no CI" note this doc used to carry.
+- No LICENSE file in the repo.
+- Single author to date (`arnav.g1010@gmail.com`, committing as both `arnav`
+  and `NotArnav03`).
 
 ---
 
@@ -282,9 +290,15 @@ Never read `WorldEffect.value` as a string in renderer code.
 - **16 props**, spanning `structure`/`ppe`/`instrument`/`equipment`/`person`/
   `signage`/`hazard` kinds.
 - **Languages authored**: `en`, `hi` throughout; `sat` (Santali, Ol Chiki script)
-  is present on only 2 of the ~86 localized fields as of the last translation
-  pass — `availableLanguages()` correctly reports Santali as unavailable rather
-  than silently falling back. See §8 for the path to fixing this.
+  now covers every scenario string in both `gas-confined-space` and
+  `fire-explosion` (was 2 of ~86 as of this doc's last full pass) — but it is
+  an **AI machine draft** written by `tools/translate.mjs --dictionary`
+  (a local-dictionary alternative to the Bhashini path, for when Bhashini
+  credentials aren't available), not a reviewed translation. Every line is
+  also recorded in `l10n/sat-review.tsv` against its English source; treat
+  none of it as authoritative until a Santali speaker signs off each row —
+  same requirement this section always stated, just now applying to the
+  full scenario text rather than four sentences of it. See §8.
 - **Five fatal outcome branches** (`outcome_fatal_entry`, `_survey`, `_atmosphere`,
   `_gas`, `_rescue`) alongside `outcome_pass` — each names a specific way to die
   in this scenario, which is the point: a failed run is a named, specific debrief.
@@ -316,31 +330,44 @@ work on one.
 | Regulation citations unverified | Placeholder `cite` strings only | `src/scenarios/gas-confined-space.json` → `regulations` and per-node `cites` |
 | No certified-instructor review of the procedure | Not started | content review, not code |
 | Tier A never run on real ARCore hardware | Type-checks and builds; unproven | `src/app/render/tierA.ts`; test with `tools/phone.mjs` |
-| Tier A uses primitive geometry (boxes/capsules), not models | Deliberate placeholder | `tierA.ts` `geometryFor()` |
+| Tier A uses primitive geometry, not models | Shaped now (a person is head+torso+limbs, extinguishers are colour/shape-distinguished), still coloured geometry not a site twin | `tierA.ts` `partsFor()` (was `geometryFor()`, one primitive per kind — see `tests/tierA-shapes.test.ts`) |
 | Tier B (marker tracking) not implemented | Contracted, falls back loudly | `Tier` type in `render/contract.ts` includes `'B'`; `tier.ts`'s `IMPLEMENTED` array is `['A', 'C']` only; `main.ts`'s `rendererFor()` always serves Tier C when asked for B |
-| Credential issuance happens in-browser | Demo-only, explicitly named as such | `src/credential/web-crypto.ts`'s `createDemoIssuer` — real issuance needs a server-side keystore, a published trust list, and key rotation, none of which exist yet |
+| Credential issuance happens in-browser | Demo-only, explicitly named as such; now signed with a fixed key (not random per-session) so a *different* device can verify it | `src/credential/web-crypto.ts`'s `createDemoIssuer` + `src/credential/demo-trust.ts` — real issuance needs a server-side keystore, a published trust list, and key rotation, none of which exist yet |
 | Santali narration is speech-synthesized, not recorded | Stand-in | `app/ui/i18n.ts`'s `Localizer.speak()`; `Narration.audio` field already exists in `engine/types.ts` to carry real clips whenever they're recorded |
-| Santali translation coverage is ~2 of 86 scenario strings | Tooling exists, unreviewed drafts pending | `tools/translate.mjs` generates drafts + a `l10n/sat-review.tsv` sign-off sheet; **nothing it writes is authoritative until a Santali speaker signs off each line** — this is enforced by process, not by code |
+| Santali translation is an unreviewed AI draft | Full scenario coverage (both scenarios), zero human review | `tools/translate.mjs --dictionary l10n/ai-santali-drafts.json --apply` generated it; a `l10n/sat-review.tsv` sign-off sheet tracks every line; **nothing it writes is authoritative until a Santali speaker signs off each line** — enforced by process, not by code. Three AR-handshake UI strings were deliberately left un-drafted, not just unreviewed — see the comment above `startingAr` in `i18n.ts` |
+| Digital Asset Link verification for the APK not published | Fingerprint ready, needs publishing at a domain root outside this repo | `public/.well-known/assetlinks.json`; see `docs/APK.md` |
+| Admin dashboard has no backend/sync across devices | By design for now — reads only what this device scanned | `src/admin/store.ts`'s module comment |
 
 ## 8. Localization workflow, concretely
 
-1. `npm run l10n` — reports what's missing (scenario JSON fields + the
-   hand-written `UI` table in `app/ui/i18n.ts`), translates nothing.
+1. `npm run l10n` — reports what's missing across **both** scenario JSON files
+   (`gas-confined-space.json`, `fire-explosion.json`) plus the hand-written
+   `UI` table in `app/ui/i18n.ts`, translates nothing. As of this writing:
+   0 scenario strings missing, 3 interface strings missing (deliberately —
+   see below).
 2. `npm run l10n:draft` — calls Bhashini (needs `BHASHINI_USER_ID` /
    `BHASHINI_ULCA_API_KEY` env vars, free registration), prints drafts, writes
    nothing to source.
-3. `npm run l10n:apply` — writes machine-drafted Santali into
-   `gas-confined-space.json` directly (for scenario content) and prints
-   copy-pasteable `sat: '...'` lines for `i18n.ts` (which is hand-written source
-   and is deliberately never auto-edited, to avoid destroying comments/formatting
-   in that file).
-4. **Every string it touches is also written to `l10n/sat-review.tsv`**
+3. **`node tools/translate.mjs --dictionary <file.json> --apply`** — the
+   alternative path used to actually fill the gap: no Bhashini credentials
+   were available, so this reads a local `{ "English text": "Santali text" }`
+   map instead of calling the API. Same output either way — the tool doesn't
+   care whether Bhashini or a dictionary produced the draft, only that every
+   draft is tracked as one (step 4). `l10n/ai-santali-drafts.json` is the
+   dictionary actually used for the current coverage.
+4. `npm run l10n:apply` (or the `--dictionary` form above) writes into each
+   scenario JSON directly and prints copy-pasteable `sat: '...'` lines for
+   `i18n.ts` (hand-written source, deliberately never auto-edited, to avoid
+   destroying comments/formatting there).
+5. **Every string either mode touches is also written to `l10n/sat-review.tsv`**
    (columns: path, english, machine_santali, reviewed_by, corrected_santali) —
    this file is the actual deliverable of a translation pass, not the JSON edit.
    A Santali speaker fills in `reviewed_by`/`corrected_santali` per row before
    any of it should be treated as fit to train a worker on a lethal procedure.
-   This file does not exist yet in the repo (no translation pass has been run) —
-   creating it is the next concrete step toward closing the Santali gap.
+   This file now exists with 138 rows (full scenario coverage across both
+   files, minus the 3 deliberately-skipped UI strings) — **none of them are
+   signed off yet.** Getting a Santali speaker through this sheet is the next
+   concrete step, not writing more Santali.
 
 `{{param}}` placeholders (e.g. `{{gas}}`) are checked to survive the translation
 round-trip (`placeholdersSurvived()`); any translation that loses one is skipped
@@ -348,7 +375,7 @@ with a warning rather than silently corrupting interpolation.
 
 ## 9. Tests
 
-82 tests across 8 files, using Node's built-in test runner
+91 tests across 10 files, using Node's built-in test runner
 (`node --experimental-strip-types --test tests/**/*.test.ts`) with `happy-dom`
 providing a DOM for the app-layer tests. No mocking framework — fakes are
 hand-written (e.g. injected clocks, fake `SpeechSynthesisVoice` lists).
@@ -363,6 +390,8 @@ hand-written (e.g. injected clocks, fake `SpeechSynthesisVoice` lists).
 | `speech.test.ts` | 7 | script-based (not language-based) voice selection, Ol Chiki vs. Devanagari vs. romanized-Hindi disambiguation, Indian-English preference, graceful silence when no matching voice exists |
 | `theme.test.ts` | 6 | system/light/dark persistence, `data-theme` attribute semantics, corrupted-storage fallback |
 | `l10n.test.ts` | 4 | every declared language resolves every scenario string, fallback chains terminate in something authored, Santali falls through Hindi before English |
+| `admin.test.ts` | 5 | roster store dedup/merge-keeps-newer logic in isolation, plus end-to-end through the real dashboard DOM: paste a credential issued via `createDemoIssuer` → click "Verify & add" → row appears in the table; garbage input rejected, not silently added. Caught a real bug pre-merge: `verifyAndAdd` set the success message then immediately called `render()`, which wiped it before it could be seen |
+| `tierA-shapes.test.ts` | 4 | the one corner of the render layer with no prior coverage (WebXR/WebGL can't run under happy-dom, but geometry construction needs neither) — every prop kind builds sane, non-degenerate geometry; a person's feet actually reach the floor; the three extinguishers are genuinely distinguishable by part count and colour, not just by id string |
 
 Run `npm test` — it should exit clean with `82 pass`, `0 fail`. If it doesn't,
 that's a regression worth chasing before anything else, since this suite is the
