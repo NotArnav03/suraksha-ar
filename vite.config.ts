@@ -5,6 +5,12 @@ export default defineConfig({
   // and are imported directly — there is no separate build of the core, so the
   // web client and the Node CLI can never be running different logic.
   build: { target: 'es2022', outDir: 'dist' },
+  // Relative, not '/': this build has to work identically whether it's served
+  // from a domain root or a subpath (a GitHub Pages project site is exactly
+  // that), and a relative base makes the same `dist/` artifact correct in
+  // both without a second build. The manifest, service worker and its shell
+  // list all made the matching relative-path choice for the same reason.
+  base: './',
   server: {
     // Tier A needs WebXR, which needs a secure context. Binding to the LAN so a
     // phone can reach the dev server is the whole point of testing this on real

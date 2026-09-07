@@ -25,7 +25,9 @@ import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from '
  */
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    void navigator.serviceWorker.register('/sw.js').catch(() => {
+    // Relative, so this still resolves correctly under a subpath deployment
+    // (a GitHub Pages project site, say) and not just at a domain root.
+    void navigator.serviceWorker.register('./sw.js').catch(() => {
       // No offline shell is a degraded phone, not a broken app — the drill
       // and the credential check still work with a live connection.
     });

@@ -15,7 +15,11 @@
 // (e.g. app shell markup changes shape). Bumping it deletes every prior
 // cache on the next activate.
 const CACHE_VERSION = 'suraksha-shell-v1';
-const SHELL = ['/', '/index.html', '/manifest.webmanifest'];
+// Relative, not root-absolute: this file may be served from a subpath (a
+// GitHub Pages project site, for one), and the Cache API resolves relative
+// URLs against this worker's own location — '/manifest.webmanifest' would
+// silently point outside the app if the app isn't hosted at a domain root.
+const SHELL = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
