@@ -1,0 +1,198 @@
+{
+  "scenario_id": "fire_explosion_v1",
+  "domain": "fire_explosion",
+  "tier": "A",
+  "title": {
+    "en": "Fire & Explosion Response",
+    "hi": "आग और विस्फोट प्रतिक्रिया",
+    "sat": "TODO_community_audio"
+  },
+  "regulation": "Mines Act 1952; Coal Mines Regulations 2017 — fire & explosion response; PASS + SCSR procedure",
+  "languages": ["en", "hi", "sat"],
+  "pass_threshold": {
+    "note": "Vector, not average. rescue_restraint is zero-tolerance: any 0 here fails the whole scenario.",
+    "min_per_component": 60,
+    "zero_tolerance": ["rescue_restraint"]
+  },
+
+  "assets": [
+    { "id": "electrical_panel", "gltf": "electrical_panel.glb", "note": "Wall-mounted transformer/panel, calm state" },
+    { "id": "fire_panel",       "gltf": "fire_panel.glb",       "note": "Flame + smoke VFX that attaches to the panel anchor" },
+    { "id": "ext_dcp",          "gltf": "ext_dcp.glb",          "note": "Dry Chemical Powder extinguisher — CORRECT for electrical fire" },
+    { "id": "ext_water",        "gltf": "ext_water.glb",        "note": "Water extinguisher — WRONG/dangerous on electrical fire" },
+    { "id": "ext_co2",          "gltf": "ext_co2.glb",          "note": "CO2 extinguisher — acceptable but not the target for this drill" },
+    { "id": "scsr",             "gltf": "scsr.glb",             "note": "Self-Contained Self-Rescuer, worn from station" },
+    { "id": "exit_arrow",       "gltf": "exit_arrow.glb",       "note": "Self-luminous direction arrow, repeated along route" },
+    { "id": "exit_marker",      "gltf": "exit_marker.glb",      "note": "Green fresh-air exit marker" },
+    { "id": "colleague_down",   "gltf": "colleague_down.glb",   "note": "Collapsed worker — used only for rescue-restraint check" }
+  ],
+
+  "anchors": {
+    "note": "Tier A: user taps a detected wall/plane in place_scene to set root. All positions are metres relative to root, y = up.",
+    "root":            { "set_by": "user_tap_on_plane" },
+    "panel":           { "pos": [0.0, 1.4, -1.5] },
+    "ext_slot_left":   { "pos": [-1.0, 0.0, -1.0] },
+    "ext_slot_mid":    { "pos": [ 0.0, 0.0, -1.0] },
+    "ext_slot_right":  { "pos": [ 1.0, 0.0, -1.0] },
+    "scsr_station":    { "pos": [ 1.6, 0.9, -0.5] },
+    "route":           { "pos_list": [[0.0,0.1,0.0],[1.5,0.1,1.5],[3.0,0.1,3.0]] },
+    "exit":            { "pos": [4.5, 0.1, 4.5] },
+    "colleague":       { "pos": [2.5, 0.0, 0.0], "note": "Off the safe route, near smoke — bait for rescue-restraint" }
+  },
+
+  "states": [
+    {
+      "id": "briefing",
+      "type": "intro",
+      "prompt": {
+        "en": "A fire has started on the electrical panel. Put it out safely, then get to the exit.",
+        "hi": "बिजली के पैनल पर आग लग गई है। इसे सुरक्षित रूप से बुझाएँ, फिर बाहर निकलें।",
+        "sat": "TODO_community_audio"
+      },
+      "on_complete": "place_scene"
+    },
+    {
+      "id": "place_scene",
+      "type": "setup",
+      "prompt": {
+        "en": "Point your phone at the wall and tap to place the scene.",
+        "hi": "अपना फ़ोन दीवार की ओर करें और दृश्य रखने के लिए टैप करें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [{ "asset": "electrical_panel", "anchor": "panel" }],
+      "on_complete": "hazard_ignition"
+    },
+    {
+      "id": "hazard_ignition",
+      "type": "hazard",
+      "prompt": {
+        "en": "Something is wrong. Find the hazard.",
+        "hi": "कुछ गड़बड़ है। ख़तरे को पहचानें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [{ "asset": "fire_panel", "anchor": "panel" }],
+      "expected_action": { "type": "recognise", "target": "fire_panel" },
+      "timer_seconds": 8,
+      "scores": { "hazard_recognition": 100, "time_to_first_action": "from_state_enter" },
+      "on_success": "select_extinguisher",
+      "on_timeout": "select_extinguisher"
+    },
+    {
+      "id": "select_extinguisher",
+      "type": "select",
+      "prompt": {
+        "en": "Walk to the correct extinguisher for an electrical fire and tap it.",
+        "hi": "बिजली की आग के लिए सही अग्निशामक के पास जाएँ और उसे टैप करें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [
+        { "asset": "ext_dcp",   "anchor": "ext_slot_mid" },
+        { "asset": "ext_water", "anchor": "ext_slot_left" },
+        { "asset": "ext_co2",   "anchor": "ext_slot_right" }
+      ],
+      "expected_action": { "type": "approach_and_tap", "correct": "ext_dcp", "radius_m": 0.8 },
+      "timer_seconds": 15,
+      "scores": { "hazard_recognition": 100 },
+      "branches": {
+        "ext_dcp":   "apply_pass",
+        "ext_co2":   "apply_pass",
+        "ext_water": "induced_failure"
+      }
+    },
+    {
+      "id": "induced_failure",
+      "type": "failure",
+      "optional": true,
+      "prompt": {
+        "en": "Water on a live electrical fire can shock you and spread it. Try again — pick the powder unit.",
+        "hi": "जीवित बिजली की आग पर पानी झटका दे सकता है और आग फैला सकता है। फिर से कोशिश करें — पाउडर वाला चुनें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [{ "asset": "fire_panel", "anchor": "panel", "state": "flareup" }],
+      "expected_action": { "type": "approach_and_tap", "correct": "ext_dcp", "radius_m": 0.8 },
+      "scores": { "failure_recovery": 100 },
+      "on_success": "apply_pass"
+    },
+    {
+      "id": "apply_pass",
+      "type": "sequence",
+      "prompt": {
+        "en": "Use PASS: Pull the pin, Aim at the base, Squeeze, Sweep side to side.",
+        "hi": "PASS का प्रयोग करें: पिन खींचें, आधार पर निशाना लगाएँ, दबाएँ, अगल-बगल घुमाएँ।",
+        "sat": "TODO_community_audio"
+      },
+      "expected_action": {
+        "type": "ordered_taps",
+        "steps": ["pull", "aim", "squeeze", "sweep"]
+      },
+      "timer_seconds": 20,
+      "scores": { "procedure_sequence": 100 },
+      "on_success": "don_scsr"
+    },
+    {
+      "id": "don_scsr",
+      "type": "ppe",
+      "prompt": {
+        "en": "Before moving out, put on your self-rescuer. Tap the SCSR to wear it.",
+        "hi": "बाहर निकलने से पहले अपना सेल्फ-रेस्क्यूअर पहनें। पहनने के लिए SCSR को टैप करें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [{ "asset": "scsr", "anchor": "scsr_station" }],
+      "expected_action": { "type": "approach_and_tap", "correct": "scsr", "radius_m": 0.8 },
+      "timer_seconds": 12,
+      "scores": { "ppe_discipline": 100 },
+      "on_success": "evacuate"
+    },
+    {
+      "id": "evacuate",
+      "type": "navigate",
+      "prompt": {
+        "en": "Follow the arrows to fresh air. Do not stop for anything on the way.",
+        "hi": "ताज़ी हवा की ओर तीरों का अनुसरण करें। रास्ते में किसी भी चीज़ के लिए न रुकें।",
+        "sat": "TODO_community_audio"
+      },
+      "spawn": [
+        { "asset": "exit_arrow", "anchor": "route" },
+        { "asset": "exit_marker", "anchor": "exit" },
+        { "asset": "colleague_down", "anchor": "colleague", "if": "rescue_restraint_enabled" }
+      ],
+      "expected_action": { "type": "reach", "target": "exit", "radius_m": 1.0 },
+      "hazard_action": {
+        "type": "must_avoid",
+        "target": "colleague",
+        "radius_m": 1.2,
+        "note": "Approaching the collapsed colleague before reaching safe air = ran in unprotected.",
+        "on_violation": { "set_score": { "rescue_restraint": 0 }, "goto": "result" }
+      },
+      "timer_seconds": 30,
+      "scores": { "procedure_sequence": 100, "rescue_restraint": 100 },
+      "on_success": "result"
+    },
+    {
+      "id": "result",
+      "type": "result",
+      "prompt": {
+        "en": "Drill complete. Generating your certificate.",
+        "hi": "अभ्यास पूरा हुआ। आपका प्रमाणपत्र बनाया जा रहा है।",
+        "sat": "TODO_community_audio"
+      },
+      "competency_vector": [
+        "hazard_recognition",
+        "procedure_sequence",
+        "ppe_discipline",
+        "time_to_first_action",
+        "failure_recovery",
+        "rescue_restraint"
+      ],
+      "issue_certificate": true
+    }
+  ],
+
+  "config": {
+    "rescue_restraint_enabled": true,
+    "randomisation": {
+      "note": "For the demo, keep fixed. For certification, randomise these per PDD 5.4.",
+      "vary": ["ext_slot_positions", "route_shape", "colleague_position"]
+    }
+  }
+}
