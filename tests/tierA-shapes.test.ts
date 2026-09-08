@@ -107,6 +107,19 @@ test('the sump opening is a real annulus, not a solid disc sitting on top of a h
   assert.ok(rim, 'the rim must be a RingGeometry (a genuine annulus) so the shaft beneath is actually visible through it');
 });
 
+test('a hazard reads as fire, not the generic box fallback', () => {
+  // A worker is specifically asked to "find the hazard you see" - a box
+  // gives no visual reason to pick it over anything else in the scene.
+  // Reported live, from a real device: the fire step was unplayable because
+  // nothing on screen looked like something to point at.
+  const parts = partsFor(mockProp('fire_panel', 'hazard'));
+  assert.ok(
+    parts.every((p) => p.geometry instanceof THREE.ConeGeometry),
+    'a hazard must not fall through to the generic BoxGeometry default',
+  );
+  assert.ok(parts.length >= 2, 'a single cone reads as a party hat, not a flame');
+});
+
 test('an unrecognised prop id does not accidentally hit an extinguisher branch', () => {
   // ext_dcp/ext_water/ext_co2 are matched by exact id — a differently-named
   // equipment prop must fall through to the generic box, not silently share

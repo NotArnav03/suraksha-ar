@@ -45,6 +45,7 @@ export class TierCRenderer implements WorldRenderer {
   #sheet = document.createElement('div');
   #hooks: RendererHooks | null = null;
   #visible = new Set<string>();
+  #props: PropView[] = [];
   #alarm: 'none' | 'warning' | 'critical' = 'none';
   #gasReadout: { species: string; value: number; unit: string } | null = null;
   #readoutBox = document.createElement('div');
@@ -69,6 +70,7 @@ export class TierCRenderer implements WorldRenderer {
   }
 
   present(view: NodeView): void {
+    this.#props = view.props;
     for (const prop of view.props) {
       // A spawned prop stays out of the scene until an effect brings it in;
       // everything else is present from the start, clutter included.
@@ -147,16 +149,28 @@ export class TierCRenderer implements WorldRenderer {
     this.#sheet.hidden = true;
   }
 
+  /**
+   * `WorldEffect.role` is a role name ("fire"), but `#visible`/`#failed` are
+   * keyed by prop id ("fire_panel") — same bug as Tier A had, same fix: a
+   * scenario whose bindings happen to map a role to an identically-named id
+   * (gas-confined-space's `"casualty": "casualty"`) masks this by
+   * coincidence; fire-explosion's `"fire": "fire_panel"` doesn't share it,
+   * and the fire tile never appeared in the grid at all.
+   */
+  #idForRole(role: string): string {
+    return this.#props.find((p) => p.role === role)?.id ?? role;
+  }
+
   effect(effect: WorldEffect): void {
     switch (effect.type) {
       case 'spawn':
-        this.#visible.add(effect.role);
+        this.#visible.add(this.#idForRole(effect.role));
         break;
       case 'despawn':
-        this.#visible.delete(effect.role);
+        this.#visible.delete(this.#idForRole(effect.role));
         break;
       case 'fail_equipment':
-        this.#failed.add(effect.role);
+        this.#failed.add(this.#idForRole(effect.role));
         break;
       case 'set_gas':
         this.#gasReadout = {

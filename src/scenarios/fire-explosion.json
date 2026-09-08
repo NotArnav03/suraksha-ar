@@ -217,8 +217,8 @@
         }
       ],
       "window": {
-        "hesitationMs": 4000,
-        "deadlineMs": 8000
+        "hesitationMs": 12000,
+        "deadlineMs": 45000
       },
       "onTimeout": {
         "code": "FIRE_NOT_RECOGNISED",
@@ -263,8 +263,8 @@
         }
       ],
       "window": {
-        "hesitationMs": 8000,
-        "deadlineMs": 15000
+        "hesitationMs": 10000,
+        "deadlineMs": 30000
       },
       "errors": [
         {
@@ -359,8 +359,8 @@
         }
       ],
       "window": {
-        "hesitationMs": 8000,
-        "deadlineMs": 15000
+        "hesitationMs": 10000,
+        "deadlineMs": 25000
       },
       "onTimeout": {
         "code": "RECOVERY_FAILED",
@@ -437,8 +437,8 @@
         }
       ],
       "window": {
-        "hesitationMs": 10000,
-        "deadlineMs": 20000
+        "hesitationMs": 15000,
+        "deadlineMs": 45000
       },
       "onTimeout": {
         "code": "PASS_NOT_COMPLETED",
@@ -482,8 +482,8 @@
         }
       ],
       "window": {
-        "hesitationMs": 6000,
-        "deadlineMs": 12000
+        "hesitationMs": 10000,
+        "deadlineMs": 25000
       },
       "errors": [
         {

@@ -49,8 +49,13 @@ export class Hud {
   #waitButton = el('button', 'wait-button');
   #continue = el('button', 'primary continue');
 
+  #handle = el('div', 'hud-handle');
+  #handleHint = el('span', 'hud-handle-hint');
+  #panel = el('div', 'hud-panel');
+
   #view: NodeView | null = null;
   #bannerTimeout: number | null = null;
+  #collapsed = false;
 
   constructor(i18n: Localizer, hooks: HudHooks, tier: Tier, tierLabel: string) {
     this.#i18n = i18n;
@@ -60,6 +65,8 @@ export class Hud {
     this.#tierBadge.textContent = `TIER ${tier}`;
     this.#tierBadge.title = tierLabel;
     bar.append(this.#tierBadge, this.#languagePicker(), this.#themeToggle(), this.#speechToggle());
+
+    this.#setupHandle();
 
     this.#listen.className = 'listen';
     this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
@@ -77,12 +84,61 @@ export class Hud {
     this.#continue.addEventListener('click', () => this.#hooks.onAcknowledge());
     this.#continue.hidden = true;
 
-    const panel = el('div', 'hud-panel');
     const head = el('div', 'prompt-row');
     head.append(this.#prompt, this.#listen);
-    panel.append(this.#pulse, head, this.#timer, this.#checklist, this.#banner, this.#continue);
+    this.#panel.append(this.#pulse, head, this.#timer, this.#checklist, this.#banner, this.#continue);
 
-    this.root.append(bar, panel, this.#waitButton);
+    this.root.append(bar, this.#handle, this.#panel, this.#waitButton);
+  }
+
+  /**
+   * A bottom-sheet handle: swipe down to collapse the panel and see the world
+   * underneath, swipe up to bring it back, tap to toggle either way — a
+   * worker walking an AR scene needs to actually see the room, and a prompt
+   * long enough to wrap five lines used to leave almost nothing else on
+   * screen. Scoped to this one handle, not the whole panel, so it can't eat
+   * taps meant for the checklist or the continue button.
+   */
+  #setupHandle(): void {
+    this.#handle.append(el('span', 'hud-grip'), this.#handleHint);
+    this.#handle.setAttribute('role', 'button');
+    this.#handle.tabIndex = 0;
+    this.#syncHandleHint();
+
+    let startY = 0;
+    let dragging = false;
+    this.#handle.addEventListener('pointerdown', (event) => {
+      dragging = true;
+      startY = event.clientY;
+      this.#handle.setPointerCapture(event.pointerId);
+    });
+    this.#handle.addEventListener('pointerup', (event) => {
+      if (!dragging) return;
+      dragging = false;
+      const delta = event.clientY - startY;
+      // A real swipe wins in its own direction; anything smaller reads as a
+      // tap, which toggles — swipe gesture on a strip this thin is not
+      // reliable enough to be the only way in.
+      if (Math.abs(delta) > 18) this.#setCollapsed(delta > 0);
+      else this.#setCollapsed(!this.#collapsed);
+    });
+    this.#handle.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.#setCollapsed(!this.#collapsed);
+      }
+    });
+  }
+
+  #syncHandleHint(): void {
+    this.#handleHint.textContent = this.#collapsed ? '▲' : '▼';
+    this.#handle.setAttribute('aria-expanded', String(!this.#collapsed));
+  }
+
+  #setCollapsed(value: boolean): void {
+    this.#collapsed = value;
+    this.root.classList.toggle('hud-collapsed', value);
+    this.#syncHandleHint();
   }
 
   #languagePicker(): HTMLElement {
@@ -221,6 +277,11 @@ export class Hud {
     // replaces it. Everything else clears itself so the prompt is readable again.
     if (feedback.severity !== 'fatal') {
       this.#bannerTimeout = window.setTimeout(() => this.hideBanner(), 7000);
+    } else {
+      // The one case where the panel is not allowed to stay collapsed: the
+      // reason a drill just ended fatally must not be sitting behind a sheet
+      // the learner swiped out of the way three steps ago.
+      this.#setCollapsed(false);
     }
   }
 

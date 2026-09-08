@@ -366,7 +366,33 @@ button:disabled { opacity: .38; pointer-events: none; }
   min-height: 42px; padding: 4px 10px; font-size: .92rem;
   flex: 1 1 auto; text-align: center; white-space: nowrap;
 }
-.hud-panel { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
+.hud-panel {
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+  max-height: 80vh; opacity: 1; overflow: hidden;
+  transition: max-height .28s ease, opacity .2s ease, padding .28s ease;
+}
+
+/*
+ * The bottom-sheet handle. A prompt long enough to wrap five lines left
+ * almost nothing of an AR view on screen — this is the one thing between
+ * "read the instructions" and "actually see the room to act on them", so it
+ * has to be a real, obvious, always-present control, not a tiny corner icon.
+ */
+.hud-handle {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 34px; padding: 6px 0; cursor: grab; touch-action: none;
+  background: var(--panel); border-bottom: 1px solid var(--line-soft);
+  user-select: none; -webkit-user-select: none;
+}
+.hud-handle:active { cursor: grabbing; background: var(--panel-2); }
+.hud-grip {
+  width: 40px; height: 4px; border-radius: 999px; background: var(--line);
+}
+.hud-handle-hint { font-size: 11px; color: var(--ink-3); }
+
+.hud-collapsed .hud-panel {
+  max-height: 0; opacity: 0; padding-top: 0; padding-bottom: 0;
+}
 
 /* The input receipt. Identical for every verdict on purpose — it reports that
    the tap arrived, never whether it was the right tap. */

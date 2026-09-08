@@ -224,6 +224,32 @@ const EXTINGUISHER_KIND: Record<string, 'dcp' | 'water' | 'co2'> = {
   ext_co2: 'co2',
 };
 
+/**
+ * A flame, not a coloured box. The generic-box fallback used to apply to
+ * `hazard` too, which is exactly wrong for the one prop a learner is
+ * specifically asked to spot and point at ("find the hazard you see") - a
+ * box gives no visual reason to pick it over anything else in the scene.
+ * Emissive, not just brightly-coloured: AR passthrough lighting is whatever
+ * the real room happens to be, and this has to read as fire regardless.
+ */
+function hazardParts(): THREE.Mesh[] {
+  const flameMat = (color: number, emissive: number) =>
+    stdMaterial(color, { emissive, emissiveIntensity: 1.1, roughness: 0.55 });
+
+  const base = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.3, 12), flameMat(0xd7371a, 0xb32a10));
+  base.position.y = 0.01;
+
+  const mid = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.22, 12), flameMat(0xf0791e, 0xe0620f));
+  mid.position.set(0.02, 0.1, 0.01);
+  mid.rotation.z = 0.12;
+
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.042, 0.15, 10), flameMat(0xffcf4d, 0xffb020));
+  tip.position.set(-0.015, 0.19, -0.01);
+  tip.rotation.z = -0.1;
+
+  return [base, mid, tip];
+}
+
 /** Exported for tests/tierA-shapes.test.ts — geometry construction needs no WebGL/DOM, so it can run for real under plain Node. */
 export function partsFor(prop: PropView): THREE.Mesh[] {
   const extinguisher = EXTINGUISHER_KIND[prop.id];
@@ -240,6 +266,8 @@ export function partsFor(prop: PropView): THREE.Mesh[] {
       return signageParts();
     case 'instrument':
       return instrumentParts();
+    case 'hazard':
+      return hazardParts();
     default:
       return [new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.18, 0.16), stdMaterial(KIND_COLOR[prop.kind]))];
   }
@@ -587,18 +615,35 @@ export class TierARenderer implements WorldRenderer {
     this.#sheet.hidden = true;
   }
 
+  /**
+   * `WorldEffect.role` is a *role* name ("fire"), but `#visible` and `#meshes`
+   * are keyed by *prop id* ("fire_panel") — `#build`/`#layout` both work in
+   * prop ids throughout. Where a scenario's bindings happen to map a role to
+   * an identically-named prop id (gas-confined-space's `"casualty":
+   * "casualty"`), using the raw role as if it were the id silently works by
+   * coincidence; fire-explosion's `"fire": "fire_panel"` and `"casualty":
+   * "colleague_down"` don't share that coincidence, and neither effect ever
+   * found its mesh — spawned props stayed invisible forever, on real
+   * hardware, which is exactly the "the fire is literally not there" this
+   * fixes. PropView already carries each prop's own role (`#roleOf` in
+   * controller.ts), so resolving is just a lookup, not new bookkeeping.
+   */
+  #idForRole(role: string): string {
+    return this.#props.find((p) => p.role === role)?.id ?? role;
+  }
+
   effect(effect: WorldEffect): void {
     switch (effect.type) {
       case 'spawn':
-        this.#visible.add(effect.role);
+        this.#visible.add(this.#idForRole(effect.role));
         if (this.#placed) this.#layout();
         break;
       case 'despawn':
-        this.#visible.delete(effect.role);
+        this.#visible.delete(this.#idForRole(effect.role));
         if (this.#placed) this.#layout();
         break;
       case 'fail_equipment': {
-        const group = this.#meshes.get(effect.role);
+        const group = this.#meshes.get(this.#idForRole(effect.role));
         const mesh = group?.children[0];
         if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshStandardMaterial) {
           mesh.material.color.set(0x3a4147);
