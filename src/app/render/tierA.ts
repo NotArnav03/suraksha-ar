@@ -153,10 +153,23 @@ function ppeParts(): THREE.Mesh[] {
 
 /** A rimmed opening you look down into — a curb around a dark void, not a solid puck. */
 function structureParts(): THREE.Mesh[] {
-  const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.06, 28), stdMaterial(0x2b3238));
-  const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.03, 28), stdMaterial(0x0b0f12, { roughness: 0.9 }));
-  hole.position.y = -0.03;
-  return [rim, hole];
+  // A *solid* rim cylinder completely covers whatever "hole" sits inside its
+  // own radius, whatever colour either one is - there is no actual gap for
+  // the hole to show through. RingGeometry is a true annulus (a real
+  // geometric hole, not just a darker mesh underneath); the shaft then
+  // extends genuinely downward instead of being a second flat disc, so it
+  // reads as depth from an angle, not just a color difference from directly
+  // above. Concrete-pale rim against a near-black shaft also has to contrast
+  // against whatever real floor this sits on in AR passthrough, not just
+  // against itself.
+  const lip = new THREE.Mesh(
+    new THREE.RingGeometry(0.36, 0.44, 28).rotateX(-Math.PI / 2),
+    stdMaterial(0x8a8f86, { roughness: 0.85, side: THREE.DoubleSide }),
+  );
+  lip.position.y = 0.02;
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.32, 0.3, 28), stdMaterial(0x0b0f12, { roughness: 0.9 }));
+  shaft.position.y = -0.15;
+  return [lip, shaft];
 }
 
 /** A plate on a post — reads as a standing sign, not a plaque floating in the air. */
@@ -185,15 +198,21 @@ function extinguisherParts(kind: 'dcp' | 'water' | 'co2'): THREE.Mesh[] {
   const parts = [body, neck];
 
   if (kind === 'dcp') {
-    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.058, 0.058, 0.05, 16), stdMaterial(0x2255aa));
+    // Radius has to clear the body's own taper (0.055-0.065) by a visible
+    // margin, or the "band" renders inside the body and is invisible from
+    // every angle — caught by actually rendering this, not by the geometry
+    // tests, which only check that vertices are finite, not that they're
+    // outside the parent mesh.
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(0.078, 0.078, 0.05, 16), stdMaterial(0x2255aa));
     band.position.y = 0.02;
     parts.push(band);
   }
   if (kind === 'co2') {
-    // The horn is the tell on a CO2 unit — a real one is unmistakable even at a glance.
-    const horn = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.14, 12, 1, true), stdMaterial(0x1a1a1a));
+    // The horn is the tell on a CO2 unit — a real one is unmistakable even at
+    // a glance, so this has to read clearly in silhouette, not just exist.
+    const horn = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.18, 12, 1, true), stdMaterial(0x3a3f42));
     horn.rotation.z = Math.PI / 2.4;
-    horn.position.set(0.09, 0.12, 0);
+    horn.position.set(0.11, 0.12, 0);
     parts.push(horn);
   }
   return parts;

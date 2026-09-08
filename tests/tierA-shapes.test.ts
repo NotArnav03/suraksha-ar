@@ -74,6 +74,39 @@ test('the three extinguishers are visually distinct, matching docs/ASSETS_FIRE_E
   assert.ok(co2.length > water.length, 'CO2 must have an extra part (the horn) that water does not');
 });
 
+/** Widest horizontal extent of a mesh's own geometry, in its local space. */
+function boundingRadius(mesh: THREE.Mesh): number {
+  mesh.geometry.computeBoundingBox();
+  const box = mesh.geometry.boundingBox!;
+  return Math.max(Math.abs(box.min.x), Math.abs(box.max.x), Math.abs(box.min.z), Math.abs(box.max.z));
+}
+
+test('the DCP band is wider than the extinguisher body everywhere, not just at its own height', () => {
+  // Caught by actually rendering this (see tierA.ts's comment on the fix): a
+  // band whose radius doesn't clear the body's is rendered *inside* it and
+  // is invisible from every angle, which no vertex/NaN check here would ever
+  // catch - only a real screenshot did. This test encodes what the
+  // screenshot found, so the bug can't come back silently.
+  const [body, , band] = partsFor(mockProp('ext_dcp', 'equipment'));
+  assert.ok(band, 'DCP should have a third part (the band)');
+  assert.ok(
+    boundingRadius(band!) > boundingRadius(body!),
+    `band radius (${boundingRadius(band!)}) must exceed the body's widest radius (${boundingRadius(body!)}), or it renders hidden inside the body`,
+  );
+});
+
+test('the sump opening is a real annulus, not a solid disc sitting on top of a hidden hole', () => {
+  // The original version used two solid CylinderGeometry discs - the "rim"
+  // being solid meant it fully covered the "hole" mesh regardless of either
+  // one's color or position, since there was no actual gap for the hole to
+  // show through. Only a render caught this; this test pins the structural
+  // fix (a true geometric hole) so it can't quietly regress back to a solid
+  // disc that happens to still pass a vertex-sanity check.
+  const parts = partsFor(mockProp('sump_opening', 'structure'));
+  const rim = parts.find((p) => p.geometry instanceof THREE.RingGeometry);
+  assert.ok(rim, 'the rim must be a RingGeometry (a genuine annulus) so the shaft beneath is actually visible through it');
+});
+
 test('an unrecognised prop id does not accidentally hit an extinguisher branch', () => {
   // ext_dcp/ext_water/ext_co2 are matched by exact id — a differently-named
   // equipment prop must fall through to the generic box, not silently share
