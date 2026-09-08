@@ -404,6 +404,21 @@ function startScreen(report: TierReport): void {
   });
   actions.append(begin, reset);
 
+  // A presentation shortcut, not a second product: reuses the exact
+  // headless-ideal-operator path `?demo=credential` already used, so the
+  // certificate this produces is genuinely earned and genuinely signed —
+  // this only saves someone stage time, it does not fake a credential.
+  const demo = document.createElement('button');
+  demo.className = 'ghost';
+  demo.title = i18n.ui('demoCertificateWarn');
+  demo.textContent = `🎫 ${i18n.ui('demoCertificate')}`;
+  demo.addEventListener('click', () => credentialDemoScreen(report));
+  actions.append(demo);
+
+  const demoNote = document.createElement('p');
+  demoNote.className = 'reason';
+  demoNote.textContent = i18n.ui('demoCertificateWarn');
+
   const prefs = document.createElement('div');
   prefs.className = 'prefs';
   const themeButton = document.createElement('button');
@@ -426,7 +441,7 @@ function startScreen(report: TierReport): void {
     prefs.append(switchModule);
   }
 
-  root.append(hero, welcome, langRow, tierBox, progress, actions, prefs);
+  root.append(hero, welcome, langRow, tierBox, progress, actions, demoNote, prefs);
 }
 
 async function drillScreen(report: TierReport): Promise<void> {

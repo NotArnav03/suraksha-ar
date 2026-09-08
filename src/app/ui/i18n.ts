@@ -114,6 +114,18 @@ const UI: Record<string, LocalizedText> = {
   },
   beginDrill: { en: 'Begin drill', hi: 'अभ्यास शुरू कीजिए', sat: 'ᱟᱹᱣᱟᱛ ᱮᱛᱦᱚᱵ ᱢᱮ' },
   clearProgress: { en: 'Clear progress', hi: 'प्रगति मिटाइए', sat: 'ᱚᱰᱚᱠᱚᱜ ᱢᱮᱴᱟᱣ ᱢᱮ' },
+  // For presentations: skips straight to a real, signed certificate by
+  // actually running the engine headlessly against an ideal operator - not a
+  // mock screen. Labelled plainly as a demo shortcut so it's never mistaken
+  // for something a worker earned.
+  demoCertificate: {
+    en: 'Demo: skip to a certificate',
+    hi: 'डेमो: सीधे प्रमाणपत्र देखिए',
+  },
+  demoCertificateWarn: {
+    en: 'For presentations only — this clears any saved drill progress and issues a real certificate for an ideal run.',
+    hi: 'केवल प्रस्तुति के लिए — यह सहेजी गई अभ्यास प्रगति मिटा देगा और एक आदर्श प्रयास के लिए असली प्रमाणपत्र जारी करेगा।',
+  },
   chooseModule: {
     en: 'Choose a training module',
     hi: 'एक प्रशिक्षण मॉड्यूल चुनिए',
