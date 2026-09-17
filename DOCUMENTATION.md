@@ -15,8 +15,9 @@ dashboard, reshaped Tier A geometry, and full-but-unreviewed Santali
 scenario coverage) — they haven't been rewritten yet to match. `README.md`
 is current on all of that; this section and the numbers immediately below
 are current, the numbered sections after are not.
-- `npm test` → **91/91 passing** (10 test files, up from 8 — `admin.test.ts`
-  and `tierA-shapes.test.ts` are new).
+- `npm test` → **109/109 passing** (12 test files; `admin.test.ts`,
+  `tierA-shapes.test.ts`, `citations.test.ts` and `machinery.test.ts` were added after this document was written).
+  A third scenario, `machinery-conveyor-loto`, has been added since; `README.md` describes it.
 - `npm run check` (`tsc --noEmit`) → clean.
 - `npm run build` → succeeds, two pages now (`index.html` + `admin.html`,
   `vite.config.ts`'s `rollupOptions.input`).
@@ -302,15 +303,11 @@ Never read `WorldEffect.value` as a string in renderer code.
 - **Five fatal outcome branches** (`outcome_fatal_entry`, `_survey`, `_atmosphere`,
   `_gas`, `_rescue`) alongside `outcome_pass` — each names a specific way to die
   in this scenario, which is the point: a failed run is a named, specific debrief.
-- **Regulation citations are placeholders.** `regulations` currently reads
-  `["Mines Act 1952 — duty to maintain a safe working environment", "Mines
-  Vocational Training Rules 1966 — initial training, confined space module",
-  "DGMS guidance on confined space entry, gas testing and standby persons"]` —
-  correct instruments named, but **no clause numbers have been verified.** Do
-  not present this scenario as regulation-compliant until each `cite` is checked
-  against source and a certified instructor has reviewed the procedure itself
-  (both gaps are also called out in `README.md`'s "Known gaps" section — nothing
-  has changed on this front since that was written).
+- **Regulation citations are pinpointed and checked against source text**
+  (CMR 2017 r.104, r.153 and r.166; MVT Rules 1966 r.6 and the First Schedule; OSH Code
+  2020 s.6(2)(c)). The verbatim text and caveats are in `docs/CITATIONS.md`, and the
+  debrief shows each one next to the step it governs. A certified instructor still has to
+  review the procedure itself before this scenario is presented as compliant.
 
 To author a new scenario or extend this one: read `engine/types.ts` top to
 bottom first (it's ~250 lines and is the entire data model), then
@@ -374,7 +371,7 @@ with a warning rather than silently corrupting interpolation.
 
 ## 9. Tests
 
-91 tests across 10 files, using Node's built-in test runner
+109 tests across 12 files, using Node's built-in test runner
 (`node --experimental-strip-types --test tests/**/*.test.ts`) with `happy-dom`
 providing a DOM for the app-layer tests. No mocking framework — fakes are
 hand-written (e.g. injected clocks, fake `SpeechSynthesisVoice` lists).

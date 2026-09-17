@@ -6,7 +6,7 @@ The product thesis: the gap in the problem statement is not training delivery, i
 
 ## Where the code is now
 
-The **drill engine**, the **assessment**, the **credential**, the **Tier A + Tier C clients**, an installable **offline PWA shell**, a **Trusted Web Activity Android APK**, and a **web compliance dashboard** are built. Tier B (marker tracking) is contracted but not implemented. Two scenarios are authored: `gas-confined-space` and `fire-explosion`, both reachable from an in-app module picker.
+The **drill engine**, the **assessment**, the **credential**, the **Tier A + Tier C clients**, an installable **offline PWA shell**, a **Trusted Web Activity Android APK**, and a **web compliance dashboard** are built. Tier B (marker tracking) is contracted but not implemented. Three scenarios are authored, one for each domain SIH26041 names (gas leaks, fire response and machinery hazards): `gas-confined-space`, `fire-explosion` and `machinery-conveyor-loto`, all reachable from an in-app module picker.
 
 Live: **https://notarnav03.github.io/suraksha-ar/** (worker app) and **`/admin.html`** (compliance dashboard) — redeployed automatically on every push to `main`.
 
@@ -16,10 +16,10 @@ src/assess/      event stream -> competency vector -> certification
 src/credential/  compact signed credential, offline QR verification
 src/app/         the web client: tier detection, shared HUD, module picker, Tier A/C worlds
 src/admin/       compliance dashboard — verifies scanned credentials, no backend
-src/scenarios/   authored scenario content (JSON) — gas-confined-space, fire-explosion
+src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons — see docs/APK.md for the Android build
-tests/           91 tests, node's built-in runner
+tests/           109 tests, node's built-in runner
 ```
 
 ## Try it
@@ -28,7 +28,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 91 tests
+npm test                # 109 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -43,7 +43,7 @@ npm run dev             # the client, on your LAN so a phone can reach it
 npm run build           # 35 kB gzipped, + 134 kB three.js only on AR devices
 ```
 
-Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion` (deep-links past the module picker).
+Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion|machinery` (deep-links past the module picker).
 
 Building the Android APK is a separate, one-time-setup process — see `docs/APK.md`.
 
@@ -96,15 +96,18 @@ No web fonts, no CDN. The app has to work with the radio off.
 
 `fire-explosion` — an electrical panel fire at the pit-top: hazard recognition, choosing the correct extinguisher class (never water on a live electrical fire), the PASS technique, donning a self-rescuer, and evacuating without re-entering for a collapsed colleague — the same second-victim-restraint reflex `gas-confined-space` measures, in a different domain.
 
-English and Hindi are authored throughout both scenarios. Santali (Ol Chiki) now covers every scenario string in both — but it is an **AI machine draft**, not a reviewed translation: every line is also recorded in `l10n/sat-review.tsv` against its English source, and none of it should be presented to a worker as verified training content until a Santali speaker has signed off each row. Three interface strings (the AR-handshake status lines) are deliberately left Hindi-only rather than machine-drafted at all — see the comment in `src/app/ui/i18n.ts`.
+`machinery-conveyor-loto`: a jammed belt conveyor at the coal handling plant. The learner spots the jam and the helper's loose gamchha, stops the belt if it is still running, and then the belt restarts and catches the helper. The fatal reflex is the machinery version of the second-victim one: grabbing a person caught in a machine before the machine is stopped. After that come isolating the *right* belt (the belt number varies, so a memorised tap sequence isolates the wrong one), padlock and tag, a try-start test, first aid, clearing the jam, and handing the belt back. Variants cover belt C3 or C4, running or tripped, and three shifts. Going to the helper before the lock-out does not end the drill, but it withholds the certificate, because rescue restraint has no partial credit.
+
+English and Hindi are authored throughout all three scenarios. Santali (Ol Chiki) covers every string in the gas and fire scenarios — but it is an **AI machine draft**, not a reviewed translation: every line is also recorded in `l10n/sat-review.tsv` against its English source, and none of it should be presented to a worker as verified training content until a Santali speaker has signed off each row. Three interface strings (the AR-handshake status lines) are deliberately left Hindi-only rather than machine-drafted at all — see the comment in `src/app/ui/i18n.ts`.
 
 ## Known gaps — read before pitching
 
-- **Every regulation citation in the scenario JSON is a placeholder.** They name the right instruments (Mines Act 1952, Mines Vocational Training Rules 1966, DGMS confined-space guidance) but no clause numbers have been verified. Replace each `cite` with the exact provision, checked against the source, before this is shown as compliant with anything.
+- **Regulation citations are pinpointed, but not yet reviewed by a professional.** Every `cite` now names a specific provision (Coal Mines Regulations 2017, Mines Vocational Training Rules 1966, OSH Code 2020 s.6), was checked against the source text, and is shown to the learner on the debrief. `docs/CITATIONS.md` records the verbatim text and the caveats: permit-to-work and the standby person are site procedures rather than stand-alone regulations, the CMR 2017 text came from a mirror rather than the Gazette, and the Mines Act 1952 was repealed by the OSH Code on 21 Nov 2025. `tests/citations.test.ts` rejects any citation without a pinpoint.
 - **Neither scenario has been reviewed by a certified instructor.** Both procedures are drawn from general practice, not a DGMS-certified sign-off.
-- **The Santali translation is an unreviewed AI draft.** Complete coverage, but not verified — see `l10n/sat-review.tsv`. Do not present it as authoritative until a Santali speaker has checked it line by line.
+- **The Santali translation is an unreviewed AI draft.** Complete coverage for the gas and fire scenarios, but not verified — see `l10n/sat-review.tsv`. Do not present it as authoritative until a Santali speaker has checked it line by line.
+- **The conveyor drill has no Santali at all yet.** It declares only `en` and `hi`, so a Santali learner is served Hindi. `node tools/translate.mjs --report` lists what is missing; any draft has to go through `l10n/sat-review.tsv` like the rest.
 - **The admin dashboard has no backend.** It verifies real signed credentials and keeps a real roster, but only of whatever this one device has scanned — see the module comment in `src/admin/store.ts` for what a real multi-supervisor deployment still needs.
-- **Tier A has never run on real hardware.** It is written against the WebXR hit-test and dom-overlay specs and it type-checks and builds, but no ARCore device has executed it in this repo. Treat it as unproven until it has been on a phone.
+- **Tier A has been demonstrated working on a real phone at the ISIH presentations.** Behaviour across the wider range of ARCore handsets has not been measured yet.
 - **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher — see `src/app/render/tierA.ts`'s `partsFor`), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate — two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
 - **Tier B (marker tracking) is not built.** It is contracted in `render/contract.ts`; the app falls back to Tier C loudly rather than mounting a renderer that would show a black screen.
 - **Issuing happens in the browser** in the current demo, signed with a fixed demo key (`src/credential/demo-trust.ts`, chosen deliberately over a random-per-session key so a credential can be verified on a *different* device — see that file's comment) — which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
