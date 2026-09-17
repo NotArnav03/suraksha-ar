@@ -84,6 +84,9 @@ const UI: Record<string, LocalizedText> = {
     hi: 'काम सही है, समय ग़लत — इससे पहले कुछ और करना ज़रूरी है।',
     sat: 'ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱟᱭ ᱴᱷᱤᱠ ᱚᱠᱛᱚ — ᱮᱴᱟᱜ ᱡᱤᱱᱤᱥ ᱯᱩᱭᱞᱩ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾',
   },
+  // No `sat` on these two, for the same reason as the three AR lines below.
+  rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
+  rulesFollowed: { en: '{{count}} rules followed', hi: '{{count}} नियमों का पालन किया' },
   // No `sat` on these three: the fallback chain hands a Santali learner the
   // Hindi line, which is honest, where invented Santali would not be. They are
   // written to be replaced by a speaker, not by a translation engine. This is a

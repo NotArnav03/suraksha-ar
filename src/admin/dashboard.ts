@@ -1,5 +1,6 @@
 import { webVerifier } from '../credential/web-crypto.ts';
 import { verifyCredential, type VerifiedCredential } from '../credential/credential.ts';
+import { qrVersionFor } from '../credential/codec.ts';
 import { DEMO_TRUST_LIST } from '../credential/demo-trust.ts';
 import { DIMENSIONS } from '../engine/types.ts';
 import {
@@ -125,9 +126,20 @@ export function mountDashboard(app: HTMLElement): void {
 
   async function verifyAndAdd(text: string, feedback: HTMLElement): Promise<void> {
     setFeedback(feedback, 'Checking…', 'feedback');
-    const result = await verifyCredential(text.trim(), webVerifier(DEMO_TRUST_LIST));
+    const code = text.trim();
+    // Measured, not claimed: the signature check below is the whole verification,
+    // and it makes no network request, so this is what a supervisor at a gate
+    // with no signal actually waits for.
+    const started = performance.now();
+    const result = await verifyCredential(code, webVerifier(DEMO_TRUST_LIST));
+    const ms = Math.max(1, Math.round(performance.now() - started));
+    const version = qrVersionFor(code.length);
+    const proof =
+      `checked offline in ${ms} ms · ${code.length}-character code` +
+      (version === null ? '' : ` (QR version ${version})`) +
+      ' · no network request made';
     if (!result.valid) {
-      setFeedback(feedback, `Rejected: ${result.reason}`, 'feedback bad');
+      setFeedback(feedback, `Rejected: ${result.reason} · ${proof}`, 'feedback bad');
       return;
     }
     const record = toRecord(result.subjectId, result);
@@ -135,7 +147,8 @@ export function mountDashboard(app: HTMLElement): void {
     feedbackState = {
       text:
         `Added ${result.subjectId} — ${domainLabel(result.domain)}` +
-        (result.warnings.length ? ` (${result.warnings.join('; ')})` : ''),
+        (result.warnings.length ? ` (${result.warnings.join('; ')})` : '') +
+        ` · ${proof}`,
       cls: 'feedback good',
     };
     render();

@@ -19,13 +19,13 @@
   ],
   "regulations": [
     {
-      "cite": "Mines Act 1952 — duty to maintain a safe working environment"
+      "cite": "OSH Code 2020, s.6(2)(c): the employer must provide the information, instruction, training and supervision needed for safety (in force 21 Nov 2025, replacing the Mines Act 1952)"
     },
     {
-      "cite": "Coal Mines Regulations 2017 — fire & explosion response; PASS + SCSR procedure"
+      "cite": "Coal Mines Regulations 2017, r.139-140: fire-fighting equipment, training in its use, and standing orders for withdrawal"
     },
     {
-      "cite": "DGMS guidance on fire fighting and self-rescuer use"
+      "cite": "Coal Mines Regulations 2017, r.243: self-rescuers and training in their use"
     }
   ],
   "props": [
@@ -232,6 +232,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(1)(a): identify the hazards workers may be exposed to at work"
+        }
+      ],
       "next": "select_extinguisher"
     },
     {
@@ -323,6 +328,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.139(2)-(3): no water or soda-acid extinguisher on oil or electrical fires, and no foam on electrical fires"
+        }
+      ],
       "next": "apply_pass"
     },
     {
@@ -374,6 +384,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.139(2): water shall not be used for fighting oil or electrical fires"
+        }
+      ],
       "next": "apply_pass"
     },
     {
@@ -452,6 +467,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.140(3): operators must be trained in the use of fire extinguishers"
+        }
+      ],
       "next": "don_scsr"
     },
     {
@@ -515,6 +535,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.243(1) and (3)(c): carry a self-rescuer and be trained to use it (a belowground requirement, drilled here as a reflex)"
+        }
+      ],
       "next": "evacuate"
     },
     {
@@ -596,6 +621,11 @@
         },
         "goto": "outcome_fatal_gas"
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.140(4): standing orders for warning of fire and timely withdrawal of personnel"
+        }
+      ],
       "next": "outcome_pass"
     },
     {

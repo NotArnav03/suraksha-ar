@@ -61,6 +61,29 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
+/**
+ * "Coal Mines Regulations 2017, r.166(3)(a): where gas is detected ..." becomes
+ * the provision on one line and what it says underneath, with the pinpoint kept
+ * whole so a narrow screen never breaks "r.104(1)" from its "(a)".
+ */
+function ruleRow(cite: string, met: boolean): HTMLLIElement {
+  const row = el('li', met ? 'met' : 'missed');
+  const body = el('span', 'rule-cite');
+  const split = cite.indexOf(': ');
+  const ref = split === -1 ? cite : cite.slice(0, split);
+  const lastComma = ref.lastIndexOf(', ');
+  const refLine = el('span', 'rule-ref');
+  if (lastComma === -1) {
+    refLine.append(el('span', 'rule-pin', ref));
+  } else {
+    refLine.append(ref.slice(0, lastComma + 2), el('span', 'rule-pin', ref.slice(lastComma + 2)));
+  }
+  body.append(refLine);
+  if (split !== -1) body.append(el('span', 'rule-says', cite.slice(split + 2)));
+  row.append(el('span', 'rule-mark', met ? '✓' : '✗'), body);
+  return row;
+}
+
 export interface ResultsOptions {
   scenario: Scenario;
   session: DrillSession;
@@ -103,6 +126,41 @@ export function renderResults(options: ResultsOptions): HTMLElement {
       list.append(row);
     }
     section.append(list);
+    root.append(section);
+  }
+
+  // ── the rules behind it ───────────────────────────────────────────────────
+  // Every assessed step that cites a provision, missed ones first. A worker who
+  // went in after the casualty should leave knowing it was not a judgement call
+  // but a regulation, and a supervisor reading over their shoulder should be
+  // able to check the provision rather than take the app's word for it.
+  const creditByNode = new Map<string, number>();
+  for (const c of competency.contributions) {
+    creditByNode.set(c.nodeId, Math.min(creditByNode.get(c.nodeId) ?? 1, c.credit));
+  }
+  const cited = scenario.nodes
+    .filter((node) => node.cites?.length && creditByNode.has(node.id))
+    .map((node) => ({ node, met: creditByNode.get(node.id)! >= 1 }))
+    .sort((a, b) => Number(a.met) - Number(b.met));
+  if (cited.length > 0) {
+    const section = el('section', 'panel');
+    section.append(el('h2', '', i18n.ui('rulesBehind')));
+    const missed = el('ul', 'rules');
+    const followed = el('ul', 'rules');
+    for (const { node, met } of cited) {
+      for (const ref of node.cites!) {
+        (met ? followed : missed).append(ruleRow(ref.cite, met));
+      }
+    }
+    if (missed.childElementCount > 0) section.append(missed);
+    if (followed.childElementCount > 0) {
+      // Rules that were kept matter less than rules that were broken, and on a
+      // clean pass the full list would push the certificate off the screen.
+      const fold = el('details', 'rules-followed');
+      const summary = i18n.ui('rulesFollowed').replace('{{count}}', String(followed.childElementCount));
+      fold.append(el('summary', '', summary), followed);
+      section.append(fold);
+    }
     root.append(section);
   }
 

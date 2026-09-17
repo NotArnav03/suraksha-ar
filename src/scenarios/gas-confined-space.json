@@ -19,13 +19,13 @@
   ],
   "regulations": [
     {
-      "cite": "Mines Act 1952 — duty to maintain a safe working environment"
+      "cite": "OSH Code 2020, s.6(2)(c): the employer must provide the information, instruction, training and supervision needed for safety (in force 21 Nov 2025, replacing the Mines Act 1952)"
     },
     {
-      "cite": "Mines Vocational Training Rules 1966 — initial training, confined space module"
+      "cite": "Mines Vocational Training Rules 1966, r.6(1) and First Schedule: training before employment for surface and opencast workers"
     },
     {
-      "cite": "DGMS guidance on confined space entry, gas testing and standby persons"
+      "cite": "Coal Mines Regulations 2017, r.166: precautions against inflammable and noxious gases"
     }
   ],
   "props": [
@@ -205,7 +205,7 @@
       "id": "o2",
       "range": {
         "min": 15.4,
-        "max": 19.2,
+        "max": 18.9,
         "step": 0.1,
         "precision": 1
       }
@@ -331,7 +331,10 @@
       },
       "cites": [
         {
-          "cite": "Mines Vocational Training Rules 1966 — hazard identification at the workplace"
+          "cite": "Coal Mines Regulations 2017, r.104(1)(a): identify the hazards workers may be exposed to at work"
+        },
+        {
+          "cite": "Mines Vocational Training Rules 1966, First Schedule: the \"What's wrong\" hazard-spotting visit"
         }
       ],
       "next": "check_permit"
@@ -410,7 +413,7 @@
       },
       "cites": [
         {
-          "cite": "DGMS guidance on confined space entry — permit to work"
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (permit-to-work)"
         }
       ],
       "next": "permit_absent"
@@ -653,7 +656,7 @@
       },
       "cites": [
         {
-          "cite": "DGMS guidance on confined space entry — gas testing before entry"
+          "cite": "Coal Mines Regulations 2017, r.166(5)-(6): nobody enters until a competent person, using an approved detector, reports the place free of gas"
         }
       ],
       "next": "gas_result"
@@ -771,6 +774,11 @@
           }
         }
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.166(3): withdraw, fence the place off, and remove the gas by improving the ventilation"
+        }
+      ],
       "next": "don_ppe"
     },
     {
@@ -859,7 +867,7 @@
       },
       "cites": [
         {
-          "cite": "Mines Vocational Training Rules 1966 — use and care of protective equipment"
+          "cite": "Coal Mines Regulations 2017, r.104(2)(d)(i): personal protective equipment for the risk that remains"
         }
       ],
       "next": "post_standby"
@@ -939,7 +947,7 @@
       },
       "cites": [
         {
-          "cite": "DGMS guidance on confined space entry — standby person and communication"
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (standby person and communication)"
         }
       ],
       "next": "entry"
@@ -1097,6 +1105,11 @@
         ],
         "goto": "outcome_fatal_gas"
       },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.166(3)(a): where gas is detected, all persons shall be withdrawn from the place"
+        }
+      ],
       "next": "casualty_appears"
     },
     {
@@ -1226,7 +1239,7 @@
       },
       "cites": [
         {
-          "cite": "DGMS guidance on confined space entry — rescue without entry"
+          "cite": "Coal Mines Regulations 2017, r.166(3)(b) and (5): the place is fenced off, and nobody re-enters until it is reported free of gas"
         }
       ],
       "next": "outcome_pass"

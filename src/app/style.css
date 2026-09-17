@@ -484,6 +484,21 @@ button:disabled { opacity: .38; pointer-events: none; }
 .error-code { font-weight: 700; text-transform: capitalize; }
 .error-meta { font-size: .86rem; color: var(--ink-3); text-transform: capitalize; }
 
+.rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rules li { display: grid; grid-template-columns: 1.4rem 1fr; gap: 8px; align-items: baseline; font-size: .9rem; line-height: 1.45; }
+.rules li.missed .rule-mark { color: var(--crit); }
+.rules li.met .rule-mark { color: var(--go); }
+.rules li.met .rule-cite { color: var(--ink-3); }
+.rule-mark { font-weight: 800; }
+.rule-cite { display: grid; gap: 2px; }
+.rule-ref { font-weight: 700; }
+.rule-pin { white-space: nowrap; }
+.rules li.missed .rule-ref { color: var(--ink); }
+.rules + .rules-followed { margin-top: 12px; }
+.rules-followed summary { cursor: pointer; font-size: .9rem; color: var(--ink-2); padding: 4px 0; }
+.rules-followed summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+.rules-followed[open] summary { margin-bottom: 8px; }
+
 .dim { display: grid; grid-template-columns: 8.5rem 1fr 2.4rem auto; gap: 12px; align-items: center; margin-bottom: 12px; }
 .dim-name { font-size: .86rem; color: var(--ink-2); text-transform: capitalize; }
 .dim-track { position: relative; height: 16px; border-radius: 8px; background: var(--panel-2); overflow: hidden; }

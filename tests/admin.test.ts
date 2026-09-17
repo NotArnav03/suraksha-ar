@@ -142,13 +142,36 @@ test('a real credential pasted into the dashboard produces a roster row', async 
   const verifyButton = [...admin.querySelectorAll<HTMLButtonElement>('button')].find(
     (b) => b.textContent === 'Verify & add',
   )!;
-  verifyButton.click();
+  // Any network use during verification would make the on-screen claim a lie.
+  const g = globalThis as unknown as { fetch: unknown; XMLHttpRequest: unknown };
+  const realFetch = g.fetch;
+  const realXhr = g.XMLHttpRequest;
+  let networkCalls = 0;
+  g.fetch = () => {
+    networkCalls++;
+    return Promise.reject(new Error('network used during verification'));
+  };
+  g.XMLHttpRequest = function () {
+    networkCalls++;
+    throw new Error('network used during verification');
+  };
+  try {
+    verifyButton.click();
 
-  // The click handler is async; give its microtasks a turn.
-  await new Promise((resolve) => setTimeout(resolve, 50));
+    // The click handler is async; give its microtasks a turn.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  } finally {
+    g.fetch = realFetch;
+    g.XMLHttpRequest = realXhr;
+  }
+  assert.equal(networkCalls, 0, 'verification must not touch the network');
 
   const feedback = admin.querySelector('.feedback')!;
   assert.match(feedback.textContent ?? '', /Added JH\/CHP\/4242/);
+  // The numbers on screen are measured, not claimed.
+  assert.match(feedback.textContent ?? '', /checked offline in \d+ ms/);
+  assert.match(feedback.textContent ?? '', /\d+-character code \(QR version \d+\)/);
+  assert.match(feedback.textContent ?? '', /no network request made/);
 
   const row = [...admin.querySelectorAll('td.cell-subject')].find((td) => td.textContent === 'JH/CHP/4242');
   assert.ok(row, 'the verified credential must appear as a roster row, not just a feedback message');
