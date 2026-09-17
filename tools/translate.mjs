@@ -44,6 +44,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SCENARIOS = [
   join(ROOT, 'src/scenarios/gas-confined-space.json'),
   join(ROOT, 'src/scenarios/fire-explosion.json'),
+  join(ROOT, 'src/scenarios/machinery-conveyor-loto.json'),
 ];
 const I18N = join(ROOT, 'src/app/ui/i18n.ts');
 const REVIEW = join(ROOT, 'l10n/sat-review.tsv');

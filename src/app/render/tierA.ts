@@ -250,10 +250,118 @@ function hazardParts(): THREE.Mesh[] {
   return [base, mid, tip];
 }
 
+/**
+ * The conveyor drill's props. Most are `equipment`, which would otherwise all
+ * be the same grey box, and the drill turns on telling them apart: isolator C3
+ * from isolator C4, the start button from the pull cord. Two are `hazard`, and
+ * a coal jam or a hanging cloth drawn as a flame would teach the wrong thing.
+ * Parts hang from the group origin, which `#layout` places 0.85 m up.
+ */
+function conveyorParts(): THREE.Mesh[] {
+  const steel = stdMaterial(0x5c6166, { metalness: 0.4 });
+  const legA = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.5, 0.04), steel);
+  legA.position.set(-0.2, -0.6, 0);
+  const legB = legA.clone();
+  legB.position.x = 0.2;
+  const bed = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.05, 0.24), steel);
+  bed.position.y = -0.33;
+  const belt = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.02, 0.2), stdMaterial(0x1c1f22, { roughness: 0.9 }));
+  belt.position.y = -0.295;
+  // Drums run across the belt, so their axis is along z.
+  const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.24, 16).rotateX(Math.PI / 2), steel);
+  tail.position.set(0.26, -0.3, 0);
+  const head = tail.clone();
+  head.position.x = -0.26;
+  return [legA, legB, bed, belt, tail, head];
+}
+
+function coalJamParts(): THREE.Mesh[] {
+  const coal = stdMaterial(0x15171a, { roughness: 0.95 });
+  const lumps: [number, number, number, number][] = [
+    [0, -0.78, 0, 0.07],
+    [0.08, -0.79, 0.04, 0.05],
+    [-0.07, -0.79, -0.03, 0.055],
+    [0.02, -0.71, 0.01, 0.045],
+  ];
+  return lumps.map(([x, y, z, r]) => {
+    const lump = new THREE.Mesh(new THREE.DodecahedronGeometry(r), coal);
+    lump.position.set(x, y, z);
+    return lump;
+  });
+}
+
+/** A hanging checked cloth: red and white strips, the gamchha a worker actually wears. */
+function gamchhaParts(): THREE.Mesh[] {
+  const red = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.36, 0.012), stdMaterial(0xc0392b, { roughness: 0.9 }));
+  red.position.set(-0.035, -0.05, 0);
+  const white = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.36, 0.012), stdMaterial(0xe8e2d4, { roughness: 0.9 }));
+  white.position.set(0.035, -0.05, 0);
+  const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.2, 8).rotateZ(Math.PI / 2), stdMaterial(0x5c6166));
+  rail.position.y = 0.13;
+  return [red, white, rail];
+}
+
+function isolatorParts(): THREE.Mesh[] {
+  const box = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.24, 0.1), stdMaterial(0x8a9099, { metalness: 0.3 }));
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.04, 16).rotateX(Math.PI / 2), stdMaterial(0xc0281c));
+  handle.position.set(0, 0.02, 0.07);
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.035, 0.005), stdMaterial(0xf0c419));
+  plate.position.set(0, -0.08, 0.053);
+  return [box, handle, plate];
+}
+
+function padlockParts(): THREE.Mesh[] {
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.07, 0.03), stdMaterial(0xc9a227, { metalness: 0.5 }));
+  const shackle = new THREE.Mesh(new THREE.TorusGeometry(0.028, 0.007, 8, 20, Math.PI), stdMaterial(0xb8bcc2, { metalness: 0.7 }));
+  shackle.position.y = 0.035;
+  return [body, shackle];
+}
+
+function dangerTagParts(): THREE.Mesh[] {
+  const tag = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, 0.005), stdMaterial(0xc0281c));
+  const band = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.05, 0.006), stdMaterial(0xf4f1ea));
+  band.position.y = 0.03;
+  return [tag, band];
+}
+
+function startButtonParts(): THREE.Mesh[] {
+  const box = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.16, 0.08), stdMaterial(0x2b3238));
+  const start = new THREE.Mesh(new THREE.CylinderGeometry(0.028, 0.028, 0.02, 16).rotateX(Math.PI / 2), stdMaterial(0x2e9e4f));
+  start.position.set(0, 0.03, 0.05);
+  const stop = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.02, 16).rotateX(Math.PI / 2), stdMaterial(0xc0281c));
+  stop.position.set(0, -0.035, 0.05);
+  return [box, start, stop];
+}
+
+/** A switch on a post with the cord running off along the belt line. */
+function pullCordParts(): THREE.Mesh[] {
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.9, 8), stdMaterial(0x5c6166));
+  post.position.y = -0.4;
+  const switchBox = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.06), stdMaterial(0xf0c419));
+  switchBox.position.y = 0.05;
+  const cord = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.005, 0.5, 6).rotateZ(Math.PI / 2), stdMaterial(0xc0281c));
+  cord.position.set(0.27, 0.03, 0);
+  return [post, switchBox, cord];
+}
+
+const PARTS_BY_ID: Record<string, () => THREE.Mesh[]> = {
+  conveyor_tail: conveyorParts,
+  coal_jam: coalJamParts,
+  loose_gamchha: gamchhaParts,
+  isolator_c3: isolatorParts,
+  isolator_c4: isolatorParts,
+  padlock: padlockParts,
+  danger_tag: dangerTagParts,
+  start_button: startButtonParts,
+  pull_cord: pullCordParts,
+};
+
 /** Exported for tests/tierA-shapes.test.ts — geometry construction needs no WebGL/DOM, so it can run for real under plain Node. */
 export function partsFor(prop: PropView): THREE.Mesh[] {
   const extinguisher = EXTINGUISHER_KIND[prop.id];
   if (extinguisher) return extinguisherParts(extinguisher);
+  const byId = PARTS_BY_ID[prop.id];
+  if (byId) return byId();
 
   switch (prop.kind) {
     case 'person':
@@ -306,6 +414,7 @@ export class TierARenderer implements WorldRenderer {
   #slots = new Map<string, Slot>();
   #meshes = new Map<string, THREE.Group>();
   #visible = new Set<string>();
+  #seeded = new Set<string>();
   #props: PropView[] = [];
   #interactive = true;
 
@@ -491,6 +600,10 @@ export class TierARenderer implements WorldRenderer {
     this.#props = view.props;
     this.#interactive = !view.narrationOnly;
     for (const prop of view.props) {
+      // Starting visibility is applied once; after that only effects change it,
+      // or a `despawn` would be undone on the very next step.
+      if (this.#seeded.has(prop.id)) continue;
+      this.#seeded.add(prop.id);
       if (prop.visible) this.#visible.add(prop.id);
     }
     if (this.#placed) {

@@ -1,0 +1,1203 @@
+{
+  "id": "machinery-conveyor-loto",
+  "version": "0.1.0",
+  "domain": "machinery_haulage_loto",
+  "title": {
+    "en": "Machinery: Conveyor Lock-out",
+    "hi": "मशीनरी: कन्वेयर लॉक-आउट"
+  },
+  "description": {
+    "en": "A jammed belt conveyor at the coal handling plant. Spot the hazards, keep hands off a live belt, and when your helper is caught, stop the machine before you touch him. Isolate the right belt, lock, tag and test it, then hand it back.",
+    "hi": "कोल हैंडलिंग प्लांट में जाम बेल्ट कन्वेयर। ख़तरे पहचानिए, चालू बेल्ट से हाथ दूर रखिए, और जब हेल्पर फँसे, तो उसे छूने से पहले मशीन रोकिए। सही बेल्ट आइसोलेट कीजिए, ताला-टैग लगाइए, जाँचिए, और फिर बेल्ट वापस सौंपिए।"
+  },
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "regulations": [
+    {
+      "cite": "OSH Code 2020, s.6(2)(c): the employer must provide the information, instruction, training and supervision needed for safety (in force 21 Nov 2025, replacing the Mines Act 1952)"
+    },
+    {
+      "cite": "Coal Mines Regulations 2017, r.211: precautions regarding moving parts of machinery"
+    },
+    {
+      "cite": "Coal Mines Regulations 2017, r.104: the Safety Management Plan and its standard operating procedures"
+    }
+  ],
+  "props": [
+    {
+      "id": "conveyor_tail",
+      "kind": "equipment",
+      "label": {
+        "en": "Belt conveyor, tail end",
+        "hi": "बेल्ट कन्वेयर का पिछला सिरा"
+      }
+    },
+    {
+      "id": "coal_jam",
+      "kind": "hazard",
+      "label": {
+        "en": "Coal jammed at the tail pulley",
+        "hi": "टेल पुली में फँसा कोयला"
+      }
+    },
+    {
+      "id": "loose_gamchha",
+      "kind": "hazard",
+      "label": {
+        "en": "Helper's loose gamchha",
+        "hi": "हेल्पर का ढीला गमछा"
+      }
+    },
+    {
+      "id": "helper",
+      "kind": "person",
+      "label": {
+        "en": "Your helper",
+        "hi": "आपका हेल्पर"
+      }
+    },
+    {
+      "id": "helper_caught",
+      "kind": "person",
+      "label": {
+        "en": "Helper caught at the pulley",
+        "hi": "पुली में फँसा हेल्पर"
+      },
+      "spawned": true
+    },
+    {
+      "id": "pull_cord",
+      "kind": "equipment",
+      "label": {
+        "en": "Pull-cord stop switch",
+        "hi": "पुल-कॉर्ड स्टॉप स्विच"
+      }
+    },
+    {
+      "id": "isolator_c3",
+      "kind": "equipment",
+      "label": {
+        "en": "Isolator C3",
+        "hi": "आइसोलेटर C3"
+      }
+    },
+    {
+      "id": "isolator_c4",
+      "kind": "equipment",
+      "label": {
+        "en": "Isolator C4",
+        "hi": "आइसोलेटर C4"
+      }
+    },
+    {
+      "id": "padlock",
+      "kind": "equipment",
+      "label": {
+        "en": "Your personal padlock",
+        "hi": "आपका निजी ताला"
+      }
+    },
+    {
+      "id": "danger_tag",
+      "kind": "equipment",
+      "label": {
+        "en": "Do-not-operate tag",
+        "hi": "'चालू न करें' टैग"
+      }
+    },
+    {
+      "id": "start_button",
+      "kind": "equipment",
+      "label": {
+        "en": "Local start button",
+        "hi": "लोकल स्टार्ट बटन"
+      }
+    },
+    {
+      "id": "control_radio",
+      "kind": "equipment",
+      "label": {
+        "en": "Radio to control room",
+        "hi": "कंट्रोल रूम का रेडियो"
+      }
+    }
+  ],
+  "bindings": {
+    "belt": "conveyor_tail",
+    "jam": "coal_jam",
+    "loose_cloth": "loose_gamchha",
+    "helper": "helper",
+    "casualty": "helper_caught",
+    "pull_cord": "pull_cord",
+    "padlock": "padlock",
+    "tag": "danger_tag",
+    "start_button": "start_button",
+    "radio": "control_radio"
+  },
+  "params": [
+    {
+      "id": "belt",
+      "pick": [
+        "C3",
+        "C4"
+      ]
+    },
+    {
+      "id": "belt_state",
+      "pick": [
+        "running",
+        "tripped"
+      ]
+    },
+    {
+      "id": "shift",
+      "pick": [
+        "first",
+        "second",
+        "night"
+      ]
+    }
+  ],
+  "start": "brief_running",
+  "nodes": [
+    {
+      "id": "brief_running",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "when": {
+        "belt_state": "running"
+      },
+      "prompt": {
+        "text": {
+          "en": "It is the {{shift}} shift at the coal handling plant. Belt {{belt}} has jammed: coal is packed around the tail pulley, and the belt is still running. Your supervisor sends you and a helper to clear it. Do not touch anything yet.",
+          "hi": "कोल हैंडलिंग प्लांट में बेल्ट {{belt}} जाम हो गई है: टेल पुली के चारों ओर कोयला भर गया है, और बेल्ट अभी भी चल रही है। सुपरवाइज़र ने आपको और एक हेल्पर को इसे साफ़ करने भेजा है। अभी किसी चीज़ को हाथ मत लगाइए।"
+        }
+      },
+      "effects": [
+        {
+          "type": "ambient",
+          "state": "chp_belt_running"
+        }
+      ],
+      "next": "brief_tripped"
+    },
+    {
+      "id": "brief_tripped",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "when": {
+        "belt_state": "tripped"
+      },
+      "prompt": {
+        "text": {
+          "en": "It is the {{shift}} shift at the coal handling plant. Belt {{belt}} has jammed and tripped: it has stopped, with coal packed around the tail pulley. A stopped belt is not a safe belt. Your supervisor sends you and a helper to clear it. Do not touch anything yet.",
+          "hi": "कोल हैंडलिंग प्लांट में बेल्ट {{belt}} जाम होकर ट्रिप हो गई है: वह रुकी है, और टेल पुली के चारों ओर कोयला भरा है। रुकी हुई बेल्ट सुरक्षित बेल्ट नहीं होती। सुपरवाइज़र ने आपको और एक हेल्पर को इसे साफ़ करने भेजा है। अभी किसी चीज़ को हाथ मत लगाइए।"
+        }
+      },
+      "effects": [
+        {
+          "type": "ambient",
+          "state": "chp_belt_tripped"
+        }
+      ],
+      "next": "observe_hazards"
+    },
+    {
+      "id": "observe_hazards",
+      "kind": "observe",
+      "dimensions": [
+        "hazard_recognition"
+      ],
+      "prompt": {
+        "text": {
+          "en": "Look around before you go near the belt. Tap on the two things here that could kill someone today, and choose \"Look at\".",
+          "hi": "बेल्ट के पास जाने से पहले चारों ओर देखिए। यहाँ की वे दो चीज़ें टैप कीजिए जो आज किसी की जान ले सकती हैं, और \"देखिए\" चुनिए।"
+        }
+      },
+      "targets": [
+        "jam",
+        "loose_cloth"
+      ],
+      "minCorrect": 2,
+      "distractors": [
+        "start_button",
+        "padlock"
+      ],
+      "errors": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "REACHED_INTO_LIVE_BELT",
+          "severity": "fatal",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
+              "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            }
+          },
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
+          "goto": "outcome_fatal_live_belt"
+        }
+      ],
+      "window": {
+        "hesitationMs": 12000,
+        "deadlineMs": 45000
+      },
+      "onTimeout": {
+        "code": "HAZARDS_NOT_RECOGNISED",
+        "severity": "major",
+        "dimension": "hazard_recognition",
+        "consequence": {
+          "text": {
+            "en": "You did not spot both hazards: the jammed pulley, and the loose cloth hanging near it.",
+            "hi": "आपने दोनों ख़तरे नहीं पहचाने: जाम पुली, और उसके पास लटकता ढीला कपड़ा।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(1)(a): identify the hazards workers may be exposed to at work"
+        },
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(6): nobody close to moving machinery shall wear loose outer clothing"
+        }
+      ],
+      "next": "stop_belt"
+    },
+    {
+      "id": "stop_belt",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence"
+      ],
+      "when": {
+        "belt_state": "running"
+      },
+      "prompt": {
+        "text": {
+          "en": "The belt is still running, and nobody works on a moving belt. Stop it first: tap the pull-cord switch and choose \"Use\".",
+          "hi": "बेल्ट अभी भी चल रही है, और चलती बेल्ट पर कोई काम नहीं करता। पहले इसे रोकिए: पुल-कॉर्ड स्विच टैप कीजिए और \"चलाइए\" चुनिए।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "pull_cord"
+          },
+          "label": {
+            "en": "Stop the belt with the pull cord",
+            "hi": "पुल-कॉर्ड से बेल्ट रोकिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 40000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "REACHED_INTO_LIVE_BELT",
+          "severity": "fatal",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
+              "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            }
+          },
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
+          "goto": "outcome_fatal_live_belt"
+        }
+      ],
+      "onTimeout": {
+        "code": "BELT_NOT_STOPPED",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "The belt was left running while people stood beside it.",
+            "hi": "लोग पास खड़े रहे और बेल्ट चलती रही।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(4): nobody shall repair, adjust, clean or lubricate machinery in motion where there is risk of injury"
+        }
+      ],
+      "next": "helper_caught_running"
+    },
+    {
+      "id": "helper_caught_running",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "when": {
+        "belt_state": "running"
+      },
+      "prompt": {
+        "text": {
+          "en": "The belt stops. You turn towards the switch room. Behind you, the belt starts again: someone has reset the pull cord. Your helper had leaned in to pull the coal out, and his loose gamchha has dragged his arm into the pulley.",
+          "hi": "बेल्ट रुक जाती है। आप स्विच रूम की ओर मुड़ते हैं। पीछे बेल्ट फिर चल पड़ती है: किसी ने पुल-कॉर्ड रीसेट कर दी है। आपका हेल्पर कोयला निकालने के लिए झुका था, और उसके ढीले गमछे ने उसकी बाँह पुली में खींच ली है।"
+        }
+      },
+      "effects": [
+        {
+          "type": "despawn",
+          "role": "helper"
+        },
+        {
+          "type": "despawn",
+          "role": "loose_cloth"
+        },
+        {
+          "type": "spawn",
+          "role": "casualty"
+        },
+        {
+          "type": "alarm",
+          "level": "critical"
+        },
+        {
+          "type": "haptic",
+          "pattern": "sos"
+        }
+      ],
+      "next": "helper_caught_tripped"
+    },
+    {
+      "id": "helper_caught_tripped",
+      "kind": "brief",
+      "dimensions": [],
+      "weight": 0,
+      "when": {
+        "belt_state": "tripped"
+      },
+      "prompt": {
+        "text": {
+          "en": "You turn towards the switch room. Behind you, the belt starts: the control room has restarted it, not knowing anyone is here. Your helper had leaned in to pull the coal out, and his loose gamchha has dragged his arm into the pulley.",
+          "hi": "आप स्विच रूम की ओर मुड़ते हैं। पीछे बेल्ट चल पड़ती है: कंट्रोल रूम ने, यह जाने बिना कि यहाँ कोई है, उसे फिर चालू कर दिया है। आपका हेल्पर कोयला निकालने के लिए झुका था, और उसके ढीले गमछे ने उसकी बाँह पुली में खींच ली है।"
+        }
+      },
+      "effects": [
+        {
+          "type": "despawn",
+          "role": "helper"
+        },
+        {
+          "type": "despawn",
+          "role": "loose_cloth"
+        },
+        {
+          "type": "spawn",
+          "role": "casualty"
+        },
+        {
+          "type": "alarm",
+          "level": "critical"
+        },
+        {
+          "type": "haptic",
+          "pattern": "sos"
+        }
+      ],
+      "next": "rescue_decision"
+    },
+    {
+      "id": "rescue_decision",
+      "kind": "expect",
+      "dimensions": [
+        "rescue_restraint",
+        "time_criticality",
+        "communication"
+      ],
+      "prompt": {
+        "text": {
+          "en": "He is caught and the belt is running. Do NOT grab him: the pulley will take you too. First, tap the pull-cord switch and choose \"Use\" to stop the belt. Then tap the radio and choose \"Report to\": a man is caught on belt {{belt}}, keep it stopped, send first aid.",
+          "hi": "वह फँसा है और बेल्ट चल रही है। उसे पकड़िए मत: पुली आपको भी खींच लेगी। पहले पुल-कॉर्ड स्विच टैप कीजिए और बेल्ट रोकने के लिए \"चलाइए\" चुनिए। फिर रेडियो टैप कीजिए और \"सूचना दीजिए\" चुनिए: बेल्ट {{belt}} पर आदमी फँसा है, बेल्ट बंद रखिए, प्राथमिक उपचार भेजिए।"
+        }
+      },
+      "ordered": true,
+      "expect": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "pull_cord"
+          },
+          "label": {
+            "en": "Stop the belt",
+            "hi": "बेल्ट रोकिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "report",
+            "target": "radio"
+          },
+          "label": {
+            "en": "Call the control room",
+            "hi": "कंट्रोल रूम को बताइए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 8000,
+        "deadlineMs": 30000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "code": "SECOND_VICTIM_PULLED_IN",
+          "severity": "fatal",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "You grabbed him while the belt could still run. The pulley pulled you in beside him.",
+              "hi": "आपने उसे तब पकड़ा जब बेल्ट अब भी चल सकती थी। पुली ने आपको भी उसके साथ अंदर खींच लिया।"
+            }
+          },
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
+          "goto": "outcome_fatal_second_victim"
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "REACHED_INTO_LIVE_BELT",
+          "severity": "fatal",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
+              "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            }
+          },
+          "effects": [
+            {
+              "type": "alarm",
+              "level": "critical"
+            },
+            {
+              "type": "haptic",
+              "pattern": "sos"
+            }
+          ],
+          "goto": "outcome_fatal_live_belt"
+        }
+      ],
+      "onTimeout": {
+        "code": "BELT_NOT_STOPPED_IN_TIME",
+        "severity": "fatal",
+        "dimension": "time_criticality",
+        "consequence": {
+          "text": {
+            "en": "The belt kept running while you hesitated.",
+            "hi": "आपके रुकने के दौरान बेल्ट चलती रही।"
+          }
+        },
+        "goto": "outcome_fatal_delay"
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(4): nobody shall repair, adjust, clean or lubricate machinery in motion where there is risk of injury"
+        },
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (emergency stop and call for help)"
+        }
+      ],
+      "next": "isolate_c3"
+    },
+    {
+      "id": "isolate_c3",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence",
+        "hazard_recognition"
+      ],
+      "when": {
+        "belt": "C3"
+      },
+      "prompt": {
+        "text": {
+          "en": "The belt has stopped, but it has already restarted once today. Before anyone touches him, cut its power at the source. Belt {{belt}} is fed by isolator {{belt}}. Tap isolator {{belt}} and choose \"Open\" to switch it off.",
+          "hi": "बेल्ट रुक गई है, पर आज वह एक बार फिर चल चुकी है। कोई उसे छुए, इससे पहले उसकी बिजली जड़ से काटिए। बेल्ट {{belt}} की बिजली आइसोलेटर {{belt}} से आती है। आइसोलेटर {{belt}} टैप कीजिए और \"खोलिए\" चुनिए (आइसोलेटर खोलने का मतलब है बिजली काटना)।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "open",
+            "target": "isolator_c3"
+          },
+          "label": {
+            "en": "Open isolator {{belt}}",
+            "hi": "आइसोलेटर {{belt}} खोलिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 12000,
+        "deadlineMs": 45000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "open",
+            "target": "isolator_c4"
+          },
+          "code": "WRONG_ISOLATOR",
+          "severity": "major",
+          "dimension": "hazard_recognition",
+          "consequence": {
+            "text": {
+              "en": "That isolator feeds the other belt. Belt {{belt}} is still live. Read the plate before you switch anything.",
+              "hi": "यह आइसोलेटर दूसरी बेल्ट का है। बेल्ट {{belt}} में अब भी बिजली है। कुछ भी बंद करने से पहले प्लेट पढ़िए।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "code": "TOUCHED_BEFORE_ISOLATION",
+          "severity": "major",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
+              "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "CLEARED_BEFORE_ISOLATION",
+          "severity": "major",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
+              "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "ISOLATION_NOT_DONE",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "The belt was not isolated in time.",
+            "hi": "बेल्ट समय पर आइसोलेट नहीं हुई।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (isolation before work)"
+        },
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(4): nobody shall repair, adjust, clean or lubricate machinery in motion where there is risk of injury"
+        }
+      ],
+      "next": "isolate_c4"
+    },
+    {
+      "id": "isolate_c4",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence",
+        "hazard_recognition"
+      ],
+      "when": {
+        "belt": "C4"
+      },
+      "prompt": {
+        "text": {
+          "en": "The belt has stopped, but it has already restarted once today. Before anyone touches him, cut its power at the source. Belt {{belt}} is fed by isolator {{belt}}. Tap isolator {{belt}} and choose \"Open\" to switch it off.",
+          "hi": "बेल्ट रुक गई है, पर आज वह एक बार फिर चल चुकी है। कोई उसे छुए, इससे पहले उसकी बिजली जड़ से काटिए। बेल्ट {{belt}} की बिजली आइसोलेटर {{belt}} से आती है। आइसोलेटर {{belt}} टैप कीजिए और \"खोलिए\" चुनिए (आइसोलेटर खोलने का मतलब है बिजली काटना)।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "open",
+            "target": "isolator_c4"
+          },
+          "label": {
+            "en": "Open isolator {{belt}}",
+            "hi": "आइसोलेटर {{belt}} खोलिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 12000,
+        "deadlineMs": 45000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "open",
+            "target": "isolator_c3"
+          },
+          "code": "WRONG_ISOLATOR",
+          "severity": "major",
+          "dimension": "hazard_recognition",
+          "consequence": {
+            "text": {
+              "en": "That isolator feeds the other belt. Belt {{belt}} is still live. Read the plate before you switch anything.",
+              "hi": "यह आइसोलेटर दूसरी बेल्ट का है। बेल्ट {{belt}} में अब भी बिजली है। कुछ भी बंद करने से पहले प्लेट पढ़िए।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "code": "TOUCHED_BEFORE_ISOLATION",
+          "severity": "major",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
+              "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "CLEARED_BEFORE_ISOLATION",
+          "severity": "major",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
+              "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "ISOLATION_NOT_DONE",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "The belt was not isolated in time.",
+            "hi": "बेल्ट समय पर आइसोलेट नहीं हुई।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (isolation before work)"
+        },
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(4): nobody shall repair, adjust, clean or lubricate machinery in motion where there is risk of injury"
+        }
+      ],
+      "next": "lock_and_tag"
+    },
+    {
+      "id": "lock_and_tag",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence",
+        "ppe_discipline"
+      ],
+      "prompt": {
+        "text": {
+          "en": "An isolator someone else can switch back on is not isolation. Tap your personal padlock and choose \"Clip on\" to lock the isolator. Then tap the do-not-operate tag and choose \"Clip on\".",
+          "hi": "जिस आइसोलेटर को कोई और फिर चालू कर सके, वह आइसोलेशन नहीं है। अपना निजी ताला टैप कीजिए और आइसोलेटर पर ताला लगाने के लिए \"बाँधिए\" चुनिए। फिर 'चालू न करें' टैग टैप कीजिए और \"बाँधिए\" चुनिए।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "attach",
+            "target": "padlock"
+          },
+          "label": {
+            "en": "Lock the isolator",
+            "hi": "आइसोलेटर पर ताला लगाइए"
+          }
+        },
+        {
+          "match": {
+            "verb": "attach",
+            "target": "tag"
+          },
+          "label": {
+            "en": "Hang the tag",
+            "hi": "टैग लटकाइए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 60000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "code": "TOUCHED_BEFORE_LOCKOUT",
+          "severity": "major",
+          "dimension": "rescue_restraint",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
+              "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "CLEARED_BEFORE_LOCKOUT",
+          "severity": "major",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
+              "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "LOCKOUT_NOT_DONE",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "The isolator was left without your lock and tag.",
+            "hi": "आइसोलेटर पर आपका ताला और टैग नहीं लगा।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (lock-out and tag-out)"
+        }
+      ],
+      "next": "try_start"
+    },
+    {
+      "id": "try_start",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence"
+      ],
+      "prompt": {
+        "text": {
+          "en": "Prove the belt is dead before anyone goes near it. Tap the local start button and choose \"Use\". The belt must not move.",
+          "hi": "किसी के पास जाने से पहले साबित कीजिए कि बेल्ट बंद है। लोकल स्टार्ट बटन टैप कीजिए और \"चलाइए\" चुनिए। बेल्ट को हिलना नहीं चाहिए।"
+        }
+      },
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "start_button"
+          },
+          "label": {
+            "en": "Test: press start, the belt stays still",
+            "hi": "जाँच: स्टार्ट दबाइए, बेल्ट न हिले"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 40000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "code": "SKIPPED_START_TEST",
+          "severity": "major",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "Not yet. A lock on the wrong switch looks exactly like a lock on the right one. Test first.",
+              "hi": "अभी नहीं। ग़लत स्विच पर लगा ताला भी सही स्विच पर लगे ताले जैसा ही दिखता है। पहले जाँचिए।"
+            }
+          }
+        },
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "code": "SKIPPED_START_TEST",
+          "severity": "major",
+          "dimension": "procedure_sequence",
+          "consequence": {
+            "text": {
+              "en": "Not yet. A lock on the wrong switch looks exactly like a lock on the right one. Test first.",
+              "hi": "अभी नहीं। ग़लत स्विच पर लगा ताला भी सही स्विच पर लगे ताले जैसा ही दिखता है। पहले जाँचिए।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "START_TEST_NOT_DONE",
+        "severity": "major",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "Nobody proved the belt was dead.",
+            "hi": "किसी ने साबित नहीं किया कि बेल्ट बंद है।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (prove the machine is dead before work)"
+        }
+      ],
+      "next": "free_helper"
+    },
+    {
+      "id": "free_helper",
+      "kind": "expect",
+      "dimensions": [
+        "communication",
+        "rescue_restraint"
+      ],
+      "prompt": {
+        "text": {
+          "en": "The belt is stopped, locked and tested. Now go to him. Tap your helper and choose \"Look at\" to check his arm and his breathing. Then choose \"Signal\" and keep talking to him until first aid arrives. Do not pull his arm out of the pulley yourself.",
+          "hi": "बेल्ट रुकी है, ताला लगा है और जाँच हो चुकी है। अब उसके पास जाइए। हेल्पर को टैप कीजिए और उसकी बाँह और साँस देखने के लिए \"देखिए\" चुनिए। फिर \"इशारा कीजिए\" चुनिए और प्राथमिक उपचार आने तक उससे बात करते रहिए। उसकी बाँह ख़ुद पुली से मत खींचिए।"
+        }
+      },
+      "ordered": true,
+      "expect": [
+        {
+          "match": {
+            "verb": "inspect",
+            "target": "casualty"
+          },
+          "label": {
+            "en": "Check his arm and breathing",
+            "hi": "बाँह और साँस देखिए"
+          }
+        },
+        {
+          "match": {
+            "verb": "signal",
+            "target": "casualty"
+          },
+          "label": {
+            "en": "Keep him calm",
+            "hi": "उसे शांत रखिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 60000
+      },
+      "onTimeout": {
+        "code": "HELPER_LEFT_ALONE",
+        "severity": "major",
+        "dimension": "communication",
+        "consequence": {
+          "text": {
+            "en": "Your helper was left alone after the belt was made safe.",
+            "hi": "बेल्ट सुरक्षित होने के बाद भी हेल्पर अकेला छोड़ दिया गया।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Mines Vocational Training Rules 1966, First Schedule: training in first aid"
+        }
+      ],
+      "next": "clear_jam"
+    },
+    {
+      "id": "clear_jam",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence"
+      ],
+      "prompt": {
+        "text": {
+          "en": "The first-aid team has taken him. The belt is still locked. Now clear the coal: tap the jammed coal and choose \"Use\".",
+          "hi": "प्राथमिक उपचार दल उसे ले गया है। बेल्ट पर अब भी ताला है। अब कोयला साफ़ कीजिए: फँसे कोयले को टैप कीजिए और \"चलाइए\" चुनिए।"
+        }
+      },
+      "effects": [
+        {
+          "type": "despawn",
+          "role": "casualty"
+        },
+        {
+          "type": "alarm",
+          "level": "none"
+        }
+      ],
+      "ordered": false,
+      "expect": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "jam"
+          },
+          "label": {
+            "en": "Clear the jam",
+            "hi": "जाम साफ़ कीजिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 10000,
+        "deadlineMs": 40000
+      },
+      "onTimeout": {
+        "code": "JAM_NOT_CLEARED",
+        "severity": "minor",
+        "dimension": "procedure_sequence",
+        "consequence": {
+          "text": {
+            "en": "The jam was not cleared.",
+            "hi": "जाम साफ़ नहीं हुआ।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.211(4): nobody shall repair, adjust, clean or lubricate machinery in motion where there is risk of injury"
+        }
+      ],
+      "next": "restore"
+    },
+    {
+      "id": "restore",
+      "kind": "expect",
+      "dimensions": [
+        "procedure_sequence",
+        "communication"
+      ],
+      "prompt": {
+        "text": {
+          "en": "The job is done and everyone is clear. Only the person who put a lock on takes it off. Tap your padlock and choose \"Open\" to remove it. Then tap the radio and choose \"Report to\": belt {{belt}} is clear and ready to start.",
+          "hi": "काम पूरा हुआ और सब दूर हैं। ताला वही हटाता है जिसने लगाया था। अपना ताला टैप कीजिए और हटाने के लिए \"खोलिए\" चुनिए। फिर रेडियो टैप कीजिए और \"सूचना दीजिए\" चुनिए: बेल्ट {{belt}} साफ़ है और चालू होने के लिए तैयार है।"
+        }
+      },
+      "ordered": true,
+      "expect": [
+        {
+          "match": {
+            "verb": "open",
+            "target": "padlock"
+          },
+          "label": {
+            "en": "Remove your lock",
+            "hi": "अपना ताला हटाइए"
+          }
+        },
+        {
+          "match": {
+            "verb": "report",
+            "target": "radio"
+          },
+          "label": {
+            "en": "Hand the belt back",
+            "hi": "बेल्ट वापस सौंपिए"
+          }
+        }
+      ],
+      "window": {
+        "hesitationMs": 15000,
+        "deadlineMs": 60000
+      },
+      "errors": [
+        {
+          "match": {
+            "verb": "use",
+            "target": "start_button"
+          },
+          "code": "STARTED_WITHOUT_HANDOVER",
+          "severity": "major",
+          "dimension": "communication",
+          "consequence": {
+            "text": {
+              "en": "You tried to start the belt yourself. The control room starts it, once they know the area is clear.",
+              "hi": "आपने बेल्ट ख़ुद चालू करने की कोशिश की। बेल्ट कंट्रोल रूम चालू करता है, जब उसे पता हो कि जगह ख़ाली है।"
+            }
+          }
+        }
+      ],
+      "onTimeout": {
+        "code": "HANDOVER_NOT_DONE",
+        "severity": "minor",
+        "dimension": "communication",
+        "consequence": {
+          "text": {
+            "en": "The belt was not handed back to the control room.",
+            "hi": "बेल्ट कंट्रोल रूम को वापस नहीं सौंपी गई।"
+          }
+        }
+      },
+      "cites": [
+        {
+          "cite": "Coal Mines Regulations 2017, r.104(5)(e): standard operating procedures in the mine's Safety Management Plan (removing a lock and handing back)"
+        }
+      ],
+      "next": "outcome_pass"
+    },
+    {
+      "id": "outcome_pass",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "pass",
+      "prompt": {
+        "text": {
+          "en": "Belt {{belt}} is back in service.",
+          "hi": "बेल्ट {{belt}} फिर से चालू है।"
+        }
+      },
+      "summary": {
+        "text": {
+          "en": "You spotted the loose gamchha and the jam, and made sure nobody worked on a live belt. When your helper was caught, you stopped the belt instead of grabbing him, isolated the right belt, locked, tagged and tested it, and only then went to him. Stopping the machine before touching the person is the reflex this drill exists for.",
+          "hi": "आपने ढीला गमछा और जाम पहचाना, और ध्यान रखा कि चालू बेल्ट पर कोई काम न करे। जब हेल्पर फँसा, तो आपने उसे पकड़ने के बजाय बेल्ट रोकी, सही बेल्ट आइसोलेट की, ताला और टैग लगाया, जाँच की, और उसके बाद ही उसके पास गए। इंसान को छूने से पहले मशीन रोकना: यही आदत यह अभ्यास सिखाता है।"
+        }
+      }
+    },
+    {
+      "id": "outcome_fatal_live_belt",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": {
+        "text": {
+          "en": "The drill has ended.",
+          "hi": "अभ्यास समाप्त हुआ।"
+        }
+      },
+      "summary": {
+        "text": {
+          "en": "You put your hands into the tail pulley of a belt that was not isolated. A stopped belt can start at any moment from the control room. Stop, isolate, lock, tag and test before any hand goes near a pulley.",
+          "hi": "आपने ऐसी बेल्ट की टेल पुली में हाथ डाला जो आइसोलेट नहीं थी। रुकी हुई बेल्ट कंट्रोल रूम से कभी भी चल सकती है। किसी भी पुली के पास हाथ ले जाने से पहले रोकिए, आइसोलेट कीजिए, ताला और टैग लगाइए, और जाँचिए।"
+        }
+      }
+    },
+    {
+      "id": "outcome_fatal_second_victim",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": {
+        "text": {
+          "en": "The drill has ended.",
+          "hi": "अभ्यास समाप्त हुआ।"
+        }
+      },
+      "summary": {
+        "text": {
+          "en": "You grabbed your helper while the belt could still run, and the pulley pulled you in beside him. The fastest way to save someone caught in a machine is to stop the machine, not to reach for them.",
+          "hi": "जब बेल्ट अब भी चल सकती थी, आपने हेल्पर को पकड़ा, और पुली ने आपको भी उसके साथ खींच लिया। मशीन में फँसे व्यक्ति को बचाने का सबसे तेज़ तरीका मशीन रोकना है, उसकी ओर हाथ बढ़ाना नहीं।"
+        }
+      }
+    },
+    {
+      "id": "outcome_fatal_delay",
+      "kind": "outcome",
+      "dimensions": [],
+      "weight": 0,
+      "result": "fatal",
+      "prompt": {
+        "text": {
+          "en": "The drill has ended.",
+          "hi": "अभ्यास समाप्त हुआ।"
+        }
+      },
+      "summary": {
+        "text": {
+          "en": "The belt kept running while you hesitated. When someone is caught in a machine, the seconds before the pull cord is pulled decide how bad the injury is.",
+          "hi": "आपके रुकने के दौरान बेल्ट चलती रही। जब कोई मशीन में फँसा हो, तो पुल-कॉर्ड खींचने से पहले के सेकंड तय करते हैं कि चोट कितनी गहरी होगी।"
+        }
+      }
+    }
+  ],
+  "scoring": {
+    "passMark": {
+      "hazard_recognition": 60,
+      "procedure_sequence": 60,
+      "time_criticality": 60,
+      "ppe_discipline": 80,
+      "communication": 60,
+      "rescue_restraint": 100
+    },
+    "requiredVariants": 3
+  }
+}

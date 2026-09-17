@@ -52,6 +52,7 @@ const { VERBS_BY_KIND } = await import('../src/app/render/contract.ts');
 const { VERB_ICON, VERB_LABEL } = await import('../src/app/render/verbs.ts');
 const { Localizer } = await import('../src/app/ui/i18n.ts');
 const { scoreSession } = await import('../src/assess/score.ts');
+const { renderResults } = await import('../src/app/results.ts');
 const { validateScenario } = await import('../src/engine/validate.ts');
 const { resolveVariant } = await import('../src/engine/variant.ts');
 const engineTypes = await import('../src/engine/types.ts');
@@ -237,6 +238,28 @@ test('climbing in without testing is reachable, fatal, and explained on screen',
   assert.ok((banner.textContent ?? '').length > 0);
 
   assert.equal(controller.session.outcome, 'fatal');
+
+  // The debrief names the provision behind the step that was skipped, and puts
+  // missed steps before the ones that were done.
+  const competency = scoreSession(controller.session);
+  const debrief = renderResults({
+    scenario,
+    session: controller.session,
+    competency,
+    attempts: [],
+    i18n: new Localizer('en'),
+    workerId: 'JH/CHP/0001',
+    onRestart: () => {},
+  });
+  const rules = [...debrief.querySelectorAll('.rules li')];
+  assert.ok(rules.length > 0, 'the debrief should list the rules behind the drill');
+  assert.match(rules[0]!.className, /missed/, 'a missed step should be listed first');
+  const permit = rules.find((li) => /r\.104\(5\)\(e\).*permit-to-work/.test(li.textContent ?? ''));
+  assert.ok(permit, 'the skipped permit check should be cited');
+  assert.match(permit.className, /missed/);
+  for (const li of debrief.querySelectorAll('.rules li.met')) {
+    assert.ok(li.closest('details.rules-followed'), 'rules that were kept should sit in the folded list');
+  }
   controller.stop();
 });
 
@@ -511,4 +534,113 @@ test('a step taken out of order is shown to the learner, not only scored', async
   assert.ok((banner.textContent ?? '').length > 0);
 
   controller.stop();
+});
+
+/**
+ * Every module, completed by touch alone.
+ *
+ * The walk above is hand-written for the gas drill. This one reads what the
+ * current step is waiting for, finds that prop's tile by its on-screen label,
+ * and presses the verb by its on-screen name, so it covers any module without
+ * knowing its content, including the conveyor drill's variant-specific steps.
+ */
+test('an ideal operator can finish every module by touching the screen', async () => {
+  const { readdir } = await import('node:fs/promises');
+  const dir = fileURLToPath(new URL('../src/scenarios/', import.meta.url));
+  const files = (await readdir(dir)).filter((f) => f.endsWith('.json'));
+  assert.ok(files.length >= 3);
+
+  for (const file of files) {
+    const module = validateScenario(JSON.parse(await readFile(dir + file, 'utf8')));
+    for (const seed of [1, 2, 3, 4]) {
+      const variant = resolveVariant(module, seed);
+      const world = window.document.createElement('div') as unknown as HTMLElement;
+      const chrome = window.document.createElement('div') as unknown as HTMLElement;
+      window.document.body.append(world as never, chrome as never);
+      const i18n = new Localizer('en');
+      i18n.speechEnabled = false;
+      const finished = { value: false };
+      const controller = new DrillController(
+        variant,
+        new TierCRenderer(i18n),
+        i18n,
+        { onFinish: () => (finished.value = true) },
+        manualScheduler(),
+      );
+      await controller.start(world, chrome);
+
+      const labelFor = (target: string) => {
+        const propId = variant.bindings[target] ?? target;
+        const prop = variant.props.find((p) => p.id === propId);
+        assert.ok(prop, `${file}: no prop for ${target}`);
+        return prop.label.en;
+      };
+
+      for (let guard = 0; !finished.value && guard < 120; guard++) {
+        if (pressContinue(chrome)) continue;
+        const session = controller.session;
+        const node = session.node;
+        const where = `${file} seed ${seed} at ${node.id}`;
+        if (node.kind === 'observe') {
+          const target = node.targets.find((t) => !session.observed.has(session.resolveTarget(t)));
+          assert.ok(target, `${where}: nothing left to spot`);
+          assert.ok(touch(world, labelFor(target), 'Look at'), `${where}: could not look at ${target}`);
+          continue;
+        }
+        const next = session.pending[0];
+        assert.ok(next, `${where}: nothing pending`);
+        const verb = next.match.verb ?? 'inspect';
+        if (verb === 'wait') {
+          chrome.querySelector<HTMLButtonElement>('.wait-button')!.click();
+          continue;
+        }
+        assert.ok(
+          touch(world, labelFor(next.match.target!), VERB_LABEL[verb].en),
+          `${where}: could not "${VERB_LABEL[verb].en}" ${next.match.target}`,
+        );
+      }
+
+      assert.ok(finished.value, `${file} seed ${seed}: stuck on ${controller.session.node.id}`);
+      assert.equal(scoreSession(controller.session).result, 'pass', `${file} seed ${seed}`);
+      controller.stop();
+      world.remove();
+      chrome.remove();
+    }
+  }
+});
+
+test('a prop removed from the scene stays removed when the next step is shown', async () => {
+  // Every renderer used to re-add each non-spawned prop on every step, which
+  // silently undid a `despawn` one step later. The conveyor drill is the first
+  // to remove a prop that started in the scene: the helper is replaced by the
+  // helper caught in the pulley, and both tiles showed side by side.
+  const module = validateScenario(
+    JSON.parse(await readFile(fileURLToPath(new URL('../src/scenarios/machinery-conveyor-loto.json', import.meta.url)), 'utf8')),
+  );
+  const world = window.document.createElement('div') as unknown as HTMLElement;
+  const chrome = window.document.createElement('div') as unknown as HTMLElement;
+  window.document.body.append(world as never, chrome as never);
+  const i18n = new Localizer('en');
+  i18n.speechEnabled = false;
+  const controller = new DrillController(resolveVariant(module, 1), new TierCRenderer(i18n), i18n, { onFinish: () => {} }, manualScheduler());
+  await controller.start(world, chrome);
+
+  for (let guard = 0; controller.session.node.id !== 'rescue_decision' && guard < 20; guard++) {
+    if (pressContinue(chrome)) continue;
+    const session = controller.session;
+    const node = session.node;
+    if (node.kind === 'observe') {
+      touch(world, node.targets.includes('jam') && !session.observed.has('coal_jam') ? 'Coal jammed' : "Helper's loose gamchha", 'Look at');
+    } else if (node.kind === 'expect') {
+      touch(world, 'Pull-cord stop switch', 'Use');
+    }
+  }
+  assert.equal(controller.session.node.id, 'rescue_decision');
+  const labels = tiles(world).map(labelOf);
+  assert.ok(labels.includes('Helper caught at the pulley'), 'the caught helper should now be in the scene');
+  assert.ok(!labels.includes('Your helper'), 'the standing helper should be gone');
+  assert.ok(!labels.includes("Helper's loose gamchha"), 'the gamchha should be gone with him');
+  controller.stop();
+  world.remove();
+  chrome.remove();
 });

@@ -45,6 +45,8 @@ export class TierCRenderer implements WorldRenderer {
   #sheet = document.createElement('div');
   #hooks: RendererHooks | null = null;
   #visible = new Set<string>();
+  /** props whose starting visibility has been applied; after that only effects change it */
+  #seeded = new Set<string>();
   #props: PropView[] = [];
   #alarm: 'none' | 'warning' | 'critical' = 'none';
   #gasReadout: { species: string; value: number; unit: string } | null = null;
@@ -73,7 +75,10 @@ export class TierCRenderer implements WorldRenderer {
     this.#props = view.props;
     for (const prop of view.props) {
       // A spawned prop stays out of the scene until an effect brings it in;
-      // everything else is present from the start, clutter included.
+      // everything else is present from the start, clutter included. Only the
+      // first time, though: re-adding it on every step undid any `despawn`.
+      if (this.#seeded.has(prop.id)) continue;
+      this.#seeded.add(prop.id);
       if (prop.visible) this.#visible.add(prop.id);
     }
 

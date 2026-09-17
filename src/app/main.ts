@@ -2,6 +2,7 @@ import './style.css';
 
 import gasScenarioJson from '../scenarios/gas-confined-space.json' with { type: 'json' };
 import fireScenarioJson from '../scenarios/fire-explosion.json' with { type: 'json' };
+import machineryScenarioJson from '../scenarios/machinery-conveyor-loto.json' with { type: 'json' };
 
 import { scoreSession } from '../assess/score.ts';
 import { certify } from '../assess/certify.ts';
@@ -52,6 +53,10 @@ const SCENARIOS: Record<string, unknown> = {
   'fire-explosion': fireScenarioJson,
   'fire_explosion': fireScenarioJson,
   'fire': fireScenarioJson,
+  'machinery-conveyor-loto': machineryScenarioJson,
+  'machinery_haulage_loto': machineryScenarioJson,
+  'machinery': machineryScenarioJson,
+  'conveyor': machineryScenarioJson,
 };
 
 /**
@@ -65,6 +70,7 @@ const MODULE_ERRORS: { key: string; error: unknown }[] = [];
 for (const [key, json] of [
   ['gas-confined-space', gasScenarioJson],
   ['fire-explosion', fireScenarioJson],
+  ['machinery-conveyor-loto', machineryScenarioJson],
 ] as const) {
   try {
     MODULES.push({ key, scenario: validateScenario(json) });

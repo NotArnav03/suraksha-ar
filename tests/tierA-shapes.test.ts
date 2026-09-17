@@ -128,3 +128,36 @@ test('an unrecognised prop id does not accidentally hit an extinguisher branch',
   assert.equal(generic.length, 1);
   assert.ok(generic[0]!.geometry instanceof THREE.BoxGeometry);
 });
+
+test('the conveyor drill props are drawn as themselves, not as boxes or flames', () => {
+  // Most of them are `equipment`, which would otherwise all be the same box,
+  // and the drill turns on telling isolator C3 from C4 and the start button
+  // from the pull cord. The coal jam and the gamchha are `hazard`, and a flame
+  // there would teach the learner the wrong thing.
+  const genericBox = partsFor(mockProp('generic_equipment', 'equipment'));
+  const ids: [string, string][] = [
+    ['conveyor_tail', 'equipment'],
+    ['coal_jam', 'hazard'],
+    ['loose_gamchha', 'hazard'],
+    ['isolator_c3', 'equipment'],
+    ['isolator_c4', 'equipment'],
+    ['padlock', 'equipment'],
+    ['danger_tag', 'equipment'],
+    ['start_button', 'equipment'],
+    ['pull_cord', 'equipment'],
+  ];
+  for (const [id, kind] of ids) {
+    const parts = partsFor(mockProp(id, kind));
+    parts.forEach((part, i) => assertSaneGeometry(part, `${id}[${i}]`));
+    assert.ok(parts.length > genericBox.length, `${id} fell back to the generic box`);
+    assert.ok(!parts.some((p) => p.geometry instanceof THREE.ConeGeometry), `${id} is drawn with flame cones`);
+  }
+  // The conveyor has to reach the floor, since its group sits 0.85 m up.
+  const lowest = Math.min(
+    ...partsFor(mockProp('conveyor_tail', 'equipment')).map((p) => {
+      p.geometry.computeBoundingBox();
+      return p.position.y + p.geometry.boundingBox!.min.y;
+    }),
+  );
+  assert.ok(lowest < -0.8, `the conveyor's legs should reach the floor; lowest point was ${lowest}`);
+});
