@@ -574,6 +574,10 @@ function credentialDemoScreen(report: TierReport): void {
   screen('results').append(results);
 }
 
+// Which lines have been recorded by a real speaker, before the first prompt is
+// spoken. Ships empty: see docs/NARRATION.md and `node tools/narration.mjs`.
+await i18n.loadNarration();
+
 const report = await detectTier(
   forcedTier && IMPLEMENTED.includes(forcedTier) ? forcedTier : undefined,
 );

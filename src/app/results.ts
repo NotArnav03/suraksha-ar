@@ -108,7 +108,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
   if (outcome.kind === 'outcome') {
     const summary = i18n.text(outcome.summary.text);
     head.append(el('p', 'outcome-summary', summary));
-    i18n.speak(summary);
+    i18n.speak(summary, outcome.summary.audio);
   }
   root.append(head);
 

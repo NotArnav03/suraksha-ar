@@ -218,10 +218,19 @@ export function pickVoice(
   return [...candidates].sort((a, b) => score(b) - score(a))[0]!;
 }
 
+/**
+ * Where recorded narration lives, relative so a subpath deployment still
+ * resolves (same reason as the service worker's relative shell paths).
+ */
+const NARRATION_BASE = './narration/';
+
 export class Localizer {
   #language: Language;
   #voices: SpeechSynthesisVoice[] = [];
   #enabled = true;
+  /** clip ids known to exist, from narration/manifest.json; empty until loaded */
+  #clips = new Set<string>();
+  #playing: HTMLAudioElement | null = null;
 
   constructor(code: LangCode = 'hi') {
     this.#language = LANGUAGES.find((l) => l.code === code) ?? LANGUAGES[0]!;
@@ -260,8 +269,50 @@ export class Localizer {
     return entry ? resolve(entry, this.#language.chain) : key;
   }
 
+  /**
+   * Load the list of recorded clips, once, at startup.
+   *
+   * A manifest rather than trying each file and handling the 404: a phone with
+   * the radio off would otherwise spend a failed request on every single line,
+   * and the failure is indistinguishable from a clip that exists but is not
+   * cached yet. No manifest means no recordings, which is the state this ships
+   * in, and everything falls back to the synthetic voice.
+   */
+  async loadNarration(): Promise<number> {
+    if (typeof fetch !== 'function') return 0;
+    try {
+      const response = await fetch(`${NARRATION_BASE}manifest.json`);
+      if (!response.ok) return 0;
+      const manifest = (await response.json()) as { clips?: unknown };
+      if (!Array.isArray(manifest.clips)) return 0;
+      this.#clips = new Set(manifest.clips.filter((c): c is string => typeof c === 'string'));
+    } catch {
+      // No manifest, unreadable manifest, or no network on first run.
+    }
+    return this.#clips.size;
+  }
+
+  /**
+   * The recorded clip for this narration in the selected language, if there is
+   * one. Follows the same fallback chain as the text, so a Santali learner
+   * hears the Hindi recording where the Santali one has not been made, exactly
+   * as they already read the Hindi line.
+   */
+  clipFor(audio: Record<string, string> | undefined): string | null {
+    if (!audio || this.#clips.size === 0) return null;
+    for (const code of this.#language.chain) {
+      const id = audio[code];
+      if (id && this.#clips.has(id)) return `${NARRATION_BASE}${id}.mp3`;
+    }
+    return null;
+  }
+
   stop(): void {
     if ('speechSynthesis' in window) speechSynthesis.cancel();
+    if (this.#playing) {
+      this.#playing.pause();
+      this.#playing = null;
+    }
   }
 
   /**
@@ -270,12 +321,38 @@ export class Localizer {
    * The Listen control asks before offering itself. A button that does nothing
    * is worse than no button on a screen a worker is already unsure of.
    */
-  canSpeak(text: string): boolean {
+  canSpeak(text: string, audio?: Record<string, string>): boolean {
+    if (this.clipFor(audio)) return true;
     if (!('speechSynthesis' in window) || text.length === 0) return false;
     return pickVoice(this.#voices, scriptTag(text)) !== null;
   }
 
-  speak(text: string): void {
+  speak(text: string, audio?: Record<string, string>): void {
+    if (!this.#enabled) return;
+
+    // A recording by a speaker of the language beats the handset's voice every
+    // time, and for Santali, Ho, Mundari and Kurukh it is the only option that
+    // exists at all. A clip that fails to play (missing file, codec, autoplay
+    // policy) falls through to the synthetic voice rather than saying nothing.
+    const clip = this.clipFor(audio);
+    if (clip) {
+      this.stop();
+      const element = new Audio(clip);
+      this.#playing = element;
+      element.addEventListener('ended', () => {
+        if (this.#playing === element) this.#playing = null;
+      });
+      void element.play().catch(() => {
+        if (this.#playing === element) this.#playing = null;
+        this.#synthesise(text);
+      });
+      return;
+    }
+
+    this.#synthesise(text);
+  }
+
+  #synthesise(text: string): void {
     if (!this.#enabled || !('speechSynthesis' in window) || text.length === 0) return;
 
     const tag = scriptTag(text);

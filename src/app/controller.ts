@@ -143,6 +143,7 @@ export class DrillController {
           ? this.#i18n.ui('outOfOrder')
           : null,
       severity: step.severity ?? (outOfOrder ? ('major' as const) : null),
+      ...(step.consequence?.audio ? { consequenceAudio: step.consequence.audio } : {}),
     };
 
     // Present first, then feed back. A fatal mistake advances to the outcome
@@ -170,6 +171,7 @@ export class DrillController {
     const view: NodeView = {
       node,
       prompt: this.#i18n.text(node.prompt.text),
+      ...(node.prompt.audio ? { promptAudio: node.prompt.audio } : {}),
       checklist: this.#checklist(),
       props: this.#props(),
       narrationOnly: node.kind === 'brief' || node.kind === 'outcome',

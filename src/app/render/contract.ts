@@ -45,6 +45,8 @@ export interface ChecklistItem {
 export interface NodeView {
   node: ScenarioNode;
   prompt: string;
+  /** language code -> recorded clip id for the prompt, when the scenario names one */
+  promptAudio?: Record<string, string>;
   /** authored expectation labels — the checklist is content, not UI copy */
   checklist: ChecklistItem[];
   props: PropView[];
@@ -58,6 +60,8 @@ export interface Feedback {
   verdict: Verdict;
   /** the authored consequence, in the learner's language */
   consequence: string | null;
+  /** language code -> recorded clip id for that consequence */
+  consequenceAudio?: Record<string, string>;
   severity: 'minor' | 'major' | 'fatal' | null;
 }
 

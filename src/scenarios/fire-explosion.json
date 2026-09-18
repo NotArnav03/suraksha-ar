@@ -158,6 +158,10 @@
           "en": "A fire has started on the electrical panel. First, put it out safely using the right extinguisher. Then get yourself to the exit.",
           "hi": "बिजली के पैनल में आग लग गई है। पहले सही अग्निशामक से इसे सुरक्षित रूप से बुझाइए। फिर बाहर निकास तक पहुँचिए।",
           "sat": "ᱵᱤᱡᱩᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱥᱮᱴᱟᱜ ᱮᱛᱦᱚᱵ ᱮᱱᱟ ᱾ ᱯᱩᱭᱞᱩ, ᱴᱷᱤᱠ ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱛᱮ ᱨᱚᱠᱷᱟ ᱠᱟᱛᱮ ᱵᱚᱸᱫ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱚᱰᱚᱠ ᱡᱟᱭᱜᱟ ᱛᱮ ᱥᱮᱴᱮᱨ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/briefing.prompt.hi",
+          "sat": "fire-explosion/briefing.prompt.sat"
         }
       },
       "effects": [
@@ -178,6 +182,10 @@
           "en": "Take a moment to get ready. When you are ready to begin, continue.",
           "hi": "तैयार होने के लिए एक पल लीजिए। जब तैयार हों, आगे बढ़िए।",
           "sat": "ᱴᱮᱭᱟᱨ ᱦᱩᱭ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫ ᱴᱟᱲᱟᱝ ᱡᱚᱛᱚ ᱢᱮ ᱾ ᱚᱠᱛᱚ ᱛᱮᱭᱟᱨ ᱠᱟᱱᱟᱢ, ᱟᱭᱳ ᱪᱟᱞᱟᱜ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/place_scene.prompt.hi",
+          "sat": "fire-explosion/place_scene.prompt.sat"
         }
       },
       "next": "hazard_ignition"
@@ -193,6 +201,10 @@
           "en": "Look around you. Point to, or tap on, the hazard you see.",
           "hi": "अपने चारों ओर देखिए। जो ख़तरा दिखे, उस पर इशारा कीजिए या टैप कीजिए।",
           "sat": "ᱟᱢᱟᱜ ᱪᱟᱨᱤᱭᱟᱜ ᱦᱮᱨ ᱢᱮ ᱾ ᱡᱟᱦᱟᱸ ᱵᱤᱯᱚᱫ ᱧᱮᱞᱟᱢ, ᱚᱱᱟ ᱰᱚᱸᱠᱟ ᱢᱮ ᱟᱨᱵᱟᱝ ᱴᱮᱯ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/hazard_ignition.prompt.hi",
+          "sat": "fire-explosion/hazard_ignition.prompt.sat"
         }
       },
       "targets": [
@@ -229,6 +241,10 @@
             "en": "You did not spot the fire in time. Every second matters.",
             "hi": "आपने समय पर आग नहीं पहचानी। हर सेकंड मायने रखता है।",
             "sat": "ᱟᱢ ᱚᱠᱛᱚ ᱨᱮ ᱥᱮᱴᱟᱜ ᱵᱟᱭ ᱧᱮᱞᱟᱢ ᱾ ᱡᱚᱛᱚ ᱴᱟᱲᱟᱝ ᱡᱟᱹᱥᱛᱤ ᱟᱹᱰᱤ ᱠᱟᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/hazard_ignition.timeout.hi",
+            "sat": "fire-explosion/hazard_ignition.timeout.sat"
           }
         }
       },
@@ -251,6 +267,10 @@
           "en": "This is an electrical fire — never use water on it. Find the powder (DCP) extinguisher, the one with a blue band. Tap on it and choose \"Look at\" to pick it.",
           "hi": "यह बिजली की आग है — इस पर कभी पानी मत डालिए। पाउडर (डीसीपी) अग्निशामक ढूँढ़िए, जिस पर नीली पट्टी है। उसे टैप कीजिए और चुनने के लिए \"देखिए\" चुनिए।",
           "sat": "ᱱᱚᱶᱟ ᱫᱚ ᱵᱤᱡᱩᱞᱤ ᱥᱮᱴᱟᱜ ᱠᱟᱱᱟ — ᱛᱮᱦᱮᱸᱧ ᱫᱟᱜ ᱵᱟᱭ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾ ᱯᱟᱺᱰᱚᱨ (DCP) ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱢᱮ, ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱨᱟᱜ ᱵᱮᱸᱰ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱚᱱᱟ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ \"ᱦᱮᱨᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/select_extinguisher.prompt.hi",
+          "sat": "fire-explosion/select_extinguisher.prompt.sat"
         }
       },
       "ordered": false,
@@ -285,6 +305,10 @@
               "en": "Water on a live electrical fire can shock you and spread it.",
               "hi": "जीवित बिजली की आग पर पानी झटका दे सकता है और आग फैला सकता है।",
               "sat": "ᱡᱤᱭᱩᱸ ᱵᱤᱡᱩᱞᱤ ᱥᱮᱴᱟᱜ ᱨᱮ ᱫᱟᱜ ᱫᱚ ᱟᱢ ᱠᱚᱸ ᱥᱚᱠ ᱮᱢᱟᱭ ᱟᱨ ᱥᱮᱴᱟᱜ ᱮᱴᱟᱜ ᱦᱩᱭ ᱮᱢᱟᱭ ᱾"
+            },
+            "audio": {
+              "hi": "fire-explosion/select_extinguisher.error.WATER_ON_ELECTRICAL_FIRE.hi",
+              "sat": "fire-explosion/select_extinguisher.error.WATER_ON_ELECTRICAL_FIRE.sat"
             }
           },
           "effects": [
@@ -312,6 +336,10 @@
               "en": "CO₂ can also be used on an electrical fire, but for this drill, use the powder (DCP) extinguisher instead.",
               "hi": "सीओ₂ भी बिजली की आग पर काम कर सकता है, लेकिन इस अभ्यास के लिए पाउडर (डीसीपी) अग्निशामक का उपयोग कीजिए।",
               "sat": "CO₂ ᱦᱚᱸ ᱵᱤᱡᱩᱞᱤ ᱥᱮᱴᱟᱜ ᱨᱮ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱞᱟᱹᱜᱤᱫ, ᱯᱟᱺᱰᱚᱨ (DCP) ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾"
+            },
+            "audio": {
+              "hi": "fire-explosion/select_extinguisher.error.CO2_NOT_TARGET.hi",
+              "sat": "fire-explosion/select_extinguisher.error.CO2_NOT_TARGET.sat"
             }
           }
         }
@@ -325,6 +353,10 @@
             "en": "No extinguisher was selected in time.",
             "hi": "समय पर कोई अग्निशामक नहीं चुना गया।",
             "sat": "ᱚᱠᱛᱚ ᱨᱮ ᱚᱠᱛᱚ ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱵᱟᱭ ᱵᱟᱪᱷᱟᱣ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/select_extinguisher.timeout.hi",
+            "sat": "fire-explosion/select_extinguisher.timeout.sat"
           }
         }
       },
@@ -346,6 +378,10 @@
           "en": "That was wrong — water is dangerous on an electrical fire. Now find the powder (DCP) extinguisher, tap on it, and choose \"Look at\" to pick it.",
           "hi": "यह ग़लत था — बिजली की आग पर पानी ख़तरनाक है। अब पाउडर (डीसीपी) अग्निशामक ढूँढ़िए, उसे टैप कीजिए, और चुनने के लिए \"देखिए\" चुनिए।",
           "sat": "ᱚᱱᱟ ᱫᱚ ᱵᱟᱭ ᱴᱷᱤᱠ — ᱵᱤᱡᱩᱞᱤ ᱥᱮᱴᱟᱜ ᱨᱮ ᱫᱟᱜ ᱫᱚ ᱵᱤᱯᱚᱫ ᱠᱟᱱᱟ ᱾ ᱱᱤᱛᱚᱜ ᱯᱟᱺᱰᱚᱨ (DCP) ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱫᱟᱲᱮᱭᱟᱜ ᱢᱮ, ᱴᱮᱯ ᱢᱮ, ᱟᱨ \"ᱦᱮᱨᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/induced_failure.prompt.hi",
+          "sat": "fire-explosion/induced_failure.prompt.sat"
         }
       },
       "ordered": false,
@@ -381,6 +417,10 @@
             "en": "You did not recover to the correct extinguisher.",
             "hi": "आप सही अग्निशामक पर वापस नहीं आए।",
             "sat": "ᱟᱢ ᱴᱷᱤᱠ ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱛᱟᱭᱚᱢ ᱫᱚᱦᱲᱟ ᱵᱟᱭ ᱟᱲᱟᱜᱼᱟᱢ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/induced_failure.timeout.hi",
+            "sat": "fire-explosion/induced_failure.timeout.sat"
           }
         }
       },
@@ -402,6 +442,10 @@
           "en": "Now use the extinguisher. Follow these four steps, one at a time: tap the extinguisher and choose \"Open\" to pull the pin. Tap the fire and choose \"Look at\" to aim at its base. Tap the extinguisher and choose \"Use\" to squeeze the handle. Tap the fire and choose \"Use\" to sweep side to side.",
           "hi": "अब अग्निशामक का उपयोग कीजिए। ये चार क़दम एक-एक करके कीजिए: अग्निशामक को टैप करके \"खोलिए\" चुनिए और पिन खींचिए। आग को टैप करके \"देखिए\" चुनिए और आधार पर निशाना लगाइए। अग्निशामक को टैप करके \"चलाइए\" चुनिए और हैंडल दबाइए। आग को टैप करके \"चलाइए\" चुनिए और अगल-बगल घुमाइए।",
           "sat": "ᱱᱤᱛᱚᱜ ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾ ᱱᱚᱶᱟ ᱟᱠᱟᱛ ᱠᱚᱨᱟᱣ ᱢᱤᱫ-ᱢᱤᱫ ᱠᱟᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ: ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱯᱤᱱ ᱡᱟᱨᱣᱟ ᱞᱟᱹᱜᱤᱫ \"ᱜᱤᱫᱨᱟᱹᱭ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾ ᱥᱮᱴᱟᱜ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱴᱷᱮᱱ ᱰᱚᱸᱠᱟ ᱞᱟᱹᱜᱤᱫ \"ᱦᱮᱨᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾ ᱮᱠᱥᱴᱤᱝᱜᱩᱭᱥᱚᱨ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱦᱮᱸᱰᱮᱞ ᱫᱟᱵ ᱞᱟᱹᱜᱤᱫ \"ᱵᱮᱵᱷᱟᱨ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾ ᱥᱮᱴᱟᱜ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱡᱤᱫ-ᱡᱤᱫ ᱦᱳᱨᱳᱢ ᱞᱟᱹᱜᱤᱫ \"ᱵᱮᱵᱷᱟᱨ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/apply_pass.prompt.hi",
+          "sat": "fire-explosion/apply_pass.prompt.sat"
         }
       },
       "ordered": true,
@@ -464,6 +508,10 @@
             "en": "PASS was not completed in time.",
             "hi": "समय पर PASS पूरा नहीं हुआ।",
             "sat": "PASS ᱚᱠᱛᱚ ᱨᱮ ᱵᱟᱭ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/apply_pass.timeout.hi",
+            "sat": "fire-explosion/apply_pass.timeout.sat"
           }
         }
       },
@@ -485,6 +533,10 @@
           "en": "Before you leave, put on your self-rescuer. Tap on the SCSR and choose \"Put on\" to wear it.",
           "hi": "बाहर निकलने से पहले अपना सेल्फ-रेस्क्यूअर पहनिए। SCSR को टैप कीजिए और \"पहनिए\" चुनकर उसे पहनिए।",
           "sat": "ᱚᱰᱚᱠ ᱟᱠ ᱛᱟᱭᱚᱢ, ᱟᱢᱟᱜ SCSR ᱮᱰᱟ ᱢᱮ ᱾ SCSR ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱮᱰᱟ ᱞᱟᱹᱜᱤᱫ \"ᱮᱰᱟ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/don_scsr.prompt.hi",
+          "sat": "fire-explosion/don_scsr.prompt.sat"
         }
       },
       "ordered": false,
@@ -519,6 +571,10 @@
               "en": "You tried to evacuate without the self-rescuer.",
               "hi": "आपने सेल्फ-रेस्क्यूअर के बिना बाहर निकलने की कोशिश की।",
               "sat": "ᱟᱢ SCSR ᱵᱟᱭ ᱮᱰᱟ ᱠᱟᱛᱮ ᱚᱰᱚᱠ ᱞᱟᱹᱜᱤᱫ ᱪᱮᱥᱴᱟ ᱠᱮᱫᱟᱢ ᱾"
+            },
+            "audio": {
+              "hi": "fire-explosion/don_scsr.error.EXIT_WITHOUT_SCSR.hi",
+              "sat": "fire-explosion/don_scsr.error.EXIT_WITHOUT_SCSR.sat"
             }
           }
         }
@@ -532,6 +588,10 @@
             "en": "SCSR was not worn.",
             "hi": "SCSR नहीं पहना गया।",
             "sat": "SCSR ᱵᱟᱭ ᱮᱰᱟ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/don_scsr.timeout.hi",
+            "sat": "fire-explosion/don_scsr.timeout.sat"
           }
         }
       },
@@ -555,6 +615,10 @@
           "en": "Follow the arrows to fresh air now. Do not stop for anything on the way — not even your collapsed colleague. Tap on the exit and choose \"Climb in\" to go through it and reach safety.",
           "hi": "अभी तीरों का अनुसरण करते हुए ताज़ी हवा तक पहुँचिए। रास्ते में किसी भी चीज़ के लिए मत रुकिए — अपने बेहोश साथी के लिए भी नहीं। निकास को टैप कीजिए और सुरक्षित पहुँचने के लिए \"अंदर उतरिए\" चुनिए।",
           "sat": "ᱱᱤᱛᱚᱜ ᱥᱮᱨ ᱠᱚᱨᱟᱣ ᱠᱟᱛᱮ ᱱᱟᱶᱟ ᱦᱟᱣᱟ ᱛᱮ ᱥᱮᱴᱮᱨ ᱢᱮ ᱾ ᱦᱚᱨᱟ ᱨᱮ ᱚᱠᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱚᱸ ᱵᱟᱭ ᱛᱤᱝᱩ ᱢᱮ — ᱟᱢᱟᱜ ᱵᱮᱦᱳᱥ ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱦᱚᱸ ᱵᱟᱭᱟ ᱾ ᱚᱰᱚᱠ ᱡᱟᱭᱜᱟ ᱴᱮᱯ ᱢᱮ ᱟᱨ ᱨᱚᱠᱷᱟ ᱥᱮᱴᱮᱨ ᱞᱟᱹᱜᱤᱫ \"ᱨᱮᱭᱟᱜ ᱢᱮ\" ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/evacuate.prompt.hi",
+          "sat": "fire-explosion/evacuate.prompt.sat"
         }
       },
       "ordered": false,
@@ -603,6 +667,10 @@
               "en": "You went to the collapsed colleague before reaching safe air. This is how second-victim deaths happen.",
               "hi": "आप सुरक्षित हवा में पहुँचने से पहले बेहोश साथी के पास गए। ऐसे ही दूसरे-शिकार की मौतें होती हैं।",
               "sat": "ᱟᱢ ᱨᱚᱠᱷᱟ ᱦᱟᱣᱟ ᱥᱮᱴᱮᱨ ᱟᱠ ᱛᱟᱭᱚᱢ ᱵᱮᱦᱳᱥ ᱜᱚᱲᱚ ᱴᱷᱮᱱ ᱪᱟᱞᱟᱜ ᱠᱮᱫᱟᱢ ᱾ ᱚᱱᱟ ᱛᱮ ᱵᱟᱨᱦᱚᱸ ᱴᱚᱸᱜᱚ ᱜᱚᱲᱚ ᱮᱴᱟᱜ ᱠᱚ ᱦᱩᱭᱩᱜᱼᱟ ᱾"
+            },
+            "audio": {
+              "hi": "fire-explosion/evacuate.error.SECOND_VICTIM_ENTRY.hi",
+              "sat": "fire-explosion/evacuate.error.SECOND_VICTIM_ENTRY.sat"
             }
           },
           "goto": "outcome_fatal_rescue"
@@ -617,6 +685,10 @@
             "en": "You did not reach fresh air in time.",
             "hi": "आप समय पर ताज़ी हवा तक नहीं पहुँचे।",
             "sat": "ᱟᱢ ᱚᱠᱛᱚ ᱨᱮ ᱱᱟᱶᱟ ᱦᱟᱣᱟ ᱵᱟᱭ ᱥᱮᱴᱮᱨᱟᱢ ᱾"
+          },
+          "audio": {
+            "hi": "fire-explosion/evacuate.timeout.hi",
+            "sat": "fire-explosion/evacuate.timeout.sat"
           }
         },
         "goto": "outcome_fatal_gas"
@@ -639,6 +711,10 @@
           "en": "You are at fresh air.",
           "hi": "आप ताज़ी हवा में हैं।",
           "sat": "ᱟᱢ ᱱᱟᱶᱟ ᱦᱟᱣᱟ ᱨᱮ ᱢᱮᱱᱟᱢᱟ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_pass.prompt.hi",
+          "sat": "fire-explosion/outcome_pass.prompt.sat"
         }
       },
       "summary": {
@@ -646,6 +722,10 @@
           "en": "You recognised the fire, chose DCP for electrical fire, applied PASS, wore SCSR and evacuated without re-entering for the casualty. That restraint is what this drill measures.",
           "hi": "आपने आग पहचानी, बिजली की आग के लिए डीसीपी चुना, PASS लागू किया, SCSR पहना और साथी के लिए वापस घुसे बिना बाहर निकले। वही संयम इस अभ्यास का माप है।",
           "sat": "ᱟᱢ ᱥᱮᱴᱟᱜ ᱵᱟᱰᱟᱭ ᱠᱮᱫᱟᱢ, ᱵᱤᱡᱩᱞᱤ ᱥᱮᱴᱟᱜ ᱞᱟᱹᱜᱤᱫ DCP ᱵᱟᱪᱷᱟᱣ ᱠᱮᱫᱟᱢ, PASS ᱵᱮᱵᱷᱟᱨ ᱠᱮᱫᱟᱢ, SCSR ᱮᱰᱟ ᱠᱮᱫᱟᱢ ᱟᱨ ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱲᱟ ᱵᱟᱭ ᱟᱛ ᱡᱚᱛᱚ ᱠᱟᱛᱮ ᱚᱰᱚᱠ ᱮᱱᱟᱢ ᱾ ᱚᱱᱟ ᱚᱰᱚᱠ ᱠᱟᱴᱮ ᱛᱟᱦᱮᱸᱱ ᱫᱚ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱠᱟᱴᱮ ᱢᱚᱠᱥᱚᱫ ᱠᱟᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_pass.summary.hi",
+          "sat": "fire-explosion/outcome_pass.summary.sat"
         }
       }
     },
@@ -660,6 +740,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_fatal_rescue.prompt.hi",
+          "sat": "fire-explosion/outcome_fatal_rescue.prompt.sat"
         }
       },
       "summary": {
@@ -667,6 +751,10 @@
           "en": "You went in to save the collapsed worker before reaching safe air. In a real fire, the same smoke and heat that took him takes you.",
           "hi": "आप सुरक्षित हवा में पहुँचने से पहले बेहोश साथी को बचाने घुसे। असली आग में वही धुआँ और गर्मी जो उसे ले गई, आपको भी लेती।",
           "sat": "ᱟᱢ ᱨᱚᱠᱷᱟ ᱦᱟᱣᱟ ᱥᱮᱴᱮᱨ ᱟᱠ ᱛᱟᱭᱚᱢ ᱵᱮᱦᱳᱥ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱵᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱢ ᱾ ᱴᱷᱤᱠ ᱥᱮᱴᱟᱜ ᱨᱮ, ᱡᱟᱦᱟᱸ ᱫᱷᱩᱸᱣᱟᱹ ᱟᱨ ᱟᱩᱥ ᱛᱮ ᱩᱱᱤ ᱡᱟᱨᱣᱟ ᱠᱮᱫᱟ, ᱚᱱᱟ ᱛᱮ ᱟᱢ ᱦᱚᱸ ᱡᱟᱨᱣᱟᱭ ᱢᱮᱭᱟᱭ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_fatal_rescue.summary.hi",
+          "sat": "fire-explosion/outcome_fatal_rescue.summary.sat"
         }
       }
     },
@@ -681,6 +769,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_fatal_gas.prompt.hi",
+          "sat": "fire-explosion/outcome_fatal_gas.prompt.sat"
         }
       },
       "summary": {
@@ -688,6 +780,10 @@
           "en": "When the alarm sounds, the only correct action is to leave. Not to fix equipment, not to finish a task.",
           "hi": "अलार्म बजे तो एक ही सही काम है — बाहर निकलना। उपकरण ठीक करना नहीं, काम पूरा करना नहीं।",
           "sat": "ᱚᱠᱛᱚ ᱟᱞᱟᱨᱢ ᱩᱬᱩᱬ ᱦᱩᱭ, ᱚᱱᱟ ᱚᱠᱛᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱫᱚ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱡᱚᱛᱚᱱ ᱴᱷᱤᱠ ᱵᱟᱭ, ᱠᱟᱹᱢᱤ ᱴᱟᱸᱰᱟᱝ ᱵᱟᱭ ᱾"
+        },
+        "audio": {
+          "hi": "fire-explosion/outcome_fatal_gas.summary.hi",
+          "sat": "fire-explosion/outcome_fatal_gas.summary.sat"
         }
       }
     }

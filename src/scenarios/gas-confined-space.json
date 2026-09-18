@@ -272,6 +272,10 @@
           "en": "Look around you. Point to, or tap on, anything you see that tells you this is a dangerous job — not an ordinary cleaning job.",
           "hi": "अपने चारों ओर देखिए। जो कुछ भी दिखे कि यह ख़तरनाक काम है — सामान्य सफ़ाई का काम नहीं — उस पर इशारा कीजिए या टैप कीजिए।",
           "sat": "ᱱᱚᱰᱮ ᱡᱟᱦᱟᱸ ᱡᱤᱱᱤᱥ ᱠᱟᱛᱷᱟ ᱠᱚ ᱠᱟᱡᱽ ᱵᱟᱝ ᱠᱟᱱᱟ ᱠᱚ ᱩᱫᱩᱜᱽ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/observe_hazards.prompt.hi",
+          "sat": "gas-confined-space/observe_hazards.prompt.sat"
         }
       },
       "targets": [
@@ -298,6 +302,10 @@
               "en": "You climbed in while you were still working out what this job was. Nothing had been checked, and nobody had been told.",
               "hi": "आप तब उतर गए जब आप यह समझ ही रहे थे कि यह काम क्या है। कुछ भी जाँचा नहीं गया था, और किसी को बताया नहीं गया था।",
               "sat": "ᱟᱢ ᱡᱟᱦᱟᱸ ᱠᱟᱹᱢᱤ ᱠᱟᱱᱟ ᱩᱱᱤ ᱵᱟᱭ ᱵᱩᱡᱷᱟᱹᱣ ᱠᱮᱫᱮᱭᱟᱢ ᱟᱨ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱟᱢᱟ ᱾ ᱚᱠᱛᱚ ᱵᱟᱭ ᱠᱩᱞᱤ ᱠᱟᱱᱟ, ᱟᱨ ᱚᱠᱚᱭ ᱵᱟᱭ ᱠᱷᱚᱵᱚᱨ ᱟᱠᱟᱱᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/observe_hazards.error.ENTERED_DURING_SURVEY.hi",
+              "sat": "gas-confined-space/observe_hazards.error.ENTERED_DURING_SURVEY.sat"
             }
           },
           "effects": [
@@ -326,6 +334,10 @@
             "en": "You did not register the confined space board. Every step after this one is now being taken blind.",
             "hi": "आपने सीमित स्थान का बोर्ड नहीं देखा। इसके बाद का हर कदम अब अंधेरे में है।",
             "sat": "ᱟᱢ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱵᱳᱨᱰ ᱵᱟᱭ ᱦᱮᱨᱠᱮᱫᱟ ᱾ ᱱᱚᱶᱟ ᱛᱟᱭᱚᱢ ᱨᱮᱭᱟᱜ ᱡᱚᱛᱚ ᱦᱚᱨᱟ ᱫᱚ ᱠᱟᱱᱟᱭ ᱵᱟᱭ ᱧᱮᱞ ᱠᱟᱛᱮ ᱠᱟᱹᱢᱤᱭᱟᱢᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/observe_hazards.timeout.hi",
+            "sat": "gas-confined-space/observe_hazards.timeout.sat"
           }
         }
       },
@@ -350,6 +362,10 @@
           "en": "Do not go near the sump yet. A spoken instruction is not enough — first, walk to the permit board and look at it.",
           "hi": "अभी सम्प के पास मत जाइए। मौखिक आदेश काफ़ी नहीं है — पहले परमिट बोर्ड के पास जाइए और उसे देखिए।",
           "sat": "ᱱᱤᱛᱚᱜ ᱥᱚᱢᱯ ᱥᱮᱴᱮᱨ ᱟᱠ ᱵᱟᱭ ᱪᱟᱞᱟᱠ ᱢᱮ ᱾ ᱠᱟᱛᱷᱟ ᱛᱮ ᱦᱩᱠᱩᱢ ᱫᱚ ᱵᱟᱭ ᱜᱟᱱᱚᱜ — ᱯᱩᱭᱞᱩ, ᱯᱟᱨᱢᱤᱴ ᱵᱳᱨᱰ ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ ᱟᱨ ᱦᱮᱨ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/check_permit.prompt.hi",
+          "sat": "gas-confined-space/check_permit.prompt.sat"
         }
       },
       "ordered": false,
@@ -384,6 +400,10 @@
               "en": "You climbed in on a verbal order. No permit, no gas test, nobody watching the opening.",
               "hi": "आप मौखिक आदेश पर उतर गए। न परमिट, न गैस जाँच, न कोई मुँह पर निगरानी रखने वाला।",
               "sat": "ᱟᱢ ᱠᱟᱛᱷᱟ ᱦᱩᱠᱩᱢ ᱛᱮ ᱨᱮᱭᱟᱜ ᱠᱮᱫᱟ ᱾ ᱚᱠᱛᱚ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱝ, ᱚᱠᱛᱚ ᱜᱮᱥ ᱠᱩᱞᱤ ᱵᱟᱝ, ᱚᱠᱚᱭ ᱵᱟᱝ ᱠᱷᱩᱡᱽ ᱧᱮᱞ ᱛᱟᱦᱮᱸᱱᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/check_permit.error.ENTERED_WITHOUT_PERMIT.hi",
+              "sat": "gas-confined-space/check_permit.error.ENTERED_WITHOUT_PERMIT.sat"
             }
           },
           "effects": [
@@ -408,6 +428,10 @@
             "en": "You never looked at the permit board.",
             "hi": "आपने परमिट बोर्ड देखा ही नहीं।",
             "sat": "ᱟᱢ ᱛᱮᱦᱮᱸᱧ ᱯᱟᱨᱢᱤᱴ ᱵᱳᱨᱰ ᱵᱟᱭ ᱦᱮᱨᱠᱮᱫᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/check_permit.timeout.hi",
+            "sat": "gas-confined-space/check_permit.timeout.sat"
           }
         }
       },
@@ -433,6 +457,10 @@
           "en": "There is no permit on the board for this sump. Do not enter. Report this to your supervisor and stop work.",
           "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। अंदर मत जाइए। सुपरवाइज़र को बताइए और काम रोकिए।",
           "sat": "ᱱᱚᱶᱟ ᱥᱚᱢᱯ ᱞᱟᱹᱜᱤᱫ ᱵᱳᱨᱰ ᱨᱮ ᱚᱠᱛᱚ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱝᱟ ᱾ ᱟᱛ ᱵᱟᱭ ᱡᱚᱛᱚ ᱢᱮ ᱾ ᱟᱢᱟᱜ ᱥᱩᱯᱚᱨᱵᱟᱭᱡᱚᱨ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱟᱨ ᱠᱟᱹᱢᱤ ᱛᱟᱸᱦᱮᱸᱱ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/permit_absent.prompt.hi",
+          "sat": "gas-confined-space/permit_absent.prompt.sat"
         }
       },
       "ordered": false,
@@ -467,6 +495,10 @@
               "en": "You saw there was no permit and went in anyway.",
               "hi": "आपने देखा कि परमिट नहीं है, फिर भी अंदर चले गए।",
               "sat": "ᱟᱢ ᱧᱮᱞ ᱠᱮᱫᱟ ᱡᱮ ᱚᱠᱛᱚ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱝᱟ, ᱛᱤᱱᱟᱹᱜ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/permit_absent.error.ENTERED_WITHOUT_PERMIT.hi",
+              "sat": "gas-confined-space/permit_absent.error.ENTERED_WITHOUT_PERMIT.sat"
             }
           },
           "goto": "outcome_fatal_entry"
@@ -481,6 +513,10 @@
             "en": "You stood there. A missing permit is something you are required to report, not wait out.",
             "hi": "आप खड़े रहे। परमिट का न होना बताना ज़रूरी है, इंतज़ार करना नहीं।",
             "sat": "ᱟᱢ ᱚᱱᱰᱮ ᱛᱤᱝᱩ ᱠᱮᱫᱟ ᱾ ᱵᱟᱝ ᱢᱮᱱᱟᱜ ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱞᱟᱹᱜᱤᱫ ᱡᱤᱱᱤᱥ ᱠᱟᱱᱟ, ᱛᱟᱸᱦᱮᱸᱱ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱝᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/permit_absent.timeout.hi",
+            "sat": "gas-confined-space/permit_absent.timeout.sat"
           }
         }
       },
@@ -501,6 +537,10 @@
           "en": "There is a permit on the board. But look at the date — it was issued for yesterday's shift, so it is no longer valid. Report this to your supervisor and stop work.",
           "hi": "बोर्ड पर परमिट तो है। पर तारीख़ देखिए — यह कल की शिफ्ट के लिए जारी हुआ था, इसलिए अब मान्य नहीं है। सुपरवाइज़र को बताइए और काम रोकिए।",
           "sat": "ᱵᱳᱨᱰ ᱨᱮ ᱯᱟᱨᱢᱤᱴ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱢᱮᱱᱠᱷᱟᱱ ᱛᱟᱨᱤᱠᱷ ᱦᱮᱨ ᱢᱮ — ᱩᱱᱤ ᱦᱚᱞᱟ ᱥᱤᱯᱷᱴ ᱞᱟᱹᱜᱤᱫ ᱮᱢ ᱟᱠᱟᱱᱟ, ᱚᱱᱟ ᱛᱮ ᱱᱤᱛᱚᱜ ᱵᱟᱭ ᱪᱟᱞᱟᱜᱼᱟ ᱾ ᱟᱢᱟᱜ ᱥᱩᱯᱚᱨᱵᱟᱭᱡᱚᱨ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱟᱨ ᱠᱟᱹᱢᱤ ᱛᱟᱸᱦᱮᱸᱱ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/permit_expired.prompt.hi",
+          "sat": "gas-confined-space/permit_expired.prompt.sat"
         }
       },
       "ordered": false,
@@ -535,6 +575,10 @@
               "en": "An expired permit is not a permit. The atmosphere it certified was yesterday's.",
               "hi": "समाप्त परमिट, परमिट नहीं होता। उसने जिस हवा को प्रमाणित किया था वह कल की थी।",
               "sat": "ᱢᱟᱲᱟᱝ ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱝᱟ ᱾ ᱡᱟᱦᱟᱸ ᱦᱟᱣᱟ ᱨᱮᱭᱟᱜ ᱥᱟᱠᱷᱭᱟᱛ ᱮᱢᱟᱱᱟ, ᱩᱱᱤ ᱫᱚ ᱦᱚᱞᱟ ᱛᱤᱸᱜᱩᱟᱜ ᱠᱟᱱᱟᱭ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/permit_expired.error.ENTERED_ON_EXPIRED_PERMIT.hi",
+              "sat": "gas-confined-space/permit_expired.error.ENTERED_ON_EXPIRED_PERMIT.sat"
             }
           },
           "goto": "outcome_fatal_entry"
@@ -549,6 +593,10 @@
             "en": "You let an expired permit stand.",
             "hi": "आपने समाप्त परमिट को चलने दिया।",
             "sat": "ᱟᱢ ᱢᱟᱲᱟᱝ ᱯᱟᱨᱢᱤᱴ ᱛᱟᱸᱦᱮᱸᱱ ᱮᱫᱟᱭ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/permit_expired.timeout.hi",
+            "sat": "gas-confined-space/permit_expired.timeout.sat"
           }
         }
       },
@@ -566,6 +614,10 @@
           "en": "Before anyone goes near the opening, test the air from outside. First, use the gas detector — switch it on and lower it into the opening. Then look at the detector screen and read the result.",
           "hi": "मुँह के पास जाने से पहले, बाहर से ही हवा की जाँच कीजिए। पहले गैस डिटेक्टर इस्तेमाल कीजिए — उसे चालू करके मुँह में नीचे उतारिए। फिर डिटेक्टर की स्क्रीन देखकर रीडिंग पढ़िए।",
           "sat": "ᱚᱠᱚᱭᱚᱜ ᱠᱷᱩᱡᱽ ᱥᱮᱴᱮᱨ ᱵᱟᱭ ᱡᱚᱛᱚ ᱛᱮᱭᱟᱨ, ᱵᱟᱦᱨᱮ ᱠᱷᱚᱱ ᱦᱟᱣᱟ ᱠᱩᱞᱤ ᱢᱮ ᱾ ᱯᱩᱭᱞᱩ, ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ — ᱚᱱ ᱢᱮ ᱟᱨ ᱠᱷᱩᱡᱽ ᱨᱮ ᱚᱲᱚᱠ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱨᱮᱭᱟᱜ ᱥᱠᱨᱤᱱ ᱦᱮᱨ ᱢᱮ ᱟᱨ ᱨᱤᱰᱤᱝ ᱯᱟᱲᱦᱟᱣ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/gas_test.prompt.hi",
+          "sat": "gas-confined-space/gas_test.prompt.sat"
         }
       },
       "ordered": true,
@@ -638,6 +690,10 @@
               "en": "You leaned over the opening and sniffed. Hydrogen sulphide deadens your sense of smell within seconds — by the time it stops smelling, it is at its most dangerous. Your nose is not an instrument.",
               "hi": "आपने मुँह पर झुककर सूँघा। हाइड्रोजन सल्फाइड कुछ ही सेकंड में सूँघने की शक्ति मार देती है — जब गंध आना बंद हो, तभी वह सबसे घातक होती है। नाक कोई यंत्र नहीं है।",
               "sat": "ᱟᱢ ᱠᱷᱩᱡᱽ ᱪᱮᱛᱟᱱ ᱩᱠᱩ ᱠᱮᱫᱟ ᱟᱨ ᱥᱩᱝᱜᱩᱫ ᱠᱮᱫᱟ ᱾ ᱦᱟᱭᱰᱨᱳᱡᱮᱱ ᱥᱟᱞᱯᱷᱟᱭᱰ ᱫᱚ ᱠᱚᱸ ᱴᱟᱲᱟᱝ ᱨᱮ ᱟᱢᱟᱜ ᱥᱩᱝᱜᱩᱫ ᱥᱚᱠᱛᱤ ᱵᱚᱸᱫ ᱮᱫᱟᱭ — ᱚᱠᱛᱚ ᱵᱟᱭ ᱥᱩᱝᱜᱩᱫᱟᱢ, ᱚᱠᱛᱚ ᱫᱚ ᱴᱷᱤᱠ ᱚᱱᱟ ᱚᱠᱛᱚ ᱫᱚ ᱡᱟᱹᱥᱛᱤ ᱵᱤᱯᱚᱫ ᱠᱟᱱᱟ ᱾ ᱟᱢᱟᱜ ᱢᱩᱪᱟᱹᱫ ᱫᱚ ᱡᱚᱛᱚᱱ ᱵᱟᱝᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/gas_test.error.SMELL_USED_AS_TEST.hi",
+              "sat": "gas-confined-space/gas_test.error.SMELL_USED_AS_TEST.sat"
             }
           }
         }
@@ -651,6 +707,10 @@
             "en": "The atmosphere was never tested. Nobody in this yard knows what is in that sump.",
             "hi": "हवा की जाँच कभी हुई ही नहीं। इस यार्ड में किसी को नहीं पता कि उस सम्प में क्या है।",
             "sat": "ᱦᱟᱣᱟ ᱫᱚ ᱛᱮᱦᱮᱸᱧ ᱵᱟᱭ ᱠᱩᱞᱤ ᱠᱟᱱᱟ ᱾ ᱱᱚᱶᱟ ᱭᱟᱨᱰ ᱨᱮ ᱚᱠᱚᱭ ᱵᱟᱭ ᱵᱟᱰᱟᱭᱟ ᱡᱟᱦᱟᱸ ᱚᱱᱟ ᱥᱚᱢᱯ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/gas_test.timeout.hi",
+            "sat": "gas-confined-space/gas_test.timeout.sat"
           }
         }
       },
@@ -702,6 +762,10 @@
           "en": "The air is not safe yet. First, use the ventilation blower — switch it on. Then wait for it to clear the air. After that, use the gas detector again — the old reading no longer counts.",
           "hi": "हवा अभी सुरक्षित नहीं है। पहले वेंटिलेशन ब्लोअर इस्तेमाल कीजिए — उसे चालू कीजिए। फिर हवा साफ़ होने तक इंतज़ार कीजिए। उसके बाद गैस डिटेक्टर से दोबारा जाँच कीजिए — पुरानी रीडिंग अब मायने नहीं रखती।",
           "sat": "ᱦᱟᱣᱟ ᱫᱚ ᱱᱤᱛᱚᱜ ᱵᱟᱭ ᱨᱚᱠᱷᱟ ᱠᱟᱱᱟ ᱾ ᱯᱩᱭᱞᱩ, ᱦᱟᱣᱟ ᱵᱞᱚᱣᱟᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ — ᱚᱱ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱦᱟᱣᱟ ᱯᱷᱟᱨᱪᱟ ᱦᱩᱭ ᱛᱟᱦᱮᱸᱱ ᱢᱮ ᱾ ᱚᱱᱟ ᱞᱟᱦᱟ, ᱫᱚᱦᱲᱟ ᱜᱮᱥ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ — ᱢᱟᱨᱟᱝ ᱨᱤᱰᱤᱝ ᱫᱚ ᱱᱤᱛᱚᱜ ᱵᱟᱭ ᱴᱷᱤᱠ ᱠᱟᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/ventilate.prompt.hi",
+          "sat": "gas-confined-space/ventilate.prompt.sat"
         }
       },
       "ordered": true,
@@ -757,6 +821,10 @@
               "en": "You knew the reading and went in anyway.",
               "hi": "रीडिंग जानते हुए भी आप अंदर चले गए।",
               "sat": "ᱟᱢ ᱨᱤᱰᱤᱝ ᱵᱟᱰᱟᱭ ᱠᱮᱫᱟᱢ, ᱛᱤᱱᱟᱹᱜ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱢ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/ventilate.error.ENTERED_UNPURGED.hi",
+              "sat": "gas-confined-space/ventilate.error.ENTERED_UNPURGED.sat"
             }
           },
           "goto": "outcome_fatal_atmosphere"
@@ -771,6 +839,10 @@
             "en": "The space was never ventilated.",
             "hi": "जगह में कभी हवा नहीं चलाई गई।",
             "sat": "ᱡᱟᱭᱜᱟ ᱨᱮ ᱛᱮᱦᱮᱸᱧ ᱵᱟᱭ ᱦᱟᱣᱟ ᱪᱟᱞᱟᱣ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/ventilate.timeout.hi",
+            "sat": "gas-confined-space/ventilate.timeout.sat"
           }
         }
       },
@@ -792,6 +864,10 @@
           "en": "The air is better now, but the space is still not fully safe. Wear the breathing apparatus. Wear the full-body harness. Then attach the retrieval line to the tripod.",
           "hi": "हवा अब बेहतर है, पर जगह अभी भी पूरी तरह सुरक्षित नहीं है। श्वास उपकरण पहनिए। फुल-बॉडी हार्नेस पहनिए। फिर रिट्रीवल लाइन को ट्राइपॉड से जोड़िए।",
           "sat": "ᱦᱟᱣᱟ ᱫᱚ ᱱᱤᱛᱚᱜ ᱵᱟᱲᱛᱤ ᱠᱟᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱡᱟᱭᱜᱟ ᱫᱚ ᱛᱮᱦᱮᱸᱧ ᱯᱚᱨᱟ ᱨᱚᱠᱷᱟ ᱵᱟᱭ ᱟᱠᱟᱱᱟ ᱾ ᱥᱟᱶᱥ ᱡᱚᱛᱚᱱ ᱮᱰᱟ ᱢᱮ ᱾ ᱚᱲᱟᱜ-ᱦᱳᱨ ᱦᱟᱨᱱᱮᱥ ᱮᱰᱟ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱟᱹᱰᱤ ᱠᱚᱨᱮᱭᱟᱜ ᱞᱟᱭᱤᱱ ᱴᱨᱟᱭᱯᱚᱰ ᱨᱮ ᱛᱟᱸᱛᱤ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/don_ppe.prompt.hi",
+          "sat": "gas-confined-space/don_ppe.prompt.sat"
         }
       },
       "ordered": true,
@@ -848,6 +924,10 @@
               "en": "No breathing set, no line. If anything goes wrong down there, nobody can pull you out.",
               "hi": "न श्वास उपकरण, न लाइन। नीचे कुछ भी बिगड़े तो कोई आपको खींच नहीं सकता।",
               "sat": "ᱚᱠᱛᱚ ᱥᱟᱶᱥ ᱡᱚᱛᱚᱱ ᱵᱟᱝ, ᱚᱠᱛᱚ ᱞᱟᱭᱤᱱ ᱵᱟᱝᱟ ᱾ ᱞᱟᱦᱟ ᱨᱮ ᱡᱚᱛᱚ ᱵᱤᱜᱟᱲ ᱛᱟᱦᱮᱸᱱᱠᱷᱟᱱ, ᱚᱠᱚᱭ ᱵᱟᱭ ᱟᱢ ᱡᱟᱨᱣᱟᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/don_ppe.error.ENTERED_WITHOUT_PPE.hi",
+              "sat": "gas-confined-space/don_ppe.error.ENTERED_WITHOUT_PPE.sat"
             }
           },
           "goto": "outcome_fatal_atmosphere"
@@ -862,6 +942,10 @@
             "en": "You were still not wearing the set when the window closed.",
             "hi": "समय बीत गया और आपने अब तक उपकरण नहीं पहना था।",
             "sat": "ᱚᱠᱛᱚ ᱮᱴᱟᱜ ᱠᱟᱱᱟᱜ ᱚᱠᱛᱚ, ᱟᱢ ᱛᱮᱦᱮᱸᱧ ᱥᱟᱶᱥ ᱡᱚᱛᱚᱱ ᱵᱟᱭ ᱮᱰᱟᱭ ᱠᱮᱫᱟᱢ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/don_ppe.timeout.hi",
+            "sat": "gas-confined-space/don_ppe.timeout.sat"
           }
         }
       },
@@ -883,6 +967,10 @@
           "en": "You cannot go in alone. First, signal the standby person to stand at the opening. Then use the radio to report to the control room that you are going in.",
           "hi": "आप अकेले अंदर नहीं जा सकते। पहले स्टैंडबाई व्यक्ति को इशारा करके मुँह पर खड़ा कीजिए। फिर रेडियो से कंट्रोल रूम को बताइए कि आप अंदर जा रहे हैं।",
           "sat": "ᱟᱢ ᱟᱰᱤ ᱟᱛ ᱵᱟᱭ ᱡᱚᱛᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾ ᱯᱩᱭᱞᱩ, ᱥᱴᱮᱸᱰᱵᱟᱭ ᱦᱳᱲ ᱠᱷᱩᱡᱽ ᱨᱮ ᱛᱤᱝᱩ ᱞᱟᱹᱜᱤᱫ ᱥᱮᱱᱚᱛ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱨᱮᱰᱤᱭᱳ ᱛᱮ ᱠᱚᱱᱴᱨᱚᱞ ᱨᱩᱢ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ ᱡᱮ ᱟᱢ ᱟᱛ ᱡᱚᱛᱚ ᱠᱟᱱᱟᱢ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/post_standby.prompt.hi",
+          "sat": "gas-confined-space/post_standby.prompt.sat"
         }
       },
       "ordered": false,
@@ -928,6 +1016,10 @@
               "en": "You went down with nobody at the opening. Whatever happens next, nobody above knows it is happening.",
               "hi": "आप उतर गए और मुँह पर कोई नहीं था। अब नीचे जो भी हो, ऊपर किसी को पता नहीं चलेगा।",
               "sat": "ᱟᱢ ᱚᱰᱚᱠ ᱠᱮᱫᱟᱢ ᱡᱟᱦᱟᱸ ᱠᱷᱩᱡᱽ ᱨᱮ ᱚᱠᱚᱭ ᱵᱟᱝ ᱛᱤᱝᱩ ᱠᱟᱱᱟ ᱾ ᱚᱠᱟ ᱦᱚᱸ ᱦᱩᱭᱩᱜ ᱠᱷᱟᱱ, ᱪᱮᱛᱟᱱ ᱨᱮ ᱚᱠᱚᱭ ᱵᱟᱭ ᱵᱟᱰᱟᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/post_standby.error.ENTERED_WITHOUT_STANDBY.hi",
+              "sat": "gas-confined-space/post_standby.error.ENTERED_WITHOUT_STANDBY.sat"
             }
           },
           "goto": "outcome_fatal_atmosphere"
@@ -942,6 +1034,10 @@
             "en": "No standby person was posted.",
             "hi": "कोई स्टैंडबाई व्यक्ति तैनात नहीं हुआ।",
             "sat": "ᱚᱠᱛᱚ ᱥᱴᱮᱸᱰᱵᱟᱭ ᱦᱳᱲ ᱵᱟᱭ ᱛᱤᱝᱩ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/post_standby.timeout.hi",
+            "sat": "gas-confined-space/post_standby.timeout.sat"
           }
         }
       },
@@ -963,6 +1059,10 @@
           "en": "You have checked the permit, cleared and re-tested the air, worn your equipment, and posted the standby person. Everything is ready. Now climb into the sump.",
           "hi": "आपने परमिट जाँच लिया, हवा साफ़ करके दोबारा जाँच ली, उपकरण पहन लिया, और स्टैंडबाई तैनात कर दिया। सब कुछ तैयार है। अब सम्प में उतरिए।",
           "sat": "ᱟᱢ ᱯᱟᱨᱢᱤᱴ ᱠᱩᱞᱤ ᱠᱮᱫᱟᱢ, ᱦᱟᱣᱟ ᱯᱷᱟᱨᱪᱟ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱠᱩᱞᱤ ᱠᱮᱫᱟᱢ, ᱡᱚᱛᱚᱱ ᱮᱰᱟ ᱠᱮᱫᱟᱢ, ᱟᱨ ᱥᱴᱮᱸᱰᱵᱟᱭ ᱦᱳᱲ ᱛᱤᱝᱩ ᱠᱮᱫᱟᱢ ᱾ ᱡᱚᱛᱚ ᱛᱮᱭᱟᱨ ᱠᱟᱱᱟ ᱾ ᱱᱤᱛᱚᱜ ᱥᱚᱢᱯ ᱨᱮ ᱨᱮᱭᱟᱜ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/entry.prompt.hi",
+          "sat": "gas-confined-space/entry.prompt.sat"
         }
       },
       "ordered": false,
@@ -992,6 +1092,10 @@
             "en": "The window for the permit passed while you waited.",
             "hi": "इंतज़ार करते-करते परमिट का समय निकल गया।",
             "sat": "ᱟᱢ ᱛᱟᱸᱦᱮᱸᱱ ᱛᱟᱦᱮᱸ ᱠᱟᱛᱮ, ᱯᱟᱨᱢᱤᱴ ᱚᱠᱛᱚ ᱪᱟᱞᱟᱜ ᱮᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/entry.timeout.hi",
+            "sat": "gas-confined-space/entry.timeout.sat"
           }
         }
       },
@@ -1037,6 +1141,10 @@
           "en": "Get out now. Signal the standby person. Then climb out of the sump immediately — do not stop for anything else.",
           "hi": "अभी बाहर निकलिए। स्टैंडबाई को इशारा कीजिए। फिर तुरंत सम्प से बाहर निकलिए — किसी और चीज़ के लिए मत रुकिए।",
           "sat": "ᱱᱤᱛᱚᱜ ᱚᱰᱚᱠ ᱢᱮ ᱾ ᱥᱴᱮᱸᱰᱵᱟᱭ ᱦᱳᱲ ᱥᱮᱱᱚᱛ ᱢᱮ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱱᱤᱛᱚᱜ ᱥᱚᱢᱯ ᱠᱷᱚᱱ ᱚᱰᱚᱠ ᱢᱮ — ᱮᱴᱟᱜ ᱡᱤᱱᱤᱥ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱭ ᱛᱤᱝᱩ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/evacuate.prompt.hi",
+          "sat": "gas-confined-space/evacuate.prompt.sat"
         }
       },
       "ordered": false,
@@ -1082,6 +1190,10 @@
               "en": "You stayed down there to restart the blower. The blower is not worth the breaths it costs you.",
               "hi": "आप ब्लोअर चालू करने नीचे ही रुके रहे। ब्लोअर उन साँसों के बराबर नहीं जो इसमें ख़र्च हुईं।",
               "sat": "ᱟᱢ ᱵᱞᱚᱣᱟᱨ ᱫᱚᱦᱲᱟ ᱮᱛᱦᱚᱵ ᱞᱟᱹᱜᱤᱫ ᱚᱱᱰᱮ ᱛᱤᱝᱩ ᱠᱮᱫᱟᱢ ᱾ ᱵᱞᱚᱣᱟᱨ ᱫᱚ ᱟᱢᱟᱜ ᱥᱟᱶᱥ ᱴᱟᱲᱟᱝ ᱡᱮᱢᱚᱱ ᱵᱟᱝᱟ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/evacuate.error.STAYED_TO_FIX_EQUIPMENT.hi",
+              "sat": "gas-confined-space/evacuate.error.STAYED_TO_FIX_EQUIPMENT.sat"
             }
           }
         }
@@ -1122,6 +1234,10 @@
           "en": "You are out. Then you see him — the fitter who went into the adjacent chamber ten minutes ago is face down at the bottom of it, not moving.",
           "hi": "आप बाहर आ गए। तभी आप देखते हैं — जो फिटर दस मिनट पहले बगल वाले चैम्बर में उतरा था, वह नीचे औंधा पड़ा है, हिल नहीं रहा।",
           "sat": "ᱟᱢ ᱚᱰᱚᱠ ᱮᱱᱟᱢ ᱾ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱟᱢ ᱩᱱᱤ ᱧᱮᱞ ᱠᱮᱫᱟᱢ — ᱡᱟᱦᱟᱸ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱜᱟᱨᱟ ᱫᱟᱦ ᱢᱤᱱᱤᱴ ᱞᱟᱦᱟ ᱥᱮᱴᱮᱨ ᱪᱮᱢᱵᱚᱨ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱭ, ᱩᱱᱤ ᱫᱚ ᱞᱟᱛᱟᱨ ᱨᱮ ᱴᱷᱟᱶ ᱠᱟᱛᱮ ᱵᱟᱝ ᱦᱳᱨᱳᱢ ᱠᱟᱱᱟᱭ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/casualty_appears.prompt.hi",
+          "sat": "gas-confined-space/casualty_appears.prompt.sat"
         }
       },
       "effects": [
@@ -1148,6 +1264,10 @@
           "en": "He is not moving. Do NOT climb in after him. First, use the radio to call the rescue team. Then use the retrieval line to pull him out — from where you are standing, outside the sump.",
           "hi": "वह हिल नहीं रहा। उसके पीछे अंदर मत जाइए। पहले रेडियो से रेस्क्यू टीम को बुलाइए। फिर रिट्रीवल लाइन से उसे बाहर खींचिए — वहीं से, सम्प के बाहर खड़े रहकर।",
           "sat": "ᱩᱱᱤ ᱵᱟᱝ ᱮ ᱚᱰᱚᱠ ᱠᱟᱱᱟ ᱾ ᱟᱢ ᱪᱮᱫ ᱟᱢ ᱠᱟᱢᱤᱭᱟ ?"
+        },
+        "audio": {
+          "hi": "gas-confined-space/rescue_decision.prompt.hi",
+          "sat": "gas-confined-space/rescue_decision.prompt.sat"
         }
       },
       "ordered": false,
@@ -1193,6 +1313,10 @@
               "en": "You went in after him. This is how most confined space deaths happen — not one worker, but the two or three who climbed down to help. The same atmosphere that took him takes you, in the same number of breaths.",
               "hi": "आप उसके पीछे उतर गए। सीमित स्थान में ज़्यादातर मौतें ऐसे ही होती हैं — एक मज़दूर नहीं, बल्कि वे दो-तीन जो बचाने उतरे। जिस हवा ने उसे लिया, वही आपको लेती है, उतनी ही साँसों में।",
               "sat": "ᱟᱢ ᱩᱱᱤ ᱞᱟᱦᱟ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱢ ᱾ ᱚᱱᱟ ᱛᱮ ᱡᱟᱹᱥᱛᱤ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱚᱰᱚᱠ ᱠᱚ ᱦᱩᱭᱩᱜᱼᱟ — ᱢᱤᱫ ᱠᱟᱹᱢᱤᱭᱟᱹ ᱵᱟᱝ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱟᱨ-ᱯᱮ ᱡᱟᱦᱟᱸ ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟ ᱾ ᱡᱟᱦᱟᱸ ᱦᱟᱣᱟ ᱛᱮ ᱩᱱᱤ ᱮᱢ ᱠᱮᱫᱟ, ᱚᱱᱟ ᱦᱟᱣᱟ ᱛᱮ ᱟᱢᱚᱜ ᱦᱚᱸ ᱮᱢᱟᱭ, ᱡᱟᱹᱥᱛᱤ ᱥᱟᱶᱥ ᱨᱮ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/rescue_decision.error.SECOND_VICTIM_ENTRY.hi",
+              "sat": "gas-confined-space/rescue_decision.error.SECOND_VICTIM_ENTRY.sat"
             }
           },
           "effects": [
@@ -1220,6 +1344,10 @@
               "en": "Shouting at him costs seconds and changes nothing. He cannot hear you.",
               "hi": "उसे पुकारने में सेकंड बर्बाद होते हैं और कुछ नहीं बदलता। वह सुन नहीं सकता।",
               "sat": "ᱩᱱᱤ ᱟᱲᱟᱝ ᱠᱟᱛᱮ ᱴᱟᱲᱟᱝ ᱚᱠᱛᱚ ᱟᱹᱰᱤ ᱦᱩᱭ, ᱚᱠᱛᱚ ᱵᱟᱭ ᱵᱚᱫᱚᱞ ᱟᱭ ᱾ ᱩᱱᱤ ᱟᱢ ᱵᱟᱭ ᱟᱭᱩᱢᱮᱭᱟᱭ ᱾"
+            },
+            "audio": {
+              "hi": "gas-confined-space/rescue_decision.error.DELAYED_CALLING_RESCUE.hi",
+              "sat": "gas-confined-space/rescue_decision.error.DELAYED_CALLING_RESCUE.sat"
             }
           }
         }
@@ -1233,6 +1361,10 @@
             "en": "You froze at the opening. Nobody was called, and the retrieval line stayed coiled on the tripod.",
             "hi": "आप मुँह पर जड़ हो गए। किसी को नहीं बुलाया, और रिट्रीवल लाइन ट्राइपॉड पर लिपटी रह गई।",
             "sat": "ᱟᱢ ᱠᱷᱩᱡᱽ ᱨᱮ ᱛᱤᱝᱩ ᱠᱮᱫᱟᱢ ᱾ ᱚᱠᱚᱭ ᱵᱟᱭ ᱛᱟᱦᱮᱸ ᱠᱮᱫᱟᱭ, ᱟᱨ ᱟᱹᱰᱤ ᱠᱚᱨᱮᱭᱟᱜ ᱞᱟᱭᱤᱱ ᱴᱨᱟᱭᱯᱚᱰ ᱨᱮᱭ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ ᱾"
+          },
+          "audio": {
+            "hi": "gas-confined-space/rescue_decision.timeout.hi",
+            "sat": "gas-confined-space/rescue_decision.timeout.sat"
           }
         },
         "goto": "outcome_fatal_gas"
@@ -1255,6 +1387,10 @@
           "en": "Both of you are on the surface.",
           "hi": "आप दोनों सतह पर हैं।",
           "sat": "ᱟᱢ ᱵᱟᱨᱦᱚᱸ ᱪᱮᱛᱟᱱ ᱨᱮ ᱢᱮᱱᱟᱢᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_pass.prompt.hi",
+          "sat": "gas-confined-space/outcome_pass.prompt.sat"
         }
       },
       "summary": {
@@ -1262,6 +1398,10 @@
           "en": "You tested before entering, purged and re-tested, wore the set, kept a line and a standby person, came out the moment the blower tripped, and recovered your colleague without adding yourself to the casualty list. That last decision is the one this drill exists for.",
           "hi": "आपने उतरने से पहले जाँच की, हवा साफ़ करके दोबारा जाँचा, उपकरण पहना, लाइन और स्टैंडबाई रखा, ब्लोअर बंद होते ही बाहर आए, और साथी को बचाया — बिना ख़ुद हताहतों की सूची में जुड़े। यह आख़िरी फ़ैसला ही इस अभ्यास का असली मक़सद है।",
           "sat": "ᱟᱢ ᱟᱛ ᱡᱚᱛᱚ ᱦᱟᱛᱟᱣ ᱠᱩᱞᱤ ᱠᱮᱫᱟᱢ, ᱦᱟᱣᱟ ᱯᱷᱟᱨᱪᱟ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱠᱩᱞᱤ ᱠᱮᱫᱟᱢ, ᱡᱚᱛᱚᱱ ᱮᱰᱟ ᱠᱮᱫᱟᱢ, ᱞᱟᱭᱤᱱ ᱟᱨ ᱥᱴᱮᱸᱰᱵᱟᱭ ᱦᱳᱲ ᱛᱟᱸᱦᱮᱸ ᱠᱮᱫᱟᱢ, ᱵᱞᱚᱣᱟᱨ ᱵᱚᱸᱫ ᱦᱩᱭ ᱚᱠᱛᱚ ᱚᱰᱚᱠ ᱮᱱᱟᱢ, ᱟᱨ ᱟᱢ ᱵᱟᱝ ᱦᱩᱭ ᱠᱟᱛᱮ ᱟᱢᱟᱜ ᱜᱚᱲᱚ ᱡᱟᱨᱣᱟ ᱠᱮᱫᱟᱢ ᱾ ᱚᱱᱟ ᱢᱩᱪᱟᱹᱫ ᱨᱮᱭᱟᱜ ᱵᱤᱪᱟᱨ ᱫᱚ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱨᱮᱭᱟᱜ ᱢᱚᱠᱥᱚᱫ ᱠᱟᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_pass.summary.hi",
+          "sat": "gas-confined-space/outcome_pass.summary.sat"
         }
       }
     },
@@ -1276,6 +1416,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_entry.prompt.hi",
+          "sat": "gas-confined-space/outcome_fatal_entry.prompt.sat"
         }
       },
       "summary": {
@@ -1283,6 +1427,10 @@
           "en": "You entered a confined space without an authorised permit. The permit is not paperwork — it is the record that somebody competent checked this space today, for you.",
           "hi": "आपने बिना अधिकृत परमिट के सीमित स्थान में प्रवेश किया। परमिट काग़ज़ी कार्रवाई नहीं है — यह इस बात का रिकॉर्ड है कि किसी योग्य व्यक्ति ने आज, आपके लिए, यह जगह जाँची है।",
           "sat": "ᱟᱢ ᱚᱠᱛᱚ ᱴᱷᱤᱠ ᱯᱟᱨᱢᱤᱴ ᱠᱟᱛᱮ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱢ ᱾ ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱠᱟᱜᱚᱡ ᱵᱟᱝᱟ — ᱩᱱᱤ ᱫᱚ ᱨᱮᱠᱚᱰ ᱠᱟᱱᱟ ᱡᱮ ᱢᱤᱫ ᱡᱟᱹᱱᱟᱹ ᱦᱳᱲ ᱛᱮᱦᱮᱸᱧ ᱛᱮᱦᱮᱸᱧᱟᱜ ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱠᱩᱞᱤ ᱠᱮᱫᱟᱭ, ᱟᱢᱟᱜ ᱞᱟᱹᱜᱤᱫ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_entry.summary.hi",
+          "sat": "gas-confined-space/outcome_fatal_entry.summary.sat"
         }
       }
     },
@@ -1297,6 +1445,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_survey.prompt.hi",
+          "sat": "gas-confined-space/outcome_fatal_survey.prompt.sat"
         }
       },
       "summary": {
@@ -1304,6 +1456,10 @@
           "en": "You climbed in before you had finished looking. Nothing was tested, no permit was checked, and nobody knew where you were. Looking first is not a formality that delays the work — it is how you find out whether this space can be entered at all.",
           "hi": "आप देखना पूरा करने से पहले ही उतर गए। कुछ जाँचा नहीं गया, कोई परमिट नहीं देखा गया, और किसी को पता नहीं था कि आप कहाँ हैं। पहले देखना काम में देरी करने वाली औपचारिकता नहीं है — इसी से पता चलता है कि इस जगह में उतरा भी जा सकता है या नहीं।",
           "sat": "ᱟᱢ ᱦᱮᱨ ᱚᱠᱛᱚ ᱴᱟᱸᱰᱟᱝ ᱵᱟᱭ ᱟᱠᱟᱱ ᱡᱟᱭᱜᱟ ᱨᱮ ᱨᱮᱭᱟᱜ ᱠᱮᱫᱟᱢ ᱾ ᱚᱠᱛᱚ ᱵᱟᱭ ᱠᱩᱞᱤ ᱠᱟᱱᱟ, ᱚᱠᱛᱚ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱭ ᱠᱩᱞᱤ ᱠᱟᱱᱟ, ᱟᱨ ᱚᱠᱚᱭ ᱵᱟᱭ ᱵᱟᱰᱟᱭ ᱮᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱛᱟᱦᱮᱸᱸᱠᱟᱱᱟᱢ ᱾ ᱯᱩᱭᱞᱩ ᱦᱮᱨ ᱫᱚ ᱠᱟᱹᱢᱤ ᱰᱷᱤᱞᱟ ᱠᱟᱴᱮ ᱪᱚᱛ ᱵᱟᱝᱟ — ᱩᱱᱤ ᱛᱮ ᱟᱢ ᱵᱟᱰᱟᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱡᱮ ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱠᱤ ᱵᱟᱝᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_survey.summary.hi",
+          "sat": "gas-confined-space/outcome_fatal_survey.summary.sat"
         }
       }
     },
@@ -1318,6 +1474,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_atmosphere.prompt.hi",
+          "sat": "gas-confined-space/outcome_fatal_atmosphere.prompt.sat"
         }
       },
       "summary": {
@@ -1339,6 +1499,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_gas.prompt.hi",
+          "sat": "gas-confined-space/outcome_fatal_gas.prompt.sat"
         }
       },
       "summary": {
@@ -1346,6 +1510,10 @@
           "en": "When a gas alarm sounds inside a confined space, the only correct action is to leave. Not to fix the fan, not to finish the task, not to check the reading again. Leave, then decide.",
           "hi": "सीमित स्थान के अंदर गैस अलार्म बजे तो एक ही सही काम है — बाहर निकलना। पंखा ठीक करना नहीं, काम पूरा करना नहीं, रीडिंग दोबारा देखना नहीं। पहले बाहर निकलिए, फ़ैसला बाद में।",
           "sat": "ᱡᱟᱦᱟᱸ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱨᱮ ᱜᱮᱥ ᱟᱞᱟᱨᱢ ᱩᱬᱩᱬ ᱦᱩᱭ, ᱚᱱᱟ ᱚᱠᱛᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱫᱚ ᱚᱰᱚᱠ ᱮᱱᱟ ᱾ ᱯᱷᱮᱱ ᱛᱷᱤᱠ ᱵᱟᱭ, ᱠᱟᱹᱢᱤ ᱴᱟᱸᱰᱟᱝ ᱵᱟᱭ, ᱨᱤᱰᱤᱝ ᱫᱚᱦᱲᱟ ᱠᱩᱞᱤ ᱵᱟᱭ ᱾ ᱚᱰᱚᱠ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱵᱤᱪᱟᱨ ᱢᱮ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_gas.summary.hi",
+          "sat": "gas-confined-space/outcome_fatal_gas.summary.sat"
         }
       }
     },
@@ -1360,6 +1528,10 @@
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।",
           "sat": "ᱟᱹᱣᱟᱛ ᱴᱟᱸᱰᱟᱝ ᱮᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_rescue.prompt.hi",
+          "sat": "gas-confined-space/outcome_fatal_rescue.prompt.sat"
         }
       },
       "summary": {
@@ -1367,6 +1539,10 @@
           "en": "You went in to save him and the sump took you both. Rescue from a confined space is done from outside, on a line, by people wearing air — or by a team trained and equipped to enter. The instinct to climb down is the single most lethal reflex in this domain, and it is the one this drill is built to retrain.",
           "hi": "आप उसे बचाने उतरे और सम्प ने आप दोनों को ले लिया। सीमित स्थान से बचाव बाहर से होता है — लाइन के सहारे, हवा पहने हुए लोगों द्वारा, या उतरने के लिए प्रशिक्षित और सुसज्जित टीम द्वारा। नीचे उतर जाने की प्रवृत्ति इस क्षेत्र की सबसे जानलेवा प्रवृत्ति है, और यही अभ्यास उसी को बदलने के लिए है।",
           "sat": "ᱟᱢ ᱩᱱᱤ ᱵᱟᱸᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱟᱛ ᱡᱚᱛᱚ ᱠᱮᱫᱟᱢ ᱟᱨ ᱥᱚᱢᱯ ᱫᱚ ᱟᱢᱚᱜ ᱵᱟᱨᱦᱚᱸ ᱡᱟᱨᱣᱟ ᱠᱮᱫᱟ ᱾ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱠᱷᱚᱱ ᱨᱮᱥᱠᱭᱩ ᱫᱚ ᱵᱟᱦᱨᱮ ᱠᱷᱚᱱ, ᱞᱟᱭᱤᱱ ᱨᱮ, ᱦᱟᱣᱟ ᱡᱚᱛᱚᱱ ᱮᱰᱟ ᱦᱳᱲ ᱛᱮ ᱦᱩᱭ ᱡᱟᱱᱟᱢᱮ — ᱟᱨᱵᱟᱝ ᱴᱨᱮᱱᱰ ᱴᱤᱢ ᱛᱮ ᱡᱟᱦᱟᱸ ᱟᱛ ᱡᱚᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱛᱮᱭᱟᱨ ᱠᱟᱱᱟ ᱾ ᱞᱟᱦᱟ ᱨᱮ ᱟᱛ ᱡᱚᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱢᱚᱱ ᱫᱚ ᱱᱚᱶᱟ ᱡᱟᱭᱜᱟ ᱨᱮᱭᱟᱜ ᱡᱟᱹᱥᱛᱤ ᱵᱤᱯᱚᱫ ᱢᱚᱱ ᱠᱟᱱᱟ, ᱟᱨ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱫᱚ ᱩᱱᱟ ᱵᱚᱫᱚᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ ᱾"
+        },
+        "audio": {
+          "hi": "gas-confined-space/outcome_fatal_rescue.summary.hi",
+          "sat": "gas-confined-space/outcome_fatal_rescue.summary.sat"
         }
       }
     }

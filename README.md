@@ -19,7 +19,7 @@ src/admin/       compliance dashboard — verifies scanned credentials, no backe
 src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons — see docs/APK.md for the Android build
-tests/           109 tests, node's built-in runner
+tests/           116 tests, node's built-in runner
 ```
 
 ## Try it
@@ -28,7 +28,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 109 tests
+npm test                # 116 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -111,4 +111,4 @@ English and Hindi are authored throughout all three scenarios. Santali (Ol Chiki
 - **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher — see `src/app/render/tierA.ts`'s `partsFor`), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate — two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
 - **Tier B (marker tracking) is not built.** It is contracted in `render/contract.ts`; the app falls back to Tier C loudly rather than mounting a renderer that would show a black screen.
 - **Issuing happens in the browser** in the current demo, signed with a fixed demo key (`src/credential/demo-trust.ts`, chosen deliberately over a random-per-session key so a credential can be verified on a *different* device — see that file's comment) — which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
-- **Speech synthesis is a stand-in for recorded narration.** The languages this has to reach — Santali, Ho, Mundari, Kurukh — have no synthetic voice worth using. `Narration.audio` already carries the clips; they have not been recorded.
+- **Speech synthesis is a stand-in for recorded narration.** The languages this has to reach (Santali, Ho, Mundari, Kurukh) have no synthetic voice worth using, and Ol Chiki is never spoken at all rather than being handed to a Devanagari voice. The app now plays a recorded clip wherever one exists and falls back to the synthetic voice everywhere else, so recording is the only step left: see `docs/NARRATION.md` and `node tools/narration.mjs --report`. Nothing has been recorded yet, and lines whose words change per variant deliberately stay synthetic.

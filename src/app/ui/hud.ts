@@ -215,7 +215,7 @@ export class Hud {
 
     // Offered only where it works. On a handset with no voice for the script on
     // screen, pressing it would do nothing at all.
-    this.#listen.disabled = !this.#i18n.canSpeak(view.prompt);
+    this.#listen.disabled = !this.#i18n.canSpeak(view.prompt, view.promptAudio);
 
     this.#timer.hidden = view.window === null;
     if (changed) {
@@ -230,7 +230,7 @@ export class Hud {
   }
 
   speakPrompt(): void {
-    if (this.#view) this.#i18n.speak(this.#view.prompt);
+    if (this.#view) this.#i18n.speak(this.#view.prompt, this.#view.promptAudio);
   }
 
   /** Called every frame while a node with a deadline is open. */
@@ -270,7 +270,7 @@ export class Hud {
     this.#banner.textContent = feedback.consequence;
     this.#banner.className = `banner ${feedback.severity ?? 'minor'}`;
     this.#banner.hidden = false;
-    this.#i18n.speak(feedback.consequence);
+    this.#i18n.speak(feedback.consequence, feedback.consequenceAudio);
 
     if (this.#bannerTimeout !== null) clearTimeout(this.#bannerTimeout);
     // A fatal consequence is the lesson, so it stays until the outcome screen

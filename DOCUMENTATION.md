@@ -15,7 +15,7 @@ dashboard, reshaped Tier A geometry, and full-but-unreviewed Santali
 scenario coverage) — they haven't been rewritten yet to match. `README.md`
 is current on all of that; this section and the numbers immediately below
 are current, the numbered sections after are not.
-- `npm test` → **109/109 passing** (12 test files; `admin.test.ts`,
+- `npm test` → **116/116 passing** (13 test files; `admin.test.ts`,
   `tierA-shapes.test.ts`, `citations.test.ts` and `machinery.test.ts` were added after this document was written).
   A third scenario, `machinery-conveyor-loto`, has been added since; `README.md` describes it.
 - `npm run check` (`tsc --noEmit`) → clean.
@@ -371,7 +371,7 @@ with a warning rather than silently corrupting interpolation.
 
 ## 9. Tests
 
-109 tests across 12 files, using Node's built-in test runner
+116 tests across 13 files, using Node's built-in test runner
 (`node --experimental-strip-types --test tests/**/*.test.ts`) with `happy-dom`
 providing a DOM for the app-layer tests. No mocking framework — fakes are
 hand-written (e.g. injected clocks, fake `SpeechSynthesisVoice` lists).

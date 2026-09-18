@@ -216,6 +216,9 @@
         "text": {
           "en": "Look around before you go near the belt. Tap on the two things here that could kill someone today, and choose \"Look at\".",
           "hi": "बेल्ट के पास जाने से पहले चारों ओर देखिए। यहाँ की वे दो चीज़ें टैप कीजिए जो आज किसी की जान ले सकती हैं, और \"देखिए\" चुनिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/observe_hazards.prompt.hi"
         }
       },
       "targets": [
@@ -240,6 +243,9 @@
             "text": {
               "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
               "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/observe_hazards.error.REACHED_INTO_LIVE_BELT.hi"
             }
           },
           "effects": [
@@ -267,6 +273,9 @@
           "text": {
             "en": "You did not spot both hazards: the jammed pulley, and the loose cloth hanging near it.",
             "hi": "आपने दोनों ख़तरे नहीं पहचाने: जाम पुली, और उसके पास लटकता ढीला कपड़ा।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/observe_hazards.timeout.hi"
           }
         }
       },
@@ -293,6 +302,9 @@
         "text": {
           "en": "The belt is still running, and nobody works on a moving belt. Stop it first: tap the pull-cord switch and choose \"Use\".",
           "hi": "बेल्ट अभी भी चल रही है, और चलती बेल्ट पर कोई काम नहीं करता। पहले इसे रोकिए: पुल-कॉर्ड स्विच टैप कीजिए और \"चलाइए\" चुनिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/stop_belt.prompt.hi"
         }
       },
       "ordered": false,
@@ -325,6 +337,9 @@
             "text": {
               "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
               "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/stop_belt.error.REACHED_INTO_LIVE_BELT.hi"
             }
           },
           "effects": [
@@ -348,6 +363,9 @@
           "text": {
             "en": "The belt was left running while people stood beside it.",
             "hi": "लोग पास खड़े रहे और बेल्ट चलती रही।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/stop_belt.timeout.hi"
           }
         }
       },
@@ -370,6 +388,9 @@
         "text": {
           "en": "The belt stops. You turn towards the switch room. Behind you, the belt starts again: someone has reset the pull cord. Your helper had leaned in to pull the coal out, and his loose gamchha has dragged his arm into the pulley.",
           "hi": "बेल्ट रुक जाती है। आप स्विच रूम की ओर मुड़ते हैं। पीछे बेल्ट फिर चल पड़ती है: किसी ने पुल-कॉर्ड रीसेट कर दी है। आपका हेल्पर कोयला निकालने के लिए झुका था, और उसके ढीले गमछे ने उसकी बाँह पुली में खींच ली है।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/helper_caught_running.prompt.hi"
         }
       },
       "effects": [
@@ -408,6 +429,9 @@
         "text": {
           "en": "You turn towards the switch room. Behind you, the belt starts: the control room has restarted it, not knowing anyone is here. Your helper had leaned in to pull the coal out, and his loose gamchha has dragged his arm into the pulley.",
           "hi": "आप स्विच रूम की ओर मुड़ते हैं। पीछे बेल्ट चल पड़ती है: कंट्रोल रूम ने, यह जाने बिना कि यहाँ कोई है, उसे फिर चालू कर दिया है। आपका हेल्पर कोयला निकालने के लिए झुका था, और उसके ढीले गमछे ने उसकी बाँह पुली में खींच ली है।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/helper_caught_tripped.prompt.hi"
         }
       },
       "effects": [
@@ -488,6 +512,9 @@
             "text": {
               "en": "You grabbed him while the belt could still run. The pulley pulled you in beside him.",
               "hi": "आपने उसे तब पकड़ा जब बेल्ट अब भी चल सकती थी। पुली ने आपको भी उसके साथ अंदर खींच लिया।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/rescue_decision.error.SECOND_VICTIM_PULLED_IN.hi"
             }
           },
           "effects": [
@@ -514,6 +541,9 @@
             "text": {
               "en": "You reached into the tail pulley to pull the coal out. The belt was live, and the pulley drew your arm in.",
               "hi": "आपने कोयला निकालने के लिए टेल पुली में हाथ डाला। बेल्ट में बिजली थी, और पुली ने आपकी बाँह अंदर खींच ली।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/rescue_decision.error.REACHED_INTO_LIVE_BELT.hi"
             }
           },
           "effects": [
@@ -537,6 +567,9 @@
           "text": {
             "en": "The belt kept running while you hesitated.",
             "hi": "आपके रुकने के दौरान बेल्ट चलती रही।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/rescue_decision.timeout.hi"
           }
         },
         "goto": "outcome_fatal_delay"
@@ -612,6 +645,9 @@
             "text": {
               "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
               "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/isolate_c3.error.TOUCHED_BEFORE_ISOLATION.hi"
             }
           }
         },
@@ -627,6 +663,9 @@
             "text": {
               "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
               "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/isolate_c3.error.CLEARED_BEFORE_ISOLATION.hi"
             }
           }
         }
@@ -639,6 +678,9 @@
           "text": {
             "en": "The belt was not isolated in time.",
             "hi": "बेल्ट समय पर आइसोलेट नहीं हुई।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/isolate_c3.timeout.hi"
           }
         }
       },
@@ -713,6 +755,9 @@
             "text": {
               "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
               "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/isolate_c4.error.TOUCHED_BEFORE_ISOLATION.hi"
             }
           }
         },
@@ -728,6 +773,9 @@
             "text": {
               "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
               "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/isolate_c4.error.CLEARED_BEFORE_ISOLATION.hi"
             }
           }
         }
@@ -740,6 +788,9 @@
           "text": {
             "en": "The belt was not isolated in time.",
             "hi": "बेल्ट समय पर आइसोलेट नहीं हुई।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/isolate_c4.timeout.hi"
           }
         }
       },
@@ -764,6 +815,9 @@
         "text": {
           "en": "An isolator someone else can switch back on is not isolation. Tap your personal padlock and choose \"Clip on\" to lock the isolator. Then tap the do-not-operate tag and choose \"Clip on\".",
           "hi": "जिस आइसोलेटर को कोई और फिर चालू कर सके, वह आइसोलेशन नहीं है। अपना निजी ताला टैप कीजिए और आइसोलेटर पर ताला लगाने के लिए \"बाँधिए\" चुनिए। फिर 'चालू न करें' टैग टैप कीजिए और \"बाँधिए\" चुनिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/lock_and_tag.prompt.hi"
         }
       },
       "ordered": false,
@@ -806,6 +860,9 @@
             "text": {
               "en": "Not yet. The belt has already restarted once today. Going to him before it is made safe puts two people in the pulley instead of one.",
               "hi": "अभी नहीं। बेल्ट आज एक बार फिर चल चुकी है। उसे सुरक्षित किए बिना उसके पास जाने से पुली में एक की जगह दो लोग होंगे।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/lock_and_tag.error.TOUCHED_BEFORE_LOCKOUT.hi"
             }
           }
         },
@@ -821,6 +878,9 @@
             "text": {
               "en": "Not yet. The belt is stopped but not yet made safe. Nobody touches the pulley until the belt is isolated, locked, tagged and tested.",
               "hi": "अभी नहीं। बेल्ट रुकी है, पर अभी सुरक्षित नहीं है। जब तक बेल्ट आइसोलेट, ताला-बंद, टैग और जाँची न जाए, पुली को कोई नहीं छूता।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/lock_and_tag.error.CLEARED_BEFORE_LOCKOUT.hi"
             }
           }
         }
@@ -833,6 +893,9 @@
           "text": {
             "en": "The isolator was left without your lock and tag.",
             "hi": "आइसोलेटर पर आपका ताला और टैग नहीं लगा।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/lock_and_tag.timeout.hi"
           }
         }
       },
@@ -853,6 +916,9 @@
         "text": {
           "en": "Prove the belt is dead before anyone goes near it. Tap the local start button and choose \"Use\". The belt must not move.",
           "hi": "किसी के पास जाने से पहले साबित कीजिए कि बेल्ट बंद है। लोकल स्टार्ट बटन टैप कीजिए और \"चलाइए\" चुनिए। बेल्ट को हिलना नहीं चाहिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/try_start.prompt.hi"
         }
       },
       "ordered": false,
@@ -885,6 +951,9 @@
             "text": {
               "en": "Not yet. A lock on the wrong switch looks exactly like a lock on the right one. Test first.",
               "hi": "अभी नहीं। ग़लत स्विच पर लगा ताला भी सही स्विच पर लगे ताले जैसा ही दिखता है। पहले जाँचिए।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/try_start.error.SKIPPED_START_TEST.hi"
             }
           }
         },
@@ -900,6 +969,9 @@
             "text": {
               "en": "Not yet. A lock on the wrong switch looks exactly like a lock on the right one. Test first.",
               "hi": "अभी नहीं। ग़लत स्विच पर लगा ताला भी सही स्विच पर लगे ताले जैसा ही दिखता है। पहले जाँचिए।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/try_start.error.SKIPPED_START_TEST.hi"
             }
           }
         }
@@ -912,6 +984,9 @@
           "text": {
             "en": "Nobody proved the belt was dead.",
             "hi": "किसी ने साबित नहीं किया कि बेल्ट बंद है।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/try_start.timeout.hi"
           }
         }
       },
@@ -933,6 +1008,9 @@
         "text": {
           "en": "The belt is stopped, locked and tested. Now go to him. Tap your helper and choose \"Look at\" to check his arm and his breathing. Then choose \"Signal\" and keep talking to him until first aid arrives. Do not pull his arm out of the pulley yourself.",
           "hi": "बेल्ट रुकी है, ताला लगा है और जाँच हो चुकी है। अब उसके पास जाइए। हेल्पर को टैप कीजिए और उसकी बाँह और साँस देखने के लिए \"देखिए\" चुनिए। फिर \"इशारा कीजिए\" चुनिए और प्राथमिक उपचार आने तक उससे बात करते रहिए। उसकी बाँह ख़ुद पुली से मत खींचिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/free_helper.prompt.hi"
         }
       },
       "ordered": true,
@@ -970,6 +1048,9 @@
           "text": {
             "en": "Your helper was left alone after the belt was made safe.",
             "hi": "बेल्ट सुरक्षित होने के बाद भी हेल्पर अकेला छोड़ दिया गया।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/free_helper.timeout.hi"
           }
         }
       },
@@ -990,6 +1071,9 @@
         "text": {
           "en": "The first-aid team has taken him. The belt is still locked. Now clear the coal: tap the jammed coal and choose \"Use\".",
           "hi": "प्राथमिक उपचार दल उसे ले गया है। बेल्ट पर अब भी ताला है। अब कोयला साफ़ कीजिए: फँसे कोयले को टैप कीजिए और \"चलाइए\" चुनिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/clear_jam.prompt.hi"
         }
       },
       "effects": [
@@ -1027,6 +1111,9 @@
           "text": {
             "en": "The jam was not cleared.",
             "hi": "जाम साफ़ नहीं हुआ।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/clear_jam.timeout.hi"
           }
         }
       },
@@ -1090,6 +1177,9 @@
             "text": {
               "en": "You tried to start the belt yourself. The control room starts it, once they know the area is clear.",
               "hi": "आपने बेल्ट ख़ुद चालू करने की कोशिश की। बेल्ट कंट्रोल रूम चालू करता है, जब उसे पता हो कि जगह ख़ाली है।"
+            },
+            "audio": {
+              "hi": "machinery-conveyor-loto/restore.error.STARTED_WITHOUT_HANDOVER.hi"
             }
           }
         }
@@ -1102,6 +1192,9 @@
           "text": {
             "en": "The belt was not handed back to the control room.",
             "hi": "बेल्ट कंट्रोल रूम को वापस नहीं सौंपी गई।"
+          },
+          "audio": {
+            "hi": "machinery-conveyor-loto/restore.timeout.hi"
           }
         }
       },
@@ -1128,6 +1221,9 @@
         "text": {
           "en": "You spotted the loose gamchha and the jam, and made sure nobody worked on a live belt. When your helper was caught, you stopped the belt instead of grabbing him, isolated the right belt, locked, tagged and tested it, and only then went to him. Stopping the machine before touching the person is the reflex this drill exists for.",
           "hi": "आपने ढीला गमछा और जाम पहचाना, और ध्यान रखा कि चालू बेल्ट पर कोई काम न करे। जब हेल्पर फँसा, तो आपने उसे पकड़ने के बजाय बेल्ट रोकी, सही बेल्ट आइसोलेट की, ताला और टैग लगाया, जाँच की, और उसके बाद ही उसके पास गए। इंसान को छूने से पहले मशीन रोकना: यही आदत यह अभ्यास सिखाता है।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_pass.summary.hi"
         }
       }
     },
@@ -1141,12 +1237,18 @@
         "text": {
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_live_belt.prompt.hi"
         }
       },
       "summary": {
         "text": {
           "en": "You put your hands into the tail pulley of a belt that was not isolated. A stopped belt can start at any moment from the control room. Stop, isolate, lock, tag and test before any hand goes near a pulley.",
           "hi": "आपने ऐसी बेल्ट की टेल पुली में हाथ डाला जो आइसोलेट नहीं थी। रुकी हुई बेल्ट कंट्रोल रूम से कभी भी चल सकती है। किसी भी पुली के पास हाथ ले जाने से पहले रोकिए, आइसोलेट कीजिए, ताला और टैग लगाइए, और जाँचिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_live_belt.summary.hi"
         }
       }
     },
@@ -1160,12 +1262,18 @@
         "text": {
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_second_victim.prompt.hi"
         }
       },
       "summary": {
         "text": {
           "en": "You grabbed your helper while the belt could still run, and the pulley pulled you in beside him. The fastest way to save someone caught in a machine is to stop the machine, not to reach for them.",
           "hi": "जब बेल्ट अब भी चल सकती थी, आपने हेल्पर को पकड़ा, और पुली ने आपको भी उसके साथ खींच लिया। मशीन में फँसे व्यक्ति को बचाने का सबसे तेज़ तरीका मशीन रोकना है, उसकी ओर हाथ बढ़ाना नहीं।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_second_victim.summary.hi"
         }
       }
     },
@@ -1179,12 +1287,18 @@
         "text": {
           "en": "The drill has ended.",
           "hi": "अभ्यास समाप्त हुआ।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_delay.prompt.hi"
         }
       },
       "summary": {
         "text": {
           "en": "The belt kept running while you hesitated. When someone is caught in a machine, the seconds before the pull cord is pulled decide how bad the injury is.",
           "hi": "आपके रुकने के दौरान बेल्ट चलती रही। जब कोई मशीन में फँसा हो, तो पुल-कॉर्ड खींचने से पहले के सेकंड तय करते हैं कि चोट कितनी गहरी होगी।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/outcome_fatal_delay.summary.hi"
         }
       }
     }
