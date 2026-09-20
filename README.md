@@ -19,7 +19,7 @@ src/admin/       compliance dashboard — verifies scanned credentials, no backe
 src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons — see docs/APK.md for the Android build
-tests/           116 tests, node's built-in runner
+tests/           124 tests, node's built-in runner
 ```
 
 ## Try it
@@ -28,7 +28,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 116 tests
+npm test                # 124 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -58,6 +58,7 @@ Flags: `--seed N`, `--variants N`, `--lang hi,en`, `--step MS`, `--events`.
 
 Consequences that fall out of that, and which the code actually enforces:
 
+- **Two modes, and only one of them certifies.** *Show me* walks the learner through each step by name, which is the right thing to say the first time someone meets a procedure. *Prove it* replaces every instruction with the situation ("The belt is running, with coal packed at the tail pulley. Make it safe to work on.") and nothing else. A learner who is stuck can ask for the step, which hands it over and marks the run as not counting. Guided and hinted runs teach; only an unaided assessment run earns a certificate, and `certify` enforces that rather than the UI. A test rejects any goal line that names a verb, a tap or an order, because without it the assessment text drifts back into instructions one helpful edit at a time.
 - **Assessment is behavioural.** No multiple choice anywhere. The scored signal is action sequence, time-to-first-correct-action, hesitation latency, coded error class, and recovery after induced failure.
 - **A competency vector, not a score.** Six dimensions, including `rescue_restraint` — the reflex to climb down after a collapsed colleague, which is what actually kills people in confined spaces. Its pass mark is 100: there is no partial credit for going in.
 - **Every wrong action is a named, graded mistake with a stated consequence.** `ErrorRule` carries a stable code, a severity, the dimension it damages, and the narration shown to the learner. A failed run is a debrief, not a red X.
@@ -108,6 +109,7 @@ English and Hindi are authored throughout all three scenarios. Santali (Ol Chiki
 - **The conveyor drill has no Santali at all yet.** It declares only `en` and `hi`, so a Santali learner is served Hindi. `node tools/translate.mjs --report` lists what is missing; any draft has to go through `l10n/sat-review.tsv` like the rest.
 - **The admin dashboard has no backend.** It verifies real signed credentials and keeps a real roster, but only of whatever this one device has scanned — see the module comment in `src/admin/store.ts` for what a real multi-supervisor deployment still needs.
 - **Tier A has been demonstrated working on a real phone at the ISIH presentations.** Behaviour across the wider range of ARCore handsets has not been measured yet.
+- **The pass marks were tuned against guided prompts, and assessment mode has not been calibrated.** Removing the instructions makes every run harder, especially time-to-first-action, and nobody has yet run the unaided version with real workers. Treat the current thresholds as a starting point, not a standard, and expect them to move once there is data. There is also a risk in the other direction: a first-time smartphone user may fail a step because the two-tap verb sheet is unfamiliar rather than because the procedure is, which is what the guided run before it exists to prevent.
 - **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher — see `src/app/render/tierA.ts`'s `partsFor`), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate — two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
 - **Tier B (marker tracking) is not built.** It is contracted in `render/contract.ts`; the app falls back to Tier C loudly rather than mounting a renderer that would show a black screen.
 - **Issuing happens in the browser** in the current demo, signed with a fixed demo key (`src/credential/demo-trust.ts`, chosen deliberately over a random-per-session key so a credential can be verified on a *different* device — see that file's comment) — which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.

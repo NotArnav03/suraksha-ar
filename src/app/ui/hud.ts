@@ -18,6 +18,8 @@ export interface HudHooks {
   onLanguage(code: LangCode): void;
   onSpeechToggle(enabled: boolean): void;
   onWait(): void;
+  /** the learner asked to be shown the step; costs the certificate, not the drill */
+  onHint(): void;
 }
 
 function el<K extends keyof HTMLElementTagNameMap>(
@@ -47,6 +49,7 @@ export class Hud {
   #banner = el('div', 'banner');
   #pulse = el('div', 'input-pulse');
   #waitButton = el('button', 'wait-button');
+  #hint = el('button', 'ghost hint-button');
   #continue = el('button', 'primary continue');
 
   #handle = el('div', 'hud-handle');
@@ -80,13 +83,17 @@ export class Hud {
     this.#waitButton.textContent = `⏱ ${this.#i18n.ui('wait')}`;
     this.#waitButton.addEventListener('click', () => this.#hooks.onWait());
 
+    this.#hint.textContent = `💡 ${this.#i18n.ui('hint')}`;
+    this.#hint.hidden = true;
+    this.#hint.addEventListener('click', () => this.#hooks.onHint());
+
     this.#continue.textContent = this.#i18n.ui('next');
     this.#continue.addEventListener('click', () => this.#hooks.onAcknowledge());
     this.#continue.hidden = true;
 
     const head = el('div', 'prompt-row');
     head.append(this.#prompt, this.#listen);
-    this.#panel.append(this.#pulse, head, this.#timer, this.#checklist, this.#banner, this.#continue);
+    this.#panel.append(this.#pulse, head, this.#timer, this.#checklist, this.#hint, this.#banner, this.#continue);
 
     this.root.append(bar, this.#handle, this.#panel, this.#waitButton);
   }
@@ -166,6 +173,7 @@ export class Hud {
     }
     this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
     this.#waitButton.textContent = `⏱ ${this.#i18n.ui('wait')}`;
+    this.#hint.textContent = `💡 ${this.#i18n.ui('hint')}`;
     this.#continue.textContent = this.#i18n.ui('next');
     if (this.#view) this.present(this.#view);
   }
@@ -216,6 +224,9 @@ export class Hud {
     // Offered only where it works. On a handset with no voice for the script on
     // screen, pressing it would do nothing at all.
     this.#listen.disabled = !this.#i18n.canSpeak(view.prompt, view.promptAudio);
+
+    // Only in assessment mode, and only until it is taken on this step.
+    this.#hint.hidden = !view.hintAvailable;
 
     this.#timer.hidden = view.window === null;
     if (changed) {

@@ -61,7 +61,18 @@ export interface ErrorCount {
   dimension: Dimension;
 }
 
-export interface Competency {
+/**
+ * How the run was taken. A guided run walks the learner through each step by
+ * name, so it teaches but proves nothing; a run where a hint was taken proves
+ * everything except the step that was handed over. Only an unhinted assessment
+ * run can count towards a credential (see `certify`).
+ */
+export interface Attempted {
+  mode: 'guided' | 'assess';
+  hinted: boolean;
+}
+
+export interface Competency extends Attempted {
   scenarioId: string;
   variantId: string;
   seed: number;
@@ -112,7 +123,9 @@ export function scoreResults(
   results: NodeResult[],
   outcome: 'pass' | 'fail' | 'fatal' | null,
   outcomeNodeId: string | null,
-): Competency {
+  // How the run was taken is the app's to know, not the scorer's: the engine
+  // sees an identical event stream either way, which is the whole point.
+): Omit<Competency, keyof Attempted> {
   const assessed = results.filter((r) => r.kind === 'expect' || r.kind === 'observe');
 
   const earned = new Map<Dimension, number>();
@@ -247,12 +260,20 @@ export function scoreResults(
   };
 }
 
-export function scoreSession(session: DrillSession): Competency {
+export function scoreSession(
+  session: DrillSession,
+  // Defaults to an unaided assessment run: the headless runners and the tests
+  // drive the engine directly, with no prompts on screen to help them.
+  attempted: Attempted = { mode: 'assess', hinted: false },
+): Competency {
   const node = session.node;
-  return scoreResults(
-    session.scenario,
-    session.results,
-    session.outcome,
-    node.kind === 'outcome' ? node.id : null,
-  );
+  return {
+    ...scoreResults(
+      session.scenario,
+      session.results,
+      session.outcome,
+      node.kind === 'outcome' ? node.id : null,
+    ),
+    ...attempted,
+  };
 }

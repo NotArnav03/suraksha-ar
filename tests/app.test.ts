@@ -644,3 +644,69 @@ test('a prop removed from the scene stays removed when the next step is shown', 
   world.remove();
   chrome.remove();
 });
+
+test('assessment mode states the goal, and the hint hands over the step at the cost of the certificate', async () => {
+  const module = validateScenario(
+    JSON.parse(await readFile(fileURLToPath(new URL('../src/scenarios/machinery-conveyor-loto.json', import.meta.url)), 'utf8')),
+  );
+  const variant = resolveVariant(module, 1);
+  const world = window.document.createElement('div') as unknown as HTMLElement;
+  const chrome = window.document.createElement('div') as unknown as HTMLElement;
+  window.document.body.append(world as never, chrome as never);
+  const i18n = new Localizer('en');
+  i18n.speechEnabled = false;
+  const controller = new DrillController(
+    variant,
+    new TierCRenderer(i18n),
+    i18n,
+    { onFinish: () => {} },
+    manualScheduler(),
+    { mode: 'assess' },
+  );
+  await controller.start(world, chrome);
+  pressContinue(chrome); // the briefing is narration, and reads the same in both modes
+
+  const node = controller.session.node;
+  assert.equal(node.id, 'observe_hazards');
+  assert.equal(prompt(chrome), node.goal!.text.en, 'assessment mode should show the goal');
+  assert.doesNotMatch(prompt(chrome), /tap|choose/i, 'the goal must not name the screen mechanics');
+  assert.deepEqual(controller.attempted, { mode: 'assess', hinted: false });
+
+  const hint = chrome.querySelector<HTMLButtonElement>('.hint-button');
+  assert.ok(hint && !hint.hidden, 'a stuck learner must be able to ask for the step');
+  hint.click();
+
+  assert.equal(prompt(chrome), node.prompt.text.en, 'the hint shows the guided line for this step');
+  assert.equal(chrome.querySelector<HTMLButtonElement>('.hint-button')!.hidden, true, 'already given');
+  assert.deepEqual(controller.attempted, { mode: 'assess', hinted: true });
+  controller.stop();
+  world.remove();
+  chrome.remove();
+});
+
+test('guided mode is unchanged: the step is named, and no hint is offered', async () => {
+  const module = validateScenario(
+    JSON.parse(await readFile(fileURLToPath(new URL('../src/scenarios/machinery-conveyor-loto.json', import.meta.url)), 'utf8')),
+  );
+  const world = window.document.createElement('div') as unknown as HTMLElement;
+  const chrome = window.document.createElement('div') as unknown as HTMLElement;
+  window.document.body.append(world as never, chrome as never);
+  const i18n = new Localizer('en');
+  i18n.speechEnabled = false;
+  const controller = new DrillController(
+    resolveVariant(module, 1),
+    new TierCRenderer(i18n),
+    i18n,
+    { onFinish: () => {} },
+    manualScheduler(),
+  );
+  await controller.start(world, chrome);
+  pressContinue(chrome);
+
+  assert.equal(prompt(chrome), controller.session.node.prompt.text.en);
+  assert.equal(chrome.querySelector<HTMLButtonElement>('.hint-button')!.hidden, true);
+  assert.deepEqual(controller.attempted, { mode: 'guided', hinted: false });
+  controller.stop();
+  world.remove();
+  chrome.remove();
+});

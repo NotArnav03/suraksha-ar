@@ -142,6 +142,7 @@ export function resolveVariant(scenario: Scenario, seed: number): ResolvedScenar
     const base = {
       id: node.id,
       prompt: interpolateNarration(node.prompt, params),
+      ...(node.goal ? { goal: interpolateNarration(node.goal, params) } : {}),
       dimensions: node.dimensions,
       ...(node.weight !== undefined ? { weight: node.weight } : {}),
       ...(node.cites ? { cites: node.cites } : {}),

@@ -43,7 +43,13 @@ export function certify(
 ): Certification {
   const required = scenario.scoring.requiredVariants;
 
-  const forThisScenario = attempts.filter((a) => a.scenarioId === scenario.id);
+  const all = attempts.filter((a) => a.scenarioId === scenario.id);
+
+  // A guided run names every step as the learner takes it, and a hinted run
+  // hands over the one step the learner could not find. Both teach; neither is
+  // evidence of competence, so neither can be counted towards a credential.
+  const forThisScenario = all.filter((a) => a.mode === 'assess' && !a.hinted);
+  const aided = all.length - forThisScenario.length;
 
   // One counted attempt per distinct variant: the first that passed it.
   const counted = new Map<string, Competency>();
@@ -73,6 +79,11 @@ export function certify(
     reasons.push(
       `${counted.size} of ${required} distinct variants passed — ${required - counted.size} more required`,
     );
+    if (aided > 0) {
+      reasons.push(
+        `${aided} guided or hinted ${aided === 1 ? 'run does' : 'runs do'} not count towards a certificate`,
+      );
+    }
     const fatal = forThisScenario.filter((a) => a.result === 'fatal');
     for (const attempt of fatal) {
       for (const error of attempt.fatalErrors) {

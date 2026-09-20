@@ -161,6 +161,12 @@ export function validateScenario(input: unknown): Scenario {
       node.dimensions.forEach((d, i) => dimensionRef(`${at}.dimensions[${i}]`, d));
     }
     if (!node.prompt?.text?.en) push(`${at}.prompt.text.en`, 'English text is required as the fallback');
+    if (node.goal && !node.goal.text?.en) {
+      push(`${at}.goal.text.en`, 'English text is required as the fallback');
+    }
+    // A goal on a node nobody is scored on has nothing to hide: brief and
+    // outcome nodes are narration, and assessment mode shows them unchanged.
+    if (node.goal && !measures) push(`${at}.goal`, 'only an assessed node needs a goal prompt');
 
     for (const [i, param] of Object.entries(node.when ?? {})) {
       if (!paramIds.has(i)) push(`${at}.when.${i}`, `guards on undeclared param (value ${String(param)})`);

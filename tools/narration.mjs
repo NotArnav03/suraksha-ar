@@ -68,6 +68,9 @@ function lines(scenario) {
   };
   for (const node of scenario.nodes) {
     add(node.prompt, `${node.id}.prompt`);
+    // Assessment mode speaks the goal in place of the step, so it is a line the
+    // app can say and therefore a line someone has to record.
+    add(node.goal, `${node.id}.goal`);
     if (node.kind === 'outcome') add(node.summary, `${node.id}.summary`);
     for (const rule of node.errors ?? []) add(rule.consequence, `${node.id}.error.${rule.code}`);
     if (node.onTimeout) add(node.onTimeout.consequence, `${node.id}.timeout`);

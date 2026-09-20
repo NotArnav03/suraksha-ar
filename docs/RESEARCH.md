@@ -437,6 +437,65 @@ of it. The compact payload stays the offline gate-scan path; the standard payloa
 credential portable into Skill India Digital and NCVET recognition. That converts the two largest
 adjacent systems from competitors into distribution.
 
+### 6.1 Where this sits in the national skilling system
+
+Checked 2026-09-20. This is the positioning, with the parts that are verified separated from the
+parts that are not, because the difference is what a knowledgeable judge will probe.
+
+**The ladder, in order.** The Skill Council for Mining Sector (SCMS), promoted by FIMI and
+authorised by MSDE on 17 March 2015, writes the National Occupational Standards and Qualification
+Packs. NCVET recognises **Awarding Bodies** and, separately, **Assessment Agencies**; an AA is
+recognised state-wise and is the entity authorised to assess candidates against an NSQC-approved
+qualification. An awarding body onboards AAs from that pool.
+
+So this product is not an issuer and should never be pitched as one. Its slot is **the instrument
+an Assessment Agency uses**, feeding an awarding body that deposits into DigiLocker.
+
+**The mapping is real.** From SCMS qualification pack MIN/Q3203 (NSQC approved, 2023), the safety
+NOS are MIN/N1702 (underground metalliferous), **MIN/N1703 (opencast, including the Mine Vocational
+Training Rule)** and MIN/N1704 (underground coal). Since the drills are set at the pit-top,
+MIN/N1703 is the primary mapping. Performance criteria our drills already exercise, verbatim from
+the pack:
+
+- **PC3** "undertake 'The Take-5 (Personal Risk Assessment)' before commencement of any work" — the
+  hazard-spotting node in all three drills
+- **PC33** "identify six directional hazards at workplace and take decisions accordingly"
+- **PC27** "ensure positive isolation near the work place if applicable" — the conveyor lock-out
+  drill, almost word for word
+- **PC10** "operate various types of fire extinguishers to control different types of fire" — fire
+- **PC14** "use self-rescue apparatus appropriately when required" — fire
+- **PC1** firedamp, whitedamp, blackdamp and **PC24** "follow laid out SOP in case of alarm signal
+  for leakage of inflammable gases" — gas and confined space
+- **PC25** reporting unsafe acts, **PC26** communication, **PC28** PPE, **PC8** first aid
+
+**NCVET's micro-credential guidelines (2023)** are a better fit than a full Qualification Pack: a
+90-second drill is a micro-credential against named PCs, not a job-role qualification.
+
+**The honest caveat on mapping.** Performance criteria are can-do statements. Our six-dimension
+vector does not decompose into them automatically, so putting PC codes in the scenario JSON is a
+label unless the credential also reports per-PC evidence. Claim NSQF alignment only once that
+output exists.
+
+**Offline verification is already in the national standard.** The Electronic Skill Credential
+Standard (ESCS v1.0, MSDE/DGT, June 2019, built on Open Badges v2 and JSON-LD) treats the QR code
+as an "offline-to-online bridge" and specifies two paths: fetch the signed JSON-LD from a URI, or,
+where the credential cannot be reached in the cloud, embed `@id`, `hash`, `key_id` and
+`signatureValue` in the QR and **verify the signature offline**. That is what the 51-byte payload
+already does, which reframes it: not a rival credential, an implementation of the offline mode the
+standard describes. It also fixes the demo's weakest point, because the signing key belongs to the
+awarding body rather than the handset.
+
+**The caveat on ESCS.** It is a 2019 specification still being rolled out, and through DGT:
+new e-certificate formats apply to Craftsmen Training Scheme trainees from the 2025 admission year.
+There is no evidence that mining-sector credentials use it. Treat it as the direction of travel and
+a strong precedent, not as a system we can plug into today. Build the ESCS-shaped payload when a
+partner holds the signing key, not before.
+
+**Why offline still matters.** Skill India Digital Hub's QR resolves to a live NSDC verification
+page. That is an online lookup, and a pit-top in Jharkhand frequently has no network. The claim to
+make is narrow and true: *the national system verifies where there is signal; this verifies where
+there is not.*
+
 **Open questions worth an hour each**
 
 1. Exact DGMS state-wise fatal accident figures for Jharkhand 2022 and 2023, from the DGMS
@@ -510,6 +569,12 @@ adjacent systems from competitors into distribution.
 - VR deployment logistics and support ratios: https://www.raum.app/enterprise-vr-training/
 
 **Existing solutions: credentials and compliance**
+- NCVET, recognition of Awarding Bodies and Assessment Agencies: https://ncvet.gov.in/recognition-of-ab-aa/
+- NCVET guidelines for NOS and micro-credentials (2023): https://ncvet.gov.in/wp-content/uploads/2023/07/Guidelines-for-Development-Approval-Usage-of-National-Occupational-Standards-NOS-Micro-Credentials-MC.pdf
+- Skill Council for Mining Sector: https://www.skillcms.in/
+- SCMS qualification pack MIN/Q3203 with the MIN/N1702-1704 safety NOS and their performance criteria: https://nqr.gov.in/sites/default/files/MIN_Q3203_v2.0%20Mine%20Mechanic-Fitter%20-%20NSQC%20Approved%20-%2001.04.2023.pdf
+- Electronic Skill Credential Standard v1.0 (MSDE/DGT, June 2019), including offline QR signature verification: https://bharatskills.gov.in/pdf/ESCS/Electronic_Skill_Credential_Standard_v1.0.pdf
+- DGT, new e-certificate formats for CTS trainees from the 2025 admission year: https://www.dgt.gov.in/en/node/4277
 - Skill India Digital Hub: https://www.skillindiadigital.gov.in/about-us
 - MOSIP Inji credentialing stack: https://www.biometricupdate.com/202609/mosip-broadens-inji-beyond-digital-id-into-open-credentialing-platform
 - Inji wallet overview (offline share, W3C VC, ISO 18013-5): https://docs.mosip.io/inji/inji-wallet/inji-mobile/overview

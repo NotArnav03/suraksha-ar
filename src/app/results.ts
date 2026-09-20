@@ -110,6 +110,12 @@ export function renderResults(options: ResultsOptions): HTMLElement {
     head.append(el('p', 'outcome-summary', summary));
     i18n.speak(summary, outcome.summary.audio);
   }
+  // Said on the screen that shows the score, not buried in the certificate
+  // panel: a learner who just passed a guided run should not have to work out
+  // for themselves why no certificate appeared.
+  if (competency.mode === 'guided' || competency.hinted) {
+    head.append(el('p', 'run-note', i18n.ui(competency.hinted ? 'hintCost' : 'guidedRun')));
+  }
   root.append(head);
 
   // ── what went wrong ───────────────────────────────────────────────────────

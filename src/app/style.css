@@ -453,6 +453,8 @@ button:disabled { opacity: .38; pointer-events: none; }
   box-shadow: var(--shadow-md);
 }
 .continue { width: 100%; margin-top: 16px; }
+.hint-button { align-self: flex-start; margin-top: 10px; border-color: var(--hazard); color: var(--hazard); }
+.run-note { margin: 10px 0 0; font-size: .95rem; color: var(--ink-2); }
 
 /* ── results ────────────────────────────────────────────────────────────── */
 .results { padding: 24px 16px 34px; gap: 18px; overflow-y: auto; }

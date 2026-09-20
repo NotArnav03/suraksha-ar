@@ -10,7 +10,7 @@ import type { LocalizedText, ResolvedScenario, Scenario } from '../engine/types.
 import { distinctVariants } from '../engine/variant.ts';
 import { ScenarioError, validateScenario } from '../engine/validate.ts';
 import { DrillSession } from '../engine/runtime.ts';
-import { DrillController } from './controller.ts';
+import { DrillController, rafScheduler } from './controller.ts';
 import { TierCRenderer } from './render/tierC.ts';
 import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
@@ -90,6 +90,21 @@ if (MODULES.length === 0) {
   ).join('\n\n');
   app.append(box);
   throw new Error('no scenario module validated');
+}
+
+/**
+ * Whether a module can be run unaided.
+ *
+ * Assessment mode shows each node's `goal` (the situation) instead of its
+ * `prompt` (the step, named). A module part-way through that conversion would
+ * put "tap the pull cord and choose Use" on a screen labelled assessment, which
+ * is exactly the dishonesty the mode exists to remove, so it is offered only
+ * once every scored node has a goal.
+ */
+function assessable(candidate: Scenario): boolean {
+  return candidate.nodes
+    .filter((node) => node.kind === 'expect' || node.kind === 'observe')
+    .every((node) => node.goal !== undefined);
 }
 
 const scenarioKey = (params.get('scenario') ?? '').toLowerCase();
@@ -396,10 +411,22 @@ function startScreen(report: TierReport): void {
 
   const actions = document.createElement('div');
   actions.className = 'start-actions';
+  // Guided first, assessment second, and the assessment becomes the primary
+  // button once a run has been finished: a worker is walked through the
+  // procedure before being asked to prove it, and only the unaided run counts.
+  const hasRun = loadAttempts().some((a) => a.scenarioId === scenario.id);
+  const canAssess = assessable(scenario);
+
   const begin = document.createElement('button');
-  begin.className = 'primary big';
-  begin.textContent = i18n.ui('beginDrill');
-  begin.addEventListener('click', () => void drillScreen(report));
+  begin.className = canAssess && hasRun ? 'big' : 'primary big';
+  begin.textContent = canAssess ? i18n.ui('modeGuided') : i18n.ui('beginDrill');
+  begin.addEventListener('click', () => void drillScreen(report, 'guided'));
+
+  const assess = document.createElement('button');
+  assess.className = hasRun ? 'primary big' : 'big';
+  assess.textContent = i18n.ui('modeAssess');
+  assess.hidden = !canAssess;
+  assess.addEventListener('click', () => void drillScreen(report, 'assess'));
 
   const reset = document.createElement('button');
   reset.className = 'ghost';
@@ -408,7 +435,7 @@ function startScreen(report: TierReport): void {
     clearAttempts();
     startScreen(report);
   });
-  actions.append(begin, reset);
+  actions.append(begin, assess, reset);
 
   // A presentation shortcut, not a second product: reuses the exact
   // headless-ideal-operator path `?demo=credential` already used, so the
@@ -450,7 +477,7 @@ function startScreen(report: TierReport): void {
   root.append(hero, welcome, langRow, tierBox, progress, actions, demoNote, prefs);
 }
 
-async function drillScreen(report: TierReport): Promise<void> {
+async function drillScreen(report: TierReport, mode: 'guided' | 'assess' = 'guided'): Promise<void> {
   const root = screen('drill');
   const world = document.createElement('div');
   world.className = 'world';
@@ -495,7 +522,7 @@ async function drillScreen(report: TierReport): Promise<void> {
   const variant = nextVariant();
   controller = new DrillController(variant, renderer, i18n, {
     onFinish: (session) => {
-      const competency = scoreSession(session);
+      const competency = scoreSession(session, controller?.attempted ?? { mode, hinted: false });
       const attempts = saveAttempt(competency);
       controller?.stop();
       const results = renderResults({
@@ -509,7 +536,7 @@ async function drillScreen(report: TierReport): Promise<void> {
       });
       screen('results').append(results);
     },
-  });
+  }, rafScheduler, { mode });
 
   void controller.start(world, chrome);
 }

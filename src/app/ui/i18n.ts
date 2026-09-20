@@ -86,6 +86,19 @@ const UI: Record<string, LocalizedText> = {
   },
   // No `sat` on these two, for the same reason as the three AR lines below.
   rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
+  hint: { en: 'Show me this step', hi: 'यह चरण दिखाइए' },
+  // Said plainly, before the learner presses it and after: being stuck is not
+  // a reason to hide what the drill costs.
+  hintCost: {
+    en: 'You were shown a step, so this run does not count towards a certificate.',
+    hi: 'आपको एक चरण दिखाया गया, इसलिए यह प्रयास प्रमाणपत्र में नहीं गिना जाएगा।',
+  },
+  guidedRun: {
+    en: 'Guided run. It teaches the procedure; it does not count towards a certificate.',
+    hi: 'निर्देशित अभ्यास। यह प्रक्रिया सिखाता है; प्रमाणपत्र में नहीं गिना जाता।',
+  },
+  modeGuided: { en: 'Show me', hi: 'मुझे दिखाइए' },
+  modeAssess: { en: 'Prove it', hi: 'अब मैं करके दिखाऊँ' },
   rulesFollowed: { en: '{{count}} rules followed', hi: '{{count}} नियमों का पालन किया' },
   // No `sat` on these three: the fallback chain hands a Santali learner the
   // Hindi line, which is honest, where invented Santali would not be. They are

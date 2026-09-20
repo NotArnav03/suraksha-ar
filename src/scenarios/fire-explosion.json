@@ -207,6 +207,15 @@
           "sat": "fire-explosion/hazard_ignition.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Look around. Show what is wrong here.",
+          "hi": "चारों ओर देखिए। दिखाइए कि यहाँ क्या ग़लत है।"
+        },
+        "audio": {
+          "hi": "fire-explosion/hazard_ignition.goal.hi"
+        }
+      },
       "targets": [
         "fire"
       ],
@@ -271,6 +280,15 @@
         "audio": {
           "hi": "fire-explosion/select_extinguisher.prompt.hi",
           "sat": "fire-explosion/select_extinguisher.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The electrical panel is on fire. Decide what you will fight it with.",
+          "hi": "बिजली का पैनल जल रहा है। तय कीजिए कि आप किससे आग बुझाएँगे।"
+        },
+        "audio": {
+          "hi": "fire-explosion/select_extinguisher.goal.hi"
         }
       },
       "ordered": false,
@@ -384,6 +402,15 @@
           "sat": "fire-explosion/induced_failure.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Water will not do on this fire. Decide again.",
+          "hi": "इस आग पर पानी काम नहीं आएगा। दोबारा तय कीजिए।"
+        },
+        "audio": {
+          "hi": "fire-explosion/induced_failure.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -446,6 +473,15 @@
         "audio": {
           "hi": "fire-explosion/apply_pass.prompt.hi",
           "sat": "fire-explosion/apply_pass.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "You have the right extinguisher in your hands. Put the fire out.",
+          "hi": "सही अग्निशामक आपके हाथ में है। आग बुझाइए।"
+        },
+        "audio": {
+          "hi": "fire-explosion/apply_pass.goal.hi"
         }
       },
       "ordered": true,
@@ -539,6 +575,15 @@
           "sat": "fire-explosion/don_scsr.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The smoke is thickening and you will have to leave. Get yourself ready.",
+          "hi": "धुआँ गाढ़ा हो रहा है और आपको निकलना होगा। ख़ुद को तैयार कीजिए।"
+        },
+        "audio": {
+          "hi": "fire-explosion/don_scsr.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -619,6 +664,15 @@
         "audio": {
           "hi": "fire-explosion/evacuate.prompt.hi",
           "sat": "fire-explosion/evacuate.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "Get out.",
+          "hi": "बाहर निकलिए।"
+        },
+        "audio": {
+          "hi": "fire-explosion/evacuate.goal.hi"
         }
       },
       "ordered": false,

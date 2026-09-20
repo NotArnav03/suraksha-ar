@@ -278,6 +278,15 @@
           "sat": "gas-confined-space/observe_hazards.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Look around. Show what makes this job dangerous.",
+          "hi": "चारों ओर देखिए। दिखाइए कि यह काम ख़तरनाक क्यों है।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/observe_hazards.goal.hi"
+        }
+      },
       "targets": [
         "sump",
         "signage",
@@ -366,6 +375,15 @@
         "audio": {
           "hi": "gas-confined-space/check_permit.prompt.hi",
           "sat": "gas-confined-space/check_permit.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "Your supervisor has told you to clean the sump. Satisfy yourself that this work is authorised.",
+          "hi": "सुपरवाइज़र ने सम्प साफ़ करने को कहा है। ख़ुद तसल्ली कीजिए कि यह काम अधिकृत है।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/check_permit.goal.hi"
         }
       },
       "ordered": false,
@@ -463,6 +481,15 @@
           "sat": "gas-confined-space/permit_absent.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "There is no permit on the board for this sump. Decide what happens now.",
+          "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। तय कीजिए कि अब क्या होगा।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/permit_absent.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -543,6 +570,15 @@
           "sat": "gas-confined-space/permit_expired.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The permit on the board was issued for yesterday's shift. Decide what happens now.",
+          "hi": "बोर्ड पर लगा परमिट कल की पाली के लिए जारी हुआ था। तय कीजिए कि अब क्या होगा।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/permit_expired.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -618,6 +654,15 @@
         "audio": {
           "hi": "gas-confined-space/gas_test.prompt.hi",
           "sat": "gas-confined-space/gas_test.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "This sump has been closed for weeks. Find out what the air inside it is before anyone goes near the opening.",
+          "hi": "यह सम्प हफ़्तों से बंद है। किसी के मुँह के पास जाने से पहले पता कीजिए कि अंदर की हवा कैसी है।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/gas_test.goal.hi"
         }
       },
       "ordered": true,
@@ -768,6 +813,15 @@
           "sat": "gas-confined-space/ventilate.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The air in the sump is not fit to breathe. Make it fit, and be sure of it.",
+          "hi": "सम्प की हवा साँस लेने लायक नहीं है। उसे ठीक कीजिए, और उसकी पुष्टि कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/ventilate.goal.hi"
+        }
+      },
       "ordered": true,
       "expect": [
         {
@@ -868,6 +922,15 @@
         "audio": {
           "hi": "gas-confined-space/don_ppe.prompt.hi",
           "sat": "gas-confined-space/don_ppe.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The air is better, but this is still a confined space. Get yourself ready to go in.",
+          "hi": "हवा बेहतर है, पर यह अब भी बंद जगह है। अंदर जाने के लिए ख़ुद को तैयार कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/don_ppe.goal.hi"
         }
       },
       "ordered": true,
@@ -973,6 +1036,15 @@
           "sat": "gas-confined-space/post_standby.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Nobody enters a confined space alone. Put in place what has to be outside while you are in there.",
+          "hi": "बंद जगह में कोई अकेला नहीं उतरता। जब तक आप अंदर हैं, बाहर जो होना चाहिए, उसका इंतज़ाम कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/post_standby.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -1065,6 +1137,15 @@
           "sat": "gas-confined-space/entry.prompt.sat"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Everything you need is in place. Begin the work you were sent to do.",
+          "hi": "ज़रूरी सब कुछ तैयार है। जिस काम के लिए भेजा गया था, वह शुरू कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/entry.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -1145,6 +1226,15 @@
         "audio": {
           "hi": "gas-confined-space/evacuate.prompt.hi",
           "sat": "gas-confined-space/evacuate.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The blower has stopped and your detector alarm is now one unbroken tone. Act.",
+          "hi": "ब्लोअर बंद हो गया है और डिटेक्टर लगातार एक ही सुर में बज रहा है। कार्रवाई कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/evacuate.goal.hi"
         }
       },
       "ordered": false,
@@ -1268,6 +1358,15 @@
         "audio": {
           "hi": "gas-confined-space/rescue_decision.prompt.hi",
           "sat": "gas-confined-space/rescue_decision.prompt.sat"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The fitter in the next chamber is face down and not moving. Act.",
+          "hi": "बगल के चैंबर में फिटर औंधा पड़ा है और हिल नहीं रहा। कार्रवाई कीजिए।"
+        },
+        "audio": {
+          "hi": "gas-confined-space/rescue_decision.goal.hi"
         }
       },
       "ordered": false,

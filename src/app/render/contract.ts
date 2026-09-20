@@ -44,6 +44,10 @@ export interface ChecklistItem {
 
 export interface NodeView {
   node: ScenarioNode;
+  /** 'guided' walks the learner through each step; 'assess' states the goal only */
+  mode: 'guided' | 'assess';
+  /** true when this step has a guided line the learner has not asked for yet */
+  hintAvailable: boolean;
   prompt: string;
   /** language code -> recorded clip id for the prompt, when the scenario names one */
   promptAudio?: Record<string, string>;

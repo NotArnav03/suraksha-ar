@@ -140,7 +140,22 @@ export interface Expectation {
 
 interface NodeBase {
   id: string;
+  /**
+   * What the learner is told in guided mode: the step, named, in order.
+   * "Tap the pull-cord switch and choose Use to stop the belt."
+   */
   prompt: Narration;
+  /**
+   * What the learner is told in assessment mode: the situation and the goal,
+   * never the step. "The belt is running. Make it safe to work on."
+   *
+   * Without this the two modes are the same screen, and a drill that names the
+   * action, the object and the order measures reading rather than competence:
+   * a careful reader who has never seen a conveyor passes. A node with no
+   * `goal` falls back to `prompt`, so a scenario can be converted one node at a
+   * time, and `assessable` says whether the conversion is finished.
+   */
+  goal?: Narration;
   /** which competency dimensions this node measures */
   dimensions: Dimension[];
   weight?: number;

@@ -18,6 +18,15 @@ export interface DrillHooks {
   onFinish(session: DrillSession): void;
 }
 
+export interface DrillOptions {
+  /**
+   * 'guided' shows the authored step ("tap the pull cord and choose Use");
+   * 'assess' shows the node's `goal` instead, which states the situation and
+   * stops there. A node with no `goal` shows its prompt in both modes.
+   */
+  mode?: 'guided' | 'assess';
+}
+
 /**
  * Clock and frame source.
  *
@@ -52,6 +61,11 @@ export class DrillController {
   #enteredAt = 0;
   #frame = 0;
   #done = false;
+  #mode: 'guided' | 'assess';
+  /** a hint taken anywhere in the run marks the whole run; see `certify` */
+  #hinted = false;
+  /** the node the learner has asked for the guided line on */
+  #hintedNodeId: string | null = null;
 
   constructor(
     scenario: ResolvedScenario,
@@ -59,7 +73,9 @@ export class DrillController {
     i18n: Localizer,
     hooks: DrillHooks,
     scheduler: Scheduler = rafScheduler,
+    options: DrillOptions = {},
   ) {
+    this.#mode = options.mode ?? 'guided';
     this.#scenario = scenario;
     this.#renderer = renderer;
     this.#i18n = i18n;
@@ -80,6 +96,14 @@ export class DrillController {
       },
       onSpeechToggle: (enabled) => (i18n.speechEnabled = enabled),
       onWait: () => this.act({ verb: 'wait' }),
+      onHint: () => {
+        // Asking for the step is allowed, and it costs the certificate rather
+        // than the drill: a learner who is stuck learns more from being shown
+        // than from timing out, and the run simply stops being evidence.
+        this.#hinted = true;
+        this.#hintedNodeId = this.session.node.id;
+        this.#present(false);
+      },
     }, renderer.tier, renderer.label);
   }
 
@@ -99,6 +123,11 @@ export class DrillController {
 
     this.#present(true);
     this.#loop();
+  }
+
+  /** How this run was taken, for `scoreSession`. */
+  get attempted(): { mode: 'guided' | 'assess'; hinted: boolean } {
+    return { mode: this.#mode, hinted: this.#hinted };
   }
 
   act(action: Action): void {
@@ -168,10 +197,16 @@ export class DrillController {
       this.#enteredAt = this.#scheduler.now();
     }
 
+    // In assessment mode the goal replaces the step, until the learner asks.
+    const showStep = this.#mode === 'guided' || !node.goal || this.#hintedNodeId === node.id;
+    const narration = !showStep && node.goal ? node.goal : node.prompt;
+
     const view: NodeView = {
       node,
-      prompt: this.#i18n.text(node.prompt.text),
-      ...(node.prompt.audio ? { promptAudio: node.prompt.audio } : {}),
+      mode: this.#mode,
+      hintAvailable: this.#mode === 'assess' && node.goal !== undefined && this.#hintedNodeId !== node.id,
+      prompt: this.#i18n.text(narration.text),
+      ...(narration.audio ? { promptAudio: narration.audio } : {}),
       checklist: this.#checklist(),
       props: this.#props(),
       narrationOnly: node.kind === 'brief' || node.kind === 'outcome',

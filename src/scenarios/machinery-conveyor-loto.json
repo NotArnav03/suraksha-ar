@@ -221,6 +221,15 @@
           "hi": "machinery-conveyor-loto/observe_hazards.prompt.hi"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Look around before you go near the belt. Show the two things here that could kill someone today.",
+          "hi": "बेल्ट के पास जाने से पहले चारों ओर देखिए। वे दो चीज़ें दिखाइए जो आज किसी की जान ले सकती हैं।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/observe_hazards.goal.hi"
+        }
+      },
       "targets": [
         "jam",
         "loose_cloth"
@@ -305,6 +314,15 @@
         },
         "audio": {
           "hi": "machinery-conveyor-loto/stop_belt.prompt.hi"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The belt is running, with coal packed at the tail pulley. Make it safe to work on.",
+          "hi": "बेल्ट चल रही है और टेल पुली पर कोयला भरा है। इसे काम करने लायक सुरक्षित बनाइए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/stop_belt.goal.hi"
         }
       },
       "ordered": false,
@@ -472,6 +490,15 @@
           "hi": "वह फँसा है और बेल्ट चल रही है। उसे पकड़िए मत: पुली आपको भी खींच लेगी। पहले पुल-कॉर्ड स्विच टैप कीजिए और बेल्ट रोकने के लिए \"चलाइए\" चुनिए। फिर रेडियो टैप कीजिए और \"सूचना दीजिए\" चुनिए: बेल्ट {{belt}} पर आदमी फँसा है, बेल्ट बंद रखिए, प्राथमिक उपचार भेजिए।"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Your helper's arm is caught in the pulley and the belt is running. Act.",
+          "hi": "आपके हेल्पर की बाँह पुली में फँसी है और बेल्ट चल रही है। कार्रवाई कीजिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/rescue_decision.goal.hi"
+        }
+      },
       "ordered": true,
       "expect": [
         {
@@ -600,6 +627,15 @@
           "hi": "बेल्ट रुक गई है, पर आज वह एक बार फिर चल चुकी है। कोई उसे छुए, इससे पहले उसकी बिजली जड़ से काटिए। बेल्ट {{belt}} की बिजली आइसोलेटर {{belt}} से आती है। आइसोलेटर {{belt}} टैप कीजिए और \"खोलिए\" चुनिए (आइसोलेटर खोलने का मतलब है बिजली काटना)।"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The belt has stopped, but it has already restarted once today. Make sure it cannot start again.",
+          "hi": "बेल्ट रुक गई है, पर आज एक बार फिर चल चुकी है। पक्का कीजिए कि यह दोबारा चालू न हो सके।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/isolate_c3.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -708,6 +744,15 @@
         "text": {
           "en": "The belt has stopped, but it has already restarted once today. Before anyone touches him, cut its power at the source. Belt {{belt}} is fed by isolator {{belt}}. Tap isolator {{belt}} and choose \"Open\" to switch it off.",
           "hi": "बेल्ट रुक गई है, पर आज वह एक बार फिर चल चुकी है। कोई उसे छुए, इससे पहले उसकी बिजली जड़ से काटिए। बेल्ट {{belt}} की बिजली आइसोलेटर {{belt}} से आती है। आइसोलेटर {{belt}} टैप कीजिए और \"खोलिए\" चुनिए (आइसोलेटर खोलने का मतलब है बिजली काटना)।"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The belt has stopped, but it has already restarted once today. Make sure it cannot start again.",
+          "hi": "बेल्ट रुक गई है, पर आज एक बार फिर चल चुकी है। पक्का कीजिए कि यह दोबारा चालू न हो सके।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/isolate_c4.goal.hi"
         }
       },
       "ordered": false,
@@ -820,6 +865,15 @@
           "hi": "machinery-conveyor-loto/lock_and_tag.prompt.hi"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The isolator is open. Make sure nobody else can switch it back on while you are at the pulley.",
+          "hi": "आइसोलेटर खुला है। पक्का कीजिए कि जब तक आप पुली के पास हैं, कोई और इसे फिर चालू न कर सके।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/lock_and_tag.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -921,6 +975,15 @@
           "hi": "machinery-conveyor-loto/try_start.prompt.hi"
         }
       },
+      "goal": {
+        "text": {
+          "en": "Your lock is on the isolator. Satisfy yourself that the belt is really dead.",
+          "hi": "आइसोलेटर पर आपका ताला लगा है। ख़ुद तसल्ली कीजिए कि बेल्ट सचमुच बंद है।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/try_start.goal.hi"
+        }
+      },
       "ordered": false,
       "expect": [
         {
@@ -1013,6 +1076,15 @@
           "hi": "machinery-conveyor-loto/free_helper.prompt.hi"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The belt is locked out and proven dead. Your helper is still at the pulley.",
+          "hi": "बेल्ट लॉक है और बंद साबित हो चुकी है। आपका हेल्पर अब भी पुली के पास है।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/free_helper.goal.hi"
+        }
+      },
       "ordered": true,
       "expect": [
         {
@@ -1076,6 +1148,15 @@
           "hi": "machinery-conveyor-loto/clear_jam.prompt.hi"
         }
       },
+      "goal": {
+        "text": {
+          "en": "The first-aid team has taken him. Finish the job you came for.",
+          "hi": "प्राथमिक उपचार दल उसे ले गया है। जिस काम के लिए आए थे, वह पूरा कीजिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/clear_jam.goal.hi"
+        }
+      },
       "effects": [
         {
           "type": "despawn",
@@ -1135,6 +1216,15 @@
         "text": {
           "en": "The job is done and everyone is clear. Only the person who put a lock on takes it off. Tap your padlock and choose \"Open\" to remove it. Then tap the radio and choose \"Report to\": belt {{belt}} is clear and ready to start.",
           "hi": "काम पूरा हुआ और सब दूर हैं। ताला वही हटाता है जिसने लगाया था। अपना ताला टैप कीजिए और हटाने के लिए \"खोलिए\" चुनिए। फिर रेडियो टैप कीजिए और \"सूचना दीजिए\" चुनिए: बेल्ट {{belt}} साफ़ है और चालू होने के लिए तैयार है।"
+        }
+      },
+      "goal": {
+        "text": {
+          "en": "The jam is cleared and everyone is clear of the belt. Hand it back.",
+          "hi": "जाम साफ़ हो गया है और सब बेल्ट से दूर हैं। बेल्ट वापस सौंपिए।"
+        },
+        "audio": {
+          "hi": "machinery-conveyor-loto/restore.goal.hi"
         }
       },
       "ordered": true,
