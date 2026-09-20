@@ -710,3 +710,58 @@ test('guided mode is unchanged: the step is named, and no hint is offered', asyn
   world.remove();
   chrome.remove();
 });
+
+test('the checklist does not list the steps in assessment mode, until a hint is taken', async () => {
+  // Found on a real phone: the goal line said only "make it safe to work on",
+  // and the checklist underneath it listed "stop the belt" and "call the
+  // control room", in order. The observe node has always masked its list for
+  // exactly this reason; expect nodes now do too.
+  const module = validateScenario(
+    JSON.parse(await readFile(fileURLToPath(new URL('../src/scenarios/machinery-conveyor-loto.json', import.meta.url)), 'utf8')),
+  );
+  const variant = resolveVariant(module, 1);
+  const world = window.document.createElement('div') as unknown as HTMLElement;
+  const chrome = window.document.createElement('div') as unknown as HTMLElement;
+  window.document.body.append(world as never, chrome as never);
+  const i18n = new Localizer('en');
+  i18n.speechEnabled = false;
+  const controller = new DrillController(
+    variant,
+    new TierCRenderer(i18n),
+    i18n,
+    { onFinish: () => {} },
+    manualScheduler(),
+    { mode: 'assess' },
+  );
+  await controller.start(world, chrome);
+
+  // walk to the rescue step, which expects two actions and so renders a list
+  for (let guard = 0; controller.session.node.id !== 'rescue_decision' && guard < 20; guard++) {
+    if (pressContinue(chrome)) continue;
+    const node = controller.session.node;
+    if (node.kind === 'observe') {
+      const target = node.targets.find((t) => !controller.session.observed.has(controller.session.resolveTarget(t)));
+      const propId = variant.bindings[target!] ?? target!;
+      touch(world, variant.props.find((p) => p.id === propId)!.label.en, 'Look at');
+    } else {
+      touch(world, 'Pull-cord stop switch', 'Use');
+    }
+  }
+  assert.equal(controller.session.node.id, 'rescue_decision');
+
+  const labels = () => [...chrome.querySelectorAll('.checklist li')].map((li) => li.textContent ?? '');
+  const masked = labels().filter((l) => !/still to do/i.test(l));
+  assert.ok(masked.length >= 2, 'the learner should still see how many parts remain');
+  for (const label of masked) {
+    assert.doesNotMatch(label, /belt|radio|control room/i, `the checklist gave the step away: "${label}"`);
+  }
+
+  chrome.querySelector<HTMLButtonElement>('.hint-button')!.click();
+  assert.ok(
+    labels().some((l) => /control room/i.test(l)),
+    'asking for the step should reveal this step\'s checklist too',
+  );
+  controller.stop();
+  world.remove();
+  chrome.remove();
+});

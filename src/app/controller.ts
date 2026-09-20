@@ -223,8 +223,15 @@ export class DrillController {
 
     if (node.kind === 'expect') {
       const pending = new Set(this.session.pending);
+      // The same rule the observe node has always followed, for the same
+      // reason: in assessment mode the authored labels ("stop the belt", "call
+      // the control room") are the answer, listed in order. The learner still
+      // sees how many parts remain and which are done, which is what the
+      // countdown makes them need. Asking for the hint reveals this step's
+      // labels along with its instruction, since that is what a hint is.
+      const reveal = this.#mode === 'guided' || this.#hintedNodeId === node.id;
       return node.expect.map((expectation) => ({
-        label: this.#i18n.text(expectation.label),
+        label: reveal ? this.#i18n.text(expectation.label) : '—',
         done: !pending.has(expectation),
       }));
     }

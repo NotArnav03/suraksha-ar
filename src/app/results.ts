@@ -207,7 +207,13 @@ export function renderResults(options: ResultsOptions): HTMLElement {
     el(
       'h2',
       '',
-      `${certification.distinctVariantsPassed} / ${certification.requiredVariants} variants passed`,
+      // The same string the start screen uses. This one was English on a Hindi
+      // screen, which is the sort of thing that reads as a half-finished app to
+      // the person least able to shrug it off.
+      i18n
+        .ui('variantsPassed')
+        .replace('{{passed}}', String(certification.distinctVariantsPassed))
+        .replace('{{required}}', String(certification.requiredVariants)),
     ),
   );
   const pips = el('div', 'pips');
