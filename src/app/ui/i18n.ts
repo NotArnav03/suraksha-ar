@@ -87,6 +87,16 @@ const UI: Record<string, LocalizedText> = {
   // No `sat` on these two, for the same reason as the three AR lines below.
   rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
   hint: { en: 'Show me this step', hi: 'यह चरण दिखाइए' },
+  // The line under the QR. It was English on a Hindi screen, which is exactly
+  // the moment a worker is deciding whether to trust the thing.
+  credentialOk: {
+    en: '{{bytes}} signed bytes · QR version {{version}} · verified offline on this device',
+    hi: '{{bytes}} बाइट हस्ताक्षरित · QR संस्करण {{version}} · इसी फ़ोन पर, बिना इंटरनेट जाँचा गया',
+  },
+  credentialBad: {
+    en: '{{bytes}} signed bytes · QR version {{version}} · rejected: {{reason}}',
+    hi: '{{bytes}} बाइट हस्ताक्षरित · QR संस्करण {{version}} · अस्वीकृत: {{reason}}',
+  },
   // Said plainly, before the learner presses it and after: being stuck is not
   // a reason to hide what the drill costs.
   hintCost: {

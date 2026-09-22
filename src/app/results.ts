@@ -259,9 +259,11 @@ export function renderResults(options: ResultsOptions): HTMLElement {
         webVerifier({ [issuer.keyId]: issuer.publicKeySpki }),
       );
       const version = qrVersionFor(issued.text.length);
-      detail.textContent =
-        `${issued.bytes} signed bytes · QR version ${version} · ` +
-        (check.valid ? 'verified offline on this device' : `rejected: ${check.reason}`);
+      detail.textContent = i18n
+        .ui(check.valid ? 'credentialOk' : 'credentialBad')
+        .replace('{{bytes}}', String(issued.bytes))
+        .replace('{{version}}', String(version))
+        .replace('{{reason}}', check.valid ? '' : check.reason);
     })();
   }
 
