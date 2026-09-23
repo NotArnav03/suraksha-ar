@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { test } from 'node:test';
 
 import { Window } from 'happy-dom';
@@ -68,4 +70,37 @@ test('an explicit choice resolves to itself without consulting the phone', () =>
 test('a corrupted stored value falls back to following the phone', () => {
   window.localStorage.setItem('suraksha.theme.v1', 'chartreuse');
   assert.equal(loadTheme(), 'system');
+});
+
+/**
+ * THEME_ICON holds the *name* of a drawn pictogram, not a character to print.
+ *
+ * Assigning it as text has now shipped twice - once in the HUD, once in the
+ * start screen's preferences row - and both times the button read the literal
+ * word "contrast" beside its label. The mistake is invisible at the call site
+ * and obvious on the phone, which is exactly the kind worth pinning down in a
+ * test rather than in a reviewer's memory.
+ */
+function sourceFiles(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) return sourceFiles(path);
+    return entry.name.endsWith('.ts') ? [path] : [];
+  });
+}
+
+test('an icon name is always rendered as a drawing, never printed as text', () => {
+  const offenders: string[] = [];
+  for (const file of [...sourceFiles('src/app'), ...sourceFiles('src/admin')]) {
+    const lines = readFileSync(file, 'utf8').split('\n');
+    lines.forEach((line, index) => {
+      if (!line.includes('THEME_ICON[')) return;
+      // The only legitimate use is handing the name to `icon()`, which turns it
+      // into an <svg>. Anything else puts the name itself on screen.
+      if (/icon\(\s*THEME_ICON\[/.test(line)) return;
+      if (/^\s*(export )?const THEME_ICON/.test(line)) return;
+      offenders.push(`${file}:${index + 1}: ${line.trim()}`);
+    });
+  }
+  assert.deepEqual(offenders, [], `an icon name is being printed rather than drawn:\n${offenders.join('\n')}`);
 });

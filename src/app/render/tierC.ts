@@ -1,5 +1,6 @@
 import type { WorldEffect } from '../../engine/types.ts';
 import type { Localizer } from '../ui/i18n.ts';
+import { icon, type IconName } from '../ui/icons.ts';
 import { VERB_ICON, VERB_LABEL } from './verbs.ts';
 import type {
   Feedback,
@@ -25,14 +26,50 @@ import type {
  * "went in without testing" is a decision the learner made and can be shown.
  */
 
-const KIND_ICON: Record<PropView['kind'], string> = {
-  structure: '🕳',
-  signage: '🪧',
-  instrument: '📟',
-  equipment: '⚙️',
-  ppe: '🥽',
-  person: '🧑',
-  hazard: '☣️',
+const KIND_ICON: Record<PropView['kind'], IconName> = {
+  structure: 'opening',
+  signage: 'sign',
+  instrument: 'gauge',
+  equipment: 'crate',
+  ppe: 'helmet',
+  person: 'worker',
+  hazard: 'hazard',
+};
+
+/**
+ * Some props are individual enough that their kind cannot carry them. Every
+ * lock, radio, isolator and start button in the conveyor drill is `equipment`,
+ * and a learner who cannot read the label was being shown the same glyph for
+ * all four. The drill asks them to find a specific object, so the object gets
+ * its own sign.
+ */
+const PROP_ICON: Record<string, IconName> = {
+  // gas / confined space
+  vent_fan: 'blower',
+  radio: 'radio',
+  scba: 'cylinder',
+  harness: 'shackle',
+  retrieval_line: 'rope',
+  gas_readout: 'gauge',
+  toolbox: 'crate',
+  wheelbarrow: 'crate',
+  // fire
+  electrical_panel: 'isolator',
+  ext_dcp: 'extinguisher',
+  ext_water: 'extinguisher',
+  ext_co2: 'extinguisher',
+  scsr: 'cylinder',
+  exit_arrow: 'exit',
+  exit_marker: 'exit',
+  // conveyor lock-out
+  conveyor_tail: 'machine',
+  pull_cord: 'pullcord',
+  isolator_c3: 'isolator',
+  isolator_c4: 'isolator',
+  padlock: 'lock-closed',
+  danger_tag: 'tag',
+  start_button: 'startstop',
+  control_radio: 'radio',
 };
 
 export class TierCRenderer implements WorldRenderer {
@@ -101,15 +138,13 @@ export class TierCRenderer implements WorldRenderer {
     tile.disabled = disabled;
     if (this.#failed.has(prop.id)) tile.classList.add('failed');
 
-    const icon = document.createElement('span');
-    icon.className = 'tile-icon';
-    icon.textContent = KIND_ICON[prop.kind];
+    const glyph = icon(PROP_ICON[prop.id] ?? KIND_ICON[prop.kind], `tile-icon kind-${prop.kind}`);
 
     const label = document.createElement('span');
     label.className = 'tile-label';
     label.textContent = prop.label;
 
-    tile.append(icon, label);
+    tile.append(glyph, label);
     tile.addEventListener('click', () => this.#openSheet(prop));
     return tile;
   }
@@ -127,12 +162,9 @@ export class TierCRenderer implements WorldRenderer {
     for (const verb of prop.verbs) {
       const button = document.createElement('button');
       button.className = `verb verb-${verb}`;
-      const icon = document.createElement('span');
-      icon.className = 'verb-icon';
-      icon.textContent = VERB_ICON[verb];
       const text = document.createElement('span');
       text.textContent = this.#i18n.text(VERB_LABEL[verb]);
-      button.append(icon, text);
+      button.append(icon(VERB_ICON[verb], 'verb-icon'), text);
       button.addEventListener('click', () => {
         this.#closeSheet();
         this.#hooks?.act({ verb, target: prop.id });

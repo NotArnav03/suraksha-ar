@@ -12,6 +12,7 @@ import {
   removeRecord,
   type RosterRecord,
 } from './store.ts';
+import { icon } from '../app/ui/icons.ts';
 import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from '../app/ui/theme.ts';
 
 /**
@@ -219,7 +220,8 @@ export function mountDashboard(app: HTMLElement): void {
     const header = el('header', 'admin-header');
     const titleBlock = el('div');
     titleBlock.append(el('p', 'eyebrow', 'Suraksha AR · Compliance'), el('h1', '', 'Certified workers'));
-    const themeButton = el('button', 'lang-button', `${THEME_ICON[theme]}  Theme`);
+    const themeButton = el('button', 'lang-button');
+    themeButton.append(icon(THEME_ICON[theme]), el('span', 'btn-label', 'Theme'));
     themeButton.addEventListener('click', () => {
       theme = nextTheme(theme);
       applyTheme(theme);
@@ -247,7 +249,8 @@ export function mountDashboard(app: HTMLElement): void {
     verifyButton.addEventListener('click', () => void verifyAndAdd(textarea.value, feedback));
     actions.append(verifyButton);
     if (scanSupported()) {
-      const scanButton = el('button', 'ghost', '📷 Scan QR');
+      const scanButton = el('button', 'ghost');
+    scanButton.append(icon('qr'), el('span', 'btn-label', 'Scan QR'));
       scanButton.addEventListener('click', () => void scanQr(feedback));
       actions.append(scanButton);
     }

@@ -16,85 +16,117 @@
  */
 
 :root {
-  /* warm paper: for a yard in daylight */
-  --bg: #f6f2ea;
-  --bg-2: #fffdf8;
-  --panel: #fffdf8;
-  --panel-2: #efe8dc;
-  --line: #dbd1c0;
-  --line-soft: #ebe4d8;
-  --ink: #1b1915;
-  --ink-2: #4c463d;
-  --ink-3: #756d61;
-  --hazard: #b3660d;
-  --hazard-ink: #8a4e07;
-  --hazard-dim: #fbeed8;
-  --hazard-solid: #e08b1e;
-  --on-hazard: #24160300;
-  --go: #1c7663;
-  --go-dim: #dff0eb;
-  --warn: #9a6210;
-  --crit: #b1362a;
-  --crit-dim: #fbe6e3;
-  --glow: rgba(179, 102, 13, .14);
+  /* Concrete, ink and safety yellow: the colours of the place this runs in.
+     Yellow is a fill and never small text, because #f2b202 on white cannot be
+     read; the amber inks below are what type uses. */
+  --bg: #e4e5e1;
+  --bg-2: #eff0ec;
+  --panel: #fbfbf9;
+  --panel-2: #e3e5e0;
+  --line: #b3b7b0;
+  --line-soft: #cfd2cb;
+  --ink: #15181b;
+  --ink-2: #444a4f;
+  --ink-3: #6a7075;
+  --hazard: #a25f00;
+  --hazard-ink: #7a4700;
+  --hazard-dim: #f7e6c4;
+  --hazard-solid: #f2b202;
+  /* A real push-button is not one colour. These three are its top face, its
+     bottom face and the shadowed edge it stands on, which is what makes the
+     thing look pressable instead of printed. */
+  --hazard-hi: #ffd960;
+  --hazard-lo: #dc9c00;
+  --hazard-edge: #9c6f00;
+  --on-hazard: #15140c;
+  --on-hazard-ink: #15140c;
+  --go: #15694a;
+  --go-dim: #d9ebe2;
+  --warn: #8a5a08;
+  --crit: #b32b1d;
+  --crit-dim: #f7ddd9;
+  --glow: rgba(21, 24, 27, .10);
+  /* the faint ruled grid of a mine plan, under everything */
+  --grid-line: rgba(21, 24, 27, .045);
+  /* the lit top edge of anything raised off the page */
+  --hi-line: rgba(255, 255, 255, .9);
 
   --tap: 60px;
-  --radius: 16px;
-  --shadow-sm: 0 1px 2px rgba(60, 45, 20, .08);
-  --shadow-md: 0 10px 28px rgba(60, 45, 20, .14);
+  /* Between a stamped plate and a bubble: enough to look made, not enough to
+     look like a phone app template. Panels take the larger one. */
+  --radius: 8px;
+  --radius-lg: 12px;
+  /* A hard offset for the edge, a soft one for the air under it. The edge is
+     what makes a surface read as folded steel rather than a sticker; the
+     ambient blur is what stops the screen reading as one flat sheet. */
+  --shadow-sm: 0 1px 0 rgba(21, 24, 27, .10), 0 2px 8px rgba(21, 24, 27, .07);
+  --shadow-md: 0 3px 0 rgba(21, 24, 27, .14), 0 10px 22px rgba(21, 24, 27, .12);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    /* warm charcoal: for a training room after dark, and for the AR HUD */
-    --bg: #1a1815;
-    --bg-2: #201d18;
-    --panel: #24211b;
-    --panel-2: #2e2a23;
-    --line: #423b31;
-    --line-soft: #302b24;
-    --ink: #f5f0e7;
-    --ink-2: #bdb5a6;
-    --ink-3: #8d8577;
-    --hazard: #f0a02e;
-    --hazard-ink: #ffc46b;
-    --hazard-dim: #3a2b10;
-    --hazard-solid: #f0a02e;
-    --go: #3fc0a8;
-    --go-dim: #12302a;
-    --warn: #e0a143;
-    --crit: #e4695c;
-    --crit-dim: #331715;
-    --glow: rgba(240, 160, 46, .16);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
-    --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
+    --bg: #121417;
+    --bg-2: #171a1d;
+    --panel: #1c2024;
+    --panel-2: #242a2f;
+    --line: #3a4248;
+    --line-soft: #2b3238;
+    --ink: #f1f3f0;
+    --ink-2: #b6bdc2;
+    --ink-3: #8a9298;
+    --hazard: #ffc220;
+    --hazard-ink: #ffd04d;
+    --hazard-dim: #3a2e08;
+    --hazard-solid: #ffc220;
+    --hazard-hi: #ffdf6d;
+    --hazard-lo: #e8a300;
+    --hazard-edge: #8a6200;
+    --on-hazard: #15140c;
+    --on-hazard-ink: #15140c;
+    --go: #3ec495;
+    --go-dim: #10312a;
+    --warn: #e2a63a;
+    --crit: #ef6d5c;
+    --crit-dim: #38180f;
+    --glow: rgba(255, 194, 32, .14);
+    --grid-line: rgba(255, 255, 255, .035);
+    --hi-line: rgba(255, 255, 255, .06);
+    --shadow-sm: 0 1px 0 rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .38);
+    --shadow-md: 0 3px 0 rgba(0, 0, 0, .5), 0 12px 26px rgba(0, 0, 0, .48);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1a1815;
-  --bg-2: #201d18;
-  --panel: #24211b;
-  --panel-2: #2e2a23;
-  --line: #423b31;
-  --line-soft: #302b24;
-  --ink: #f5f0e7;
-  --ink-2: #bdb5a6;
-  --ink-3: #8d8577;
-  --hazard: #f0a02e;
-  --hazard-ink: #ffc46b;
-  --hazard-dim: #3a2b10;
-  --hazard-solid: #f0a02e;
-  --go: #3fc0a8;
-  --go-dim: #12302a;
-  --warn: #e0a143;
-  --crit: #e4695c;
-  --crit-dim: #331715;
-  --glow: rgba(240, 160, 46, .16);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
-  --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
+  --bg: #121417;
+  --bg-2: #171a1d;
+  --panel: #1c2024;
+  --panel-2: #242a2f;
+  --line: #3a4248;
+  --line-soft: #2b3238;
+  --ink: #f1f3f0;
+  --ink-2: #b6bdc2;
+  --ink-3: #8a9298;
+  --hazard: #ffc220;
+  --hazard-ink: #ffd04d;
+  --hazard-dim: #3a2e08;
+  --hazard-solid: #ffc220;
+  --hazard-hi: #ffdf6d;
+  --hazard-lo: #e8a300;
+  --hazard-edge: #8a6200;
+  --on-hazard: #15140c;
+  --on-hazard-ink: #15140c;
+  --go: #3ec495;
+  --go-dim: #10312a;
+  --warn: #e2a63a;
+  --crit: #ef6d5c;
+  --crit-dim: #38180f;
+  --glow: rgba(255, 194, 32, .14);
+  --grid-line: rgba(255, 255, 255, .035);
+  --hi-line: rgba(255, 255, 255, .06);
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .38);
+  --shadow-md: 0 3px 0 rgba(0, 0, 0, .5), 0 12px 26px rgba(0, 0, 0, .48);
   color-scheme: dark;
 }
 
@@ -104,6 +136,13 @@ html, body {
   margin: 0;
   height: 100%;
   background: var(--bg);
+  background-image:
+    radial-gradient(120% 70% at 80% -10%, rgba(242, 178, 2, .10), transparent 60%),
+    radial-gradient(90% 60% at 0% 100%, rgba(21, 105, 74, .07), transparent 70%),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: auto, auto, 46px 46px, 46px 46px;
+  background-attachment: fixed;
   color: var(--ink);
   /*
    * Devanagari and Ol Chiki are named explicitly. `system-ui` covers Latin and,
@@ -128,33 +167,100 @@ button {
   font: inherit;
   font-weight: 600;
   color: var(--ink);
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
   min-height: var(--tap);
   padding: 12px 18px;
   cursor: pointer;
   touch-action: manipulation;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
 }
-button:active { transform: translateY(1px) scale(.985); }
+button:active { transform: translateY(1px); box-shadow: none; }
 button:focus-visible { outline: 3px solid var(--hazard); outline-offset: 3px; }
+
+/* A pictogram sits beside its label, never instead of it: the label is what a
+   worker acts on, the sign is what they recognise across the yard. Drawn here
+   rather than borrowed from the handset's emoji font - see ui/icons.ts. */
+.icon { flex: 0 0 auto; display: inline-flex; width: 1.4em; height: 1.4em; color: inherit; }
+.icon svg { width: 100%; height: 100%; display: block; }
+.btn-label { min-width: 0; }
+/* `:not(.module-watermark)`: the ghosted glyph on a module card is absolutely
+   positioned decoration, and without this exclusion its mere presence turned
+   the card into a flex row and stood the heading beside its own description. */
+button:has(> .icon:not(.module-watermark)) {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
 button:disabled { opacity: .38; pointer-events: none; }
 
+/*
+ * The one thing on the screen that is meant to be pressed, built like the
+ * button on a starter panel: a lit top face, a darker bottom face, and a solid
+ * edge underneath that it drops onto when a thumb lands. The travel is real,
+ * 4px of edge and 4px of movement, because through a glove a colour change
+ * alone reads as nothing having happened.
+ */
 .primary {
-  background: linear-gradient(180deg, #ffb648, var(--hazard-solid));
-  color: #241603;
-  border-color: transparent;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 8px 22px var(--glow);
+  background: linear-gradient(180deg, var(--hazard-hi), var(--hazard-solid) 52%, var(--hazard-lo));
+  color: var(--on-hazard);
+  border-color: var(--hazard-edge);
+  box-shadow:
+    0 4px 0 var(--hazard-edge),
+    0 10px 20px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, .55);
 }
-.primary.big { min-height: 76px; font-size: 1.2rem; border-radius: var(--radius); }
+.primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--hazard-edge), inset 0 1px 0 rgba(255, 255, 255, .35);
+}
+.primary.big {
+  min-height: 76px; font-size: 1.2rem; border-radius: var(--radius);
+  position: relative; overflow: hidden;
+}
+/* A slow sweep across the start button. It is the only animation here that
+   exists to be noticed: someone who has opened the app and stopped should have
+   something telling them where to go. */
+.primary.big::after {
+  content: ''; position: absolute; inset: -2px; pointer-events: none;
+  background: linear-gradient(104deg, transparent 40%, rgba(255, 255, 255, .6) 50%, transparent 60%);
+  transform: translateX(-130%);
+  /* Three passes, not forever. It is there to catch someone who has stopped,
+     and a screen that never settles costs battery on the handset this is aimed
+     at and wears out its welcome on every other one. */
+  animation: sheen 5s cubic-bezier(.4, 0, .2, 1) 1.4s 3;
+}
+@keyframes sheen {
+  0%, 62% { transform: translateX(-130%); }
+  100% { transform: translateX(130%); }
+}
 .ghost { background: transparent; color: var(--ink-2); border-color: transparent; }
 .ghost:active { background: var(--panel-2); }
 
 /* ── start screen ───────────────────────────────────────────────────────── */
 .start { padding: 26px 20px 34px; gap: 22px; overflow-y: auto; }
 
-.hero { display: grid; gap: 12px; }
+/* The screen assembles from the top down rather than arriving all at once. It
+   costs half a second and it is the difference between a page that loaded and
+   a thing that is ready for you. */
+.start > * { animation: rise-in .44s cubic-bezier(.2, .8, .25, 1) both; }
+.start > *:nth-child(1) { animation-delay: .02s; }
+.start > *:nth-child(2) { animation-delay: .07s; }
+.start > *:nth-child(3) { animation-delay: .12s; }
+.start > *:nth-child(4) { animation-delay: .17s; }
+.start > *:nth-child(5) { animation-delay: .22s; }
+.start > *:nth-child(6) { animation-delay: .27s; }
+.start > *:nth-child(7) { animation-delay: .31s; }
+.start > *:nth-child(n+8) { animation-delay: .35s; }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } }
+
+.hero { display: grid; gap: 12px; position: relative; padding-top: 16px; }
+/* A short length of barrier tape over the title: the app's one piece of
+   ornament, borrowed from the place it runs in. */
+.hero::before {
+  content: ''; position: absolute; top: 0; left: 0; width: 78px; height: 7px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(115deg, var(--hazard-solid) 0 9px, var(--on-hazard) 9px 18px);
+}
 /* --hazard is tuned for borders and fills, where 3:1 is enough. As 13px text on
    warm paper it measured 3.9:1, so the eyebrow takes the darker ink instead. */
 .eyebrow {
@@ -171,8 +277,9 @@ button:disabled { opacity: .38; pointer-events: none; }
    tell them nothing can go wrong here, because nothing here is real. */
 .welcome {
   display: flex; gap: 14px; align-items: flex-start;
-  padding: 16px 18px; border-radius: var(--radius);
-  background: var(--go-dim); border: 1px solid var(--go);
+  padding: 14px 16px; border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(100deg, var(--go-dim), transparent 150%);
+  border-left: 6px solid var(--go);
 }
 .welcome-icon { font-size: 1.7rem; line-height: 1.2; flex: 0 0 auto; }
 .welcome p { margin: 0; color: var(--ink); font-size: 1rem; text-wrap: pretty; }
@@ -180,25 +287,30 @@ button:disabled { opacity: .38; pointer-events: none; }
 .lang { display: flex; gap: 10px; flex-wrap: wrap; }
 .lang-big .lang-button { flex: 1 1 100px; min-height: var(--tap); font-size: 1.08rem; }
 .lang-button {
-  min-height: 44px; padding: 8px 16px; border-radius: 999px;
-  background: transparent; color: var(--ink-2); border: 1.5px solid var(--line);
+  min-height: 44px; padding: 8px 16px; border-radius: var(--radius);
+  background: transparent; color: var(--ink-2); border: 2px solid var(--line);
+  box-shadow: none;
   transition: background .14s ease, color .14s ease, border-color .14s ease, transform .12s ease;
 }
 .lang-button.on {
   background: var(--ink); color: var(--bg); border-color: var(--ink);
+  box-shadow: 0 2px 0 var(--line), inset 0 1px 0 rgba(255, 255, 255, .18);
 }
 
+/* Panels are lit from above: a highlight along the top edge, a wash down to
+   the darker surface tone, and the shadow beneath doing the rest. */
 .panel {
-  background: var(--panel);
+  position: relative;
+  background: linear-gradient(170deg, var(--panel), var(--panel-2));
   border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 18px;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-lg); padding: 18px;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 var(--hi-line);
 }
 .panel h2 { margin: 0 0 12px; font-size: 1.1rem; }
 .reason { margin: 4px 0; color: var(--ink-3); font-size: .94rem; }
 
 .badge {
-  display: inline-block; padding: 4px 11px; border-radius: 999px;
+  display: inline-block; padding: 4px 10px; border-radius: 4px;
   font-size: 12px; font-weight: 700; letter-spacing: .06em;
   background: var(--panel-2); color: var(--ink-2); border: 1px solid var(--line);
   vertical-align: middle;
@@ -206,11 +318,16 @@ button:disabled { opacity: .38; pointer-events: none; }
 .badge.warn { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); }
 
 .tier-report { padding: 18px; }
-.tier-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+/* The badge takes its own line rather than squeezing the label into "is the
+   phone ready / for" and a stranded final word. */
+.tier-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+.tier-head > div { flex: 1 1 auto; min-width: 150px; }
+.tier-head .badge { order: 3; margin-left: 66px; }
 .tier-icon {
-  flex: 0 0 auto; width: 52px; height: 52px; display: grid; place-items: center;
-  font-size: 1.6rem; border-radius: 14px;
-  background: var(--hazard-dim); box-shadow: inset 0 0 0 1px var(--hazard);
+  flex: 0 0 auto; width: 52px; height: 52px; padding: 11px; display: grid; place-items: center;
+  border-radius: 6px; color: var(--ink);
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  box-shadow: inset 0 0 0 2px var(--line), var(--shadow-sm);
 }
 .tier-head > div { min-width: 0; }
 .tier-eyebrow { margin: 0; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
@@ -223,9 +340,9 @@ button:disabled { opacity: .38; pointer-events: none; }
   border-top: 1px solid var(--line-soft); font-size: .96rem;
 }
 .caps li:first-child { border-top: none; }
-.cap-icon { flex: 0 0 auto; font-size: 1.1rem; width: 1.5em; text-align: center; }
+.cap-icon.icon { width: 1.5em; height: 1.5em; color: var(--ink-2); }
 .cap-label { flex: 1; color: var(--ink-2); }
-.cap-tick { flex: 0 0 auto; font-weight: 700; font-size: 1.05rem; }
+.cap-tick.icon { width: 1.25em; height: 1.25em; }
 .caps .yes .cap-tick { color: var(--go); }
 .caps .no .cap-tick { color: var(--ink-3); }
 .caps .no .cap-label { color: var(--ink-3); }
@@ -239,9 +356,25 @@ button:disabled { opacity: .38; pointer-events: none; }
 .module-card {
   display: block; width: 100%; text-align: left; cursor: pointer;
   font: inherit; color: inherit;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  padding: 18px 76px 18px 22px; overflow: hidden;
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
 }
-.module-card:hover, .module-card:focus-visible { border-color: var(--ink-3); transform: translateY(-1px); }
+/* A colour bar down the spine, the way a binder of method statements is
+   tabbed, and the drill's own pictogram ghosted into the corner so the three
+   modules are told apart at a glance rather than by reading three headings. */
+.module-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  background: linear-gradient(180deg, var(--hazard-hi), var(--hazard-lo));
+}
+.module-watermark.icon {
+  position: absolute; right: -14px; bottom: -18px; width: 104px; height: 104px;
+  color: var(--ink); opacity: .07; pointer-events: none;
+}
+.module-card:hover, .module-card:focus-visible {
+  border-color: var(--hazard); transform: translateY(-2px);
+  box-shadow: var(--shadow-md), inset 0 1px 0 var(--hi-line);
+}
+.module-card:active { transform: translateY(1px); box-shadow: var(--shadow-sm); }
 .module-card h2 { margin: 0 0 6px; font-size: 1.15rem; }
 .module-card .lede { font-size: .96rem; }
 
@@ -258,9 +391,13 @@ button:disabled { opacity: .38; pointer-events: none; }
 .readout {
   position: sticky; top: 0; z-index: 2; margin-bottom: 14px;
   font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.5rem;
-  text-align: center; padding: 12px; border-radius: 12px;
-  background: var(--panel); border: 2px solid var(--line); color: var(--ink-2);
+  text-align: center; padding: 12px; border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 2px solid var(--line); color: var(--ink-2);
+  box-shadow: var(--shadow-sm), inset 0 2px 6px rgba(0, 0, 0, .10);
 }
+.readout.warning, .readout.critical { animation: readout-shift .3s ease both; }
+@keyframes readout-shift { from { transform: scale(1.04); } }
 .readout.warning { border-color: var(--warn); color: var(--warn); }
 .readout.critical { border-color: var(--crit); color: var(--crit); }
 
@@ -270,16 +407,43 @@ button:disabled { opacity: .38; pointer-events: none; }
 .tile {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; min-height: 124px; padding: 12px 8px; text-align: center;
-  background: var(--panel);
-  border: 1.5px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
-  animation: tile-in .26s ease both;
+  background: linear-gradient(170deg, var(--panel), var(--panel-2));
+  border: 2px solid var(--line); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm), inset 0 1px 0 var(--hi-line);
+  animation: tile-in .3s cubic-bezier(.2, .8, .25, 1) both;
 }
-@keyframes tile-in { from { opacity: 0; transform: scale(.94); } }
-.tile:active { transform: scale(.96); border-color: var(--hazard); }
-.tile-icon { font-size: 2.2rem; line-height: 1; }
+/* The grid deals itself out rather than appearing in one block, which reads as
+   the scene being set up in front of you. Capped at ten, after which the
+   stagger would be a delay rather than a flourish. */
+.tile:nth-child(2) { animation-delay: .03s; }
+.tile:nth-child(3) { animation-delay: .06s; }
+.tile:nth-child(4) { animation-delay: .09s; }
+.tile:nth-child(5) { animation-delay: .12s; }
+.tile:nth-child(6) { animation-delay: .15s; }
+.tile:nth-child(7) { animation-delay: .18s; }
+.tile:nth-child(8) { animation-delay: .21s; }
+.tile:nth-child(9) { animation-delay: .24s; }
+.tile:nth-child(n+10) { animation-delay: .27s; }
+@keyframes tile-in { from { opacity: 0; transform: scale(.92) translateY(6px); } }
+.tile:hover { border-color: var(--hazard); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.tile:active { transform: scale(.96); border-color: var(--hazard); box-shadow: none; }
+.tile-icon.icon { width: 40px; height: 40px; color: var(--ink-2); }
+/* The prop a learner is asked to find reads as a hazard sign, because that is
+   what it is. Everything else stays in plain ink, so the warning means something. */
+.tile-icon.kind-hazard { color: var(--crit); }
+/* The one thing in the scene trying to hurt somebody gets a slow pulse.
+   Nothing else on this screen moves, so it is the eye's first stop. */
+.tile:has(.kind-hazard) {
+  border-color: var(--crit);
+  background: linear-gradient(170deg, var(--crit-dim), var(--panel-2));
+  animation: tile-in .3s cubic-bezier(.2, .8, .25, 1) both, hazard-breathe 2.8s ease-in-out .5s 5;
+}
+@keyframes hazard-breathe {
+  50% { box-shadow: var(--shadow-sm), 0 0 0 5px var(--crit-dim); border-color: var(--crit); }
+}
 .tile-label { font-size: .9rem; font-weight: 600; color: var(--ink-2); line-height: 1.3; }
 .tile.failed { border-color: var(--crit); opacity: .55; }
-.tile.failed .tile-icon { filter: grayscale(1); }
+.tile.failed .tile-icon { opacity: .55; }
 
 .sheet {
   /* `display` lives on `:not([hidden])`, not here. An author-stylesheet rule
@@ -297,14 +461,15 @@ button:disabled { opacity: .38; pointer-events: none; }
 
 .sheet-card {
   width: 100%; background: var(--panel);
-  border-top: 4px solid var(--hazard-solid);
-  border-radius: 22px 22px 0 0;
+  border-top: 5px solid var(--hazard-solid);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background-image: linear-gradient(180deg, var(--panel-2), var(--panel) 90px);
   padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
   display: grid; gap: 12px; max-height: 80vh; overflow-y: auto;
   box-shadow: var(--shadow-md);
   animation: sheet-up .22s cubic-bezier(.2, .9, .3, 1) both;
 }
-@keyframes sheet-up { from { transform: translateY(28px); } }
+@keyframes sheet-up { from { transform: translateY(40px); } }
 .sheet-card h2 { margin: 0 0 2px; font-size: 1.3rem; text-align: center; }
 
 /*
@@ -318,10 +483,14 @@ button:disabled { opacity: .38; pointer-events: none; }
 .verb {
   display: flex; align-items: center; gap: 14px;
   text-align: left; min-height: 68px; font-size: 1.1rem;
-  background: var(--panel-2);
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  box-shadow: var(--shadow-sm);
 }
-.verb-icon { font-size: 1.5rem; flex: 0 0 auto; width: 1.5em; text-align: center; }
-.sheet-card .ghost { border: 1.5px solid var(--line); }
+.verb:hover { border-color: var(--hazard); }
+.verb:active { box-shadow: none; }
+.verb-icon.icon { width: 30px; height: 30px; color: var(--ink-2); }
+button.verb:has(> .icon) { justify-content: flex-start; }
+.sheet-card .ghost { border: 2px solid var(--line); }
 
 /* The AR handshake can take seconds and can fail. Neither may look like a
    crash, so the wait gets its own visible line rather than an empty screen. */
@@ -337,7 +506,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 
 /* ── hud ────────────────────────────────────────────────────────────────── */
 .chrome { flex: 0 0 auto; }
-.hud { border-top: 1px solid var(--line); background: var(--panel); }
+.hud { position: relative; border-top: 1px solid var(--line); background: var(--panel); }
 /*
  * Two deliberate rows, not one row that happens to wrap.
  *
@@ -415,13 +584,28 @@ button:disabled { opacity: .38; pointer-events: none; }
    reads slowly, so the control is a real button rather than a faint link. */
 .prompt-row .listen {
   flex: 0 0 auto; min-height: 48px; min-width: 48px; padding: 8px 12px;
-  font-size: .9rem; background: var(--panel-2); border: 1.5px solid var(--line);
-  color: var(--ink-2); border-radius: 12px;
+  font-size: .82rem; background: var(--panel-2); border: 2px solid var(--line);
+  color: var(--ink-2); border-radius: var(--radius); flex-direction: column; gap: 3px; line-height: 1.1;
 }
 
-.timer { position: relative; height: 12px; border-radius: 999px; background: var(--panel-2); margin: 14px 0 8px; overflow: hidden; }
-.timer-fill { height: 100%; border-radius: 999px; background: var(--go); transition: width .2s linear; }
-.timer.urgent .timer-fill { background: var(--crit); }
+/* A gauge, not a lozenge. */
+.timer {
+  position: relative; height: 14px; margin: 14px 0 8px; overflow: hidden;
+  border: 1px solid var(--line); border-radius: 4px;
+  background: var(--panel-2); box-shadow: inset 0 1px 3px rgba(0, 0, 0, .18);
+}
+.timer-fill { height: 100%; background: var(--go); transition: width .2s linear; }
+/* Barrier-tape stripes, crawling. A bar that only changes colour can be missed
+   by someone concentrating on the scene; movement at the edge of vision
+   cannot. */
+.timer.urgent { border-color: var(--crit); }
+.timer.urgent .timer-fill {
+  background-color: var(--crit);
+  background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, .28) 0 8px, transparent 8px 16px);
+  background-size: 22.7px 22.7px;
+  animation: barber .7s linear infinite;
+}
+@keyframes barber { to { background-position: 22.7px 0; } }
 /* The countdown, not decoration: it is the only thing telling a learner how
    long they have left, so it is held to body-text contrast rather than the
    muted tone the rest of the small print uses. */
@@ -434,33 +618,48 @@ button:disabled { opacity: .38; pointer-events: none; }
 .checklist-heading { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .checklist li { display: flex; gap: 10px; align-items: baseline; font-size: 1rem; color: var(--ink-2); }
 .checklist li.done { color: var(--ink-3); }
-.tick { color: var(--ink-3); font-weight: 700; flex: 0 0 auto; }
+.tick.icon { width: 1.15em; height: 1.15em; color: var(--ink-3); align-self: center; }
 .checklist li.done .tick { color: var(--go); animation: tick-in .3s cubic-bezier(.2, 1.4, .4, 1) both; }
 @keyframes tick-in { from { transform: scale(.4); opacity: 0; } }
 
 .banner {
-  margin-top: 14px; padding: 14px 16px; border-radius: 12px; font-size: 1rem;
-  background: var(--hazard-dim); border-left: 5px solid var(--warn); color: var(--ink);
+  margin-top: 14px; padding: 14px 16px; font-size: 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(100deg, var(--hazard-dim), transparent 165%);
+  border-left: 6px solid var(--warn); color: var(--ink);
   animation: banner-in .22s ease both;
 }
-@keyframes banner-in { from { opacity: 0; transform: translateY(-4px); } }
+@keyframes banner-in { from { opacity: 0; transform: translateY(-6px) scaleY(.96); } }
 .banner.major { border-color: var(--hazard); }
-.banner.fatal { background: var(--crit-dim); border-color: var(--crit); }
+.banner.fatal {
+  background: linear-gradient(100deg, var(--crit-dim), transparent 165%);
+  border-color: var(--crit);
+  /* The diagonal band off a real barrier tape, spent on one thing only: the
+     consequence that ends the drill. */
+  border-top: 8px solid transparent;
+  border-image: repeating-linear-gradient(45deg, var(--crit) 0 10px, var(--on-hazard) 10px 20px) 8;
+}
 
+/* Floating just clear of the HUD's top edge, not at the middle of the screen.
+   Pinned to the viewport it landed on whatever the panel was showing: on the
+   phone it covered the first line of the prompt and the listen button
+   underneath it. Anchored to the HUD it is always over the world instead. */
 .wait-button {
-  position: fixed; right: 16px; bottom: 50%; z-index: 5; border-radius: 999px;
-  background: var(--panel); border: 1.5px solid var(--hazard); color: var(--hazard);
+  position: absolute; right: 16px; bottom: calc(100% + 12px); z-index: 5;
+  border-radius: var(--radius);
+  background: var(--panel); border: 2px solid var(--hazard); color: var(--hazard);
   box-shadow: var(--shadow-md);
 }
 .continue { width: 100%; margin-top: 16px; }
-.hint-button { align-self: flex-start; margin-top: 10px; border-color: var(--hazard); color: var(--hazard); }
+.hint-button { align-self: flex-start; margin-top: 10px; border: 2px solid var(--hazard); color: var(--hazard); }
 .run-note { margin: 10px 0 0; font-size: .95rem; color: var(--ink-2); }
 
 /* ── results ────────────────────────────────────────────────────────────── */
 .results { padding: 24px 16px 34px; gap: 18px; overflow-y: auto; }
 .outcome {
-  padding: 22px; border-radius: var(--radius); border-left: 6px solid var(--line);
-  background: var(--panel); box-shadow: var(--shadow-md);
+  padding: 22px; border-radius: var(--radius-lg); border-left: 6px solid var(--line);
+  background: linear-gradient(170deg, var(--panel), var(--panel-2));
+  box-shadow: var(--shadow-md), inset 0 1px 0 var(--hi-line);
 }
 .outcome h1 { margin: 0 0 10px; font-size: 1.7rem; letter-spacing: -.015em; }
 .outcome-summary { margin: 0; color: var(--ink-2); text-wrap: pretty; }
@@ -472,14 +671,13 @@ button:disabled { opacity: .38; pointer-events: none; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.98); } }
 .outcome.pass h1 { color: var(--go); }
-.outcome.pass h1::before { content: '🎉 '; }
 .outcome.fail { border-left-color: var(--warn); }
 .outcome.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
 .outcome.fatal h1 { color: var(--crit); }
 
 .errors { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .errors li {
-  display: grid; gap: 3px; padding: 13px 15px; border-radius: 12px;
+  display: grid; gap: 3px; padding: 13px 15px; border-radius: var(--radius);
   background: var(--panel-2); border-left: 4px solid var(--warn);
 }
 .errors li.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
@@ -491,7 +689,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .rules li.missed .rule-mark { color: var(--crit); }
 .rules li.met .rule-mark { color: var(--go); }
 .rules li.met .rule-cite { color: var(--ink-3); }
-.rule-mark { font-weight: 800; }
+.rule-mark.icon { width: 1.1em; height: 1.1em; margin-top: .2em; }
 .rule-cite { display: grid; gap: 2px; }
 .rule-ref { font-weight: 700; }
 .rule-pin { white-space: nowrap; }
@@ -502,10 +700,14 @@ button:disabled { opacity: .38; pointer-events: none; }
 .rules-followed[open] summary { margin-bottom: 8px; }
 
 .dim { display: grid; grid-template-columns: 8.5rem 1fr 2.4rem auto; gap: 12px; align-items: center; margin-bottom: 12px; }
-.dim-name { font-size: .86rem; color: var(--ink-2); text-transform: capitalize; }
-.dim-track { position: relative; height: 16px; border-radius: 8px; background: var(--panel-2); overflow: hidden; }
+.dim-name { font-size: .86rem; color: var(--ink-2); }
+.dim-track {
+  position: relative; height: 16px; overflow: hidden; border-radius: 4px;
+  border: 1px solid var(--line); background: var(--panel-2);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .18);
+}
 .dim-track.empty { opacity: .45; }
-.dim-fill { height: 100%; border-radius: 8px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
+.dim-fill { height: 100%; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
 .dim-fill.over { background: var(--go); }
 .dim-fill.under { background: var(--crit); }
 .dim-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .55; }
@@ -513,18 +715,25 @@ button:disabled { opacity: .38; pointer-events: none; }
 .dim-note { font-size: .72rem; color: var(--crit); text-transform: uppercase; letter-spacing: .08em; }
 
 .pips { display: flex; gap: 10px; margin: 6px 0 10px; }
-.pip { width: 36px; height: 10px; border-radius: 999px; background: var(--panel-2); transition: background .3s ease; }
-.pip.on { background: var(--go); }
+.pip {
+  width: 36px; height: 10px; border-radius: 3px;
+  border: 1px solid var(--line); background: var(--panel-2);
+  transition: background .3s ease, box-shadow .3s ease;
+}
+.pip.on { background: var(--go); box-shadow: 0 0 0 2px var(--go-dim); }
 
 .credential { text-align: center; }
-.credential h2::before { content: '🔏  '; }
+/* The certificate panel is titled in words; the QR below it is the proof. */
 .qr {
-  width: 100%; max-width: 268px; height: auto; border-radius: 14px;
+  width: 100%; max-width: 268px; height: auto; border-radius: var(--radius);
   background: #fff; padding: 12px; box-shadow: var(--shadow-md);
+  /* It lands like a stamp on a permit, because that is what it is. */
+  animation: stamp .5s cubic-bezier(.2, 1.35, .35, 1) both;
 }
+@keyframes stamp { from { opacity: 0; transform: scale(1.14) rotate(-2.5deg); } }
 
 .fatal-error {
-  margin: 20px; padding: 16px; border-radius: 12px; white-space: pre-wrap;
+  margin: 20px; padding: 16px; border-radius: var(--radius); white-space: pre-wrap;
   background: var(--crit-dim); border-left: 5px solid var(--crit); color: var(--ink);
   font-family: ui-monospace, monospace; font-size: .86rem;
 }
@@ -591,7 +800,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .ar-hint {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
   z-index: 11; max-width: 78vw; text-align: center;
-  padding: 16px 20px; border-radius: 14px;
+  padding: 16px 20px; border-radius: var(--radius);
   background: rgba(26, 24, 21, .92); border: 1.5px solid var(--hazard);
   color: var(--ink); font-size: 1.05rem;
 }

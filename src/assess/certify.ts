@@ -24,10 +24,26 @@ export interface AggregateScore {
   attempts: number;
 }
 
+/** A reason a certificate was withheld, in a form the learner's UI can translate. */
+export type ReasonDetail =
+  | { code: 'moreVariants'; passed: number; required: number; short: number }
+  | { code: 'aidedRuns'; count: number }
+  | { code: 'fatalAttempt'; error: string }
+  | { code: 'belowMark'; dimension: Dimension; mark: number | null };
+
 export interface Certification {
   scenarioId: string;
   granted: boolean;
   reasons: string[];
+  /**
+   * The same reasons as structured data.
+   *
+   * `reasons` is English prose, which is fine for a supervisor's dashboard and
+   * wrong for the worker's own screen: a Hindi debrief was printing "below pass
+   * mark on ppe_discipline" straight through. The learner's UI renders these
+   * instead and looks the words up in their language.
+   */
+  details: ReasonDetail[];
   requiredVariants: number;
   distinctVariantsPassed: number;
   countedVariantIds: string[];
@@ -74,28 +90,37 @@ export function certify(
   });
 
   const reasons: string[] = [];
+  const details: ReasonDetail[] = [];
   const granted = counted.size >= required;
   if (!granted) {
     reasons.push(
       `${counted.size} of ${required} distinct variants passed — ${required - counted.size} more required`,
     );
+    details.push({ code: 'moreVariants', passed: counted.size, required, short: required - counted.size });
     if (aided > 0) {
       reasons.push(
         `${aided} guided or hinted ${aided === 1 ? 'run does' : 'runs do'} not count towards a certificate`,
       );
+      details.push({ code: 'aidedRuns', count: aided });
     }
     const fatal = forThisScenario.filter((a) => a.result === 'fatal');
     for (const attempt of fatal) {
       for (const error of attempt.fatalErrors) {
         reasons.push(`attempt on ${attempt.variantId} ended fatally: ${error.code}`);
+        details.push({ code: 'fatalAttempt', error: error.code });
       }
     }
     const shortfalls = new Set(forThisScenario.flatMap((a) => a.shortfalls));
     for (const dimension of shortfalls) {
       const mark = scenario.scoring.passMark[dimension];
       reasons.push(`below pass mark on ${dimension}${mark === undefined ? '' : ` (needs ${mark})`}`);
+      details.push({ code: 'belowMark', dimension, mark: mark ?? null });
     }
   } else {
+    // Nothing is added to `details` here on purpose: on a pass the learner's
+    // screen already carries this line as a localised heading above the pips,
+    // and printing it twice in two languages is how the certificate panel
+    // ended up with an English sentence under a Hindi one.
     reasons.push(`${counted.size} distinct variants passed, ${required} required`);
   }
 
@@ -107,6 +132,7 @@ export function certify(
     scenarioId: scenario.id,
     granted,
     reasons,
+    details,
     requiredVariants: required,
     distinctVariantsPassed: counted.size,
     countedVariantIds: [...counted.keys()],

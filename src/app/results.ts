@@ -1,6 +1,6 @@
 import QRCode from 'qrcode';
 
-import { certify } from '../assess/certify.ts';
+import { certify, type ReasonDetail } from '../assess/certify.ts';
 import type { Competency } from '../assess/score.ts';
 import { qrVersionFor } from '../credential/codec.ts';
 import { issueCredential, verifyCredential } from '../credential/credential.ts';
@@ -8,6 +8,7 @@ import { createDemoIssuer, webVerifier } from '../credential/web-crypto.ts';
 import type { DrillSession } from '../engine/runtime.ts';
 import type { Scenario } from '../engine/types.ts';
 import type { Localizer } from './ui/i18n.ts';
+import { icon } from './ui/icons.ts';
 
 /**
  * The debrief.
@@ -80,7 +81,7 @@ function ruleRow(cite: string, met: boolean): HTMLLIElement {
   }
   body.append(refLine);
   if (split !== -1) body.append(el('span', 'rule-says', cite.slice(split + 2)));
-  row.append(el('span', 'rule-mark', met ? '✓' : '✗'), body);
+  row.append(icon(met ? 'check' : 'cross', 'rule-mark'), body);
   return row;
 }
 
@@ -92,6 +93,30 @@ export interface ResultsOptions {
   i18n: Localizer;
   workerId: string;
   onRestart(): void;
+}
+
+/** A withheld-certificate reason, in the learner's language. */
+function reasonText(detail: ReasonDetail, i18n: Localizer): string {
+  switch (detail.code) {
+    case 'moreVariants':
+      return i18n
+        .ui('reason_moreVariants')
+        .replace('{{passed}}', String(detail.passed))
+        .replace('{{required}}', String(detail.required))
+        .replace('{{short}}', String(detail.short));
+    case 'aidedRuns':
+      return i18n.ui('reason_aidedRuns').replace('{{count}}', String(detail.count));
+    case 'fatalAttempt':
+      return i18n.ui('reason_fatalAttempt');
+    case 'belowMark': {
+      const dimension = i18n.ui(`dim_${detail.dimension}`);
+      if (detail.mark === null) return i18n.ui('reason_belowMark').replace('{{dimension}}', dimension);
+      return i18n
+        .ui('reason_belowMarkNeeds')
+        .replace('{{dimension}}', dimension)
+        .replace('{{mark}}', String(detail.mark));
+    }
+  }
 }
 
 export function renderResults(options: ResultsOptions): HTMLElement {
@@ -127,7 +152,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
       const row = el('li', error.severity);
       row.append(
         el('span', 'error-code', error.code.replaceAll('_', ' ').toLowerCase()),
-        el('span', 'error-meta', `${error.severity} · ${error.dimension.replaceAll('_', ' ')}`),
+        el('span', 'error-meta', `${error.severity} · ${i18n.ui(`dim_${error.dimension}`)}`),
       );
       list.append(row);
     }
@@ -175,7 +200,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
   vector.append(el('h2', '', i18n.ui('competency')));
   for (const dimension of competency.vector) {
     const row = el('div', 'dim');
-    row.append(el('span', 'dim-name', dimension.dimension.replaceAll('_', ' ')));
+    row.append(el('span', 'dim-name', i18n.ui(`dim_${dimension.dimension}`)));
 
     const track = el('div', 'dim-track');
     const fill = el('div', 'dim-fill');
@@ -195,7 +220,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
     }
 
     row.append(track, el('span', 'dim-score', dimension.score === null ? '—' : String(dimension.score)));
-    if (dimension.floored) row.append(el('span', 'dim-note', 'fatal'));
+    if (dimension.floored) row.append(el('span', 'dim-note', i18n.ui('floored')));
     vector.append(row);
   }
   root.append(vector);
@@ -221,8 +246,12 @@ export function renderResults(options: ResultsOptions): HTMLElement {
     pips.append(el('span', i < certification.distinctVariantsPassed ? 'pip on' : 'pip'));
   }
   progress.append(pips);
-  for (const reason of certification.reasons.slice(0, 3)) {
-    progress.append(el('p', 'reason', reason));
+  // `details`, not `reasons`: the latter is English prose meant for the
+  // supervisor's dashboard, and it was being printed verbatim under a Hindi
+  // heading. On a pass there are no details, because the heading above already
+  // says it in the learner's language.
+  for (const detail of certification.details.slice(0, 3)) {
+    progress.append(el('p', 'reason', reasonText(detail, i18n)));
   }
   root.append(progress);
 

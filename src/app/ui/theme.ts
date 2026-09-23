@@ -13,16 +13,18 @@
  * because it is composited over an image nobody can predict.
  */
 
+import type { IconName } from './icons.ts';
+
 export type ThemeChoice = 'system' | 'light' | 'dark';
 
 const STORE_KEY = 'suraksha.theme.v1';
 const ORDER: ThemeChoice[] = ['system', 'light', 'dark'];
 
-/** What the control shows for each state. Glyphs, because it sits in a bar with no room for words. */
-export const THEME_ICON: Record<ThemeChoice, string> = {
-  system: '🌗',
-  light: '☀️',
-  dark: '🌙',
+/** The pictogram for each state: the control sits in a bar with no room for words. */
+export const THEME_ICON: Record<ThemeChoice, IconName> = {
+  system: 'contrast',
+  light: 'sun',
+  dark: 'moon',
 };
 
 function isChoice(value: string | null): value is ThemeChoice {

@@ -90,6 +90,8 @@ The HUD in Tier A is not a port. It is the same DOM, drawn by the same `Hud`, fl
 
 Tier detection reports **two** answers on the start screen: the best tier the device supports, and the tier actually being served. Conflating them is how a pitch ends up claiming AR coverage it does not have.
 
+**The interface is drawn, not borrowed.** Every pictogram is an inline SVG in `src/app/ui/icons.ts`, in the language of safety signage: flat, one weight, inheriting the ink of whatever it sits on. Emoji used to do this job, which meant a gear for a conveyor, a biohazard trefoil for a pile of coal, and a wrench for "operate this control" - a vendor's house style standing in for a sign a worker already knows. Objects a drill asks you to find (the isolator, the padlock, the pull cord, the tag) each get their own glyph, because a learner who cannot read the label has nothing else to go on. Shapes are square, borders are heavy, the one accent is safety yellow, and the only decorative flourish in the app is a diagonal hazard band on the consequence that ends a drill.
+
 No web fonts, no CDN. The app has to work with the radio off.
 
 ## The authored scenarios
