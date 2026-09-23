@@ -75,6 +75,7 @@ function toRecord(subjectId: string, verified: VerifiedCredential): RosterRecord
     domain: verified.domain,
     scores: verified.scores,
     variantsPassed: verified.variantsPassed,
+    variantDigests: verified.variantDigests,
     issuedAt,
     expiresAt: verified.expiresAt.toISOString(),
     provisional: verified.provisional,
@@ -363,14 +364,68 @@ export function mountDashboard(app: HTMLElement): void {
         row.append(el('td', '', new Date(r.expiresAt).toLocaleDateString()));
         row.append(el('td', '', String(r.variantsPassed)));
         const removeCell = el('td');
+        const drillsButton = el('button', 'ghost small', 'Drills');
         const removeButton = el('button', 'ghost small', 'Remove');
         removeButton.addEventListener('click', () => {
           removeRecord(r.id);
           render();
         });
-        removeCell.append(removeButton);
+        removeCell.append(drillsButton, removeButton);
         row.append(removeCell);
         tbody.append(row);
+
+        // The drills this credential was earned on, recovered from its own
+        // digests. Loaded on demand: resolving them needs the scenarios, and a
+        // supervisor checking a gate pass should not wait for them to arrive.
+        const detail = el('tr', 'row-detail');
+        const detailCell = el('td');
+        detailCell.colSpan = 7;
+        detail.append(detailCell);
+        detail.hidden = true;
+        tbody.append(detail);
+
+        let loaded = false;
+        drillsButton.addEventListener('click', () => {
+          detail.hidden = !detail.hidden;
+          if (loaded || detail.hidden) return;
+          loaded = true;
+          detailCell.replaceChildren(el('p', 'reason', 'Recovering the drills…'));
+          void (async () => {
+            const { resolveDigests, isKnown, describeParams } = await import('./replay.ts');
+            const entries = resolveDigests(r.domain, r.variantDigests ?? []);
+            detailCell.replaceChildren();
+            if (entries.length === 0) {
+              detailCell.append(
+                el('p', 'reason', 'This credential was scanned before drill digests were recorded; re-scan it to recover them.'),
+              );
+              return;
+            }
+            detailCell.append(el('p', 'reason', `Passed ${entries.length} distinct drill(s):`));
+            const list = el('ul', 'drills');
+            for (const entry of entries) {
+              const item = el('li');
+              if (isKnown(entry)) {
+                item.append(el('span', 'drill-params', describeParams(entry.params)));
+                const link = el('a', 'drill-replay');
+                link.href = entry.href;
+                link.target = '_blank';
+                link.rel = 'noopener';
+                link.textContent = `Replay this drill (seed ${entry.seed})`;
+                item.append(link);
+              } else {
+                // Not a failure to be hidden: it means the module was edited
+                // after this credential was issued, so the run it attests to no
+                // longer exists in this build.
+                item.classList.add('unknown');
+                item.append(
+                  el('span', 'drill-params', `Variant ${entry.digest.toString(16)} is not in this version of the module`),
+                );
+              }
+              list.append(item);
+            }
+            detailCell.append(list);
+          })();
+        });
       }
       table.append(tbody);
       tablePanel.append(table);

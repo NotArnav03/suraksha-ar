@@ -72,3 +72,11 @@ button.danger { color: var(--crit); }
 }
 .scan-video { width: min(92vw, 480px); border-radius: 12px; }
 .scan-overlay .ghost { background: rgba(255, 255, 255, .12); color: #fff; }
+
+/* ── the drills behind a credential ─────────────────────────────────────── */
+.row-detail td { background: var(--panel-2); }
+.drills { list-style: none; margin: 6px 0 2px; padding: 0; display: grid; gap: 8px; }
+.drills li { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+.drills li.unknown .drill-params { color: var(--warn); }
+.drill-params { font-variant-numeric: tabular-nums; }
+.drill-replay { color: var(--hazard-ink); text-underline-offset: 2px; }

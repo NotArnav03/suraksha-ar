@@ -195,3 +195,59 @@ test('garbage input is rejected, not silently added', async () => {
   assert.match(feedback.textContent ?? '', /Rejected/);
   assert.equal(loadRoster().length, 0);
 });
+
+test('a supervisor can see the drills a credential was earned on, and replay one', async () => {
+  // The credential spends four bytes per variant instead of carrying the
+  // parameters, so that it scans off a cracked screen. That is only an honest
+  // trade if the drills come back out, which is what this checks through the
+  // real UI: scan, expand the row, read what the worker actually faced.
+  clearRoster();
+  window.document.body.innerHTML = '<div id="admin"></div>';
+  const root = window.document.querySelector('#admin') as unknown as HTMLElement;
+  mountDashboard(root);
+
+  const issuer = await createDemoIssuer();
+  const { resolveVariant } = await import('../src/engine/variant.ts');
+  const { scenarioForDomain } = await import('../src/admin/replay.ts');
+  const scenario = scenarioForDomain('machinery_haulage_loto')!;
+  const variants = [1, 3, 4].map((seed) => resolveVariant(scenario, seed));
+
+  const issued = await issueCredential(
+    {
+      granted: true,
+      scenarioId: scenario.id,
+      reasons: [],
+      requiredVariants: 3,
+      distinctVariantsPassed: 3,
+      countedVariantIds: variants.map((v) => v.variantId),
+      attempts: { total: 3, passed: 3, failed: 0, fatal: 0 },
+      vector: [],
+      weakest: null,
+    } as never,
+    { subjectId: 'JH/CHP/5150', domain: scenario.domain },
+    issuer.signer,
+  );
+
+  const textarea = root.querySelector<HTMLTextAreaElement>('.credential-input')!;
+  textarea.value = issued.text;
+  [...root.querySelectorAll<HTMLButtonElement>('button')].find((b) => b.textContent === 'Verify & add')!.click();
+  await new Promise((resolve) => setTimeout(resolve, 60));
+
+  const drills = [...root.querySelectorAll<HTMLButtonElement>('button')].find((b) => b.textContent === 'Drills');
+  assert.ok(drills, 'each roster row should offer the drills behind it');
+  drills.click();
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  const items = [...root.querySelectorAll('.drills li')].map((li) => li.textContent ?? '');
+  assert.equal(items.length, 3, `expected three drills, got ${items.length}`);
+  for (const item of items) {
+    assert.match(item, /belt C[34]/, `the drill should name what the worker faced: "${item}"`);
+    assert.match(item, /belt state (running|tripped)/);
+  }
+  const links = [...root.querySelectorAll<HTMLAnchorElement>('.drill-replay')];
+  assert.equal(links.length, 3, 'every recovered drill should be replayable');
+  for (const link of links) {
+    assert.match(link.href, /scenario=machinery-conveyor-loto/);
+    assert.match(link.href, /mode=assess/);
+  }
+});

@@ -7,7 +7,7 @@ import machineryScenarioJson from '../scenarios/machinery-conveyor-loto.json' wi
 import { scoreSession } from '../assess/score.ts';
 import { certify } from '../assess/certify.ts';
 import type { LocalizedText, ResolvedScenario, Scenario } from '../engine/types.ts';
-import { distinctVariants } from '../engine/variant.ts';
+import { distinctVariants, resolveVariant } from '../engine/variant.ts';
 import { ScenarioError, validateScenario } from '../engine/validate.ts';
 import { DrillSession } from '../engine/runtime.ts';
 import { DrillController, rafScheduler } from './controller.ts';
@@ -39,6 +39,9 @@ const app = document.querySelector<HTMLElement>('#app')!;
 const params = new URLSearchParams(location.search);
 const workerId = params.get('worker') ?? 'JH/CHP/2291';
 const forcedTier = (params.get('tier')?.toUpperCase() as Tier | undefined) ?? undefined;
+// `?mode=assess` comes from the dashboard's replay links: an auditor opening the
+// drill a credential was earned on should get it the way the worker did.
+const urlMode = params.get('mode') === 'assess' ? 'assess' : params.get('mode') === 'guided' ? 'guided' : null;
 
 const i18n = new Localizer((params.get('lang') as LangCode) ?? 'hi');
 
@@ -215,8 +218,12 @@ async function rendererFor(
  */
 function nextVariant(): ResolvedScenario {
   const pool = distinctVariants(scenario, Math.max(scenario.scoring.requiredVariants + 2, 5));
+  // An explicitly named seed is resolved directly, not looked up in the pool.
+  // The pool is only the next few unseen variants, so an auditor replaying the
+  // exact drill from a credential (`?seed=` from the dashboard) used to be
+  // handed a different one, silently, whenever their seed fell outside it.
   const seed = params.get('seed');
-  if (seed !== null) return pool.find((v) => v.seed === Number(seed)) ?? pool[0]!;
+  if (seed !== null && Number.isInteger(Number(seed))) return resolveVariant(scenario, Number(seed));
 
   const passed = new Set(
     loadAttempts()
@@ -414,7 +421,7 @@ function startScreen(report: TierReport): void {
   // Guided first, assessment second, and the assessment becomes the primary
   // button once a run has been finished: a worker is walked through the
   // procedure before being asked to prove it, and only the unaided run counts.
-  const hasRun = loadAttempts().some((a) => a.scenarioId === scenario.id);
+  const hasRun = urlMode === 'assess' || loadAttempts().some((a) => a.scenarioId === scenario.id);
   const canAssess = assessable(scenario);
 
   const begin = document.createElement('button');

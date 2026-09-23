@@ -19,6 +19,8 @@ export interface RosterRecord {
   domain: string;
   scores: { dimension: Dimension; score: number }[];
   variantsPassed: number;
+  /** digests of the variants passed, so the drills can be recovered and replayed */
+  variantDigests?: number[];
   issuedAt: string; // ISO
   expiresAt: string; // ISO
   provisional: boolean;

@@ -15,11 +15,11 @@ src/engine/      scenario graph runtime — knows nothing about cameras or meshe
 src/assess/      event stream -> competency vector -> certification
 src/credential/  compact signed credential, offline QR verification
 src/app/         the web client: tier detection, shared HUD, module picker, Tier A/C worlds
-src/admin/       compliance dashboard — verifies scanned credentials, no backend
+src/admin/       compliance dashboard: verifies scanned credentials, recovers the drills behind them, no backend
 src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons — see docs/APK.md for the Android build
-tests/           124 tests, node's built-in runner
+tests/           130 tests, node's built-in runner
 ```
 
 ## Try it
@@ -28,7 +28,7 @@ Node 22.6+ (uses native TypeScript type stripping — no build step, no bundler)
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 124 tests
+npm test                # 130 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -73,6 +73,7 @@ A granted certification issues a **51-byte signed payload** — a 160-character 
 - **ECDSA P-256, raw IEEE P1363 signatures.** Ed25519 is the nicer curve and the wrong one here: the verifier is often an older mid-range Android, and P-256 has been in WebCrypto everywhere for a decade. IEEE P1363 is exactly the encoding WebCrypto produces, so the browser verifier needs no shim.
 - **Verification is genuinely offline.** `verifyCredential` takes a trust list and a string. No network, no issuer state.
 - **The credential carries the worst attempt, not the mean.** A safety credential should be worth what the holder can do on their bad day.
+- **The drills are recoverable from the credential itself.** Each variant costs four bytes, not the parameters, so the QR stays scannable. The dashboard walks the seeds, matches the digests, and shows a supervisor what the worker actually faced (`belt C4 · tripped · night shift`), with a link that runs that identical drill. A digest that matches nothing is reported rather than hidden: it means the module was edited after the credential was issued.
 - **Nothing personal on the wire.** The worker id already printed on their card, and the competency. No name, no biometric, no photograph.
 - **The issuer refuses to mint for an ungranted certification** — a credential that can be issued without the drill is worth exactly as much as the paper one.
 - Credentials are short-lived by design, because an offline verifier cannot see a revocation list. That trade-off is stated in the verifier warnings rather than hidden.
