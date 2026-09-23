@@ -457,15 +457,15 @@ Training Rule)** and MIN/N1704 (underground coal). Since the drills are set at t
 MIN/N1703 is the primary mapping. Performance criteria our drills already exercise, verbatim from
 the pack:
 
-- **PC3** "undertake 'The Take-5 (Personal Risk Assessment)' before commencement of any work" — the
+- **PC3** "undertake 'The Take-5 (Personal Risk Assessment)' before commencement of any work", the
   hazard-spotting node in all three drills
 - **PC33** "identify six directional hazards at workplace and take decisions accordingly"
-- **PC27** "ensure positive isolation near the work place if applicable" — the conveyor lock-out
+- **PC27** "ensure positive isolation near the work place if applicable", the conveyor lock-out
   drill, almost word for word
-- **PC10** "operate various types of fire extinguishers to control different types of fire" — fire
-- **PC14** "use self-rescue apparatus appropriately when required" — fire
+- **PC10** "operate various types of fire extinguishers to control different types of fire", fire
+- **PC14** "use self-rescue apparatus appropriately when required", fire
 - **PC1** firedamp, whitedamp, blackdamp and **PC24** "follow laid out SOP in case of alarm signal
-  for leakage of inflammable gases" — gas and confined space
+  for leakage of inflammable gases", gas and confined space
 - **PC25** reporting unsafe acts, **PC26** communication, **PC28** PPE, **PC8** first aid
 
 **NCVET's micro-credential guidelines (2023)** are a better fit than a full Qualification Pack: a

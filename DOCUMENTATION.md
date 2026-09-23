@@ -1,437 +1,470 @@
-# Suraksha AR — Engineering Documentation
+# Suraksha AR: engineering documentation
 
 SIH26041 · AR-Based Vocational Training Simulator for Industrial Safety
 
-This file is the handoff document: everything a collaborator needs to pick up this
-codebase with no prior context. `README.md` is the pitch and the design philosophy
-(read it first — it explains *why* the code is shaped this way). This file is the
-map of *what exists, where, and how it fits together*, plus the state of the repo
-as of this writing.
+This is the handoff document: what exists, where it is, and which constraints
+the code is holding that a type checker will not hold for you. `README.md` is
+the pitch and the reasoning behind the design; read that first if you want to
+know *why*. `docs/UI.md` covers the interface layer specifically.
 
-Last verified: 2026-09-08, against commit `2014a9b` on `main`. **Sections 1-11
-below predate a large amount of what's in the repo now** (a second scenario,
-the module picker, the offline PWA shell, the Android APK, the admin
-dashboard, reshaped Tier A geometry, and full-but-unreviewed Santali
-scenario coverage) — they haven't been rewritten yet to match. `README.md`
-is current on all of that; this section and the numbers immediately below
-are current, the numbered sections after are not.
-- `npm test` → **130/130 passing** (15 test files; `admin.test.ts`,
-  `tierA-shapes.test.ts`, `citations.test.ts` and `machinery.test.ts` were added after this document was written).
-  A third scenario, `machinery-conveyor-loto`, has been added since; `README.md` describes it.
-- `npm run check` (`tsc --noEmit`) → clean.
-- `npm run build` → succeeds, two pages now (`index.html` + `admin.html`,
-  `vite.config.ts`'s `rollupOptions.input`).
-- CI exists now: `.github/workflows/deploy-pages.yml` runs the full test
-  suite, typecheck and build on every push to `main`, then deploys to GitHub
-  Pages — this replaces the "no CI" note this doc used to carry.
-- No LICENSE file in the repo.
-- Single author to date (`arnav.g1010@gmail.com`, committing as both `arnav`
-  and `NotArnav03`).
+Verified 2026-09-23 against commit `caaf242` on `main`.
+
+- `npm test` → **132 passing, 0 failing** (15 files)
+- `npm run check` (`tsc --noEmit`) → clean
+- `npm run build` → two pages, `index.html` and `admin.html`
+- CI: `.github/workflows/deploy-pages.yml` runs tests, typecheck and build on
+  every push to `main`, then deploys to GitHub Pages
+- Live: https://notarnav03.github.io/suraksha-ar/ and `/admin.html`
+- No LICENSE file. Single author to date (`arnav.g1010@gmail.com`, committing as
+  both `arnav` and `NotArnav03`).
 
 ---
 
 ## 1. What this project is
 
 A phone-only AR safety-training simulator that replaces multiple-choice quizzes
-with a scored, behavioural drill, and replaces paper certificates with a signed,
-offline-verifiable QR credential. One authored scenario (JSON) runs through a
-shared assessment engine and renders in up to three "tiers" (markerless AR /
-marker-tracked AR / flat 2D), so the same drill and the same certificate are
+with a scored behavioural drill, and replaces the paper certificate with a
+signed, offline-verifiable QR credential. Three authored scenarios (JSON) run
+through one shared assessment engine and render in up to three tiers (markerless
+AR, marker-tracked AR, flat 2D), so the same drill and the same certificate are
 available on whatever Android device a worker actually owns.
 
-The product thesis, restated for engineering purposes: **the engine, the
-assessment, and the credential must never know which tier rendered the input.**
-Everything in `src/engine`, `src/assess`, and `src/credential` operates on
-tier-agnostic data (`Action`, `WorldEffect`, `NodeResult`, `Competency`). Only
-`src/app/render/*` knows about cameras, meshes, or DOM taps. This boundary is
-enforced by convention and by the `WorldRenderer` interface, not by a build-time
-firewall — see [Architectural invariants](#5-architectural-invariants-read-before-changing-anything)
-before touching any of the three renderer files.
+Two framing points that matter when you are deciding what to build next:
+
+**The product is the assessment, not the certificate.** The defensible slot in
+the national skilling system is the instrument an NCVET-recognised Assessment
+Agency uses, feeding an awarding body that deposits into DigiLocker. The 51-byte
+signed QR is not a rival credential; it is the offline verification path that
+the Electronic Skill Credential Standard already describes, for the pit-top
+where Skill India Digital's online lookup has no signal. `docs/RESEARCH.md` §6.1
+has the full ladder, the NOS/PC mapping and the caveats.
+
+**The engine, the assessment and the credential must never know which tier
+rendered the input.** Everything in `src/engine`, `src/assess` and
+`src/credential` operates on tier-agnostic data (`Action`, `WorldEffect`,
+`NodeResult`, `Competency`). Only `src/app/render/*` knows about cameras, meshes
+or DOM taps. The boundary is held by the `WorldRenderer` interface and by
+convention, not by a build-time firewall, so read §5 before touching a renderer.
 
 ## 2. Repository layout
 
 ```
 src/
-  engine/       scenario graph runtime — knows nothing about cameras or meshes
-    types.ts       the scenario/node/action data model (start here)
-    runtime.ts      DrillSession — the only place a run is scored-in-fact
+  engine/        scenario graph runtime, knows nothing about cameras or meshes
+    types.ts        the scenario/node/action data model (start here)
+    runtime.ts      DrillSession, the only place a run is scored in fact
     variant.ts      randomised-variant resolution (params, guards, splicing)
-    validate.ts     authoring-time schema + referential-integrity checks
+    validate.ts     authoring-time schema and referential-integrity checks
     text.ts         localized-string resolution, {{param}} interpolation
-    rng.ts          seeded PRNG (mulberry32) + string hashing
-    index.ts        the only import surface downstream code should use
+    rng.ts          seeded PRNG (mulberry32) and string hashing
+    index.ts        the import surface downstream code should use
 
   assess/        event stream -> competency vector -> certification
     score.ts        DrillSession results -> six-dimension Competency
-    certify.ts      Competency[] -> Certification (granted / withheld)
+    certify.ts      Competency[] -> Certification, granted or withheld, with
+                    both English reasons and structured ReasonDetails
 
   credential/    compact signed credential, offline QR verification
-    codec.ts        binary payload encode/decode (~90 bytes) + QR sizing
-    credential.ts   issue/verify logic, crypto injected via Signer/Verifier
-    node-crypto.ts  Node-side ECDSA P-256 signer + verifier (the issuer)
-    web-crypto.ts   Browser-side WebCrypto verifier + demo in-browser issuer
-    base64url.ts    URL/QR-safe base64 codec
+    codec.ts        binary payload encode/decode (51 bytes) and QR sizing
+    credential.ts   issue/verify, crypto injected via Signer/Verifier
+    node-crypto.ts  Node-side ECDSA P-256 signer and verifier (the issuer)
+    web-crypto.ts   browser WebCrypto verifier and the demo in-browser issuer
+    demo-trust.ts   the fixed demo key pair and trust list, and why it is fixed
+    base64url.ts    URL/QR-safe base64
 
-  app/           the web client: tier detection, shared HUD, per-tier world
-    main.ts         entry point — screens, AR handshake, variant selection
-    controller.ts   DrillController — the only thing allowed to touch DrillSession
-    tier.ts         capability detection (best tier vs. tier actually served)
-    results.ts      debrief screen: error list, competency bars, credential/QR
+  app/           the worker client
+    main.ts         entry: screens, module picker, AR handshake, variant choice
+    controller.ts   DrillController, the only thing allowed to touch DrillSession
+    tier.ts         capability detection (best tier vs tier actually served)
+    results.ts      debrief: errors, rules, competency bars, credential and QR
+    style.css       the whole design system (see docs/UI.md)
     render/
-      contract.ts     WorldRenderer interface — the tier boundary itself
-      tierC.ts        flat 2D renderer (grid of tiles + verb sheet)
+      contract.ts     WorldRenderer, the tier boundary itself
+      tierC.ts        flat 2D renderer (tile grid plus verb sheet)
       tierA.ts        markerless WebXR renderer (three.js)
-      overlay-taps.ts tap arbitration inside a WebXR dom-overlay (see §5.3)
-      verbs.ts        shared verb icons/labels (both tiers must agree)
+      overlay-taps.ts tap arbitration inside a WebXR dom-overlay (§5.3)
+      verbs.ts        shared verb icons and labels; both tiers must agree
     ui/
       hud.ts          shared prompt/checklist/countdown/consequence banner
-      i18n.ts         Localizer — text fallback chain + speech synthesis
-      theme.ts        light/dark/system theme persistence
+      i18n.ts         Localizer, fallback chain, speech, recorded narration
+      icons.ts        every pictogram in the product, as inline SVG
+      theme.ts        light/dark/system persistence
 
-  scenarios/
-    gas-confined-space.json   the one authored scenario (see §6)
+  admin/         the supervisor's compliance dashboard (no backend)
+    main.ts         entry
+    dashboard.ts    scan/paste, verify offline, roster table, expiry filters
+    store.ts        localStorage roster, dedupe and merge rules
+    replay.ts       credential digests -> the exact drills they were earned on
+    admin.css       dashboard-only styling on top of the app's tokens
 
+  scenarios/     authored content, one file per domain (§6)
   cli/
-    run.ts          headless drill runner — scripts, tracing, certification runs
-    credential.ts   end-to-end demo: drill -> certify -> issue -> scan -> verify
+    run.ts          headless drill runner: scripts, tracing, certification runs
+    credential.ts   end-to-end: drill -> certify -> issue -> scan -> verify
 
-tests/           82 tests, node's built-in test runner (node --experimental-strip-types)
+tests/           132 tests, node's built-in runner (§9)
 tools/
-  phone.mjs       drive a phone's Chrome over USB via adb + CDP (Tier A debugging)
-  translate.mjs   machine-draft missing Santali strings via Bhashini, for human review
-l10n/            (created on demand by translate.mjs) sat-review.tsv sign-off sheet
+  phone.mjs       drive a phone's Chrome over USB via adb and CDP (§3)
+  translate.mjs   machine-draft missing Santali, for human review (§8)
+  narration.mjs   what needs recording, and the manifest for it
+  build_apk.mjs, patch_bubblewrap_windows.mjs   the TWA Android build (docs/APK.md)
+  make_icon.mjs, make_placeholders.mjs          PWA icons, placeholder assets
+public/          PWA manifest, service worker, icons, glTF props
+l10n/            ai-santali-drafts.json, sat-review.tsv (the sign-off sheet)
+docs/            RESEARCH, CITATIONS, UI, NARRATION, APK, asset specs
 ```
 
-Everything is native TypeScript run via Node 22.6+'s `--experimental-strip-types`
-— **there is no build step for tests or CLI scripts.** Vite is used only to bundle
-the browser client (`npm run dev` / `npm run build`).
+Everything is native TypeScript run through Node 22.6+'s
+`--experimental-strip-types`. **There is no build step for tests or CLI
+scripts.** Vite is used only to bundle the two browser pages.
 
-## 3. Prerequisites and setup
+## 3. Prerequisites, setup, and testing on a phone
 
-- Node **22.6.0+** (type-stripping requirement — check with `node -v`; this repo
-  was last verified against v24.13.0).
-- `npm install` — devDependencies only (`typescript`, `@types/*`, `vite`,
-  `happy-dom` for DOM tests). Runtime dependencies are `three` (Tier A) and
-  `qrcode` (credential QR rendering).
-- No environment variables are required for normal development. `tools/translate.mjs`
-  needs `BHASHINI_USER_ID` / `BHASHINI_ULCA_API_KEY` (free registration at
-  bhashini.gov.in) — only if you're regenerating draft Santali translations.
+- Node **22.6.0+** (type stripping). Last verified on v24.13.0.
+- `npm install` installs devDependencies (`typescript`, `@types/*`, `vite`,
+  `happy-dom`). Runtime dependencies are `three` (Tier A only, dynamically
+  imported) and `qrcode`.
+- No environment variables are needed for normal development.
+  `tools/translate.mjs` wants `BHASHINI_USER_ID` and `BHASHINI_ULCA_API_KEY`
+  only if you are regenerating Santali drafts through Bhashini.
 
 ```bash
 npm install
-npm test              # 82 tests, a few seconds
-npm run check         # tsc --noEmit
-npm run dev           # Vite dev server; open the LAN URL on a phone to test tiers
-npm run build         # production bundle -> dist/
+npm test        # 132 tests, a few seconds
+npm run check   # tsc --noEmit
+npm run dev     # Vite dev server
+npm run build   # production bundle -> dist/
 ```
 
-CLI demos (see README.md for the full list) — useful for understanding the engine
-without touching the UI at all:
+### The phone is the target, so test on the phone
+
+Tier A cannot be emulated. There is no WebXR simulator here and Chrome
+DevTools' device emulation does not implement `immersive-ar`. Beyond Tier A,
+desktop Chrome at 412px catches layout but not legibility in daylight, not
+touch target size through a glove, and not what a press feels like.
 
 ```bash
-node --experimental-strip-types src/cli/run.ts --script correct --events
-node --experimental-strip-types src/cli/credential.ts --tamper
+npm run build
+npx vite preview --port 5199 --strictPort
+node tools/phone.mjs setup --port 5199   # adb reverse + forward, lists tabs
+node tools/phone.mjs logs                # stream the phone's console
+node tools/phone.mjs eval "document.title"
+node tools/phone.mjs shot out.png
 ```
 
-### Testing on an actual phone (Tier A)
+Open `http://localhost:5199` in Chrome **on the phone**, not the laptop's LAN
+IP: `adb reverse` makes the phone's own localhost resolve to the laptop's
+server, and localhost is a secure context, so WebXR runs with no TLS in the
+loop.
 
-Tier A (WebXR) **cannot be emulated on desktop** — there is no WebXR simulator in
-this project, and Chrome DevTools' device emulation does not implement
-`immersive-ar` sessions. You need a real ARCore-capable Android phone.
+Three things that will waste your time otherwise:
 
-```bash
-npm run dev                 # start the Vite dev server
-npm run phone                # adb reverse/forward, lists open tabs on the phone
-# open http://localhost:5199 in Chrome ON THE PHONE (not the laptop's LAN IP —
-# adb reverse makes the phone's own "localhost" resolve to the laptop's server,
-# which matters because WebXR requires a secure context and localhost qualifies
-# without a TLS certificate)
-npm run phone:logs           # stream the phone's console back to your terminal
-npm run phone:eval "document.title"   # run arbitrary JS in the page and see the result
-```
+- `phone.mjs open <url>` hands the URL to `am start`, and an unescaped `&`
+  splits there, so a multi-parameter deep link silently loses everything after
+  the first one. Navigate with `phone.mjs eval "location.href='...'"` instead.
+- `pickTarget` prefers a tab whose URL contains the forwarded port and
+  otherwise takes the first page target, which is frequently a stale or blank
+  tab. Close the strays: `curl -s localhost:9222/json` for ids, then
+  `curl -s -o /dev/null localhost:9222/json/close/<id>`.
+- The service worker is cache-first, so the first load after a deploy serves the
+  previous build and the second load picks up the new one.
 
-`tools/phone.mjs` talks to the phone over `adb` (must be on `PATH` or discoverable
-under the Android SDK's `platform-tools`) and Chrome's remote-debugging protocol
-over a forwarded port (9222). It has no effect on the shipped app — debugging only.
+## 4. How a drill actually runs
 
-## 4. How a drill actually runs — the request/response shape
-
-This is the part that's easiest to get wrong when extending the app, so it's
-worth internalizing before editing `controller.ts` or either renderer.
-
-1. `main.ts` loads and validates `scenarios/gas-confined-space.json`
-   (`validateScenario`), detects the tier (`detectTier`), and picks the next
-   unpassed variant (`distinctVariants` + `nextVariant()`).
-2. `main.ts` constructs a renderer for the served tier (`TierARenderer` /
-   `TierCRenderer`; Tier B is contracted in `render/contract.ts` but has no
-   implementation — see §7) and hands it, plus the resolved variant, to a new
+1. `main.ts` loads and validates all three scenario JSON files
+   (`validateScenario`), detects the tier (`detectTier`), and either shows the
+   module picker or skips it when `?scenario=` names one.
+2. The learner picks a mode. **Show me** (guided) narrates each step by name.
+   **Prove it** (assessment) replaces every instruction with the situation and
+   masks the checklist. `DrillOptions.mode` carries the choice into
    `DrillController`.
-3. `DrillController` constructs the actual `DrillSession` (`engine/runtime.ts`)
-   and a `Hud`. It is the **only** object in the app permitted to call
-   `session.dispatch()` / `session.acknowledge()` / `session.tick()`.
-4. Each render tier turns user input (a WebXR `select`, a DOM tap on a tile+verb
-   sheet) into an `Action` (`{ verb, target?, value? }`) and calls
-   `controller.act(action)`. It never touches the session directly.
-5. `DrillController#apply` takes the `StepResult` the session returns, fans
-   `WorldEffect`s out to the renderer, updates the shared `Hud` (prompt,
-   checklist, countdown, consequence banner — identical DOM in every tier), and
-   detects `session.finished`.
-6. On finish, `main.ts`'s `onFinish` hook calls `scoreSession()` (→ `Competency`),
-   persists it via `saveAttempt()` (browser `localStorage`, key
-   `suraksha.attempts.v1`), and renders the debrief (`results.ts`).
-7. The debrief calls `certify()` against **all** locally stored attempts. If a
-   certification is granted, it demo-issues a credential in-browser
-   (`createDemoIssuer` + `issueCredential`) and immediately verifies it
-   (`verifyCredential`) to render the "N signed bytes · QR version M · verified
-   offline" line.
+3. `main.ts` picks the variant: `?seed=N` resolves that exact seed through
+   `resolveVariant`, otherwise `distinctVariants` plus `nextVariant()` chooses
+   the next one the learner has not passed.
+4. A renderer is constructed for the served tier (`TierARenderer` or
+   `TierCRenderer`; Tier B is contracted but unimplemented) and handed, with the
+   resolved variant, to a new `DrillController`.
+5. `DrillController` constructs the `DrillSession` and a `Hud`. It is the
+   **only** object permitted to call `session.dispatch()`, `acknowledge()` or
+   `tick()`.
+6. A renderer turns input (a WebXR `select`, a tile tap plus a verb) into an
+   `Action` (`{ verb, target?, value? }`) and calls `controller.act(action)`. It
+   never touches the session.
+7. `DrillController#apply` takes the `StepResult`, fans `WorldEffect`s out to the
+   renderer, updates the shared `Hud`, and notices `session.finished`.
+8. On finish, `scoreSession(session, controller.attempted)` produces a
+   `Competency` carrying the mode and whether a hint was taken. `saveAttempt()`
+   persists it (`localStorage`, `suraksha.attempts.v1`) and `results.ts` renders
+   the debrief.
+9. The debrief calls `certify()` over all stored attempts. Only unaided
+   assessment runs count towards the distinct-variant requirement. If a
+   certification is granted it demo-issues a credential in-browser and verifies
+   it immediately, which is where the "N signed bytes · QR version M · verified
+   offline" line comes from.
 
-The engine/assessment/credential layers are pure functions/classes over plain
-data — no DOM, no fetch, no `Date.now()` unless injected. That's what makes
-`src/cli/*` and `tests/*` able to drive the exact same code paths headlessly.
+The engine, assessment and credential layers are pure functions and classes over
+plain data: no DOM, no fetch, no ambient `Date.now()`. That is what lets
+`src/cli/*` and `tests/*` drive the identical code paths headlessly.
 
-## 5. Architectural invariants — read before changing anything
+## 5. Architectural invariants
 
-These are constraints the codebase actively enforces (with comments explaining
-*why*, and in a few cases a regression the comment is naming). Breaking one won't
-necessarily fail a type check.
+Constraints the codebase actively holds, several of them naming a real
+regression. Breaking one will not necessarily fail a type check.
 
 ### 5.1 The tier boundary (`WorldRenderer`)
 
-A renderer (`tierA.ts` / `tierC.ts`) may only decide **how the world looks and how
-a tap becomes an `Action`**. Prompt text, checklist, countdown, and the
-consequence banner are drawn exactly once, by the shared `Hud` class
-(`app/ui/hud.ts`), and every renderer's `feedback()` method is a deliberate no-op
-with a comment saying so. If a renderer ever draws its own countdown or banner,
-two learners on different tiers can end up assessed on different amounts of time
-for what's supposed to be the same competency — this is called out explicitly in
-both `tierA.ts` and `tierC.ts`.
+A renderer decides **how the world looks and how a tap becomes an `Action`**,
+and nothing else. Prompt, checklist, countdown and consequence banner are drawn
+once, by `Hud`, and every renderer's `feedback()` is a deliberate no-op with a
+comment saying so. A renderer that drew its own countdown could quietly give its
+learners more time, and two credentials that cost different amounts of time are
+not the same credential. Verb wording is centralised in `render/verbs.ts` for
+the same reason: if Tier A said "Enter" where Tier C said "Climb in", the tiers
+would be asking subtly different questions.
 
-Corollary: verb wording (`render/verbs.ts`) is centralized for the same reason —
-if Tier A said "Enter" where Tier C said "Climb in", the tiers would be asking
-subtly different questions.
+### 5.2 `resolveVariant` rebuilds every node kind field by field
 
-### 5.2 `resolveVariant` rebuilds every node kind field-by-field (`engine/variant.ts`)
-
-`resolveVariant` does not spread-and-patch a node; each `case 'expect':` /
-`case 'observe':` etc. explicitly lists every field it keeps. The comment at
-`variant.ts:154-160` documents a real bug this caused: when `observe` nodes
-gained `errors`, the `expect` branch resolved them but the `observe` branch simply
-didn't mention them, so a fatal error rule was silently dropped from the resolved
-graph with no compile error. **If you add a field to any `ScenarioNode` variant,
-you must add it to every relevant branch of `resolveVariant` by hand** — there is
-no structural-sharing shortcut here, on purpose (see the `resolvedErrors` helper
-that now shares the observe/expect error-resolution logic specifically to prevent
-this from recurring).
+`engine/variant.ts` does not spread-and-patch. Each `case` lists every field it
+keeps. The comment there documents the bug that caused: when `observe` nodes
+gained `errors`, the `expect` branch resolved them and the `observe` branch
+simply did not mention them, so a fatal rule vanished from the resolved graph
+with no compile error. **Adding a field to any `ScenarioNode` means adding it to
+every relevant branch by hand.** `goal` (§5.8) is the most recent example.
 
 ### 5.3 WebXR dual-channel tap arbitration (`render/overlay-taps.ts`)
 
-Inside a WebXR `dom-overlay`, one physical tap on a button can arrive via the
-ordinary DOM `click` *or* the XR `select` event — and on real Android hardware,
-neither channel is independently reliable (some builds never fire `click` inside
-the overlay; `select` fires reliably but carries no target element). `OverlayTaps`
-listens to both, uses `beforexrselect`/`pointerdown` to name the element the
-finger was over, and delivers each physical tap exactly once via whichever
-channel wins the race. **This class only exists because of debugging done with
-`tools/phone.mjs` against real hardware** — do not "simplify" it back to a single
-listener without a phone in hand to verify against.
-
-Related, narrower fix in `tierA.ts#onSelect`: some Android/Chrome builds dispatch
-more than one `select` event for a single physical tap; a 350ms de-dupe guard
-prevents a Cancel-tap from closing then immediately reopening the same sheet.
+Inside a `dom-overlay`, one physical tap can arrive as a DOM `click` or as an XR
+`select`, and on real Android neither channel is independently reliable: some
+builds never fire `click` inside the overlay, and `select` fires reliably but
+carries no target element. `OverlayTaps` listens to both, uses
+`beforexrselect`/`pointerdown` to name the element the finger was over, and
+delivers each physical tap exactly once. This class exists because of debugging
+against real hardware; do not simplify it to one listener without a phone in
+hand. Related: `tierA.ts#onSelect` keeps a 350ms de-dupe, because some builds
+dispatch two `select` events for one tap and a Cancel would close then reopen
+the sheet.
 
 ### 5.4 The engine never speaks a UI language
 
-`STEP_OUT_OF_ORDER` (the "right action, wrong moment" case) is raised by the
-runtime itself, not authored in the scenario JSON, and its user-facing string
-lives in `app/ui/i18n.ts`'s `UI` table rather than as scenario content. Any
-runtime-raised message must go through the same path — this is what keeps a
-missing third-language string from being possible for engine-level messages (they
-can only be missing for authored content, which `l10n.test.ts` checks).
+`STEP_OUT_OF_ORDER` is raised by the runtime, not authored in JSON, and its
+user-facing string lives in the `UI` table in `app/ui/i18n.ts`. Any
+runtime-raised message goes the same way, which is what makes a missing third
+language impossible for engine-level text.
 
-### 5.5 Text always goes through `LocalizedText` + `Localizer`, never an inline ternary
+### 5.5 Text goes through `LocalizedText` and `Localizer`, never an inline ternary
 
-`verbs.ts`'s header comment documents the actual failure mode: a hardcoded
-`en ? a : b` check at a call site is "exactly how a third language goes missing
-silently" — a Santali-selecting learner would keep seeing Hindi no matter what
-they picked, on every string written that way, and nothing would catch it. Every
-piece of learner-facing text is a `LocalizedText` resolved through
-`Localizer.text()`/`Localizer.ui()`, so the `sat → hi → en` fallback chain is the
-only place language-selection logic exists.
+`verbs.ts`'s header names the failure mode: a hardcoded `en ? a : b` at a call
+site is how a third language goes missing silently, because a Santali learner
+would keep seeing Hindi on that one string and nothing would catch it. The
+`sat → hi → en` chain is the only place language selection lives.
 
-### 5.6 Speech voice selection keys off the *script on screen*, not the selected language code
+The same rule now covers generated prose. `certify()` writes its reasons as
+English for the supervisor's dashboard; the learner's debrief renders
+`certification.details` (structured `ReasonDetail` values) through `i18n`
+instead. Before that, a Hindi debrief printed "below pass mark on
+ppe_discipline" verbatim. `tests/app.test.ts` fails if a Hindi debrief carries
+an English reason or a raw dimension id.
 
-`i18n.ts`'s `scriptTag()` exists because the fallback chain means a learner who
-picks Santali is very often looking at Hindi (Devanagari) text on screen, not Ol
-Chiki — so speech synthesis has to look at what script the string is actually
-written in, not which language was selected, or it mispronounces (or the app
-tries to hand Devanagari text to a Santali voice). See `pickVoice()`'s scoring:
-Android lists a romanized `hi_IN_#Latn` voice right next to the real Devanagari
-one, and picks Ol Chiki-tagged Santali voices ahead of others when available.
+### 5.6 Speech keys off the script on screen, not the selected language
 
-### 5.7 Effects and errors carry variant-resolved values, not authored templates
+Because of the fallback chain, a learner who picked Santali is very often
+looking at Devanagari. `scriptTag()` in `i18n.ts` inspects what the string is
+actually written in, so synthesis does not hand Devanagari to a Santali voice or
+Ol Chiki to a Hindi one. `pickVoice()`'s scoring also has to skip Android's
+romanized `hi_IN_#Latn` voice, which sits right next to the real one.
 
-A `set_gas` effect's `value` may be authored as `"{{o2}}"` and must be a resolved
-number by the time it reaches a renderer; `resolveEffects()` in `variant.ts`
-does this coercion and throws if interpolation doesn't produce a valid number.
-Never read `WorldEffect.value` as a string in renderer code.
+### 5.7 Effects and errors carry variant-resolved values
 
-## 6. The authored scenario (`gas-confined-space.json`)
+A `set_gas` effect authored as `"{{o2}}"` must be a number by the time a
+renderer sees it. `resolveEffects()` coerces and throws if interpolation does
+not produce a valid one. Never read `WorldEffect.value` as a string in renderer
+code.
 
-- **21 nodes** (README says "eighteen or nineteen depending on variant" — that
-  was accurate for a prior version; re-verify the exact reachable count per
-  variant if this number matters for a claim you're making, since `when`-guarded
-  nodes are spliced out per variant).
-- **5 variant params**: `gas` (H2S / CO / methane, picked), `o2` (15.4–19.2%,
-  0.1 step, sampled), `permit_state` (valid/expired/absent), `detector_choice`
-  (primary vs. spare instrument), `shift` (first/second/night).
-- **Scoring**: `requiredVariants: 3`; per-dimension pass marks —
-  `hazard_recognition` 70, `procedure_sequence` 75, `time_criticality` 65,
-  `ppe_discipline` 80, `communication` 70, **`rescue_restraint` 100** (zero
-  partial credit for entering a confined space after a collapsed colleague).
-- **16 props**, spanning `structure`/`ppe`/`instrument`/`equipment`/`person`/
-  `signage`/`hazard` kinds.
-- **Languages authored**: `en`, `hi` throughout; `sat` (Santali, Ol Chiki script)
-  now covers every scenario string in both `gas-confined-space` and
-  `fire-explosion` (was 2 of ~86 as of this doc's last full pass) — but it is
-  an **AI machine draft** written by `tools/translate.mjs --dictionary`
-  (a local-dictionary alternative to the Bhashini path, for when Bhashini
-  credentials aren't available), not a reviewed translation. Every line is
-  also recorded in `l10n/sat-review.tsv` against its English source; treat
-  none of it as authoritative until a Santali speaker signs off each row —
-  same requirement this section always stated, just now applying to the
-  full scenario text rather than four sentences of it. See §8.
-- **Five fatal outcome branches** (`outcome_fatal_entry`, `_survey`, `_atmosphere`,
-  `_gas`, `_rescue`) alongside `outcome_pass` — each names a specific way to die
-  in this scenario, which is the point: a failed run is a named, specific debrief.
-- **Regulation citations are pinpointed and checked against source text**
-  (CMR 2017 r.104, r.153 and r.166; MVT Rules 1966 r.6 and the First Schedule; OSH Code
-  2020 s.6(2)(c)). The verbatim text and caveats are in `docs/CITATIONS.md`, and the
-  debrief shows each one next to the step it governs. A certified instructor still has to
-  review the procedure itself before this scenario is presented as compliant.
+### 5.8 Guided teaches, assessment proves, and only one of them certifies
 
-To author a new scenario or extend this one: read `engine/types.ts` top to
-bottom first (it's ~250 lines and is the entire data model), then
-`engine/validate.ts` to see exactly what a broken graph will be caught on before
-it ever reaches a learner. `validateScenario` throws `ScenarioError` with a
-JSON-path per issue — both `main.ts` (renders it as a fatal-error screen) and
-`cli/run.ts` (prints it to the terminal) handle this the same way.
+`Competency` extends `Attempted` (`{ mode, hinted }`). `certify()` counts a
+variant only when `mode === 'assess' && !hinted`, and says so in its reasons
+when it withholds. The gate is in the assessment layer, not the UI, so a new
+screen cannot accidentally grant a certificate for a guided run.
 
-## 7. Known gaps and their exact status
+Two supporting rules:
 
-This list is maintained in `README.md` too ("Known gaps — read before pitching");
-this version adds where in the code each gap actually lives, for anyone about to
-work on one.
+- **Assessment mode masks the checklist.** The items render as `—` until a hint
+  is taken. They were handing over the answer ("stop the belt", "call the
+  control room") on a screen that had just removed the instructions.
+- **A `goal` line may not name an action.** It states the situation and the
+  objective. `tests/modes.test.ts` rejects a goal containing a UI verb, and
+  `validateScenario` rejects a `goal` on a node that is not assessed.
+
+### 5.9 An icon name is a name, not a character
+
+`IconName` values are keys into `PATHS` in `ui/icons.ts`. Assigning one with
+`textContent` renders the word. It has shipped twice, both times printing
+"contrast" beside the theme label, so `tests/theme.test.ts` now scans the source
+and fails if `THEME_ICON[...]` is used anywhere but inside `icon()`. More in
+`docs/UI.md`.
+
+### 5.10 A renderer seeds each prop once
+
+Both renderers keep a `#seeded` set. `present()` used to re-add every
+non-spawned prop on each step, which quietly undid `despawn`: the standing
+helper and the caught helper stood side by side in the conveyor drill on a real
+phone, and the desktop never showed it.
+
+### 5.11 The credential's variant digests have to stay recoverable
+
+Each passed variant costs four bytes (a 32-bit FNV-1a digest of the variant id)
+rather than its parameters, so the QR stays scannable off a cracked screen.
+`admin/replay.ts` makes that trade honest by walking seeds 1..400, sampling each
+one's parameters and matching digests, so a supervisor sees `belt C4 · tripped ·
+night shift` and can run that identical drill. A digest matching nothing is
+reported as unrecognised, not hidden: it means the module was edited after the
+credential was issued. If you change how a variant id is built, every issued
+credential stops resolving.
+
+## 6. The authored scenarios
+
+All three live in `src/scenarios/`, all three declare `requiredVariants: 3`, and
+all three put `rescue_restraint` at a pass mark of 100: there is no partial
+credit for going in after a casualty before the hazard is controlled.
+
+| | `gas-confined-space` | `fire-explosion` | `machinery-conveyor-loto` |
+|---|---|---|---|
+| Domain | `gas_leak_confined_space` | `fire_explosion` | `machinery_haulage_loto` |
+| Nodes | 21 | 11 | 18 |
+| Props | 16 | 9 | 12 |
+| Outcomes | pass plus 5 named fatals | pass plus 2 | pass plus 3 |
+| Variant params | `gas`, `o2` (15.4-18.9%), `permit_state`, `detector_choice`, `shift` | `ext_layout`, `colleague_offset` | `belt` (C3/C4), `belt_state`, `shift` |
+| Languages | en, hi, sat | en, hi, sat | en, hi |
+
+The reachable node count per variant is lower than the total, because
+`when`-guarded nodes are spliced out. Re-verify per variant before putting a
+number in a deck.
+
+`gas-confined-space` is sited at the pit-top on purpose: non-flameproof
+electronics are restricted underground in gassy mines, and induction training is
+legally sited at the surface anyway.
+
+`machinery-conveyor-loto` is the one to read if you are learning the data model,
+because it exercises the most of it: a `when`-guarded branch on `belt_state`, a
+mid-drill `spawn` that replaces the standing helper with the caught one, a fatal
+rule for touching a person before the machine is stopped, and a belt number that
+varies so a memorised tap sequence isolates the wrong belt.
+
+Citations are pinpointed to specific provisions (CMR 2017 r.104, r.139, r.140,
+r.153(2)(b), r.166, r.211, r.243; MVT Rules 1966 r.6, r.28, r.30 and the First
+Schedule; OSH Code 2020 s.6(2)(c)), checked against source text, and shown to the
+learner on the debrief next to the step each one governs.
+`tests/citations.test.ts` rejects any citation without a pinpoint.
+`docs/CITATIONS.md` has the verbatim text and the caveats, including that
+permit-to-work and the standby person are site procedures rather than
+stand-alone regulations, that the CMR 2017 text came from a mirror rather than
+the Gazette, and that the Mines Act 1952 was repealed by the OSH Code on
+21 November 2025.
+
+To author a new scenario: read `engine/types.ts` top to bottom (it is the whole
+data model), then `engine/validate.ts` to see what a broken graph is caught on.
+`validateScenario` throws `ScenarioError` with a JSON path per issue; `main.ts`
+renders it as a fatal-error screen and `cli/run.ts` prints it.
+
+## 7. Known gaps, and where each one lives
 
 | Gap | Status | Where |
 |---|---|---|
-| Regulation citations unverified | Placeholder `cite` strings only | `src/scenarios/gas-confined-space.json` → `regulations` and per-node `cites` |
-| No certified-instructor review of the procedure | Not started | content review, not code |
-| Tier A never run on real ARCore hardware | Type-checks and builds; unproven | `src/app/render/tierA.ts`; test with `tools/phone.mjs` |
-| Tier A uses primitive geometry, not models | Shaped now (a person is head+torso+limbs, extinguishers are colour/shape-distinguished), still coloured geometry not a site twin | `tierA.ts` `partsFor()` (was `geometryFor()`, one primitive per kind — see `tests/tierA-shapes.test.ts`) |
-| Tier B (marker tracking) not implemented | Contracted, falls back loudly | `Tier` type in `render/contract.ts` includes `'B'`; `tier.ts`'s `IMPLEMENTED` array is `['A', 'C']` only; `main.ts`'s `rendererFor()` always serves Tier C when asked for B |
-| Credential issuance happens in-browser | Demo-only, explicitly named as such; now signed with a fixed key (not random per-session) so a *different* device can verify it | `src/credential/web-crypto.ts`'s `createDemoIssuer` + `src/credential/demo-trust.ts` — real issuance needs a server-side keystore, a published trust list, and key rotation, none of which exist yet |
-| Santali narration is speech-synthesized, not recorded | Stand-in | `app/ui/i18n.ts`'s `Localizer.speak()`; `Narration.audio` field already exists in `engine/types.ts` to carry real clips whenever they're recorded |
-| Santali translation is an unreviewed AI draft | Full scenario coverage (both scenarios), zero human review | `tools/translate.mjs --dictionary l10n/ai-santali-drafts.json --apply` generated it; a `l10n/sat-review.tsv` sign-off sheet tracks every line; **nothing it writes is authoritative until a Santali speaker signs off each line** — enforced by process, not by code. Three AR-handshake UI strings were deliberately left un-drafted, not just unreviewed — see the comment above `startingAr` in `i18n.ts` |
-| Admin dashboard has no backend/sync across devices | By design for now — reads only what this device scanned | `src/admin/store.ts`'s module comment |
+| No certified-instructor review | Not started. Procedures come from general practice, not a DGMS-certified sign-off. | content, not code |
+| Citations reviewed by a professional | Pinpointed and source-checked, not professionally reviewed | `docs/CITATIONS.md` |
+| Santali coverage has regressed behind the code | 101 scenario strings and 25 interface strings now missing: every `goal` line added for assessment mode, everything in the conveyor drill, and the new debrief reason strings. A Santali learner is served Hindi for all of it. | `npm run l10n`; `l10n/sat-review.tsv` |
+| Santali that exists is an unreviewed AI draft | 139 rows in the sign-off sheet, none signed off | `l10n/sat-review.tsv` |
+| Narration is synthetic | Nothing recorded yet: 133 Hindi lines and 68 Santali across the three drills. The playback path is built and falls back to synthesis, and 15 lines carry a variant placeholder so they stay synthetic by design. | `docs/NARRATION.md`, `node tools/narration.mjs --report` |
+| Pass marks are uncalibrated for assessment mode | Tuned against guided prompts. Removing the instructions makes every run harder, especially time-to-first-action. Treat them as a starting point. | `scoring.passMark` in each scenario |
+| Per-PC evidence not emitted | NSQF alignment can only be claimed once the credential reports evidence per named performance criterion | `docs/RESEARCH.md` §6.1 |
+| Issuance happens in the browser | Demo only, fixed key so another device can verify. A device that signs its own credentials can award itself competence. The verification path is real. | `credential/web-crypto.ts`, `credential/demo-trust.ts` |
+| Tier B not implemented | Contracted; the app falls back to Tier C loudly | `render/contract.ts`, `tier.ts`'s `IMPLEMENTED`, `main.ts`'s `rendererFor()` |
+| Tier A uses primitive geometry | Shaped, not boxes-per-kind, but still coloured primitives rather than a site twin | `tierA.ts`'s `partsFor()` |
+| Tier A on the wider ARCore fleet | Demonstrated working on a real phone; behaviour across budget handsets unmeasured | test with `tools/phone.mjs` |
+| Dashboard has no backend | Verifies real credentials, keeps a real roster, but only of what this one device scanned | `admin/store.ts`'s module comment |
 
-## 8. Localization workflow, concretely
+## 8. Localization workflow
 
-1. `npm run l10n` — reports what's missing across **both** scenario JSON files
-   (`gas-confined-space.json`, `fire-explosion.json`) plus the hand-written
-   `UI` table in `app/ui/i18n.ts`, translates nothing. As of this writing:
-   0 scenario strings missing, 3 interface strings missing (deliberately —
-   see below).
-2. `npm run l10n:draft` — calls Bhashini (needs `BHASHINI_USER_ID` /
-   `BHASHINI_ULCA_API_KEY` env vars, free registration), prints drafts, writes
-   nothing to source.
-3. **`node tools/translate.mjs --dictionary <file.json> --apply`** — the
-   alternative path used to actually fill the gap: no Bhashini credentials
-   were available, so this reads a local `{ "English text": "Santali text" }`
-   map instead of calling the API. Same output either way — the tool doesn't
-   care whether Bhashini or a dictionary produced the draft, only that every
-   draft is tracked as one (step 4). `l10n/ai-santali-drafts.json` is the
-   dictionary actually used for the current coverage.
-4. `npm run l10n:apply` (or the `--dictionary` form above) writes into each
-   scenario JSON directly and prints copy-pasteable `sat: '...'` lines for
-   `i18n.ts` (hand-written source, deliberately never auto-edited, to avoid
-   destroying comments/formatting there).
-5. **Every string either mode touches is also written to `l10n/sat-review.tsv`**
-   (columns: path, english, machine_santali, reviewed_by, corrected_santali) —
-   this file is the actual deliverable of a translation pass, not the JSON edit.
-   A Santali speaker fills in `reviewed_by`/`corrected_santali` per row before
-   any of it should be treated as fit to train a worker on a lethal procedure.
-   This file now exists with 138 rows (full scenario coverage across both
-   files, minus the 3 deliberately-skipped UI strings) — **none of them are
-   signed off yet.** Getting a Santali speaker through this sheet is the next
-   concrete step, not writing more Santali.
+1. `npm run l10n` reports what is missing across all three scenario files plus
+   the hand-written `UI` table in `app/ui/i18n.ts`. It translates nothing.
+2. `npm run l10n:draft` calls Bhashini (needs the two env vars), prints drafts,
+   writes nothing.
+3. `node tools/translate.mjs --dictionary <file.json> --apply` is the offline
+   path used for the current coverage: a local `{ "English": "Santali" }` map
+   instead of the API. The tool does not care which produced a draft, only that
+   every draft is tracked as one.
+4. `npm run l10n:apply` writes into the scenario JSON and prints copy-pasteable
+   `sat: '...'` lines for `i18n.ts`, which is hand-written source and
+   deliberately never auto-edited.
+5. **Every string either mode touches is written to `l10n/sat-review.tsv`**
+   (path, english, machine_santali, reviewed_by, corrected_santali). That file
+   is the deliverable of a translation pass, not the JSON edit. A Santali
+   speaker fills in the last two columns per row before any of it is fit to
+   train a worker on a lethal procedure. 139 rows exist; none are signed off.
 
-`{{param}}` placeholders (e.g. `{{gas}}`) are checked to survive the translation
-round-trip (`placeholdersSurvived()`); any translation that loses one is skipped
-with a warning rather than silently corrupting interpolation.
+`{{param}}` placeholders are checked to survive the round trip
+(`placeholdersSurvived()`); a translation that loses one is skipped with a
+warning rather than silently corrupting interpolation.
+
+Three AR-handshake strings are deliberately left un-drafted rather than
+machine-translated. See the comment above `startingAr` in `i18n.ts`.
 
 ## 9. Tests
 
-130 tests across 15 files, using Node's built-in test runner
-(`node --experimental-strip-types --test tests/**/*.test.ts`) with `happy-dom`
-providing a DOM for the app-layer tests. No mocking framework — fakes are
-hand-written (e.g. injected clocks, fake `SpeechSynthesisVoice` lists).
+132 tests across 15 files, Node's built-in runner, `happy-dom` for the DOM
+layers. No mocking framework: fakes are hand-written (injected clocks, fake
+voice lists).
 
 | File | Tests | Covers |
 |---|---|---|
-| `engine.test.ts` | 17 | validation (dangling refs, unrouted fatals), variant resolution/splicing/distinctness, the ideal-operator completing every branch, sequence errors, timeouts firing via `tick()` with no input, hesitation vs. error accounting, observe-node error rules (the "entering during survey is fatal, not a spotted hazard" fix) |
-| `assess.test.ts` | 10 | scoring math: full credit, fatal flooring a dimension, severity-weighted deductions, hesitation penalties, null (no-evidence) vs. zero, contribution traceability, certification's distinct-variant requirement, fail-then-pass still counting, worst-vs-mean aggregation |
-| `credential.test.ts` | 20 | base64url round-trips and rejection, binary codec round-trip/truncation/oversize rejection, full issue→verify loop, refusal to issue for an ungranted certification, single-byte tamper detection, unknown-issuer rejection, expiry rejection, near-expiry warnings, worst-attempt (not mean) carried into the credential, QR size ceiling, malformed-input handling |
-| `app.test.ts` | 14 | end-to-end DOM-level drill flow via happy-dom: reaching a pass, reaching a named fatal outcome, checklist behavior, spawned-prop visibility, live language switching, every scenario-expected action being reachable through the actual UI, `.hidden` actually hiding per the real stylesheet, cross-tier verb-label consistency, receipt-without-verdict feedback, out-of-order step visibility |
-| `overlay-taps.test.ts` | 9 | the dual-channel WebXR tap arbitration in isolation — click-only, select-only, both orders, stale aims, genuinely separate taps, dispose |
-| `speech.test.ts` | 7 | script-based (not language-based) voice selection, Ol Chiki vs. Devanagari vs. romanized-Hindi disambiguation, Indian-English preference, graceful silence when no matching voice exists |
-| `theme.test.ts` | 6 | system/light/dark persistence, `data-theme` attribute semantics, corrupted-storage fallback |
-| `l10n.test.ts` | 4 | every declared language resolves every scenario string, fallback chains terminate in something authored, Santali falls through Hindi before English |
-| `admin.test.ts` | 5 | roster store dedup/merge-keeps-newer logic in isolation, plus end-to-end through the real dashboard DOM: paste a credential issued via `createDemoIssuer` → click "Verify & add" → row appears in the table; garbage input rejected, not silently added. Caught a real bug pre-merge: `verifyAndAdd` set the success message then immediately called `render()`, which wiped it before it could be seen |
-| `tierA-shapes.test.ts` | 4 | the one corner of the render layer with no prior coverage (WebXR/WebGL can't run under happy-dom, but geometry construction needs neither) — every prop kind builds sane, non-degenerate geometry; a person's feet actually reach the floor; the three extinguishers are genuinely distinguishable by part count and colour, not just by id string |
+| `engine.test.ts` | 17 | validation, variant resolution and splicing, the ideal operator through every branch, sequence errors, timeouts via `tick()`, hesitation accounting, observe-node error rules |
+| `credential.test.ts` | 16 | base64url, binary codec round trip and rejections, issue/verify, refusal to issue for an ungranted certification, single-byte tamper, unknown issuer, expiry and near-expiry, worst-not-mean, QR ceiling |
+| `app.test.ts` | 19 | end-to-end DOM drill flow: pass and named fatal, checklist, spawned props, live language switch, every expected action reachable through the real UI, `.hidden` honoured by the real stylesheet, cross-tier verb agreement, a Hindi debrief carrying no English reasons |
+| `assess.test.ts` | 10 | scoring math, fatal flooring, severity weighting, hesitation, null vs zero, contribution traceability, distinct-variant certification, worst-vs-mean |
+| `overlay-taps.test.ts` | 9 | dual-channel tap arbitration in isolation |
+| `machinery.test.ts` | 8 | the conveyor drill end to end, including the second-victim grab and isolating the wrong belt |
+| `tierA-shapes.test.ts` | 8 | geometry construction: a person's feet reach the floor, three distinguishable extinguishers, the sump is an annulus, the conveyor props are not boxes |
+| `speech.test.ts` | 7 | script-based voice selection, Ol Chiki vs Devanagari vs romanized Hindi, graceful silence |
+| `theme.test.ts` | 7 | light/dark/system semantics, corrupted storage, and the icon-name-as-text guard |
+| `narration.test.ts` | 7 | the manifest, clip ids, and that variant-dependent lines stay synthetic |
+| `admin.test.ts` | 6 | roster dedupe and merge, a real credential through the real dashboard DOM, garbage rejected, the drills expander |
+| `modes.test.ts` | 6 | guided vs assessment behaviour, hinting, and that neither certifies |
+| `citations.test.ts` | 4 | every citation has a pinpoint and matches the recorded text |
+| `l10n.test.ts` | 4 | every declared language resolves every scenario string; fallback chains terminate |
+| `replay.test.ts` | 4 | a signed credential turned back into the exact drills it was earned on |
 
-Run `npm test` — it should exit clean with `82 pass`, `0 fail`. If it doesn't,
-that's a regression worth chasing before anything else, since this suite is the
-only thing standing between a scenario-JSON edit and a broken drill on a real
-phone.
+`npm test` should exit `132 pass`, `0 fail`. This suite is the only thing
+standing between a scenario-JSON edit and a broken drill on a real phone.
 
-## 10. Extending this codebase — where to start for common tasks
+## 10. Where to start for common tasks
 
-- **Add a new scenario (new domain, e.g. fire/explosion or LOTO):** author a new
-  JSON file next to `gas-confined-space.json` following `engine/types.ts`'s
-  `Scenario` shape; validate it with `validateScenario` before wiring it into
-  `main.ts`. `DOMAIN_CODES` in `credential/codec.ts` already reserves codes for
-  `fire_explosion`, `ground_control_and_height`, `machinery_haulage_loto`, and
-  `electrical_ppe_emergency` — the credential format anticipates more domains
-  than currently exist content for.
-- **Implement Tier B (marker tracking):** implement `WorldRenderer` in a new
-  `render/tierB.ts` (same contract Tier A/C already satisfy), add `'B'` to
-  `tier.ts`'s `IMPLEMENTED` array, and wire it into `main.ts`'s `rendererFor()`.
-  Nothing in the engine/assessment/credential layers needs to change — that's
-  the entire point of the tier boundary.
-- **Move credential issuance server-side:** `src/credential/credential.ts`'s
-  `issueCredential` already takes an injected `Signer`; `node-crypto.ts`'s
-  `nodeSigner`/`generateIssuerKey` are the server-side half already written and
-  exercised by `cli/credential.ts`. The work is standing up a keystore-backed
-  HTTP endpoint that calls this existing code, publishing its public key as a
-  trust list, and replacing `results.ts`'s `createDemoIssuer()` call with a
-  fetch to that endpoint.
-- **Record real narration audio:** `Narration.audio` (`engine/types.ts`) already
-  carries a `Record<string, string>` of language code → audio asset id per
-  narratable line; nothing consumes it yet (`Localizer.speak()` always uses
-  speech synthesis). Wiring it up is an `app/ui/i18n.ts` change plus an asset
-  pipeline decision, not an engine change.
-- **Verify/replace regulation citations:** edit `regulations` and per-node
-  `cites` fields directly in `gas-confined-space.json`; no code changes needed.
-  This is content work, ideally done by someone with access to the actual DGMS
-  text, and should happen before this is shown to anyone as compliant with
-  anything (see §7).
+- **Add a scenario.** Author JSON next to the others following `Scenario` in
+  `engine/types.ts`, validate it, add it to the `MODULES` list in `app/main.ts`
+  and the scenario array in `admin/replay.ts`. `DOMAIN_CODES` in
+  `credential/codec.ts` already reserves codes for
+  `ground_control_and_height` and `electrical_ppe_emergency`.
+- **Implement Tier B.** Implement `WorldRenderer` in `render/tierB.ts`, add
+  `'B'` to `tier.ts`'s `IMPLEMENTED`, wire it into `rendererFor()`. Nothing in
+  the engine, assessment or credential layers changes; that is the point of the
+  boundary.
+- **Move issuance server-side.** `issueCredential` already takes an injected
+  `Signer`, and `node-crypto.ts` is the server half, exercised by
+  `cli/credential.ts`. The work is a keystore-backed endpoint calling that code,
+  a published trust list, and replacing the `createDemoIssuer()` call in
+  `results.ts` with a fetch.
+- **Emit per-PC evidence.** The blocker on claiming NSQF alignment. Each scored
+  node would carry the performance criteria it demonstrates, `scoreResults`
+  would aggregate per PC, and the credential or its companion payload would
+  report them. See `docs/RESEARCH.md` §6.1 for the exact PC list.
+- **Record narration.** `node tools/narration.mjs --report` lists what is
+  missing, `--script` prints a recording script, `--manifest --apply` wires the
+  clips in. Lines whose words change per variant deliberately stay synthetic.
+- **Change the look.** Read `docs/UI.md` first; several rules there exist
+  because of a specific bug.
 
-## 11. Project/submission context
+## 11. Submission context
 
-`PPT-BRIEF.md` and `Suraksha_AR_SIH26041 V2.pptx` are Smart India Hackathon 2026
-submission materials (problem statement SIH26041, "AR-Based Vocational Training
-Simulator for Industrial Safety"). They describe the pitch, not the codebase —
-useful for understanding what's being promised to judges, but check this document
-and `README.md`'s "Known gaps" section before assuming a claim in the deck is
-fully implemented (e.g. the deck's backend-sync and Wi-Fi-Direct-distribution
-ideas are not present in the code at all; they're roadmap, not shipped).
+`PPT-BRIEF.md` is the deck content for SIH 2026 problem statement SIH26041. It
+describes the pitch. Where a claim there is roadmap rather than shipped, it says
+so, but check §7 here before repeating anything from it as built.
