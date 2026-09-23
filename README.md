@@ -41,7 +41,7 @@ npm run run:credential  # the whole loop: drill -> certify -> issue -> scan -> v
 npm run run:tamper      # the same loop with one payload byte flipped -> rejected
 
 npm run dev             # the client, on your LAN so a phone can reach it
-npm run build           # 35 kB gzipped, + 134 kB three.js only on AR devices
+npm run build           # 69 kB gzipped on first load, + 133 kB three.js only on AR devices
 ```
 
 Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion|machinery` (deep-links past the module picker).

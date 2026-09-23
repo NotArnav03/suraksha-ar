@@ -9,3 +9,8 @@ dist/
 # keystore in here is a signing secret and must never be committed, and the
 # rest is machine-generated and reproducible from twa-manifest.json.
 android/
+
+# Source PDFs read while writing docs/RESEARCH.md: two government publications
+# and another team's SIH 2024 deck. 7.5 MB of binaries that nothing in the build
+# reads, and the deck is not ours to redistribute from a public repo.
+research/

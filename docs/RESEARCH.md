@@ -112,7 +112,7 @@ The obligation is not the gap. Delivery quality and evidence of comprehension ar
 DGMS. The steel plants and mica *processing* units the brief also names are factories, and in
 Jharkhand those fall under the draft **Occupational Safety, Health and Working Conditions
 (Jharkhand) Rules 2025** (Labour, Employment, Training and Skill Development Department, made under
-section 135 of the OSH Code 2020, 301 pages, copy in `research/`). Rule 21 on safety officers says
+section 135 of the OSH Code 2020, 301 pages, local copy in `research/`, which is gitignored). Rule 21 on safety officers says
 outright that it applies "except mines". What that draft asks for, as it bears on this project:
 
 - **Training obligations are scattered by hazard, not set out in one place**: periodic training in
@@ -138,7 +138,7 @@ outright that it applies "except mines". What that draft asks for, as it bears o
 
 For steel and mica processing modules, cite this draft (noting that it is a draft), not the Mines
 Act. The separate *Jharkhand Minerals (Prevention of Illegal Mining, Transportation and Storage)
-Amendment Rules 2026* in `research/` deals with registering mineral dealers, JIMMS transport
+Amendment Rules 2026* (same gitignored folder) deals with registering mineral dealers, JIMMS transport
 challans and compounding fees. It has nothing to say about safety training.
 
 ### 2.4 Assessment: the actual hole in the market

@@ -7,7 +7,7 @@ the code is holding that a type checker will not hold for you. `README.md` is
 the pitch and the reasoning behind the design; read that first if you want to
 know *why*. `docs/UI.md` covers the interface layer specifically.
 
-Verified 2026-09-23 against commit `caaf242` on `main`.
+Verified 2026-09-23. The code has not changed since `caaf242`; anything after it on `main` is documentation.
 
 - `npm test` → **132 passing, 0 failing** (15 files)
 - `npm run check` (`tsc --noEmit`) → clean
