@@ -263,6 +263,41 @@ test('climbing in without testing is reachable, fatal, and explained on screen',
   controller.stop();
 });
 
+test('a Hindi debrief explains a withheld certificate in Hindi', async () => {
+  // certify() writes its reasons as English prose for the supervisor's
+  // dashboard. Printing those straight onto the learner's screen put
+  // "below pass mark on ppe_discipline" under a Hindi heading, which is the
+  // half-finished look that lands on the person least able to shrug it off.
+  const { controller, world, chrome, finished } = await mount(2);
+  pressContinue(chrome);
+  touch(world, 'Settling sump opening', 'Climb in');
+  assert.ok(finished.value, 'the drill should have ended');
+
+  const competency = scoreSession(controller.session);
+  const debrief = renderResults({
+    scenario,
+    session: controller.session,
+    competency,
+    attempts: [competency],
+    i18n: new Localizer('hi'),
+    workerId: 'JH/CHP/0001',
+    onRestart: () => {},
+  });
+
+  const reasons = [...debrief.querySelectorAll('.reason')].map((p) => p.textContent ?? '');
+  assert.ok(reasons.length > 0, 'a withheld certificate has to say why');
+  for (const reason of reasons) {
+    // Dimension ids and bare English sentences are the two ways this leaked.
+    assert.doesNotMatch(reason, /ppe_discipline|hazard_recognition|procedure_sequence/);
+    assert.doesNotMatch(reason, /below pass mark|distinct variants|do not count/i);
+  }
+  assert.ok(
+    reasons.some((reason) => /[\u0900-\u097F]/.test(reason)),
+    `at least one reason should be in Devanagari: ${reasons.join(' | ')}`,
+  );
+  controller.stop();
+});
+
 test('the checklist comes from authored content and ticks off as steps land', async () => {
   const { controller, world, chrome, finished } = await mount(2);
   void finished;

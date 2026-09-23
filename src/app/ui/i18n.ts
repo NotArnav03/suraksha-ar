@@ -60,6 +60,8 @@ const UI: Record<string, LocalizedText> = {
   result_pass: { en: 'Passed', hi: 'उत्तीर्ण', sat: 'ᱯᱟᱥ ᱮᱱᱟ' },
   result_fail: { en: 'Not passed', hi: 'उत्तीर्ण नहीं', sat: 'ᱯᱟᱥ ᱵᱟᱭ ᱦᱩᱭᱮᱱᱟ' },
   result_fatal: { en: 'Fatal outcome', hi: 'जानलेवा परिणाम', sat: 'ᱜᱚᱲᱚ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱲᱟᱣ' },
+  /* Stamped on a dimension a fatal error took to zero. */
+  floored: { en: 'Fatal', hi: 'जानलेवा', sat: 'ᱜᱚᱲᱚ' },
   competency: { en: 'Competency', hi: 'दक्षता', sat: 'ᱫᱟᱲᱮᱭᱟᱜ ᱡᱟᱹᱱᱟᱹ' },
   credential: { en: 'Certificate', hi: 'प्रमाणपत्र', sat: 'ᱥᱟᱠᱷᱭᱟᱛ' },
   scanToVerify: {
@@ -88,6 +90,29 @@ const UI: Record<string, LocalizedText> = {
   rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
   // The six dimensions, named for the learner. Machine-cased identifiers
   // ("Ppe Discipline") were being printed straight onto a Hindi screen.
+  // Why a certificate was withheld. English prose from certify() used to be
+  // printed straight onto a Hindi debrief; these are the same reasons in the
+  // learner's own language.
+  reason_moreVariants: {
+    en: '{{passed}} of {{required}} drills passed, {{short}} more to go',
+    hi: '{{required}} में से {{passed}} अभ्यास पास, {{short}} और बाकी',
+  },
+  reason_aidedRuns: {
+    en: '{{count}} guided or hinted run(s) do not count towards a certificate',
+    hi: '{{count}} सहायता वाले अभ्यास प्रमाणपत्र में नहीं गिने जाते',
+  },
+  reason_fatalAttempt: {
+    en: 'A drill ended in a fatal outcome',
+    hi: 'एक अभ्यास जानलेवा परिणाम पर ख़त्म हुआ',
+  },
+  reason_belowMark: {
+    en: 'Below the pass mark on {{dimension}}',
+    hi: '{{dimension}} में पास अंक से कम',
+  },
+  reason_belowMarkNeeds: {
+    en: 'Below the pass mark on {{dimension}} (needs {{mark}})',
+    hi: '{{dimension}} में पास अंक से कम ({{mark}} चाहिए)',
+  },
   dim_hazard_recognition: { en: 'Hazard recognition', hi: 'ख़तरा पहचानना' },
   dim_procedure_sequence: { en: 'Right steps, right order', hi: 'सही क्रम में सही कदम' },
   dim_time_criticality: { en: 'Acting in time', hi: 'समय पर कार्रवाई' },
