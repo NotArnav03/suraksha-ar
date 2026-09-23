@@ -1,6 +1,7 @@
 import type { Feedback, NodeView, Tier } from '../render/contract.ts';
 import type { Localizer } from './i18n.ts';
 import { LANGUAGES, type LangCode } from './i18n.ts';
+import { icon } from './icons.ts';
 import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './theme.ts';
 
 /**
@@ -20,6 +21,14 @@ export interface HudHooks {
   onWait(): void;
   /** the learner asked to be shown the step; costs the certificate, not the drill */
   onHint(): void;
+}
+
+/** A button's words, kept in their own span so the pictogram beside them can be sized on its own. */
+function labelSpan(text: string): HTMLSpanElement {
+  const span = document.createElement('span');
+  span.className = 'btn-label';
+  span.textContent = text;
+  return span;
 }
 
 function el<K extends keyof HTMLElementTagNameMap>(
@@ -72,7 +81,7 @@ export class Hud {
     this.#setupHandle();
 
     this.#listen.className = 'listen';
-    this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
+    this.#listen.replaceChildren(icon('speaker'), labelSpan(this.#i18n.ui('listen')));
     this.#listen.addEventListener('click', () => this.speakPrompt());
 
     this.#timer.append(this.#timerFill, this.#timerLabel);
@@ -80,10 +89,10 @@ export class Hud {
 
     this.#banner.hidden = true;
 
-    this.#waitButton.textContent = `⏱ ${this.#i18n.ui('wait')}`;
+    this.#waitButton.replaceChildren(icon('hourglass'), labelSpan(this.#i18n.ui('wait')));
     this.#waitButton.addEventListener('click', () => this.#hooks.onWait());
 
-    this.#hint.textContent = `💡 ${this.#i18n.ui('hint')}`;
+    this.#hint.replaceChildren(icon('question'), labelSpan(this.#i18n.ui('hint')));
     this.#hint.hidden = true;
     this.#hint.addEventListener('click', () => this.#hooks.onHint());
 
@@ -171,9 +180,9 @@ export class Hud {
     for (const button of this.root.querySelectorAll<HTMLElement>('.lang-button[data-code]')) {
       button.classList.toggle('on', button.dataset.code === this.#i18n.language.code);
     }
-    this.#listen.textContent = `🔊 ${this.#i18n.ui('listen')}`;
-    this.#waitButton.textContent = `⏱ ${this.#i18n.ui('wait')}`;
-    this.#hint.textContent = `💡 ${this.#i18n.ui('hint')}`;
+    this.#listen.replaceChildren(icon('speaker'), labelSpan(this.#i18n.ui('listen')));
+    this.#waitButton.replaceChildren(icon('hourglass'), labelSpan(this.#i18n.ui('wait')));
+    this.#hint.replaceChildren(icon('question'), labelSpan(this.#i18n.ui('hint')));
     this.#continue.textContent = this.#i18n.ui('next');
     if (this.#view) this.present(this.#view);
   }
@@ -181,23 +190,27 @@ export class Hud {
   /** Light, dark, or whatever the phone says — see theme.ts for why all three. */
   #themeToggle(): HTMLElement {
     let choice: ThemeChoice = loadTheme();
-    const button = el('button', 'lang-button theme-toggle', THEME_ICON[choice]);
+    const button = el('button', 'lang-button theme-toggle');
+    button.replaceChildren(icon(THEME_ICON[choice]));
+    button.title = this.#i18n.ui('theme');
     button.title = this.#i18n.ui('theme');
     button.addEventListener('click', () => {
       choice = nextTheme(choice);
       applyTheme(choice);
-      button.textContent = THEME_ICON[choice];
+      button.replaceChildren(icon(THEME_ICON[choice]));
     });
     return button;
   }
 
   #speechToggle(): HTMLElement {
-    const button = el('button', 'lang-button speech-toggle on', '🔊');
+    const button = el('button', 'lang-button speech-toggle on');
+    button.replaceChildren(icon('speaker'));
+    button.title = this.#i18n.ui('listen');
     button.addEventListener('click', () => {
       const enabled = !this.#i18n.speechEnabled;
       this.#hooks.onSpeechToggle(enabled);
       button.classList.toggle('on', enabled);
-      button.textContent = enabled ? '🔊' : '🔇';
+      button.replaceChildren(icon(enabled ? 'speaker' : 'speaker-off'));
     });
     return button;
   }
@@ -216,7 +229,7 @@ export class Hud {
       this.#checklist.append(heading);
       for (const item of view.checklist) {
         const row = el('li', item.done ? 'done' : '');
-        row.append(el('span', 'tick', item.done ? '✓' : '○'), el('span', '', item.label));
+        row.append(icon(item.done ? 'check' : 'box', 'tick'), el('span', '', item.label));
         this.#checklist.append(row);
       }
     }

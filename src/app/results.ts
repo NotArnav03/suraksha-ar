@@ -8,6 +8,7 @@ import { createDemoIssuer, webVerifier } from '../credential/web-crypto.ts';
 import type { DrillSession } from '../engine/runtime.ts';
 import type { Scenario } from '../engine/types.ts';
 import type { Localizer } from './ui/i18n.ts';
+import { icon } from './ui/icons.ts';
 
 /**
  * The debrief.
@@ -80,7 +81,7 @@ function ruleRow(cite: string, met: boolean): HTMLLIElement {
   }
   body.append(refLine);
   if (split !== -1) body.append(el('span', 'rule-says', cite.slice(split + 2)));
-  row.append(el('span', 'rule-mark', met ? '✓' : '✗'), body);
+  row.append(icon(met ? 'check' : 'cross', 'rule-mark'), body);
   return row;
 }
 
@@ -127,7 +128,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
       const row = el('li', error.severity);
       row.append(
         el('span', 'error-code', error.code.replaceAll('_', ' ').toLowerCase()),
-        el('span', 'error-meta', `${error.severity} · ${error.dimension.replaceAll('_', ' ')}`),
+        el('span', 'error-meta', `${error.severity} · ${i18n.ui(`dim_${error.dimension}`)}`),
       );
       list.append(row);
     }
@@ -175,7 +176,7 @@ export function renderResults(options: ResultsOptions): HTMLElement {
   vector.append(el('h2', '', i18n.ui('competency')));
   for (const dimension of competency.vector) {
     const row = el('div', 'dim');
-    row.append(el('span', 'dim-name', dimension.dimension.replaceAll('_', ' ')));
+    row.append(el('span', 'dim-name', i18n.ui(`dim_${dimension.dimension}`)));
 
     const track = el('div', 'dim-track');
     const fill = el('div', 'dim-fill');

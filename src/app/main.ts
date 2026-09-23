@@ -16,6 +16,7 @@ import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
 import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
 import { Localizer, LANGUAGES, type LangCode } from './ui/i18n.ts';
+import { icon, type IconName } from './ui/icons.ts';
 import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './ui/theme.ts';
 
 /**
@@ -249,13 +250,23 @@ const TIER_LABEL: Record<Tier, LocalizedText> = {
   C: { en: 'Flat interactive', hi: 'फ्लैट मोड', sat: 'ᱯᱷᱞᱮᱴ ᱢᱳᱰ' },
 };
 
-const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: string }> = {
-  webxrImmersiveAr: { en: 'Markerless AR', hi: 'मार्करलेस AR', sat: 'ᱢᱟᱨᱠᱚᱨᱞᱮᱥ AR', icon: '🕶️' },
-  camera: { en: 'Camera', hi: 'कैमरा', sat: 'ᱠᱮᱢᱨᱟ', icon: '📷' },
-  deviceOrientation: { en: 'Motion sensors', hi: 'मोशन सेंसर', sat: 'ᱪᱟᱞᱟᱣ ᱥᱮᱸᱥᱚᱨ', icon: '🧭' },
-  webgl: { en: '3D graphics', hi: '3D ग्राफ़िक्स', sat: '3D ᱪᱤᱛᱟᱹᱨ', icon: '🎮' },
-  secureContext: { en: 'Secure connection', hi: 'सुरक्षित कनेक्शन', sat: 'ᱨᱚᱠᱷᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ', icon: '🔒' },
+const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: IconName }> = {
+  webxrImmersiveAr: { en: 'Markerless AR', hi: 'मार्करलेस AR', sat: 'ᱢᱟᱨᱠᱚᱨᱞᱮᱥ AR', icon: 'headset' },
+  camera: { en: 'Camera', hi: 'कैमरा', sat: 'ᱠᱮᱢᱨᱟ', icon: 'camera' },
+  deviceOrientation: { en: 'Motion sensors', hi: 'मोशन सेंसर', sat: 'ᱪᱟᱞᱟᱣ ᱥᱮᱸᱥᱚᱨ', icon: 'compass' },
+  webgl: { en: '3D graphics', hi: '3D ग्राफ़िक्स', sat: '3D ᱪᱤᱛᱟᱹᱨ', icon: 'chip' },
+  secureContext: { en: 'Secure connection', hi: 'सुरक्षित कनेक्शन', sat: 'ᱨᱚᱠᱷᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ', icon: 'shield' },
 };
+
+const TIER_ICON: Record<Tier, IconName> = { A: 'headset', B: 'marker', C: 'phone' };
+
+/** A button's words, in their own span, so the pictogram beside them sizes independently. */
+function labelSpan(text: string): HTMLSpanElement {
+  const span = document.createElement('span');
+  span.className = 'btn-label';
+  span.textContent = text;
+  return span;
+}
 
 /** Which module to drill. Skipped when `?scenario=` names one explicitly. */
 function moduleScreen(report: TierReport): void {
@@ -328,14 +339,13 @@ function startScreen(report: TierReport): void {
   // Said before anything else is asked of them. A first-week recruit who thinks
   // they can break something will not experiment, and experimenting is the
   // entire method here.
+  // A plain notice, the way a safety board is plain. The reassurance is in the
+  // words; a waving-hand emoji only made it look like a chat app.
   const welcome = document.createElement('div');
   welcome.className = 'welcome';
-  const welcomeIcon = document.createElement('span');
-  welcomeIcon.className = 'welcome-icon';
-  welcomeIcon.textContent = '👋';
   const welcomeText = document.createElement('p');
   welcomeText.textContent = i18n.ui('welcome');
-  welcome.append(welcomeIcon, welcomeText);
+  welcome.append(welcomeText);
 
   const langRow = document.createElement('div');
   langRow.className = 'lang lang-big';
@@ -358,9 +368,7 @@ function startScreen(report: TierReport): void {
 
   const tierHead = document.createElement('div');
   tierHead.className = 'tier-head';
-  const tierIcon = document.createElement('span');
-  tierIcon.className = 'tier-icon';
-  tierIcon.textContent = report.serving === 'A' ? '🕶️' : report.serving === 'B' ? '🎯' : '📱';
+  const tierIcon = icon(TIER_ICON[report.serving], 'tier-icon');
   const tierNames = document.createElement('div');
   const tierEyebrow = document.createElement('p');
   tierEyebrow.className = 'tier-eyebrow';
@@ -383,16 +391,14 @@ function startScreen(report: TierReport): void {
     const meta = CAPABILITY_LABEL[name];
     const item = document.createElement('li');
     item.className = value ? 'yes' : 'no';
-    const icon = document.createElement('span');
-    icon.className = 'cap-icon';
-    icon.textContent = meta?.icon ?? '•';
     const label = document.createElement('span');
     label.className = 'cap-label';
     label.textContent = meta ? i18n.text(meta) : name;
-    const tick = document.createElement('span');
-    tick.className = 'cap-tick';
-    tick.textContent = value ? '✓' : '—';
-    item.append(icon, label, tick);
+    item.append(
+      icon(meta?.icon ?? 'chip', 'cap-icon'),
+      label,
+      icon(value ? 'check' : 'dash', 'cap-tick'),
+    );
     caps.append(item);
   }
   tierBox.append(caps);
@@ -451,7 +457,7 @@ function startScreen(report: TierReport): void {
   const demo = document.createElement('button');
   demo.className = 'ghost';
   demo.title = i18n.ui('demoCertificateWarn');
-  demo.textContent = `🎫 ${i18n.ui('demoCertificate')}`;
+  demo.replaceChildren(icon('certificate'), labelSpan(i18n.ui('demoCertificate')));
   demo.addEventListener('click', () => credentialDemoScreen(report));
   actions.append(demo);
 
@@ -476,7 +482,7 @@ function startScreen(report: TierReport): void {
   if (MODULES.length > 1 && !skipPicker) {
     const switchModule = document.createElement('button');
     switchModule.className = 'lang-button';
-    switchModule.textContent = `🔀  ${i18n.ui('changeModule')}`;
+    switchModule.replaceChildren(icon('swap'), labelSpan(i18n.ui('changeModule')));
     switchModule.addEventListener('click', () => moduleScreen(report));
     prefs.append(switchModule);
   }

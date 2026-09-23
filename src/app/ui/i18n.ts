@@ -86,6 +86,14 @@ const UI: Record<string, LocalizedText> = {
   },
   // No `sat` on these two, for the same reason as the three AR lines below.
   rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
+  // The six dimensions, named for the learner. Machine-cased identifiers
+  // ("Ppe Discipline") were being printed straight onto a Hindi screen.
+  dim_hazard_recognition: { en: 'Hazard recognition', hi: 'ख़तरा पहचानना' },
+  dim_procedure_sequence: { en: 'Right steps, right order', hi: 'सही क्रम में सही कदम' },
+  dim_time_criticality: { en: 'Acting in time', hi: 'समय पर कार्रवाई' },
+  dim_ppe_discipline: { en: 'Protective equipment', hi: 'सुरक्षा उपकरण' },
+  dim_communication: { en: 'Telling the right people', hi: 'सही लोगों को बताना' },
+  dim_rescue_restraint: { en: 'Restraint in a rescue', hi: 'बचाव में संयम' },
   hint: { en: 'Show me this step', hi: 'यह चरण दिखाइए' },
   // The line under the QR. It was English on a Hindi screen, which is exactly
   // the moment a worker is deciding whether to trust the thing.

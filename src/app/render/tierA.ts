@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import type { Prop, WorldEffect } from '../../engine/types.ts';
 import type { Localizer } from '../ui/i18n.ts';
 import { OverlayTaps } from './overlay-taps.ts';
+import { icon as iconEl } from '../ui/icons.ts';
 import { VERB_ICON, VERB_LABEL } from './verbs.ts';
 import type {
   Feedback,
@@ -703,7 +704,7 @@ export class TierARenderer implements WorldRenderer {
       button.className = `verb verb-${verb}`;
       const icon = document.createElement('span');
       icon.className = 'verb-icon';
-      icon.textContent = VERB_ICON[verb];
+      icon.replaceChildren(iconEl(VERB_ICON[verb]).firstChild!);
       const text = document.createElement('span');
       text.textContent = this.#i18n.text(VERB_LABEL[verb]);
       button.append(icon, text);

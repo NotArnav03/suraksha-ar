@@ -16,85 +16,94 @@
  */
 
 :root {
-  /* warm paper: for a yard in daylight */
-  --bg: #f6f2ea;
-  --bg-2: #fffdf8;
-  --panel: #fffdf8;
-  --panel-2: #efe8dc;
-  --line: #dbd1c0;
-  --line-soft: #ebe4d8;
-  --ink: #1b1915;
-  --ink-2: #4c463d;
-  --ink-3: #756d61;
-  --hazard: #b3660d;
-  --hazard-ink: #8a4e07;
-  --hazard-dim: #fbeed8;
-  --hazard-solid: #e08b1e;
-  --on-hazard: #24160300;
-  --go: #1c7663;
-  --go-dim: #dff0eb;
-  --warn: #9a6210;
-  --crit: #b1362a;
-  --crit-dim: #fbe6e3;
-  --glow: rgba(179, 102, 13, .14);
+  /* Concrete, ink and safety yellow: the colours of the place this runs in.
+     Yellow is a fill and never small text, because #f2b202 on white cannot be
+     read; the amber inks below are what type uses. */
+  --bg: #e4e5e1;
+  --bg-2: #eff0ec;
+  --panel: #fbfbf9;
+  --panel-2: #e3e5e0;
+  --line: #b3b7b0;
+  --line-soft: #cfd2cb;
+  --ink: #15181b;
+  --ink-2: #444a4f;
+  --ink-3: #6a7075;
+  --hazard: #a25f00;
+  --hazard-ink: #7a4700;
+  --hazard-dim: #f7e6c4;
+  --hazard-solid: #f2b202;
+  --on-hazard: #15140c;
+  --on-hazard-ink: #15140c;
+  --go: #15694a;
+  --go-dim: #d9ebe2;
+  --warn: #8a5a08;
+  --crit: #b32b1d;
+  --crit-dim: #f7ddd9;
+  --glow: rgba(21, 24, 27, .10);
 
   --tap: 60px;
-  --radius: 16px;
-  --shadow-sm: 0 1px 2px rgba(60, 45, 20, .08);
-  --shadow-md: 0 10px 28px rgba(60, 45, 20, .14);
+  /* Square, near enough: a plant label is stamped, not rounded. */
+  --radius: 3px;
+  /* Hard offsets rather than soft blur. Printed signage and folded steel both
+     cast an edge; a blurred glow is the giveaway of a template. */
+  --shadow-sm: 0 1px 0 rgba(21, 24, 27, .12);
+  --shadow-md: 0 3px 0 rgba(21, 24, 27, .18);
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    /* warm charcoal: for a training room after dark, and for the AR HUD */
-    --bg: #1a1815;
-    --bg-2: #201d18;
-    --panel: #24211b;
-    --panel-2: #2e2a23;
-    --line: #423b31;
-    --line-soft: #302b24;
-    --ink: #f5f0e7;
-    --ink-2: #bdb5a6;
-    --ink-3: #8d8577;
-    --hazard: #f0a02e;
-    --hazard-ink: #ffc46b;
-    --hazard-dim: #3a2b10;
-    --hazard-solid: #f0a02e;
-    --go: #3fc0a8;
-    --go-dim: #12302a;
-    --warn: #e0a143;
-    --crit: #e4695c;
-    --crit-dim: #331715;
-    --glow: rgba(240, 160, 46, .16);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
-    --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
+    --bg: #121417;
+    --bg-2: #171a1d;
+    --panel: #1c2024;
+    --panel-2: #242a2f;
+    --line: #3a4248;
+    --line-soft: #2b3238;
+    --ink: #f1f3f0;
+    --ink-2: #b6bdc2;
+    --ink-3: #8a9298;
+    --hazard: #ffc220;
+    --hazard-ink: #ffd04d;
+    --hazard-dim: #3a2e08;
+    --hazard-solid: #ffc220;
+    --on-hazard: #15140c;
+    --on-hazard-ink: #15140c;
+    --go: #3ec495;
+    --go-dim: #10312a;
+    --warn: #e2a63a;
+    --crit: #ef6d5c;
+    --crit-dim: #38180f;
+    --glow: rgba(255, 194, 32, .14);
+    --shadow-sm: 0 1px 0 rgba(0, 0, 0, .5);
+    --shadow-md: 0 3px 0 rgba(0, 0, 0, .55);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #1a1815;
-  --bg-2: #201d18;
-  --panel: #24211b;
-  --panel-2: #2e2a23;
-  --line: #423b31;
-  --line-soft: #302b24;
-  --ink: #f5f0e7;
-  --ink-2: #bdb5a6;
-  --ink-3: #8d8577;
-  --hazard: #f0a02e;
-  --hazard-ink: #ffc46b;
-  --hazard-dim: #3a2b10;
-  --hazard-solid: #f0a02e;
-  --go: #3fc0a8;
-  --go-dim: #12302a;
-  --warn: #e0a143;
-  --crit: #e4695c;
-  --crit-dim: #331715;
-  --glow: rgba(240, 160, 46, .16);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .35);
-  --shadow-md: 0 10px 28px rgba(0, 0, 0, .45);
+  --bg: #121417;
+  --bg-2: #171a1d;
+  --panel: #1c2024;
+  --panel-2: #242a2f;
+  --line: #3a4248;
+  --line-soft: #2b3238;
+  --ink: #f1f3f0;
+  --ink-2: #b6bdc2;
+  --ink-3: #8a9298;
+  --hazard: #ffc220;
+  --hazard-ink: #ffd04d;
+  --hazard-dim: #3a2e08;
+  --hazard-solid: #ffc220;
+  --on-hazard: #15140c;
+  --on-hazard-ink: #15140c;
+  --go: #3ec495;
+  --go-dim: #10312a;
+  --warn: #e2a63a;
+  --crit: #ef6d5c;
+  --crit-dim: #38180f;
+  --glow: rgba(255, 194, 32, .14);
+  --shadow-sm: 0 1px 0 rgba(0, 0, 0, .5);
+  --shadow-md: 0 3px 0 rgba(0, 0, 0, .55);
   color-scheme: dark;
 }
 
@@ -129,23 +138,33 @@ button {
   font-weight: 600;
   color: var(--ink);
   background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
   min-height: var(--tap);
   padding: 12px 18px;
   cursor: pointer;
   touch-action: manipulation;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
 }
-button:active { transform: translateY(1px) scale(.985); }
+button:active { transform: translateY(1px); }
 button:focus-visible { outline: 3px solid var(--hazard); outline-offset: 3px; }
+
+/* A pictogram sits beside its label, never instead of it: the label is what a
+   worker acts on, the sign is what they recognise across the yard. Drawn here
+   rather than borrowed from the handset's emoji font - see ui/icons.ts. */
+.icon { flex: 0 0 auto; display: inline-flex; width: 1.4em; height: 1.4em; color: inherit; }
+.icon svg { width: 100%; height: 100%; display: block; }
+.btn-label { min-width: 0; }
+button:has(> .icon) { display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
 button:disabled { opacity: .38; pointer-events: none; }
 
 .primary {
-  background: linear-gradient(180deg, #ffb648, var(--hazard-solid));
-  color: #241603;
-  border-color: transparent;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 8px 22px var(--glow);
+  /* One flat block of safety yellow. The gradient it replaces was doing the
+     work of looking modern, not the work of being the obvious thing to press. */
+  background: var(--hazard-solid);
+  color: var(--on-hazard);
+  border-color: var(--on-hazard);
+  box-shadow: var(--shadow-md);
 }
 .primary.big { min-height: 76px; font-size: 1.2rem; border-radius: var(--radius); }
 .ghost { background: transparent; color: var(--ink-2); border-color: transparent; }
@@ -171,8 +190,8 @@ button:disabled { opacity: .38; pointer-events: none; }
    tell them nothing can go wrong here, because nothing here is real. */
 .welcome {
   display: flex; gap: 14px; align-items: flex-start;
-  padding: 16px 18px; border-radius: var(--radius);
-  background: var(--go-dim); border: 1px solid var(--go);
+  padding: 14px 16px; border-radius: 0;
+  background: var(--go-dim); border-left: 6px solid var(--go);
 }
 .welcome-icon { font-size: 1.7rem; line-height: 1.2; flex: 0 0 auto; }
 .welcome p { margin: 0; color: var(--ink); font-size: 1rem; text-wrap: pretty; }
@@ -180,8 +199,8 @@ button:disabled { opacity: .38; pointer-events: none; }
 .lang { display: flex; gap: 10px; flex-wrap: wrap; }
 .lang-big .lang-button { flex: 1 1 100px; min-height: var(--tap); font-size: 1.08rem; }
 .lang-button {
-  min-height: 44px; padding: 8px 16px; border-radius: 999px;
-  background: transparent; color: var(--ink-2); border: 1.5px solid var(--line);
+  min-height: 44px; padding: 8px 16px; border-radius: var(--radius);
+  background: transparent; color: var(--ink-2); border: 2px solid var(--line);
   transition: background .14s ease, color .14s ease, border-color .14s ease, transform .12s ease;
 }
 .lang-button.on {
@@ -198,7 +217,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .reason { margin: 4px 0; color: var(--ink-3); font-size: .94rem; }
 
 .badge {
-  display: inline-block; padding: 4px 11px; border-radius: 999px;
+  display: inline-block; padding: 4px 10px; border-radius: 2px;
   font-size: 12px; font-weight: 700; letter-spacing: .06em;
   background: var(--panel-2); color: var(--ink-2); border: 1px solid var(--line);
   vertical-align: middle;
@@ -206,11 +225,15 @@ button:disabled { opacity: .38; pointer-events: none; }
 .badge.warn { background: var(--hazard-dim); color: var(--hazard-ink); border-color: var(--hazard); }
 
 .tier-report { padding: 18px; }
-.tier-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+/* The badge takes its own line rather than squeezing the label into "is the
+   phone ready / for" and a stranded final word. */
+.tier-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; }
+.tier-head > div { flex: 1 1 auto; min-width: 150px; }
+.tier-head .badge { order: 3; margin-left: 66px; }
 .tier-icon {
-  flex: 0 0 auto; width: 52px; height: 52px; display: grid; place-items: center;
-  font-size: 1.6rem; border-radius: 14px;
-  background: var(--hazard-dim); box-shadow: inset 0 0 0 1px var(--hazard);
+  flex: 0 0 auto; width: 52px; height: 52px; padding: 11px; display: grid; place-items: center;
+  border-radius: 2px; color: var(--ink);
+  background: var(--panel-2); box-shadow: inset 0 0 0 2px var(--line);
 }
 .tier-head > div { min-width: 0; }
 .tier-eyebrow { margin: 0; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
@@ -223,9 +246,9 @@ button:disabled { opacity: .38; pointer-events: none; }
   border-top: 1px solid var(--line-soft); font-size: .96rem;
 }
 .caps li:first-child { border-top: none; }
-.cap-icon { flex: 0 0 auto; font-size: 1.1rem; width: 1.5em; text-align: center; }
+.cap-icon.icon { width: 1.5em; height: 1.5em; color: var(--ink-2); }
 .cap-label { flex: 1; color: var(--ink-2); }
-.cap-tick { flex: 0 0 auto; font-weight: 700; font-size: 1.05rem; }
+.cap-tick.icon { width: 1.25em; height: 1.25em; }
 .caps .yes .cap-tick { color: var(--go); }
 .caps .no .cap-tick { color: var(--ink-3); }
 .caps .no .cap-label { color: var(--ink-3); }
@@ -241,7 +264,7 @@ button:disabled { opacity: .38; pointer-events: none; }
   font: inherit; color: inherit;
   transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
-.module-card:hover, .module-card:focus-visible { border-color: var(--ink-3); transform: translateY(-1px); }
+.module-card:hover, .module-card:focus-visible { border-color: var(--ink); }
 .module-card h2 { margin: 0 0 6px; font-size: 1.15rem; }
 .module-card .lede { font-size: .96rem; }
 
@@ -258,7 +281,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .readout {
   position: sticky; top: 0; z-index: 2; margin-bottom: 14px;
   font-variant-numeric: tabular-nums; font-weight: 700; font-size: 1.5rem;
-  text-align: center; padding: 12px; border-radius: 12px;
+  text-align: center; padding: 12px; border-radius: 2px;
   background: var(--panel); border: 2px solid var(--line); color: var(--ink-2);
 }
 .readout.warning { border-color: var(--warn); color: var(--warn); }
@@ -271,15 +294,19 @@ button:disabled { opacity: .38; pointer-events: none; }
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; min-height: 124px; padding: 12px 8px; text-align: center;
   background: var(--panel);
-  border: 1.5px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  border: 2px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm);
   animation: tile-in .26s ease both;
 }
 @keyframes tile-in { from { opacity: 0; transform: scale(.94); } }
 .tile:active { transform: scale(.96); border-color: var(--hazard); }
-.tile-icon { font-size: 2.2rem; line-height: 1; }
+.tile-icon.icon { width: 40px; height: 40px; color: var(--ink-2); }
+/* The prop a learner is asked to find reads as a hazard sign, because that is
+   what it is. Everything else stays in plain ink, so the warning means something. */
+.tile-icon.kind-hazard { color: var(--crit); }
+.tile:has(.kind-hazard) { border-color: var(--crit); background: var(--crit-dim); }
 .tile-label { font-size: .9rem; font-weight: 600; color: var(--ink-2); line-height: 1.3; }
 .tile.failed { border-color: var(--crit); opacity: .55; }
-.tile.failed .tile-icon { filter: grayscale(1); }
+.tile.failed .tile-icon { opacity: .55; }
 
 .sheet {
   /* `display` lives on `:not([hidden])`, not here. An author-stylesheet rule
@@ -297,8 +324,8 @@ button:disabled { opacity: .38; pointer-events: none; }
 
 .sheet-card {
   width: 100%; background: var(--panel);
-  border-top: 4px solid var(--hazard-solid);
-  border-radius: 22px 22px 0 0;
+  border-top: 5px solid var(--hazard-solid);
+  border-radius: 0;
   padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
   display: grid; gap: 12px; max-height: 80vh; overflow-y: auto;
   box-shadow: var(--shadow-md);
@@ -320,8 +347,9 @@ button:disabled { opacity: .38; pointer-events: none; }
   text-align: left; min-height: 68px; font-size: 1.1rem;
   background: var(--panel-2);
 }
-.verb-icon { font-size: 1.5rem; flex: 0 0 auto; width: 1.5em; text-align: center; }
-.sheet-card .ghost { border: 1.5px solid var(--line); }
+.verb-icon.icon { width: 30px; height: 30px; color: var(--ink-2); }
+button.verb:has(> .icon) { justify-content: flex-start; }
+.sheet-card .ghost { border: 2px solid var(--line); }
 
 /* The AR handshake can take seconds and can fail. Neither may look like a
    crash, so the wait gets its own visible line rather than an empty screen. */
@@ -415,12 +443,13 @@ button:disabled { opacity: .38; pointer-events: none; }
    reads slowly, so the control is a real button rather than a faint link. */
 .prompt-row .listen {
   flex: 0 0 auto; min-height: 48px; min-width: 48px; padding: 8px 12px;
-  font-size: .9rem; background: var(--panel-2); border: 1.5px solid var(--line);
-  color: var(--ink-2); border-radius: 12px;
+  font-size: .82rem; background: var(--panel-2); border: 2px solid var(--line);
+  color: var(--ink-2); border-radius: var(--radius); flex-direction: column; gap: 3px; line-height: 1.1;
 }
 
-.timer { position: relative; height: 12px; border-radius: 999px; background: var(--panel-2); margin: 14px 0 8px; overflow: hidden; }
-.timer-fill { height: 100%; border-radius: 999px; background: var(--go); transition: width .2s linear; }
+/* A gauge, not a lozenge. */
+.timer { position: relative; height: 14px; border: 1px solid var(--line); background: var(--panel-2); margin: 14px 0 8px; overflow: hidden; }
+.timer-fill { height: 100%; background: var(--go); transition: width .2s linear; }
 .timer.urgent .timer-fill { background: var(--crit); }
 /* The countdown, not decoration: it is the only thing telling a learner how
    long they have left, so it is held to body-text contrast rather than the
@@ -434,26 +463,32 @@ button:disabled { opacity: .38; pointer-events: none; }
 .checklist-heading { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
 .checklist li { display: flex; gap: 10px; align-items: baseline; font-size: 1rem; color: var(--ink-2); }
 .checklist li.done { color: var(--ink-3); }
-.tick { color: var(--ink-3); font-weight: 700; flex: 0 0 auto; }
+.tick.icon { width: 1.15em; height: 1.15em; color: var(--ink-3); align-self: center; }
 .checklist li.done .tick { color: var(--go); animation: tick-in .3s cubic-bezier(.2, 1.4, .4, 1) both; }
 @keyframes tick-in { from { transform: scale(.4); opacity: 0; } }
 
 .banner {
-  margin-top: 14px; padding: 14px 16px; border-radius: 12px; font-size: 1rem;
-  background: var(--hazard-dim); border-left: 5px solid var(--warn); color: var(--ink);
+  margin-top: 14px; padding: 14px 16px; border-radius: 0; font-size: 1rem;
+  background: var(--hazard-dim); border-left: 6px solid var(--warn); color: var(--ink);
   animation: banner-in .22s ease both;
 }
 @keyframes banner-in { from { opacity: 0; transform: translateY(-4px); } }
 .banner.major { border-color: var(--hazard); }
-.banner.fatal { background: var(--crit-dim); border-color: var(--crit); }
+.banner.fatal {
+  background: var(--crit-dim); border-color: var(--crit);
+  /* The diagonal band off a real barrier tape, spent on one thing only: the
+     consequence that ends the drill. */
+  border-top: 8px solid transparent;
+  border-image: repeating-linear-gradient(45deg, var(--crit) 0 10px, var(--on-hazard) 10px 20px) 8;
+}
 
 .wait-button {
-  position: fixed; right: 16px; bottom: 50%; z-index: 5; border-radius: 999px;
-  background: var(--panel); border: 1.5px solid var(--hazard); color: var(--hazard);
+  position: fixed; right: 16px; bottom: 50%; z-index: 5; border-radius: var(--radius);
+  background: var(--panel); border: 2px solid var(--hazard); color: var(--hazard);
   box-shadow: var(--shadow-md);
 }
 .continue { width: 100%; margin-top: 16px; }
-.hint-button { align-self: flex-start; margin-top: 10px; border-color: var(--hazard); color: var(--hazard); }
+.hint-button { align-self: flex-start; margin-top: 10px; border: 2px solid var(--hazard); color: var(--hazard); }
 .run-note { margin: 10px 0 0; font-size: .95rem; color: var(--ink-2); }
 
 /* ── results ────────────────────────────────────────────────────────────── */
@@ -472,14 +507,14 @@ button:disabled { opacity: .38; pointer-events: none; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(14px) scale(.98); } }
 .outcome.pass h1 { color: var(--go); }
-.outcome.pass h1::before { content: '🎉 '; }
+.outcome.pass h1 { color: var(--go); }
 .outcome.fail { border-left-color: var(--warn); }
 .outcome.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
 .outcome.fatal h1 { color: var(--crit); }
 
 .errors { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .errors li {
-  display: grid; gap: 3px; padding: 13px 15px; border-radius: 12px;
+  display: grid; gap: 3px; padding: 13px 15px; border-radius: var(--radius);
   background: var(--panel-2); border-left: 4px solid var(--warn);
 }
 .errors li.fatal { border-left-color: var(--crit); background: var(--crit-dim); }
@@ -491,7 +526,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .rules li.missed .rule-mark { color: var(--crit); }
 .rules li.met .rule-mark { color: var(--go); }
 .rules li.met .rule-cite { color: var(--ink-3); }
-.rule-mark { font-weight: 800; }
+.rule-mark.icon { width: 1.1em; height: 1.1em; margin-top: .2em; }
 .rule-cite { display: grid; gap: 2px; }
 .rule-ref { font-weight: 700; }
 .rule-pin { white-space: nowrap; }
@@ -502,10 +537,10 @@ button:disabled { opacity: .38; pointer-events: none; }
 .rules-followed[open] summary { margin-bottom: 8px; }
 
 .dim { display: grid; grid-template-columns: 8.5rem 1fr 2.4rem auto; gap: 12px; align-items: center; margin-bottom: 12px; }
-.dim-name { font-size: .86rem; color: var(--ink-2); text-transform: capitalize; }
-.dim-track { position: relative; height: 16px; border-radius: 8px; background: var(--panel-2); overflow: hidden; }
+.dim-name { font-size: .86rem; color: var(--ink-2); }
+.dim-track { position: relative; height: 16px; border: 1px solid var(--line); background: var(--panel-2); overflow: hidden; }
 .dim-track.empty { opacity: .45; }
-.dim-fill { height: 100%; border-radius: 8px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
+.dim-fill { height: 100%; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
 .dim-fill.over { background: var(--go); }
 .dim-fill.under { background: var(--crit); }
 .dim-mark { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink); opacity: .55; }
@@ -513,18 +548,18 @@ button:disabled { opacity: .38; pointer-events: none; }
 .dim-note { font-size: .72rem; color: var(--crit); text-transform: uppercase; letter-spacing: .08em; }
 
 .pips { display: flex; gap: 10px; margin: 6px 0 10px; }
-.pip { width: 36px; height: 10px; border-radius: 999px; background: var(--panel-2); transition: background .3s ease; }
+.pip { width: 36px; height: 10px; border: 1px solid var(--line); background: var(--panel-2); transition: background .3s ease; }
 .pip.on { background: var(--go); }
 
 .credential { text-align: center; }
-.credential h2::before { content: '🔏  '; }
+/* The certificate panel is titled in words; the QR below it is the proof. */
 .qr {
-  width: 100%; max-width: 268px; height: auto; border-radius: 14px;
+  width: 100%; max-width: 268px; height: auto; border-radius: 0;
   background: #fff; padding: 12px; box-shadow: var(--shadow-md);
 }
 
 .fatal-error {
-  margin: 20px; padding: 16px; border-radius: 12px; white-space: pre-wrap;
+  margin: 20px; padding: 16px; border-radius: var(--radius); white-space: pre-wrap;
   background: var(--crit-dim); border-left: 5px solid var(--crit); color: var(--ink);
   font-family: ui-monospace, monospace; font-size: .86rem;
 }
@@ -591,7 +626,7 @@ button:disabled { opacity: .38; pointer-events: none; }
 .ar-hint {
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
   z-index: 11; max-width: 78vw; text-align: center;
-  padding: 16px 20px; border-radius: 14px;
+  padding: 16px 20px; border-radius: var(--radius);
   background: rgba(26, 24, 21, .92); border: 1.5px solid var(--hazard);
   color: var(--ink); font-size: 1.05rem;
 }

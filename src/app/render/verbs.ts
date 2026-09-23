@@ -1,4 +1,5 @@
 import type { LocalizedText, Verb } from '../../engine/types.ts';
+import type { IconName } from '../ui/icons.ts';
 
 /**
  * Verb wording, shared by every tier.
@@ -16,19 +17,23 @@ import type { LocalizedText, Verb } from '../../engine/types.ts';
  * is the only place language selection logic lives.
  */
 
-export const VERB_ICON: Record<Verb, string> = {
-  inspect: '👁',
-  use: '🔧',
-  wear: '🦺',
-  attach: '🔗',
-  open: '↥',
-  close: '↧',
-  enter: '↓',
-  exit: '↑',
-  signal: '👋',
-  report: '📻',
-  wait: '⏱',
-  answer: '💬',
+/**
+ * Pictograms, not emoji: see `ui/icons.ts` for why a vendor-drawn wrench is the
+ * wrong sign for "operate this control".
+ */
+export const VERB_ICON: Record<Verb, IconName> = {
+  inspect: 'eye',
+  use: 'hand',
+  wear: 'helmet',
+  attach: 'shackle',
+  open: 'lock-open',
+  close: 'lock-closed',
+  enter: 'enter',
+  exit: 'exit',
+  signal: 'signal',
+  report: 'radio',
+  wait: 'hourglass',
+  answer: 'speech',
 };
 
 export const VERB_LABEL: Record<Verb, LocalizedText> = {
