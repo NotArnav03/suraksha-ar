@@ -268,6 +268,19 @@ function labelSpan(text: string): HTMLSpanElement {
   return span;
 }
 
+/**
+ * The pictogram ghosted into each module card.
+ *
+ * Three headings in a stack take reading; three different shapes do not. A
+ * worker who has done the belt drill before should be able to find it again
+ * without parsing a sentence in a language they may read slowly.
+ */
+const DOMAIN_ICON: Record<string, IconName> = {
+  gas_leak_confined_space: 'gauge',
+  fire_explosion: 'extinguisher',
+  machinery_haulage_loto: 'machine',
+};
+
 /** Which module to drill. Skipped when `?scenario=` names one explicitly. */
 function moduleScreen(report: TierReport): void {
   const root = screen('start module-picker');
@@ -304,7 +317,9 @@ function moduleScreen(report: TierReport): void {
     const cardDesc = document.createElement('p');
     cardDesc.className = 'lede';
     cardDesc.textContent = i18n.text(module.scenario.description);
+    const glyph = DOMAIN_ICON[module.scenario.domain];
     card.append(cardTitle, cardDesc);
+    if (glyph) card.append(icon(glyph, 'module-watermark'));
     card.addEventListener('click', () => {
       scenario = module.scenario;
       startScreen(report);
@@ -469,11 +484,17 @@ function startScreen(report: TierReport): void {
   prefs.className = 'prefs';
   const themeButton = document.createElement('button');
   themeButton.className = 'lang-button';
-  themeButton.textContent = `${THEME_ICON[theme]}  ${i18n.ui('theme')}`;
+  // `replaceChildren`, not `textContent`: THEME_ICON holds the *name* of a
+  // drawn pictogram, so assigning it as text printed the literal word
+  // "contrast" next to the label.
+  const paintTheme = (): void => {
+    themeButton.replaceChildren(icon(THEME_ICON[theme]), labelSpan(i18n.ui('theme')));
+  };
+  paintTheme();
   themeButton.addEventListener('click', () => {
     theme = nextTheme(theme);
     applyTheme(theme);
-    themeButton.textContent = `${THEME_ICON[theme]}  ${i18n.ui('theme')}`;
+    paintTheme();
   });
   prefs.append(themeButton);
 
