@@ -128,16 +128,31 @@ test('opening the wrong isolator is a named error, and the right one is still re
   }
 });
 
-test('every string in the drill is authored in English and Hindi', () => {
+test('every language this drill claims is authored on every string in it', () => {
+  // Declaring a language and shipping half of it is the failure here. The
+  // fallback chain hides it: a Santali learner just reads Hindi, on the one
+  // screen where the missing line was, and nothing anywhere says so.
   const missing: string[] = [];
   const walk = (value: unknown, path: string): void => {
     if (Array.isArray(value)) return value.forEach((v, i) => walk(v, `${path}[${i}]`));
     if (!value || typeof value !== 'object') return;
     const record = value as Record<string, unknown>;
     if (typeof record.en === 'string') {
-      if (typeof record.hi !== 'string' || record.hi.length === 0) missing.push(path);
-      else if ((record.en.match(/\{\{\w+\}\}/g) ?? []).some((p) => !(record.hi as string).includes(p) && p !== '{{shift}}')) {
-        missing.push(`${path} (placeholder dropped)`);
+      for (const language of scenario.languages) {
+        if (language === 'en') continue;
+        const translated = record[language];
+        if (typeof translated !== 'string' || translated.length === 0) {
+          missing.push(`${path} (${language})`);
+          continue;
+        }
+        // `{{shift}}` is the exception: the shift names are English words the
+        // translations say in their own, so the placeholder does not survive
+        // and should not. Every other placeholder carries a belt number or a
+        // reading, and losing one puts the wrong plant in front of a learner.
+        const dropped = (record.en.match(/\{\{\w+\}\}/g) ?? []).filter(
+          (placeholder) => placeholder !== '{{shift}}' && !translated.includes(placeholder),
+        );
+        if (dropped.length > 0) missing.push(`${path} (${language}, lost ${dropped.join(' ')})`);
       }
       return;
     }
@@ -145,7 +160,11 @@ test('every string in the drill is authored in English and Hindi', () => {
   };
   walk(scenario, '$');
   assert.deepEqual(missing, []);
-  assert.deepEqual(scenario.languages, ['en', 'hi'], 'Santali is not authored yet, so the drill must not claim it');
+  assert.deepEqual(
+    scenario.languages,
+    ['en', 'hi', 'sat'],
+    'the conveyor drill is authored in all three; drop one here only by removing its text too',
+  );
 });
 
 test('every action any scenario expects can be performed with the verbs the UI offers', async () => {

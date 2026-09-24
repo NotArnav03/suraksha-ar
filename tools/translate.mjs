@@ -36,7 +36,7 @@
  *   BHASHINI_USER_ID, BHASHINI_ULCA_API_KEY
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -320,19 +320,61 @@ const usable = results.filter((r) => !broken.includes(r));
 
 // The review sheet is written whatever the mode, because it is the deliverable
 // that matters: a Santali speaker signing off every line before a worker sees it.
+//
+// Merged, never overwritten. A run only ever covers the strings that are
+// missing *now*, so rewriting the file from this run's results would delete
+// every row a previous pass recorded, and with them any `reviewed_by` and
+// `corrected_santali` a speaker had already filled in. Sign-off is the scarce
+// thing here; a draft can always be regenerated.
+// `file` is part of the key, not decoration: `$.props[0].label` exists in all
+// three scenarios, so keying on the path alone silently merged three different
+// strings into one row and dropped two of them.
+const CELLS = ['file', 'path', 'english', 'machine_santali', 'reviewed_by', 'corrected_santali'];
+const rows = new Map();
+if (existsSync(REVIEW)) {
+  const [header, ...existing] = readFileSync(REVIEW, 'utf8').split('\n').filter(Boolean);
+  if (header.split('\t')[0] !== 'file') {
+    console.error(
+      `\n${REVIEW} is in the old five-column format, which cannot say which scenario a row belongs to.\n` +
+        'Migrate it (add a leading `file` column) before running this again, or the merge would lose rows.\n',
+    );
+    process.exit(1);
+  }
+  for (const line of existing) {
+    const cells = line.split('\t');
+    if (cells[1]) rows.set(`${cells[0]}\t${cells[1]}`, cells);
+  }
+}
+let reviewed = 0;
+for (const r of results) {
+  const where = r.file ?? I18N;
+  const before = rows.get(`${where}\t${r.path}`);
+  if (before?.[4]) reviewed++;
+  rows.set(`${where}\t${r.path}`, [
+    where,
+    r.path,
+    r.en,
+    // A line a speaker has already corrected keeps the draft it was corrected
+    // against, or the correction beside it stops meaning anything.
+    before?.[4] ? (before[3] ?? r.sat) : r.sat,
+    before?.[4] ?? '',
+    before?.[5] ?? '',
+  ]);
+}
 mkdirSync(dirname(REVIEW), { recursive: true });
 writeFileSync(
   REVIEW,
-  ['path\tenglish\tmachine_santali\treviewed_by\tcorrected_santali']
-    .concat(
-      results.map((r) =>
-        [r.path, r.en, r.sat, '', ''].map((c) => String(c).replace(/[\t\n]/g, ' ')).join('\t'),
-      ),
-    )
+  [CELLS.join('\t')]
+    .concat([...rows.values()].map((cells) => cells.map((c) => String(c).replace(/[\t\n]/g, ' ')).join('\t')))
     .join('\n') + '\n',
   'utf8',
 );
-console.log(`\nreview sheet: ${REVIEW}  (${results.length} lines awaiting a speaker)`);
+const awaiting = [...rows.values()].filter((cells) => !cells[4]).length;
+console.log(
+  `\nreview sheet: ${REVIEW}  (${rows.size} lines, ${awaiting} awaiting a speaker` +
+    (reviewed > 0 ? `, ${reviewed} already signed off and left alone` : '') +
+    ')',
+);
 
 if (mode === 'dry-run') {
   console.log('\n--dry-run: nothing written to the scenario.');
