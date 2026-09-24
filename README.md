@@ -17,10 +17,11 @@ src/credential/  compact signed credential, offline QR verification
 src/app/         the web client: tier detection, shared HUD, module picker, Tier A/C worlds, the drawn pictogram set
 src/admin/       compliance dashboard: verifies scanned credentials, recovers the drills behind them, no backend
 src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
+src/quiz/        the daily ninety-second refresher: question bank and the day's deterministic set
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons; see docs/APK.md for the Android build
 docs/            RESEARCH (the landscape), CITATIONS (the regulation text), UI (the design system), NARRATION, APK
-tests/           132 tests, node's built-in runner
+tests/           143 tests, node's built-in runner
 ```
 
 ## Try it
@@ -29,7 +30,7 @@ Node 22.6+ (uses native TypeScript type stripping, so no build step and no bundl
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 132 tests
+npm test                # 143 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -60,7 +61,8 @@ Flags: `--seed N`, `--variants N`, `--lang hi,en`, `--step MS`, `--events`.
 Consequences that fall out of that, and which the code actually enforces:
 
 - **Two modes, and only one of them certifies.** *Show me* walks the learner through each step by name, which is the right thing to say the first time someone meets a procedure. *Prove it* replaces every instruction with the situation ("The belt is running, with coal packed at the tail pulley. Make it safe to work on.") and nothing else. A learner who is stuck can ask for the step, which hands it over and marks the run as not counting. Guided and hinted runs teach; only an unaided assessment run earns a certificate, and `certify` enforces that rather than the UI. A test rejects any goal line that names a verb, a tap or an order, because without it the assessment text drifts back into instructions one helpful edit at a time.
-- **Assessment is behavioural.** No multiple choice anywhere. The scored signal is action sequence, time-to-first-correct-action, hesitation latency, coded error class, and recovery after induced failure.
+- **Assessment is behavioural.** No multiple choice anywhere in the part that certifies. The scored signal is action sequence, time-to-first-correct-action, hesitation latency, coded error class, and recovery after induced failure.
+- **The daily ninety seconds is the one exception, and it is walled off.** Six questions, new every day, seeded by the date so a whole crew gets the same set and a supervisor can ask about it at the toolbox talk. It exists because a drill passed in February is half-forgotten by April, and because the slot that reliably exists on a site is the few minutes before the shift. It writes no attempt, `certify()` has never heard of it, and a test fails if either of those stops being true. The screen says so too, in the worker's own language.
 - **A competency vector, not a score.** Six dimensions, including `rescue_restraint`, the reflex to climb down after a collapsed colleague, which is what actually kills people in confined spaces. Its pass mark is 100: there is no partial credit for going in.
 - **Every wrong action is a named, graded mistake with a stated consequence.** `ErrorRule` carries a stable code, a severity, the dimension it damages, and the narration shown to the learner. A failed run is a debrief, not a red X.
 - **Variants are procedurally generated.** Certification requires passing several *distinct* variants (`scoring.requiredVariants`). Seeds are reproducible, so an auditor can replay exactly what a worker faced from the credential alone.

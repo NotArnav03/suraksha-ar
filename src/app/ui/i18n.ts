@@ -71,6 +71,38 @@ const UI: Record<string, LocalizedText> = {
   },
   whatWentWrong: { en: 'What went wrong', hi: 'क्या ग़लत हुआ', sat: 'ᱚᱠᱟ ᱵᱟᱭ ᱴᱷᱤᱠ ᱦᱩᱭᱮᱱᱟ' },
   theme: { en: 'Light or dark', hi: 'उजाला या अंधेरा', sat: 'ᱟᱨᱟᱜ ᱟᱨᱵᱟᱝ ᱧᱩᱛ' },
+
+  // The daily ninety seconds. Short lines on purpose: this screen is read
+  // standing up, at the start of a shift, by someone who is also listening to
+  // a supervisor.
+  quizCta: { en: "Today's 90 seconds", hi: 'आज के 90 सेकंड', sat: 'ᱛᱮᱦᱮᱸᱧ ᱨᱮᱭᱟᱜ 90 ᱥᱮᱠᱮᱸᱰ' },
+  quizCtaSub: {
+    en: '6 quick questions, new every day',
+    hi: '6 छोटे सवाल, हर दिन नए',
+    sat: '6 ᱦᱩᱰᱤᱧ ᱠᱩᱠᱞᱤ, ᱡᱟᱦᱟᱸ ᱫᱤᱱ ᱱᱟᱶᱟ',
+  },
+  quizCtaDone: {
+    en: 'Done today: {{score}} of {{total}}',
+    hi: 'आज हो गया: {{total}} में से {{score}}',
+    sat: 'ᱛᱮᱦᱮᱸᱧ ᱪᱟᱵᱟ ᱮᱱᱟ: {{total}} ᱠᱷᱚᱱ {{score}}',
+  },
+  quizEyebrow: { en: 'Daily drill', hi: 'रोज़ का अभ्यास', sat: 'ᱫᱤᱱ ᱨᱮᱭᱟᱜ ᱟᱹᱣᱟᱛ' },
+  quizCounter: { en: 'Question {{n}} of {{total}}', hi: 'सवाल {{n}} / {{total}}', sat: 'ᱠᱩᱠᱞᱤ {{n}} / {{total}}' },
+  quizRight: { en: 'Right', hi: 'सही', sat: 'ᱴᱷᱤᱠ' },
+  quizWrong: { en: 'Not this one', hi: 'यह नहीं', sat: 'ᱱᱚᱶᱟ ᱵᱟᱝ' },
+  quizNext: { en: 'Next', hi: 'अगला', sat: 'ᱤᱱᱟᱹ ᱛᱟᱭᱚᱢ' },
+  quizFinish: { en: 'See the score', hi: 'नतीजा देखिए', sat: 'ᱯᱷᱚᱲᱟᱣ ᱧᱮᱞ ᱢᱮ' },
+  quizTimeUp: { en: 'Time is up', hi: 'समय ख़त्म', sat: 'ᱚᱠᱛᱚ ᱪᱟᱵᱟ ᱮᱱᱟ' },
+  quizDoneTitle: { en: 'Done for today', hi: 'आज के लिए हो गया', sat: 'ᱛᱮᱦᱮᱸᱧ ᱞᱟᱹᱜᱤᱫ ᱪᱟᱵᱟ ᱮᱱᱟ' },
+  quizScore: { en: '{{score}} of {{total}} right', hi: '{{total}} में से {{score}} सही', sat: '{{total}} ᱠᱷᱚᱱ {{score}} ᱴᱷᱤᱠ' },
+  quizStreak: { en: '{{days}} days in a row', hi: 'लगातार {{days}} दिन', sat: 'ᱞᱟᱹᱜᱟᱛᱟᱨ {{days}} ᱢᱟᱦᱟᱸ' },
+  quizStreakShort: { en: '{{days}}d', hi: '{{days}}दि', sat: '{{days}}ᱢ' },
+  quizNotAssessment: {
+    en: 'A refresher, not an assessment. It does not count towards a certificate.',
+    hi: 'यह दोहराव है, परीक्षा नहीं। इससे प्रमाणपत्र नहीं मिलता।',
+    sat: 'ᱱᱚᱶᱟ ᱫᱚ ᱫᱚᱦᱲᱟ ᱥᱮᱬᱟ ᱠᱟᱱᱟ, ᱯᱚᱨᱤᱠᱷᱟ ᱵᱟᱝ ᱠᱟᱱᱟ। ᱱᱚᱶᱟ ᱠᱷᱚᱱ ᱥᱟᱠᱷᱭᱟᱛ ᱵᱟᱭ ᱧᱟᱢᱚᱜ-ᱟ।',
+  },
+  quizBack: { en: 'Back to the drills', hi: 'अभ्यासों पर वापस', sat: 'ᱟᱹᱣᱟᱛ ᱠᱚ ᱥᱮᱫ ᱨᱩᱣᱟᱲ ᱢᱮ' },
   // The first thing a new worker reads. Nobody learns while afraid of breaking
   // something, so say plainly that this one is safe to get wrong.
   welcome: {

@@ -45,6 +45,10 @@ const SCENARIOS = [
   join(ROOT, 'src/scenarios/gas-confined-space.json'),
   join(ROOT, 'src/scenarios/fire-explosion.json'),
   join(ROOT, 'src/scenarios/machinery-conveyor-loto.json'),
+  // Not a scenario, but the same shape and the same obligation: the daily
+  // question bank is read by the same workers in the same languages, and
+  // leaving it out of the report is how it would quietly stay Hindi-only.
+  join(ROOT, 'src/quiz/bank.json'),
 ];
 const I18N = join(ROOT, 'src/app/ui/i18n.ts');
 const REVIEW = join(ROOT, 'l10n/sat-review.tsv');

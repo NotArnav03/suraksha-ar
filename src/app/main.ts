@@ -17,6 +17,7 @@ import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './resul
 import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
 import { Localizer, LANGUAGES, type LangCode } from './ui/i18n.ts';
 import { icon, type IconName } from './ui/icons.ts';
+import { mountQuiz, quizCallout } from './quiz.ts';
 import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from './ui/theme.ts';
 
 /**
@@ -315,6 +316,12 @@ function moduleScreen(report: TierReport): void {
     langRow.append(button);
   }
 
+  // Above the modules, not among them. A drill is twenty minutes and a
+  // decision to make; this is the thing a worker can finish while the
+  // supervisor is still talking, and it is the reason any of the rest is still
+  // in their hands in April.
+  root.append(quizCallout(i18n, () => quizScreen(report)));
+
   const list = document.createElement('div');
   list.className = 'module-list';
   for (const module of MODULES) {
@@ -342,6 +349,11 @@ function moduleScreen(report: TierReport): void {
   }
 
   root.append(hero, langRow, list);
+}
+
+function quizScreen(report: TierReport): void {
+  const root = screen('quiz');
+  mountQuiz(root, i18n, { onExit: () => moduleScreen(report) });
 }
 
 function startScreen(report: TierReport): void {

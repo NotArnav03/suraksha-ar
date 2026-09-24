@@ -44,6 +44,10 @@ audit. Read both before a Q&A.
   is the right thing to do the first time someone meets a procedure. *Prove it*
   gives the situation and nothing else. A learner who is stuck can ask for the
   step, which hands it over and marks the run as not counting.
+- **Ninety seconds every morning.** Six questions, new every day, seeded by the
+  date so a whole crew gets the same set and a supervisor can run it at the
+  toolbox talk. It is the retention half of the product and it deliberately
+  earns nothing: the certificate comes from the drill, never from the quiz.
 - Every action is scored into a six-dimension competency vector and, once
   several distinct randomised variants have been passed unaided, issued as a
   51-byte signed credential that verifies offline.

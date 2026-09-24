@@ -124,6 +124,7 @@ Sixteen keyframes, each with a job. Nothing loops forever.
 | `rise` | `.outcome.pass` | earned, so it is allowed to be pleased; the failure states are not |
 | `stamp` | the certificate QR | it lands like a stamp on a permit, because that is what it is |
 | `spin` | the AR handshake | a wait that can take seconds must not look like a crash |
+| `cta-call` | the daily-drill button, six pulses | the one element allowed to ask for attention rather than wait for it |
 
 **The input receipt is deliberately identical for every verdict.** It reports
 that the tap arrived, never whether it was the right tap. A renderer that made
@@ -133,6 +134,26 @@ to ask.
 `prefers-reduced-motion: reduce` strips all of it. The two things that survive
 are the alarm's colour and border weight, and the input receipt as a static bar,
 because both carry information rather than polish.
+
+## The one control that shouts
+
+`.quiz-cta`, the daily ninety seconds at the top of the module list, is the only
+element in the app permitted to ask for attention. Everything else on that
+screen is a twenty-minute commitment; this is the thing a worker can finish
+while the supervisor is still talking, so it has to read as an invitation from
+across a changing room. It wears the full push-button treatment, a barrier-tape
+stripe down its leading edge, a sheen that sweeps four times and a halo that
+pulses six.
+
+Then it stops. A control that never settles is one people learn to stop seeing,
+and it costs battery for the whole shift. Once the day's run is done the button
+goes quiet on its own: panel-coloured, green edge, a tick, and the score it just
+recorded.
+
+An option in the quiz never wears a tick or a cross. Those glyphs were chosen
+once to illustrate the words ("made the area safe") and on a phone they read as
+the verdict, marking a wrong answer correct before the question had been asked.
+Colour carries the verdict, and only after an answer is given.
 
 ## Layout rules worth knowing
 

@@ -70,7 +70,8 @@ export type IconName =
   | 'cross'
   | 'dash'
   | 'swap'
-  | 'certificate';
+  | 'certificate'
+  | 'calendar';
 
 const PATHS: Record<IconName, string> = {
   eye: '<path d="M1.5 12S5.5 5.5 12 5.5 22.5 12 22.5 12 18.5 18.5 12 18.5 1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3.2"/>',
@@ -135,6 +136,9 @@ const PATHS: Record<IconName, string> = {
   dash: '<path d="M5 12h14"/>',
   swap: '<path d="M4 8.5h13"/><path d="m13.5 5 3.5 3.5-3.5 3.5"/><path d="M20 15.5H7"/><path d="M10.5 12 7 15.5 10.5 19"/>',
   certificate: '<rect x="3.5" y="3.5" width="17" height="13" rx="1"/><path d="M7 7.5h10"/><path d="M7 10.5h6"/><circle cx="16.5" cy="16.5" r="3.2"/><path d="M14.6 19.2 14 22.5l2.5-1.3 2.5 1.3-.6-3.3"/>',
+  // days in a row, for the daily drill: a wall calendar with three marked off
+  calendar:
+    '<rect x="3.5" y="5.5" width="17" height="15" rx="1"/><path d="M3.5 10h17"/><path d="M8 3.5v4"/><path d="M16 3.5v4"/><path d="M7 13.5h2"/><path d="M11 13.5h2"/><path d="M15 13.5h2"/><path d="M7 17h2"/>',
 };
 
 /** The markup, for places that build their DOM as a string. */

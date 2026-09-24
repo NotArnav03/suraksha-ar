@@ -1,0 +1,665 @@
+{
+  "version": 1,
+  "questions": [
+    {
+      "id": "gas_before_entry",
+      "domain": "gas_leak_confined_space",
+      "cite": "CMR 2017 r.153(2)(b)",
+      "stem": {
+        "en": "A sump has been closed for weeks. What happens before anyone goes in?",
+        "hi": "एक सम्प हफ़्तों से बंद है। अंदर उतरने से पहले क्या होता है?"
+      },
+      "options": [
+        {
+          "icon": "gauge",
+          "label": {
+            "en": "Test the air",
+            "hi": "हवा जाँचिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "blower",
+          "label": {
+            "en": "Run the blower and go in",
+            "hi": "ब्लोअर चलाकर उतर जाइए"
+          }
+        },
+        {
+          "icon": "helmet",
+          "label": {
+            "en": "Wear a helmet and go in",
+            "hi": "हेलमेट पहनकर उतर जाइए"
+          }
+        }
+      ],
+      "why": {
+        "en": "Air is tested first, every time. Below 19% oxygen nobody enters.",
+        "hi": "हर बार पहले हवा जाँची जाती है। 19% से कम ऑक्सीजन पर कोई अंदर नहीं जाता।"
+      }
+    },
+    {
+      "id": "gas_alarm_sounds",
+      "domain": "gas_leak_confined_space",
+      "stem": {
+        "en": "You are inside and your gas alarm goes to one unbroken tone. What now?",
+        "hi": "आप अंदर हैं और गैस अलार्म एक लगातार आवाज़ में बदल जाता है। अब क्या?"
+      },
+      "options": [
+        {
+          "icon": "exit",
+          "label": {
+            "en": "Get out now",
+            "hi": "तुरंत बाहर निकलिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "gauge",
+          "label": {
+            "en": "Check the reading twice",
+            "hi": "रीडिंग दोबारा देखिए"
+          }
+        },
+        {
+          "icon": "hand",
+          "label": {
+            "en": "Finish the task first",
+            "hi": "पहले काम पूरा कीजिए"
+          }
+        }
+      ],
+      "why": {
+        "en": "A continuous alarm means leave, not investigate. You read the meter outside.",
+        "hi": "लगातार अलार्म का मतलब है बाहर निकलिए, जाँच नहीं। मीटर बाहर जाकर पढ़िए।"
+      }
+    },
+    {
+      "id": "gas_second_victim",
+      "domain": "gas_leak_confined_space",
+      "cite": "CMR 2017 r.104",
+      "stem": {
+        "en": "Your colleague has collapsed inside the sump. You have no breathing set. What do you do?",
+        "hi": "आपका साथी सम्प के अंदर गिर गया है। आपके पास श्वास उपकरण नहीं है। आप क्या करेंगे?"
+      },
+      "options": [
+        {
+          "icon": "signal",
+          "label": {
+            "en": "Raise the alarm, stay out",
+            "hi": "अलार्म दीजिए, बाहर रहिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "enter",
+          "label": {
+            "en": "Go in and pull him out",
+            "hi": "अंदर जाकर बाहर खींचिए"
+          }
+        },
+        {
+          "icon": "rope",
+          "label": {
+            "en": "Climb in holding the rope",
+            "hi": "रस्सी पकड़कर उतरिए"
+          }
+        }
+      ],
+      "why": {
+        "en": "More than half the people who die in confined spaces are the ones who went in to help.",
+        "hi": "सीमित स्थानों में मरने वालों में आधे से ज़्यादा वे हैं जो बचाने गए थे।"
+      }
+    },
+    {
+      "id": "gas_permit_expired",
+      "domain": "gas_leak_confined_space",
+      "stem": {
+        "en": "The permit on the board was issued for yesterday's shift. What is it worth?",
+        "hi": "बोर्ड पर लगा परमिट कल की शिफ़्ट का है। उसकी क्या क़ीमत है?"
+      },
+      "options": [
+        {
+          "icon": "sign",
+          "label": {
+            "en": "Nothing, get a new one",
+            "hi": "कुछ नहीं, नया लीजिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "hand",
+          "label": {
+            "en": "Same job, so it still counts",
+            "hi": "वही काम है, इसलिए चलेगा"
+          }
+        },
+        {
+          "icon": "worker",
+          "label": {
+            "en": "Ask a mate and carry on",
+            "hi": "साथी से पूछकर काम कीजिए"
+          }
+        }
+      ],
+      "why": {
+        "en": "A permit covers one shift and the conditions tested in it. Yesterday's air is not today's air.",
+        "hi": "परमिट एक शिफ़्ट और उसमें जाँची गई स्थितियों के लिए होता है। कल की हवा आज की हवा नहीं है।"
+      }
+    },
+    {
+      "id": "gas_standby",
+      "domain": "gas_leak_confined_space",
+      "stem": {
+        "en": "Who stays outside while you work inside a confined space?",
+        "hi": "जब आप सीमित स्थान के अंदर काम करें, बाहर कौन रहता है?"
+      },
+      "options": [
+        {
+          "icon": "worker",
+          "label": {
+            "en": "A standby person, watching",
+            "hi": "एक स्टैंडबाई व्यक्ति, नज़र रखते हुए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "sign",
+          "label": {
+            "en": "A warning board is enough",
+            "hi": "चेतावनी बोर्ड काफ़ी है"
+          }
+        },
+        {
+          "icon": "radio",
+          "label": {
+            "en": "Nobody, you carry a radio",
+            "hi": "कोई नहीं, रेडियो साथ है"
+          }
+        }
+      ],
+      "why": {
+        "en": "A radio cannot pull you out. A person who never takes their eyes off you can.",
+        "hi": "रेडियो आपको बाहर नहीं खींच सकता। नज़र रखने वाला व्यक्ति खींच सकता है।"
+      }
+    },
+    {
+      "id": "gas_oxygen_floor",
+      "domain": "gas_leak_confined_space",
+      "cite": "CMR 2017 r.153(2)(b)",
+      "stem": {
+        "en": "The detector shows 18.4% oxygen. Is that a place to work?",
+        "hi": "डिटेक्टर 18.4% ऑक्सीजन दिखा रहा है। क्या वहाँ काम किया जा सकता है?"
+      },
+      "options": [
+        {
+          "icon": "blower",
+          "label": {
+            "en": "No, ventilate and re-test",
+            "hi": "नहीं, हवा चलाइए और दोबारा जाँचिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "gauge",
+          "label": {
+            "en": "Yes, it is close enough",
+            "hi": "हाँ, लगभग ठीक है"
+          }
+        },
+        {
+          "icon": "hourglass",
+          "label": {
+            "en": "Yes, for a short job",
+            "hi": "हाँ, छोटे काम के लिए"
+          }
+        }
+      ],
+      "why": {
+        "en": "19% is the floor, not a target. Below it you ventilate and test again before anyone enters.",
+        "hi": "19% न्यूनतम सीमा है, लक्ष्य नहीं। उससे नीचे हवा चलाकर दोबारा जाँचिए, तभी कोई अंदर जाए।"
+      }
+    },
+    {
+      "id": "fire_electrical_panel",
+      "domain": "fire_explosion",
+      "stem": {
+        "en": "An electrical panel is burning and still live. Which extinguisher?",
+        "hi": "बिजली का पैनल जल रहा है और करंट चालू है। कौन सा अग्निशामक?"
+      },
+      "options": [
+        {
+          "icon": "extinguisher",
+          "label": {
+            "en": "CO₂",
+            "hi": "CO₂"
+          },
+          "correct": true
+        },
+        {
+          "icon": "extinguisher",
+          "label": {
+            "en": "Water",
+            "hi": "पानी"
+          }
+        },
+        {
+          "icon": "extinguisher",
+          "label": {
+            "en": "Foam",
+            "hi": "फ़ोम"
+          }
+        }
+      ],
+      "why": {
+        "en": "Water and foam conduct. CO₂ leaves nothing behind and does not carry current back to you.",
+        "hi": "पानी और फ़ोम करंट ले जाते हैं। CO₂ कुछ नहीं छोड़ता और करंट आप तक नहीं लाता।"
+      }
+    },
+    {
+      "id": "fire_pass",
+      "domain": "fire_explosion",
+      "stem": {
+        "en": "You have the right extinguisher. Where do you aim it?",
+        "hi": "सही अग्निशामक आपके हाथ में है। निशाना कहाँ लगाएँगे?"
+      },
+      "options": [
+        {
+          "icon": "opening",
+          "label": {
+            "en": "At the base of the fire",
+            "hi": "आग की जड़ पर"
+          },
+          "correct": true
+        },
+        {
+          "icon": "hazard",
+          "label": {
+            "en": "At the top of the flames",
+            "hi": "लपटों के ऊपर"
+          }
+        },
+        {
+          "icon": "eye",
+          "label": {
+            "en": "At the smoke",
+            "hi": "धुएँ पर"
+          }
+        }
+      ],
+      "why": {
+        "en": "Flames are the fuel burning. Put the agent where the fuel is, at the base.",
+        "hi": "लपटें जलता हुआ ईंधन हैं। जहाँ ईंधन है, यानी जड़ पर छोड़िए।"
+      }
+    },
+    {
+      "id": "fire_self_rescuer",
+      "domain": "fire_explosion",
+      "stem": {
+        "en": "Smoke is filling the gallery. What goes on before you move?",
+        "hi": "गैलरी में धुआँ भर रहा है। निकलने से पहले क्या पहनेंगे?"
+      },
+      "options": [
+        {
+          "icon": "cylinder",
+          "label": {
+            "en": "Your self-rescuer",
+            "hi": "अपना सेल्फ़-रेस्क्यूअर"
+          },
+          "correct": true
+        },
+        {
+          "icon": "helmet",
+          "label": {
+            "en": "Just your helmet",
+            "hi": "सिर्फ़ हेलमेट"
+          }
+        },
+        {
+          "icon": "hand",
+          "label": {
+            "en": "A wet cloth over the mouth",
+            "hi": "मुँह पर गीला कपड़ा"
+          }
+        }
+      ],
+      "why": {
+        "en": "Carbon monoxide has no smell and a cloth stops none of it. The self-rescuer does.",
+        "hi": "कार्बन मोनोऑक्साइड की कोई गंध नहीं होती और कपड़ा उसे नहीं रोकता। सेल्फ़-रेस्क्यूअर रोकता है।"
+      }
+    },
+    {
+      "id": "fire_reentry",
+      "domain": "fire_explosion",
+      "stem": {
+        "en": "You are out. A colleague is still inside the smoke. What now?",
+        "hi": "आप बाहर आ गए। एक साथी अब भी धुएँ में है। अब क्या?"
+      },
+      "options": [
+        {
+          "icon": "radio",
+          "label": {
+            "en": "Tell the rescue team where",
+            "hi": "रेस्क्यू टीम को जगह बताइए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "enter",
+          "label": {
+            "en": "Go back in for him",
+            "hi": "उसे लेने वापस जाइए"
+          }
+        },
+        {
+          "icon": "hourglass",
+          "label": {
+            "en": "Wait at the door",
+            "hi": "दरवाज़े पर रुकिए"
+          }
+        }
+      ],
+      "why": {
+        "en": "Nobody re-enters without breathing protection and a team. Your knowledge of where he is saves him, going back in does not.",
+        "hi": "बिना श्वास सुरक्षा और टीम के कोई वापस नहीं जाता। वह कहाँ है यह जानकारी उसे बचाती है, वापस जाना नहीं।"
+      }
+    },
+    {
+      "id": "fire_alarm_first",
+      "domain": "fire_explosion",
+      "stem": {
+        "en": "You are the first to see a small fire at the pit-top. What comes first?",
+        "hi": "पिट-टॉप पर छोटी आग सबसे पहले आपने देखी। सबसे पहले क्या?"
+      },
+      "options": [
+        {
+          "icon": "signal",
+          "label": {
+            "en": "Raise the alarm",
+            "hi": "अलार्म बजाइए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "extinguisher",
+          "label": {
+            "en": "Fight it quietly",
+            "hi": "चुपचाप बुझाइए"
+          }
+        },
+        {
+          "icon": "eye",
+          "label": {
+            "en": "Watch if it grows",
+            "hi": "देखिए बढ़ती है या नहीं"
+          }
+        }
+      ],
+      "why": {
+        "en": "Raise the alarm, then fight it if it is still small. A fire you lose alone is a fire nobody knew about.",
+        "hi": "पहले अलार्म, फिर अगर छोटी है तो बुझाइए। अकेले हारी हुई आग वह है जिसका किसी को पता ही नहीं था।"
+      }
+    },
+    {
+      "id": "loto_stopped_not_safe",
+      "domain": "machinery_haulage_loto",
+      "cite": "CMR 2017 r.139",
+      "stem": {
+        "en": "The belt has tripped and stopped. Is it safe to reach into the pulley?",
+        "hi": "बेल्ट ट्रिप होकर रुक गई है। क्या पुली में हाथ डालना सुरक्षित है?"
+      },
+      "options": [
+        {
+          "icon": "isolator",
+          "label": {
+            "en": "No, isolate it first",
+            "hi": "नहीं, पहले आइसोलेट कीजिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "machine",
+          "label": {
+            "en": "Yes, it has stopped",
+            "hi": "हाँ, वह रुक चुकी है"
+          }
+        },
+        {
+          "icon": "worker",
+          "label": {
+            "en": "Yes, if a mate watches",
+            "hi": "हाँ, अगर साथी नज़र रखे"
+          }
+        }
+      ],
+      "why": {
+        "en": "A stopped belt can be restarted from the control room by someone who does not know you are there.",
+        "hi": "रुकी हुई बेल्ट कंट्रोल रूम से कोई भी चालू कर सकता है, जिसे पता ही नहीं कि आप वहाँ हैं।"
+      }
+    },
+    {
+      "id": "loto_caught_helper",
+      "domain": "machinery_haulage_loto",
+      "stem": {
+        "en": "Your helper's arm is caught and the belt is running. First action?",
+        "hi": "आपके हेल्पर का हाथ फँस गया है और बेल्ट चल रही है। सबसे पहले क्या?"
+      },
+      "options": [
+        {
+          "icon": "pullcord",
+          "label": {
+            "en": "Pull the cord, stop the belt",
+            "hi": "पुल-कॉर्ड खींचिए, बेल्ट रोकिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "hand",
+          "label": {
+            "en": "Pull his arm free",
+            "hi": "उसका हाथ खींचकर छुड़ाइए"
+          }
+        },
+        {
+          "icon": "radio",
+          "label": {
+            "en": "Call the control room",
+            "hi": "कंट्रोल रूम को बुलाइए"
+          }
+        }
+      ],
+      "why": {
+        "en": "Stop the machine, then help the person. Reaching in first puts two people in the pulley.",
+        "hi": "पहले मशीन रोकिए, फिर मदद कीजिए। पहले हाथ डालने से पुली में दो लोग फँसते हैं।"
+      }
+    },
+    {
+      "id": "loto_own_lock",
+      "domain": "machinery_haulage_loto",
+      "stem": {
+        "en": "Whose lock goes on the isolator you are working behind?",
+        "hi": "जिस आइसोलेटर के पीछे आप काम कर रहे हैं, उस पर किसका ताला लगेगा?"
+      },
+      "options": [
+        {
+          "icon": "lock-closed",
+          "label": {
+            "en": "Your own, and you remove it",
+            "hi": "आपका अपना, और आप ही हटाएँगे"
+          },
+          "correct": true
+        },
+        {
+          "icon": "worker",
+          "label": {
+            "en": "The supervisor's",
+            "hi": "सुपरवाइज़र का"
+          }
+        },
+        {
+          "icon": "tag",
+          "label": {
+            "en": "A tag is enough",
+            "hi": "टैग ही काफ़ी है"
+          }
+        }
+      ],
+      "why": {
+        "en": "Only the person who is exposed puts the lock on, and only that person takes it off.",
+        "hi": "ताला वही लगाता है जिसकी जान ख़तरे में है, और वही उसे हटाता है।"
+      }
+    },
+    {
+      "id": "loto_try_start",
+      "domain": "machinery_haulage_loto",
+      "stem": {
+        "en": "The isolator is open and locked. What proves the belt is dead?",
+        "hi": "आइसोलेटर खुला और ताला लगा है। बेल्ट में करंट नहीं है, यह कैसे साबित होगा?"
+      },
+      "options": [
+        {
+          "icon": "startstop",
+          "label": {
+            "en": "Press start and see it stay still",
+            "hi": "स्टार्ट दबाइए, बेल्ट हिलनी नहीं चाहिए"
+          },
+          "correct": true
+        },
+        {
+          "icon": "eye",
+          "label": {
+            "en": "Look at the isolator again",
+            "hi": "आइसोलेटर दोबारा देखिए"
+          }
+        },
+        {
+          "icon": "lock-closed",
+          "label": {
+            "en": "The lock is proof enough",
+            "hi": "ताला ही सबूत है"
+          }
+        },
+        {
+          "icon": "tag",
+          "label": {
+            "en": "The tag is proof enough",
+            "hi": "टैग ही सबूत है"
+          }
+        }
+      ],
+      "why": {
+        "en": "A lock on the wrong switch looks exactly like a lock on the right one. Only the test tells them apart.",
+        "hi": "ग़लत स्विच पर लगा ताला बिल्कुल सही जैसा दिखता है। सिर्फ़ जाँच से अंतर पता चलता है।"
+      }
+    },
+    {
+      "id": "loto_wrong_belt",
+      "domain": "machinery_haulage_loto",
+      "stem": {
+        "en": "Belt C4 is jammed. You isolate C3 out of habit. What have you done?",
+        "hi": "बेल्ट C4 जाम है। आदतन आपने C3 आइसोलेट कर दिया। आपने क्या किया?"
+      },
+      "options": [
+        {
+          "icon": "machine",
+          "label": {
+            "en": "Left C4 live",
+            "hi": "C4 को चालू छोड़ दिया"
+          },
+          "correct": true
+        },
+        {
+          "icon": "shield",
+          "label": {
+            "en": "Made the area safe",
+            "hi": "इलाक़ा सुरक्षित कर दिया"
+          }
+        },
+        {
+          "icon": "swap",
+          "label": {
+            "en": "Stopped both belts",
+            "hi": "दोनों बेल्ट रोक दीं"
+          }
+        }
+      ],
+      "why": {
+        "en": "Read the plate on the isolator, every time. The belt you locked is not always the belt you are standing at.",
+        "hi": "हर बार आइसोलेटर की प्लेट पढ़िए। जिस बेल्ट पर ताला लगाया, ज़रूरी नहीं वही बेल्ट आपके सामने हो।"
+      }
+    },
+    {
+      "id": "ppe_loose_clothing",
+      "domain": "machinery_haulage_loto",
+      "stem": {
+        "en": "Why does a loose gamchha matter next to a running conveyor?",
+        "hi": "चलती कन्वेयर के पास ढीला गमछा क्यों मायने रखता है?"
+      },
+      "options": [
+        {
+          "icon": "hazard",
+          "label": {
+            "en": "It can drag an arm into the pulley",
+            "hi": "वह हाथ को पुली में खींच सकता है"
+          },
+          "correct": true
+        },
+        {
+          "icon": "eye",
+          "label": {
+            "en": "It looks untidy",
+            "hi": "वह देखने में ठीक नहीं लगता"
+          }
+        },
+        {
+          "icon": "sign",
+          "label": {
+            "en": "It is against the dress code",
+            "hi": "वह ड्रेस कोड के ख़िलाफ़ है"
+          }
+        }
+      ],
+      "why": {
+        "en": "Cloth reaches the nip before your hand does, and it does not let go.",
+        "hi": "कपड़ा आपके हाथ से पहले पुली की पकड़ में आता है, और छोड़ता नहीं।"
+      }
+    },
+    {
+      "id": "report_near_miss",
+      "domain": "machinery_haulage_loto",
+      "cite": "MVT Rules 1966, First Schedule",
+      "stem": {
+        "en": "Nobody was hurt, but the belt started while you were beside it. Report it?",
+        "hi": "किसी को चोट नहीं आई, पर आपके पास खड़े रहते बेल्ट चालू हो गई। रिपोर्ट करेंगे?"
+      },
+      "options": [
+        {
+          "icon": "speech",
+          "label": {
+            "en": "Yes, the same day",
+            "hi": "हाँ, उसी दिन"
+          },
+          "correct": true
+        },
+        {
+          "icon": "hand",
+          "label": {
+            "en": "No, nothing happened",
+            "hi": "नहीं, कुछ हुआ ही नहीं"
+          }
+        },
+        {
+          "icon": "hourglass",
+          "label": {
+            "en": "Only if it happens again",
+            "hi": "सिर्फ़ तब जब दोबारा हो"
+          }
+        }
+      ],
+      "why": {
+        "en": "The near miss you report today is the fatality that does not happen next month.",
+        "hi": "आज जो नियर-मिस आप बताते हैं, वही अगले महीने की मौत को रोकती है।"
+      }
+    }
+  ]
+}
