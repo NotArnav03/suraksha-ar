@@ -19,7 +19,7 @@ import { applyTheme, loadTheme, nextTheme, THEME_ICON, type ThemeChoice } from '
  * The compliance dashboard, as a mountable function rather than a script that
  * runs itself — kept separate from `main.ts` (which only adds the CSS
  * imports and calls this) for the same reason `app/main.ts` stays separate
- * from `controller.ts`/`tierC.ts`: importing a `.css` file only works
+ * from `controller.ts`/`tierB.ts`: importing a `.css` file only works
  * through Vite, and this module has to be importable from Node's plain test
  * runner so the real render → click → verify → row loop can be tested
  * through the actual DOM, not just unit-tested in pieces.

@@ -25,8 +25,8 @@ export interface TierReport {
   };
 }
 
-/** Tiers whose renderer actually exists. Kept explicit so the gap is visible. */
-export const IMPLEMENTED: Tier[] = ['A', 'C'];
+/** Tiers whose renderer actually exists. Both of them, now that there are two. */
+export const IMPLEMENTED: Tier[] = ['A', 'B'];
 
 async function hasImmersiveAr(): Promise<boolean> {
   const xr = (navigator as Navigator & { xr?: XRSystem }).xr;
@@ -63,24 +63,19 @@ export async function detectTier(force?: Tier): Promise<TierReport> {
 
   if (capabilities.webxrImmersiveAr && capabilities.webgl) {
     capable = 'A';
-    reasons.push('WebXR immersive-ar is supported — full markerless placement');
-  } else if (capabilities.camera && capabilities.deviceOrientation && capabilities.secureContext) {
+    reasons.push('WebXR immersive-ar is supported, so the drill can be placed in the room');
+  } else if (!capabilities.webxrImmersiveAr) {
     capable = 'B';
-    reasons.push(
-      capabilities.webxrImmersiveAr
-        ? 'WebXR present but no WebGL — falling back to marker tracking'
-        : 'no WebXR immersive-ar — marker tracking on a printed hazard card',
-    );
-    if (!capabilities.secureContext) reasons.push('camera needs a secure context');
+    reasons.push('no WebXR immersive-ar on this phone, so the drill runs flat');
   } else {
-    capable = 'C';
-    reasons.push('no camera or orientation sensors — flat interactive mode');
+    capable = 'B';
+    reasons.push('WebXR is present but there is no WebGL to draw with, so the drill runs flat');
+  }
+  if (capabilities.webxrImmersiveAr && !capabilities.secureContext) {
+    reasons.push('AR also needs a secure context (https or localhost)');
   }
 
-  const serving = force ?? (IMPLEMENTED.includes(capable) ? capable : 'C');
-  if (!force && serving !== capable) {
-    reasons.push(`tier ${capable} renderer is not built yet — serving tier ${serving}`);
-  }
+  const serving = force ?? capable;
   if (force) reasons.push(`tier forced to ${force}`);
 
   return { capable, serving, reasons, capabilities };

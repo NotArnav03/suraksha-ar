@@ -11,7 +11,7 @@ import type { Verdict } from '../../engine/runtime.ts';
  * certificate stops meaning the same thing on different handsets.
  */
 
-export type Tier = 'A' | 'B' | 'C';
+export type Tier = 'A' | 'B';
 
 /** What a learner may plausibly do to a thing. The verb is a deliberate choice,
  *  which is why entering a confined space can never be an accidental tap. */

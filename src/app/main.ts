@@ -11,7 +11,7 @@ import { distinctVariants, resolveVariant } from '../engine/variant.ts';
 import { ScenarioError, validateScenario } from '../engine/validate.ts';
 import { DrillSession } from '../engine/runtime.ts';
 import { DrillController, rafScheduler } from './controller.ts';
-import { TierCRenderer } from './render/tierC.ts';
+import { TierBRenderer } from './render/tierB.ts';
 import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
 import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
@@ -39,7 +39,18 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 const app = document.querySelector<HTMLElement>('#app')!;
 const params = new URLSearchParams(location.search);
 const workerId = params.get('worker') ?? 'JH/CHP/2291';
-const forcedTier = (params.get('tier')?.toUpperCase() as Tier | undefined) ?? undefined;
+/**
+ * `?tier=` picks a renderer by hand, for demos and for testing the flat drill on
+ * a phone that would otherwise get AR.
+ *
+ * `C` is accepted as an alias for `B`. The flat tier was Tier C while a
+ * marker-tracked tier sat between them; that middle tier was never built and
+ * has been dropped, so the flat tier is Tier B now. Links, notes and QR codes
+ * with the old letter are still in circulation, and silently serving them the
+ * right drill beats a demo falling back to AR because of one stale character.
+ */
+const requestedTier = params.get('tier')?.toUpperCase();
+const forcedTier = (requestedTier === 'C' ? 'B' : requestedTier) as Tier | undefined;
 // `?mode=assess` comes from the dashboard's replay links: an auditor opening the
 // drill a credential was earned on should get it the way the worker did.
 const urlMode = params.get('mode') === 'assess' ? 'assess' : params.get('mode') === 'guided' ? 'guided' : null;
@@ -137,7 +148,7 @@ type ArAttempt =
  * Ask for the AR session from inside the tap that started the drill.
  *
  * WebXR requires a user gesture, and this has to resolve *before* the session
- * exists so a refusal falls back cleanly to Tier C instead of stranding the
+ * exists so a refusal falls back cleanly to Tier B instead of stranding the
  * learner mid-drill with no world. `dom-overlay` is what keeps the HUD shared:
  * the same DOM the flat tier draws floats over the camera feed.
  *
@@ -203,13 +214,11 @@ async function rendererFor(
     // true; "refused" when the phone never answered is a lie that sends someone
     // hunting through permission settings that were never the problem.
     return {
-      renderer: new TierCRenderer(i18n),
+      renderer: new TierBRenderer(i18n),
       note: i18n.ui(attempt.reason === 'timeout' ? 'arTimedOut' : 'arRefused'),
     };
   }
-  // Tier B is contracted but not built. Falling back loudly beats mounting a
-  // renderer that would show the learner a black screen.
-  return { renderer: new TierCRenderer(i18n), note: null };
+  return { renderer: new TierBRenderer(i18n), note: null };
 }
 
 /**
@@ -246,8 +255,7 @@ function screen(className: string): HTMLElement {
 
 const TIER_LABEL: Record<Tier, LocalizedText> = {
   A: { en: 'Markerless AR', hi: 'मार्करलेस AR', sat: 'ᱢᱟᱨᱠᱚᱨᱞᱮᱥ AR' },
-  B: { en: 'Marker-tracked AR', hi: 'मार्कर AR', sat: 'ᱢᱟᱨᱠᱚᱨ AR' },
-  C: { en: 'Flat interactive', hi: 'फ्लैट मोड', sat: 'ᱯᱷᱞᱮᱴ ᱢᱳᱰ' },
+  B: { en: 'Flat interactive', hi: 'फ्लैट मोड', sat: 'ᱯᱷᱞᱮᱴ ᱢᱳᱰ' },
 };
 
 const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: IconName }> = {
@@ -258,7 +266,7 @@ const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: IconName }> = {
   secureContext: { en: 'Secure connection', hi: 'सुरक्षित कनेक्शन', sat: 'ᱨᱚᱠᱷᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ', icon: 'shield' },
 };
 
-const TIER_ICON: Record<Tier, IconName> = { A: 'headset', B: 'marker', C: 'phone' };
+const TIER_ICON: Record<Tier, IconName> = { A: 'headset', B: 'phone' };
 
 /** A button's words, in their own span, so the pictogram beside them sizes independently. */
 function labelSpan(text: string): HTMLSpanElement {

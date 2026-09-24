@@ -33,9 +33,10 @@ audit. Read both before a Q&A.
 
 ### Detailed explanation of the proposed solution
 
-- A phone-only AR simulator, no headset. Each authored scenario runs in three
-  renderer tiers (markerless AR, marker-tracked AR, flat 2D) off one engine, so
-  it works on any Android 10+ handset a worker already owns.
+- A phone-only AR simulator, no headset. Each authored scenario runs in two
+  renderer tiers off one engine, markerless AR on a phone that supports it and a
+  flat interactive world on one that does not, so it works on any Android 10+
+  handset a worker already owns.
 - The learner performs the procedure: checks the permit, tests the atmosphere,
   isolates the belt, decides whether to go in after a colleague. No multiple
   choice anywhere in the product.
@@ -65,8 +66,8 @@ audit. Read both before a Q&A.
 
 ### Innovation and uniqueness
 
-- One scenario graph, three renderers, one event stream, so a credential means
-  the same thing across a workforce holding mismatched handsets. Every headset
+- One scenario graph, every tier on the same event stream, so a credential
+  means the same thing across a workforce holding mismatched handsets. Every headset
   vendor solves the opposite problem: maximum fidelity for one device class.
 - **`rescue_restraint` is a named zero-tolerance dimension**, not a line item
   inside a pass mark. Going in after a collapsed colleague before the hazard is
@@ -94,10 +95,9 @@ state-backed VR effort 40 km from the problem without disparaging it.
 
 ### Technologies used
 
-- **Client**: WebXR plus three.js for markerless AR, image-marker tracking as
-  the middle tier, DOM for the universal flat tier. One shared TypeScript engine
-  and event model drives all three. Installable PWA, plus a Trusted Web Activity
-  Android APK.
+- **Client**: WebXR plus three.js for markerless AR, DOM for the universal flat
+  tier. One shared TypeScript engine and event model drives both. Installable
+  PWA, plus a Trusted Web Activity Android APK.
 - **Content**: scenarios are authored as JSON graphs (branching steps, timers, a
   graded error taxonomy, per-step regulation citations) and validated at load
   for referential integrity, so a safety officer can author without code and a
@@ -124,9 +124,10 @@ state-backed VR effort 40 km from the problem without disparaging it.
 
 ### Diagram: tiered rendering
 
-**Scenario Graph** fans out to **Tier A markerless AR**, **Tier B marker AR**,
-**Tier C flat 2D**, and all three converge on **Competency Engine**, then
-**Signed Credential**. Mark Tier B as roadmap.
+**Scenario Graph** fans out to **Tier A, markerless AR** and **Tier B, flat
+interactive**, and both converge on **Competency Engine**, then **Signed
+Credential**. The point of the diagram is the convergence: two ways to see the
+world, one way to be assessed.
 
 ### Diagram: the decision tree, from the real drill
 

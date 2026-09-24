@@ -25,9 +25,15 @@ Verified 2026-09-23. The code has not changed since `caaf242`; anything after it
 A phone-only AR safety-training simulator that replaces multiple-choice quizzes
 with a scored behavioural drill, and replaces the paper certificate with a
 signed, offline-verifiable QR credential. Three authored scenarios (JSON) run
-through one shared assessment engine and render in up to three tiers (markerless
-AR, marker-tracked AR, flat 2D), so the same drill and the same certificate are
-available on whatever Android device a worker actually owns.
+through one shared assessment engine and render in two tiers, markerless AR
+(Tier A) and flat interactive (Tier B), so the same drill and the same
+certificate are available on whatever Android device a worker actually owns.
+
+A marker-tracked middle tier used to sit between them. It was contracted and
+never built, and carrying an empty slot in the type made every tier list read as
+two thirds finished, so it has been dropped. The flat tier, previously Tier C,
+is Tier B now. `?tier=C` is still accepted as an alias, because links and notes
+with the old letter are in circulation.
 
 Two framing points that matter when you are deciding what to build next:
 
@@ -80,7 +86,7 @@ src/
     style.css       the whole design system (see docs/UI.md)
     render/
       contract.ts     WorldRenderer, the tier boundary itself
-      tierC.ts        flat 2D renderer (tile grid plus verb sheet)
+      tierB.ts        flat 2D renderer (tile grid plus verb sheet)
       tierA.ts        markerless WebXR renderer (three.js)
       overlay-taps.ts tap arbitration inside a WebXR dom-overlay (§5.3)
       verbs.ts        shared verb icons and labels; both tiers must agree
@@ -182,8 +188,8 @@ Three things that will waste your time otherwise:
    `resolveVariant`, otherwise `distinctVariants` plus `nextVariant()` chooses
    the next one the learner has not passed.
 4. A renderer is constructed for the served tier (`TierARenderer` or
-   `TierCRenderer`; Tier B is contracted but unimplemented) and handed, with the
-   resolved variant, to a new `DrillController`.
+   `TierBRenderer`) and handed, with the resolved variant, to a new
+   `DrillController`.
 5. `DrillController` constructs the `DrillSession` and a `Hud`. It is the
    **only** object permitted to call `session.dispatch()`, `acknowledge()` or
    `tick()`.
@@ -219,7 +225,7 @@ once, by `Hud`, and every renderer's `feedback()` is a deliberate no-op with a
 comment saying so. A renderer that drew its own countdown could quietly give its
 learners more time, and two credentials that cost different amounts of time are
 not the same credential. Verb wording is centralised in `render/verbs.ts` for
-the same reason: if Tier A said "Enter" where Tier C said "Climb in", the tiers
+the same reason: if Tier A said "Enter" where Tier B said "Climb in", the tiers
 would be asking subtly different questions.
 
 ### 5.2 `resolveVariant` rebuilds every node kind field by field
@@ -379,7 +385,6 @@ renders it as a fatal-error screen and `cli/run.ts` prints it.
 | Pass marks are uncalibrated for assessment mode | Tuned against guided prompts. Removing the instructions makes every run harder, especially time-to-first-action. Treat them as a starting point. | `scoring.passMark` in each scenario |
 | Per-PC evidence not emitted | NSQF alignment can only be claimed once the credential reports evidence per named performance criterion | `docs/RESEARCH.md` §6.1 |
 | Issuance happens in the browser | Demo only, fixed key so another device can verify. A device that signs its own credentials can award itself competence. The verification path is real. | `credential/web-crypto.ts`, `credential/demo-trust.ts` |
-| Tier B not implemented | Contracted; the app falls back to Tier C loudly | `render/contract.ts`, `tier.ts`'s `IMPLEMENTED`, `main.ts`'s `rendererFor()` |
 | Tier A uses primitive geometry | Shaped, not boxes-per-kind, but still coloured primitives rather than a site twin | `tierA.ts`'s `partsFor()` |
 | Tier A on the wider ARCore fleet | Demonstrated working on a real phone; behaviour across budget handsets unmeasured | test with `tools/phone.mjs` |
 | Dashboard has no backend | Verifies real credentials, keeps a real roster, but only of what this one device scanned | `admin/store.ts`'s module comment |
@@ -444,10 +449,12 @@ standing between a scenario-JSON edit and a broken drill on a real phone.
   and the scenario array in `admin/replay.ts`. `DOMAIN_CODES` in
   `credential/codec.ts` already reserves codes for
   `ground_control_and_height` and `electrical_ppe_emergency`.
-- **Implement Tier B.** Implement `WorldRenderer` in `render/tierB.ts`, add
-  `'B'` to `tier.ts`'s `IMPLEMENTED`, wire it into `rendererFor()`. Nothing in
-  the engine, assessment or credential layers changes; that is the point of the
-  boundary.
+- **Add a tier.** Implement `WorldRenderer` in a new `render/tier<X>.ts`, add
+  its letter to `Tier` in `render/contract.ts` and to `tier.ts`'s `IMPLEMENTED`,
+  teach `detectTier` when to choose it, and wire it into `rendererFor()`.
+  Nothing in the engine, assessment or credential layers changes; that is the
+  point of the boundary. Give it a label and an icon in `main.ts`'s `TIER_LABEL`
+  and `TIER_ICON`, which are exhaustive over `Tier`, so the compiler will ask.
 - **Move issuance server-side.** `issueCredential` already takes an injected
   `Signer`, and `node-crypto.ts` is the server half, exercised by
   `cli/credential.ts`. The work is a keystore-backed endpoint calling that code,

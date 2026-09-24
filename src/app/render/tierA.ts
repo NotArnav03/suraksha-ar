@@ -25,7 +25,7 @@ import type {
  * What is deliberately *not* different: the HUD is the same DOM, drawn by the
  * same shared `Hud`, floating over the camera feed through WebXR's dom-overlay.
  * The prompt, the checklist, the countdown and the consequence banner are
- * literally the same code that Tier C runs. Only the world changed.
+ * literally the same code that Tier B runs. Only the world changed.
  */
 
 const KIND_COLOR: Record<Prop['kind'], number> = {
@@ -801,7 +801,7 @@ export class TierARenderer implements WorldRenderer {
   }
 
   feedback(_feedback: Feedback): void {
-    // Shared HUD. See the note in TierCRenderer — if a tier drew its own
+    // Shared HUD. See the note in TierBRenderer: if a tier drew its own
     // consequence banner, tiers would stop showing learners the same thing.
   }
 

@@ -86,7 +86,7 @@ This replaced emoji, which meant a gear for a conveyor, a biohazard trefoil for
 a pile of coal and a wrench for "operate this control": a vendor's house style
 standing in for a sign a worker already knows. Objects a drill asks you to find
 get their own glyph rather than a per-kind fallback (`PROP_ICON` in
-`render/tierC.ts` maps the isolator, padlock, pull cord, tag, self-rescuer and
+`render/tierB.ts` maps the isolator, padlock, pull cord, tag, self-rescuer and
 the rest), because a learner who cannot read the label has nothing else to go
 on.
 

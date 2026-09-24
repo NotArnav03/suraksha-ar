@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { Window } from 'happy-dom';
 
 /**
- * Wiring test for the Tier C client.
+ * Wiring test for the Tier B client.
  *
  * This drives the real renderer through a real DOM — finding tiles by their
  * labels, opening the verb sheet, pressing the verb — rather than calling
@@ -47,7 +47,7 @@ define('performance', { now: () => Date.now() });
 
 const { DrillController } = await import('../src/app/controller.ts');
 import type { Scheduler } from '../src/app/controller.ts';
-const { TierCRenderer } = await import('../src/app/render/tierC.ts');
+const { TierBRenderer } = await import('../src/app/render/tierB.ts');
 const { VERBS_BY_KIND } = await import('../src/app/render/contract.ts');
 const { VERB_ICON, VERB_LABEL } = await import('../src/app/render/verbs.ts');
 const { Localizer } = await import('../src/app/ui/i18n.ts');
@@ -111,7 +111,7 @@ async function mount(seed: number, lang: 'en' | 'hi' | 'sat' = 'en'): Promise<Ha
   const finished = { value: false };
   const controller = new DrillController(
     resolveVariant(scenario, seed),
-    new TierCRenderer(i18n),
+    new TierBRenderer(i18n),
     i18n,
     { onFinish: () => (finished.value = true) },
     manualScheduler(),
@@ -449,7 +449,7 @@ test('setting .hidden on every toggled element actually hides it, per the real s
 });
 
 test('both tiers name every verb identically', () => {
-  // Tier A and Tier C import the same table by construction; this fails if
+  // Tier A and Tier B import the same table by construction; this fails if
   // either grows a private copy, which would mean the two tiers were asking
   // subtly different questions and their results were no longer comparable.
   for (const verbs of Object.values(VERBS_BY_KIND)) {
@@ -597,7 +597,7 @@ test('an ideal operator can finish every module by touching the screen', async (
       const finished = { value: false };
       const controller = new DrillController(
         variant,
-        new TierCRenderer(i18n),
+        new TierBRenderer(i18n),
         i18n,
         { onFinish: () => (finished.value = true) },
         manualScheduler(),
@@ -657,7 +657,7 @@ test('a prop removed from the scene stays removed when the next step is shown', 
   window.document.body.append(world as never, chrome as never);
   const i18n = new Localizer('en');
   i18n.speechEnabled = false;
-  const controller = new DrillController(resolveVariant(module, 1), new TierCRenderer(i18n), i18n, { onFinish: () => {} }, manualScheduler());
+  const controller = new DrillController(resolveVariant(module, 1), new TierBRenderer(i18n), i18n, { onFinish: () => {} }, manualScheduler());
   await controller.start(world, chrome);
 
   for (let guard = 0; controller.session.node.id !== 'rescue_decision' && guard < 20; guard++) {
@@ -692,7 +692,7 @@ test('assessment mode states the goal, and the hint hands over the step at the c
   i18n.speechEnabled = false;
   const controller = new DrillController(
     variant,
-    new TierCRenderer(i18n),
+    new TierBRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),
@@ -730,7 +730,7 @@ test('guided mode is unchanged: the step is named, and no hint is offered', asyn
   i18n.speechEnabled = false;
   const controller = new DrillController(
     resolveVariant(module, 1),
-    new TierCRenderer(i18n),
+    new TierBRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),
@@ -762,7 +762,7 @@ test('the checklist does not list the steps in assessment mode, until a hint is 
   i18n.speechEnabled = false;
   const controller = new DrillController(
     variant,
-    new TierCRenderer(i18n),
+    new TierBRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),

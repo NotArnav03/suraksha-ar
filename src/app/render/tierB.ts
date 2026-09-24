@@ -12,7 +12,7 @@ import type {
 } from './contract.ts';
 
 /**
- * Tier C — the flat world.
+ * Tier B: the flat world.
  *
  * This is the tier that runs on the phone a first-week recruit actually owns:
  * no ARCore, no depth, sometimes no gyroscope. It is deliberately not a
@@ -72,8 +72,8 @@ const PROP_ICON: Record<string, IconName> = {
   control_radio: 'radio',
 };
 
-export class TierCRenderer implements WorldRenderer {
-  readonly tier: Tier = 'C';
+export class TierBRenderer implements WorldRenderer {
+  readonly tier: Tier = 'B';
   readonly label = 'Flat interactive — any Android 10+, no camera required';
 
   #i18n: Localizer;

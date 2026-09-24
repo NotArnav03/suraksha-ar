@@ -394,7 +394,7 @@ bottom-right, because it requires caring about two different problems at once.
 3. **Seeded procedural variants, several distinct passes required, replayable by an auditor from
    the credential alone.** This is the anti-proxy-certification mechanism, and it is the answer to
    the fake-card problem that phoning a training provider does not solve.
-4. **One scenario graph, three renderers, one event stream.** This is what makes a credential mean
+4. **One scenario graph, every tier on one event stream.** This is what makes a credential mean
    the same thing across a workforce holding mismatched handsets. Every headset vendor solves the
    opposite problem: maximum fidelity for one device class.
 5. **Santali (Ol Chiki) coverage at all**, with the machine-draft status recorded honestly and a

@@ -5,7 +5,7 @@ import type { IconName } from '../ui/icons.ts';
  * Verb wording, shared by every tier.
  *
  * The words a learner reads on the action they are about to take are content,
- * not chrome. If Tier A said "Enter" where Tier C said "Climb in", the two tiers
+ * not chrome. If Tier A said "Enter" where Tier B said "Climb in", the two tiers
  * would be asking subtly different questions and their results would stop being
  * comparable — which is the one property this whole architecture exists to hold.
  *
