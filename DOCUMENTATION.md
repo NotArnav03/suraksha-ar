@@ -9,7 +9,7 @@ know *why*. `docs/UI.md` covers the interface layer specifically.
 
 Verified 2026-09-23. The code has not changed since `caaf242`; anything after it on `main` is documentation.
 
-- `npm test` → **143 passing, 0 failing** (16 files)
+- `npm test` → **147 passing, 0 failing** (16 files)
 - `npm run check` (`tsc --noEmit`) → clean
 - `npm run build` → two pages, `index.html` and `admin.html`
 - CI: `.github/workflows/deploy-pages.yml` runs tests, typecheck and build on
@@ -112,7 +112,7 @@ src/
     run.ts          headless drill runner: scripts, tracing, certification runs
     credential.ts   end-to-end: drill -> certify -> issue -> scan -> verify
 
-tests/           143 tests, node's built-in runner (§9)
+tests/           147 tests, node's built-in runner (§9)
 tools/
   phone.mjs       drive a phone's Chrome over USB via adb and CDP (§3)
   translate.mjs   machine-draft missing Santali, for human review (§8)
@@ -140,7 +140,7 @@ scripts.** Vite is used only to bundle the two browser pages.
 
 ```bash
 npm install
-npm test        # 143 tests, a few seconds
+npm test        # 147 tests, a few seconds
 npm run check   # tsc --noEmit
 npm run dev     # Vite dev server
 npm run build   # production bundle -> dist/
@@ -399,8 +399,8 @@ renders it as a fatal-error screen and `cli/run.ts` prints it.
 |---|---|---|
 | No certified-instructor review | Not started. Procedures come from general practice, not a DGMS-certified sign-off. | content, not code |
 | Citations reviewed by a professional | Pinpointed and source-checked, not professionally reviewed | `docs/CITATIONS.md` |
-| Santali is behind the code | 108 scenario strings and 25 interface strings missing: the 17 `goal` lines in the gas and fire drills, and the whole 91-string daily question bank. The conveyor drill is now covered. A Santali learner is served Hindi for the rest. | `npm run l10n`; `l10n/sat-review.tsv` |
-| Santali that exists is an unreviewed AI draft | 222 rows in the sign-off sheet, none signed off | `l10n/sat-review.tsv` |
+| Santali is behind the code | 17 strings left: the `goal` lines in the gas and fire drills, plus 25 interface strings. The conveyor drill and the whole daily question bank are covered. | `npm run l10n`; `l10n/sat-review.tsv` |
+| Santali that exists is an unreviewed AI draft | 313 rows in the sign-off sheet, none signed off | `l10n/sat-review.tsv` |
 | Narration is synthetic | Nothing recorded yet: 133 Hindi lines and 68 Santali across the three drills. The playback path is built and falls back to synthesis, and 15 lines carry a variant placeholder so they stay synthetic by design. | `docs/NARRATION.md`, `node tools/narration.mjs --report` |
 | Pass marks are uncalibrated for assessment mode | Tuned against guided prompts. Removing the instructions makes every run harder, especially time-to-first-action. Treat them as a starting point. | `scoring.passMark` in each scenario |
 | Per-PC evidence not emitted | NSQF alignment can only be claimed once the credential reports evidence per named performance criterion | `docs/RESEARCH.md` §6.1 |
@@ -455,12 +455,12 @@ voice lists).
 | `narration.test.ts` | 7 | the manifest, clip ids, and that variant-dependent lines stay synthetic |
 | `admin.test.ts` | 6 | roster dedupe and merge, a real credential through the real dashboard DOM, garbage rejected, the drills expander |
 | `modes.test.ts` | 6 | guided vs assessment behaviour, hinting, and that neither certifies |
-| `quiz.test.ts` | 11 | the day's set is stable, moves daily and covers the bank over a year; options shuffle; no option is graded by its own pictogram; the streak survives replays and a broken store; the wall between the quiz and certification |
+| `quiz.test.ts` | 15 | the day's set is stable, moves daily and covers the bank over a year; options shuffle; no option is graded by its own pictogram; the streak survives replays and a broken store; the wall between the quiz and certification; and through the real screen, Santali end to end, a mid-question language switch that keeps the answer, and a result redraw that does not record the day twice |
 | `citations.test.ts` | 4 | every citation has a pinpoint and matches the recorded text |
 | `l10n.test.ts` | 4 | every declared language resolves every scenario string; fallback chains terminate |
 | `replay.test.ts` | 4 | a signed credential turned back into the exact drills it was earned on |
 
-`npm test` should exit `143 pass`, `0 fail`. This suite is the only thing
+`npm test` should exit `147 pass`, `0 fail`. This suite is the only thing
 standing between a scenario-JSON edit and a broken drill on a real phone.
 
 ## 10. Where to start for common tasks

@@ -21,7 +21,7 @@ src/quiz/        the daily ninety-second refresher: question bank and the day's 
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons; see docs/APK.md for the Android build
 docs/            RESEARCH (the landscape), CITATIONS (the regulation text), UI (the design system), NARRATION, APK
-tests/           143 tests, node's built-in runner
+tests/           147 tests, node's built-in runner
 ```
 
 ## Try it
@@ -30,7 +30,7 @@ Node 22.6+ (uses native TypeScript type stripping, so no build step and no bundl
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 143 tests
+npm test                # 147 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -109,7 +109,7 @@ No web fonts, no CDN. The app has to work with the radio off.
 
 English and Hindi are authored throughout all three scenarios. Santali (Ol Chiki) covers the original prose of the gas and fire scenarios, but it is an **AI machine draft** rather than a reviewed translation: every line is recorded in `l10n/sat-review.tsv` against its English source, and none of it is fit to present to a worker until a Santali speaker has signed off each row.
 
-Santali has also fallen behind the code since that pass. `npm run l10n` currently reports **101 scenario strings and 25 interface strings missing**: every `goal` line added for assessment mode, the whole conveyor drill, and the debrief's new reason strings. A Santali learner is served Hindi for all of it, which the fallback chain handles silently and correctly, and which is still a gap rather than a feature. Three AR-handshake strings are deliberately left un-drafted rather than machine-translated at all, for the reason given above `startingAr` in `src/app/ui/i18n.ts`.
+The conveyor drill and the whole daily question bank now have Santali too, on the same terms. What is left is small and named: `npm run l10n` reports **17 scenario strings and 25 interface strings missing**, the `goal` lines in the gas and fire drills and some of the interface. A Santali learner is served Hindi for those, which the fallback chain handles silently and correctly, and which is still a gap rather than a feature. Three AR-handshake strings are deliberately left un-drafted rather than machine-translated at all, for the reason given above `startingAr` in `src/app/ui/i18n.ts`.
 
 ## Known gaps, read before pitching
 

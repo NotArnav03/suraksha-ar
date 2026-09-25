@@ -9,7 +9,7 @@ import {
   type QuizOption,
   type QuizQuestion,
 } from '../quiz/daily.ts';
-import type { Localizer } from './ui/i18n.ts';
+import { LANGUAGES, type Localizer } from './ui/i18n.ts';
 import { icon } from './ui/icons.ts';
 
 /**
@@ -50,14 +50,45 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
 
   let index = 0;
   let score = 0;
-  let answered = false;
+  // What was tapped on the question now on screen, so a language switch can
+  // redraw the answered state instead of quietly offering a second go at it.
+  let chosen: QuizOption | null = null;
   let finished = false;
   let remaining = QUIZ_SECONDS * 1000;
 
   const head = el('header', 'quiz-head');
-  head.append(el('p', 'eyebrow', i18n.ui('quizEyebrow')));
+  const eyebrow = el('p', 'eyebrow', i18n.ui('quizEyebrow'));
   const counter = el('p', 'quiz-counter');
-  head.append(counter);
+  head.append(eyebrow, counter);
+
+  /*
+   * The language picker again, here, because the one on the module list is
+   * behind this screen. Ninety seconds is not long enough to go back for it,
+   * and a Santali speaker who opened the day's questions in Hindi should not
+   * have to spend a third of their time navigating.
+   *
+   * Switching mid-run keeps the score, the clock and the question you are on.
+   */
+  const langRow = el('div', 'lang quiz-lang');
+  function paintLanguages(): void {
+    langRow.replaceChildren();
+    for (const language of LANGUAGES) {
+      const button = el('button', `lang-button${language.code === i18n.language.code ? ' on' : ''}`);
+      button.dataset.code = language.code;
+      button.textContent = language.name;
+      button.addEventListener('click', () => {
+        if (language.code === i18n.language.code) return;
+        i18n.setLanguage(language.code);
+        paintLanguages();
+        eyebrow.textContent = i18n.ui('quizEyebrow');
+        if (finished) showResult(lastRanOut);
+        else renderQuestion();
+      });
+      langRow.append(button);
+    }
+  }
+  paintLanguages();
+  head.append(langRow);
 
   const timer = el('div', 'timer quiz-timer');
   const timerFill = el('div', 'timer-fill');
@@ -88,7 +119,6 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
   function renderQuestion(): void {
     const question = questions[index];
     if (!question) return finish(false);
-    answered = false;
     counter.textContent = i18n
       .ui('quizCounter')
       .replace('{{n}}', String(index + 1))
@@ -114,15 +144,22 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
       list.append(button);
     }
     body.append(list);
+
+    // Redrawn in the new language, still answered.
+    if (chosen) paintAnswer(question, chosen, list);
   }
 
-  function answer(question: QuizQuestion, chosen: QuizOption, list: HTMLElement): void {
+  function answer(question: QuizQuestion, picked: QuizOption, list: HTMLElement): void {
     // One answer per question. Without this a second tap could score twice, and
     // the score is the only number this screen reports.
-    if (answered || finished) return;
-    answered = true;
-    if (chosen.correct) score++;
+    if (chosen || finished) return;
+    chosen = picked;
+    if (picked.correct) score++;
+    paintAnswer(question, picked, list);
+  }
 
+  /** The answered state, drawn from `chosen` alone so it survives a re-render. */
+  function paintAnswer(question: QuizQuestion, picked: QuizOption, list: HTMLElement): void {
     const buttons = [...list.querySelectorAll('button')];
     const shown = optionsFor(day, question);
     buttons.forEach((button, i) => {
@@ -131,13 +168,13 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
       // The right answer is always marked, whichever one was tapped. Being told
       // only "wrong" teaches nothing, and this is the teaching half of the app.
       if (option?.correct) button.classList.add('right');
-      else if (option === chosen) button.classList.add('wrong');
+      else if (option === picked) button.classList.add('wrong');
     });
 
-    const verdict = el('p', `quiz-verdict ${chosen.correct ? 'right' : 'wrong'}`);
+    const verdict = el('p', `quiz-verdict ${picked.correct ? 'right' : 'wrong'}`);
     verdict.append(
-      icon(chosen.correct ? 'check' : 'cross'),
-      el('span', '', i18n.ui(chosen.correct ? 'quizRight' : 'quizWrong')),
+      icon(picked.correct ? 'check' : 'cross'),
+      el('span', '', i18n.ui(picked.correct ? 'quizRight' : 'quizWrong')),
     );
     const why = el('p', 'quiz-why', i18n.text(question.why));
     body.append(verdict, why);
@@ -147,6 +184,7 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
     next.textContent = i18n.ui(index + 1 < total ? 'quizNext' : 'quizFinish');
     next.addEventListener('click', () => {
       index++;
+      chosen = null;
       if (index >= total) finish(false);
       else renderQuestion();
     });
@@ -158,7 +196,17 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
     if (finished) return;
     finished = true;
     stop();
-    const record = recordQuizRun(day, score, total);
+    // Recorded once, whatever happens to the screen afterwards: a language
+    // switch on the result must not count as a second run of the day.
+    recordQuizRun(day, score, total);
+    showResult(ranOut);
+  }
+
+  let lastRanOut = false;
+
+  function showResult(ranOut: boolean): void {
+    lastRanOut = ranOut;
+    const record = loadQuizRecord();
 
     body.replaceChildren();
     foot.replaceChildren();

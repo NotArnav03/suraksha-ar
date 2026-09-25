@@ -221,3 +221,94 @@ C:\Projects\hackathons\isih\src\scenarios\machinery-conveyor-loto.json	$.nodes[1
 C:\Projects\hackathons\isih\src\scenarios\machinery-conveyor-loto.json	$.nodes[16].summary.text	You grabbed your helper while the belt could still run, and the pulley pulled you in beside him. The fastest way to save someone caught in a machine is to stop the machine, not to reach for them.	ᱵᱮᱞᱴ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱪᱟᱞᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ ᱚᱠᱛᱚ ᱟᱢ ᱟᱢᱟᱜ ᱦᱮᱞᱯᱚᱨ ᱥᱟᱵ ᱠᱮᱫᱮᱭᱟᱢ, ᱟᱨ ᱯᱩᱞᱤ ᱟᱢ ᱦᱚᱸ ᱩᱱᱤᱭᱟᱜ ᱡᱟᱦᱟᱡ ᱚᱨ ᱮᱫ ᱢᱮᱭᱟ। ᱢᱮᱥᱤᱱ ᱨᱮ ᱥᱟᱵ ᱮᱱ ᱦᱚᱲ ᱨᱚᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱹᱞᱫᱤ ᱦᱚᱨ ᱫᱚ ᱢᱮᱥᱤᱱ ᱛᱮᱸᱜᱚ ᱠᱟᱱᱟ, ᱩᱱᱤ ᱥᱟᱵ ᱵᱟᱝ ᱠᱟᱱᱟ।		
 C:\Projects\hackathons\isih\src\scenarios\machinery-conveyor-loto.json	$.nodes[17].prompt.text	The drill has ended.	ᱟᱹᱣᱟᱛ ᱪᱟᱵᱟ ᱮᱱᱟ।		
 C:\Projects\hackathons\isih\src\scenarios\machinery-conveyor-loto.json	$.nodes[17].summary.text	The belt kept running while you hesitated. When someone is caught in a machine, the seconds before the pull cord is pulled decide how bad the injury is.	ᱟᱢ ᱫᱚᱢᱠᱟᱣ ᱠᱟᱱ ᱚᱠᱛᱮ ᱵᱮᱞᱴ ᱪᱟᱞᱟᱣ ᱛᱮᱭᱟᱜ ᱛᱟᱦᱮᱸ ᱮᱱᱟ। ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱢᱮᱥᱤᱱ ᱨᱮ ᱥᱟᱵ ᱮᱱᱟᱭ ᱚᱠᱛᱚ, ᱯᱩᱞ ᱠᱚᱨᱰ ᱚᱨ ᱞᱟᱦᱟ ᱨᱮᱱᱟᱜ ᱥᱮᱠᱮᱸᱰ ᱠᱚ ᱜᱮ ᱪᱚᱴ ᱪᱮᱛᱟᱱ ᱠᱟᱛᱷᱟ ᱛᱮᱭᱟᱨᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[0].stem	A sump has been closed for weeks. What happens before anyone goes in?	ᱢᱤᱫ ᱥᱚᱢᱯ ᱦᱟᱯᱛᱟ ᱦᱟᱯᱛᱟ ᱵᱚᱸᱫᱚ ᱛᱟᱦᱮᱸ ᱠᱟᱱᱟ। ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ ᱞᱟᱦᱟ ᱪᱮᱫ ᱦᱩᱭᱩᱜ-ᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[0].options[0].label	Test the air	ᱦᱟᱣᱟ ᱡᱟᱸᱪ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[0].options[1].label	Run the blower and go in	ᱵᱞᱚᱣᱟᱨ ᱪᱟᱞᱟᱣ ᱠᱟᱛᱮ ᱵᱚᱞᱚ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[0].options[2].label	Wear a helmet and go in	ᱦᱮᱞᱢᱮᱴ ᱛᱩᱸᱡ ᱠᱟᱛᱮ ᱵᱚᱞᱚ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[0].why	Air is tested first, every time. Below 19% oxygen nobody enters.	ᱡᱟᱦᱟᱸ ᱫᱷᱟᱣ ᱦᱚᱸ ᱯᱩᱭᱞᱩ ᱦᱟᱣᱟ ᱡᱟᱸᱪᱚᱜ-ᱟ। 19% ᱠᱷᱚᱱ ᱠᱚᱢ ᱚᱠᱥᱤᱡᱮᱱ ᱨᱮ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱷᱤᱛᱨᱤ ᱵᱟᱭ ᱵᱚᱞᱚᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[1].stem	You are inside and your gas alarm goes to one unbroken tone. What now?	ᱟᱢ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱢᱮᱱᱟᱢᱟ ᱟᱨ ᱜᱮᱥ ᱟᱞᱟᱨᱢ ᱢᱤᱫ ᱞᱟᱹᱜᱟᱛᱟᱨ ᱟᱲᱟᱝ ᱨᱮ ᱵᱚᱫᱚᱞ ᱮᱱᱟ। ᱱᱤᱛᱚᱜ ᱪᱮᱫ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[1].options[0].label	Get out now	ᱱᱤᱛᱚᱜ ᱜᱮ ᱚᱰᱚᱠ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[1].options[1].label	Check the reading twice	ᱨᱤᱰᱤᱝ ᱵᱟᱨ ᱫᱷᱟᱣ ᱧᱮᱞ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[1].options[2].label	Finish the task first	ᱯᱩᱭᱞᱩ ᱠᱟᱹᱢᱤ ᱪᱟᱵᱟ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[1].why	A continuous alarm means leave, not investigate. You read the meter outside.	ᱞᱟᱹᱜᱟᱛᱟᱨ ᱟᱞᱟᱨᱢ ᱨᱮᱭᱟᱜ ᱢᱟᱱᱮ ᱫᱚ ᱵᱟᱦᱨᱮ ᱚᱰᱚᱠ ᱢᱮ, ᱡᱟᱸᱪ ᱵᱟᱝ ᱠᱟᱱᱟ। ᱢᱤᱴᱚᱨ ᱵᱟᱦᱨᱮ ᱥᱮᱱ ᱠᱟᱛᱮ ᱯᱟᱲᱦᱟᱣ ᱢᱮ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[2].stem	Your colleague has collapsed inside the sump. You have no breathing set. What do you do?	ᱟᱢᱟᱜ ᱥᱟᱶᱦᱮᱫ ᱥᱚᱢᱯ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱜᱤᱛᱤᱡ ᱮᱱᱟᱭ। ᱟᱢ ᱛᱷᱮᱱ ᱥᱟᱶᱥ ᱡᱤᱱᱤᱥ ᱵᱟᱹᱱᱩᱜ-ᱟ। ᱟᱢ ᱪᱮᱫ ᱠᱟᱢᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[2].options[0].label	Raise the alarm, stay out	ᱟᱞᱟᱨᱢ ᱮᱢ ᱢᱮ, ᱵᱟᱦᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[2].options[1].label	Go in and pull him out	ᱵᱷᱤᱛᱨᱤ ᱥᱮᱱ ᱠᱟᱛᱮ ᱩᱱᱤ ᱚᱨ ᱚᱰᱚᱠ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[2].options[2].label	Climb in holding the rope	ᱵᱟᱱᱟᱨ ᱥᱟᱵ ᱠᱟᱛᱮ ᱟᱫᱮᱨ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[2].why	More than half the people who die in confined spaces are the ones who went in to help.	ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱨᱮ ᱜᱚᱡ ᱠᱟᱱ ᱦᱚᱲ ᱠᱚ ᱨᱮᱱᱟᱜ ᱟᱹᱫᱷᱟ ᱠᱷᱚᱱ ᱰᱷᱮᱨ ᱫᱚ ᱮᱴᱟᱜ ᱦᱚᱲ ᱜᱚᱲᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱚᱞᱚ ᱠᱟᱱ ᱦᱚᱲ ᱠᱚ ᱠᱟᱱᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[3].stem	The permit on the board was issued for yesterday's shift. What is it worth?	ᱵᱳᱨᱰ ᱨᱮ ᱞᱟᱹᱜᱟᱣ ᱟᱠᱟᱱ ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱦᱚᱞᱟ ᱨᱮᱭᱟᱜ ᱥᱤᱯᱷᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ। ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱪᱮᱫ ᱜᱚᱱᱚᱝ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[3].options[0].label	Nothing, get a new one	ᱛᱤᱱᱟᱹᱜ ᱦᱚᱸ ᱵᱟᱝ, ᱱᱟᱶᱟ ᱧᱟᱢ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[3].options[1].label	Same job, so it still counts	ᱮᱱᱟᱜ ᱠᱟᱹᱢᱤ ᱜᱮ, ᱚᱱᱟᱛᱮ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱪᱟᱞᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[3].options[2].label	Ask a mate and carry on	ᱥᱟᱶᱦᱮᱫ ᱠᱩᱠᱞᱤ ᱠᱟᱛᱮ ᱠᱟᱹᱢᱤ ᱛᱟᱦᱮᱸᱱ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[3].why	A permit covers one shift and the conditions tested in it. Yesterday's air is not today's air.	ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱢᱤᱫ ᱥᱤᱯᱷᱴ ᱟᱨ ᱚᱱᱟ ᱨᱮ ᱡᱟᱸᱪ ᱟᱠᱟᱱ ᱦᱟᱞᱚᱛ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱠᱟᱱᱟ। ᱦᱚᱞᱟ ᱨᱮᱭᱟᱜ ᱦᱟᱣᱟ ᱛᱮᱦᱮᱸᱧ ᱨᱮᱭᱟᱜ ᱦᱟᱣᱟ ᱵᱟᱝ ᱠᱟᱱᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[4].stem	Who stays outside while you work inside a confined space?	ᱟᱢ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱠᱟᱹᱢᱤ ᱠᱟᱱ ᱚᱠᱛᱚ ᱵᱟᱦᱨᱮ ᱚᱠᱚᱭ ᱛᱟᱦᱮᱸᱱᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[4].options[0].label	A standby person, watching	ᱢᱤᱫ ᱥᱴᱮᱱᱰᱵᱟᱭ ᱦᱚᱲ, ᱧᱮᱞ ᱛᱟᱦᱮᱸᱠᱟᱛᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[4].options[1].label	A warning board is enough	ᱦᱩᱥᱤᱭᱟᱨ ᱵᱳᱨᱰ ᱜᱮ ᱠᱟᱹᱢᱤᱭᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[4].options[2].label	Nobody, you carry a radio	ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱟᱝ, ᱨᱮᱰᱤᱭᱳ ᱟᱢ ᱥᱟᱶ ᱢᱮᱱᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[4].why	A radio cannot pull you out. A person who never takes their eyes off you can.	ᱨᱮᱰᱤᱭᱳ ᱟᱢ ᱵᱟᱦᱨᱮ ᱵᱟᱭ ᱚᱨ ᱚᱰᱚᱠ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ। ᱟᱢ ᱪᱮᱛᱟᱱ ᱠᱷᱚᱱ ᱢᱮᱫ ᱵᱟᱭ ᱟᱹᱛᱩᱨ ᱦᱚᱲ ᱜᱮ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[5].stem	The detector shows 18.4% oxygen. Is that a place to work?	ᱰᱤᱴᱮᱠᱴᱚᱨ 18.4% ᱚᱠᱥᱤᱡᱮᱱ ᱩᱫᱩᱜ ᱠᱟᱱᱟ। ᱚᱱᱰᱮ ᱠᱟᱹᱢᱤ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[5].options[0].label	No, ventilate and re-test	ᱵᱟᱝ, ᱦᱟᱣᱟ ᱪᱟᱞᱟᱣ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱡᱟᱸᱪ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[5].options[1].label	Yes, it is close enough	ᱦᱮᱸ, ᱱᱚᱶᱟ ᱞᱚᱜᱚᱱ ᱜᱮ ᱢᱮᱱᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[5].options[2].label	Yes, for a short job	ᱦᱮᱸ, ᱦᱩᱰᱤᱧ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[5].why	19% is the floor, not a target. Below it you ventilate and test again before anyone enters.	19% ᱫᱚ ᱦᱩᱰᱤᱧ ᱥᱤᱢᱟ ᱠᱟᱱᱟ, ᱞᱟᱠᱷᱟᱭ ᱵᱟᱝ ᱠᱟᱱᱟ। ᱚᱱᱟ ᱠᱷᱚᱱ ᱞᱟᱛᱟᱨ ᱨᱮ ᱦᱟᱣᱟ ᱪᱟᱞᱟᱣ ᱠᱟᱛᱮ ᱫᱚᱦᱲᱟ ᱡᱟᱸᱪ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱜᱮ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱚᱞᱚᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[6].stem	An electrical panel is burning and still live. Which extinguisher?	ᱢᱤᱫ ᱵᱤᱡᱩᱞᱤ ᱯᱮᱱᱮᱞ ᱡᱩᱞ ᱠᱟᱱᱟ ᱟᱨ ᱠᱟᱨᱮᱱᱴ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱪᱟᱞᱩ ᱢᱮᱱᱟᱜ-ᱟ। ᱚᱠᱟ ᱟᱜᱱᱤᱥᱟᱢᱚᱠ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[6].options[0].label	CO₂	CO₂		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[6].options[1].label	Water	ᱫᱟᱜ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[6].options[2].label	Foam	ᱯᱷᱚᱢ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[6].why	Water and foam conduct. CO₂ leaves nothing behind and does not carry current back to you.	ᱫᱟᱜ ᱟᱨ ᱯᱷᱚᱢ ᱠᱟᱨᱮᱱᱴ ᱤᱫᱤ ᱠᱟᱜ-ᱟ। CO₂ ᱡᱟᱦᱟᱱ ᱡᱤᱱᱤᱥ ᱵᱟᱭ ᱟᱲᱟᱜᱟ ᱟᱨ ᱠᱟᱨᱮᱱᱴ ᱟᱢ ᱫᱷᱟᱹᱵᱤᱡ ᱵᱟᱭ ᱟᱜᱩᱣᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[7].stem	You have the right extinguisher. Where do you aim it?	ᱴᱷᱤᱠ ᱟᱜᱱᱤᱥᱟᱢᱚᱠ ᱟᱢ ᱛᱤ ᱨᱮ ᱢᱮᱱᱟᱜ-ᱟ। ᱚᱠᱟ ᱡᱟᱭᱜᱟ ᱨᱮ ᱱᱤᱥᱟᱱ ᱮᱢᱟᱢ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[7].options[0].label	At the base of the fire	ᱥᱮᱸᱜᱮᱞ ᱨᱮᱭᱟᱜ ᱵᱩᱴᱟᱹ ᱨᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[7].options[1].label	At the top of the flames	ᱡᱩᱞ ᱨᱮᱭᱟᱜ ᱪᱮᱛᱟᱱ ᱨᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[7].options[2].label	At the smoke	ᱫᱷᱩᱸᱣᱟᱹ ᱨᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[7].why	Flames are the fuel burning. Put the agent where the fuel is, at the base.	ᱡᱩᱞ ᱫᱚ ᱡᱩᱞ ᱠᱟᱱ ᱛᱮᱞ ᱠᱟᱱᱟ। ᱚᱠᱟ ᱨᱮ ᱛᱮᱞ ᱢᱮᱱᱟᱜ-ᱟ, ᱚᱱᱟ ᱨᱮᱭᱟᱜ ᱵᱩᱴᱟᱹ ᱨᱮ ᱮᱢ ᱢᱮ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[8].stem	Smoke is filling the gallery. What goes on before you move?	ᱜᱮᱞᱟᱨᱤ ᱨᱮ ᱫᱷᱩᱸᱣᱟᱹ ᱯᱮᱨᱮᱡ ᱠᱟᱱᱟ। ᱚᱰᱚᱠ ᱞᱟᱦᱟ ᱪᱮᱫ ᱛᱩᱸᱡᱟᱢ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[8].options[0].label	Your self-rescuer	ᱟᱢᱟᱜ ᱥᱮᱞᱯᱷ-ᱨᱮᱥᱠᱭᱩᱟᱨ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[8].options[1].label	Just your helmet	ᱠᱷᱟᱹᱞᱤ ᱟᱢᱟᱜ ᱦᱮᱞᱢᱮᱴ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[8].options[2].label	A wet cloth over the mouth	ᱢᱚᱲᱟ ᱨᱮ ᱞᱩᱴᱩᱨ ᱠᱤᱪᱷᱨᱤᱡ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[8].why	Carbon monoxide has no smell and a cloth stops none of it. The self-rescuer does.	ᱠᱟᱨᱵᱚᱱ ᱢᱚᱱᱚᱠᱥᱟᱭᱤᱰ ᱨᱮᱱᱟᱜ ᱡᱟᱦᱟᱱ ᱥᱚ ᱵᱟᱹᱱᱩᱜ-ᱟ ᱟᱨ ᱠᱤᱪᱷᱨᱤᱡ ᱚᱱᱟ ᱵᱟᱭ ᱟᱴᱠᱟᱣᱟ। ᱥᱮᱞᱯᱷ-ᱨᱮᱥᱠᱭᱩᱟᱨ ᱟᱴᱠᱟᱣ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[9].stem	You are out. A colleague is still inside the smoke. What now?	ᱟᱢ ᱚᱰᱚᱠ ᱮᱱᱟᱢ। ᱢᱤᱫ ᱥᱟᱶᱦᱮᱫ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱫᱷᱩᱸᱣᱟᱹ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱢᱮᱱᱟᱭᱟ। ᱱᱤᱛᱚᱜ ᱪᱮᱫ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[9].options[0].label	Tell the rescue team where	ᱨᱮᱥᱠᱭᱩ ᱴᱤᱢ ᱠᱚ ᱡᱟᱭᱜᱟ ᱞᱟᱹᱭ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[9].options[1].label	Go back in for him	ᱩᱱᱤ ᱞᱟᱹᱜᱤᱫ ᱫᱚᱦᱲᱟ ᱵᱚᱞᱚ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[9].options[2].label	Wait at the door	ᱰᱩᱣᱟᱨ ᱨᱮ ᱛᱟᱸᱦᱮᱸᱱ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[9].why	Nobody re-enters without breathing protection and a team. Your knowledge of where he is saves him, going back in does not.	ᱥᱟᱶᱥ ᱨᱚᱠᱷᱟ ᱟᱨ ᱴᱤᱢ ᱵᱟᱝ ᱛᱮ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱫᱚᱦᱲᱟ ᱵᱟᱭ ᱵᱚᱞᱚᱜ-ᱟ। ᱩᱱᱤ ᱚᱠᱟ ᱨᱮ ᱢᱮᱱᱟᱭᱟ ᱚᱱᱟ ᱵᱟᱰᱟᱭ ᱜᱮ ᱩᱱᱤ ᱵᱟᱸᱪᱟᱣᱟ, ᱫᱚᱦᱲᱟ ᱵᱚᱞᱚ ᱛᱮ ᱵᱟᱝ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[10].stem	You are the first to see a small fire at the pit-top. What comes first?	ᱯᱤᱴ-ᱴᱚᱯ ᱨᱮ ᱦᱩᱰᱤᱧ ᱥᱮᱸᱜᱮᱞ ᱟᱢ ᱜᱮ ᱯᱩᱭᱞᱩ ᱧᱮᱞ ᱠᱮᱫᱟᱢ। ᱥᱟᱱᱟᱢ ᱠᱷᱚᱱ ᱯᱩᱭᱞᱩ ᱪᱮᱫ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[10].options[0].label	Raise the alarm	ᱟᱞᱟᱨᱢ ᱮᱢ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[10].options[1].label	Fight it quietly	ᱪᱩᱯ ᱛᱮ ᱵᱩᱛᱟᱹ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[10].options[2].label	Watch if it grows	ᱦᱟᱨᱟᱜ-ᱟ ᱥᱮ ᱵᱟᱝ ᱧᱮᱞ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[10].why	Raise the alarm, then fight it if it is still small. A fire you lose alone is a fire nobody knew about.	ᱯᱩᱭᱞᱩ ᱟᱞᱟᱨᱢ ᱮᱢ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱦᱩᱰᱤᱧ ᱢᱮᱱᱠᱷᱟᱱ ᱵᱩᱛᱟᱹ ᱢᱮ। ᱮᱥᱠᱟᱨ ᱨᱮ ᱦᱟᱨ ᱮᱱ ᱥᱮᱸᱜᱮᱞ ᱫᱚ ᱚᱱᱟ ᱠᱟᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮᱭᱟᱜ ᱠᱟᱛᱷᱟ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱟᱭ ᱵᱟᱰᱟᱭ ᱞᱮᱫᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[11].stem	The belt has tripped and stopped. Is it safe to reach into the pulley?	ᱵᱮᱞᱴ ᱴᱨᱤᱯ ᱮᱱ ᱛᱮ ᱛᱮᱸᱜᱚ ᱟᱠᱟᱱᱟ। ᱯᱩᱞᱤ ᱵᱷᱤᱛᱨᱤ ᱛᱤ ᱮᱢ ᱨᱚᱠᱷᱟ ᱠᱟᱱᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[11].options[0].label	No, isolate it first	ᱵᱟᱝ, ᱯᱩᱭᱞᱩ ᱟᱭᱥᱚᱞᱮᱴ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[11].options[1].label	Yes, it has stopped	ᱦᱮᱸ, ᱱᱚᱶᱟ ᱛᱮᱸᱜᱚ ᱟᱠᱟᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[11].options[2].label	Yes, if a mate watches	ᱦᱮᱸ, ᱡᱩᱫᱤ ᱥᱟᱶᱦᱮᱫ ᱧᱮᱞ ᱛᱟᱦᱮᱸᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[11].why	A stopped belt can be restarted from the control room by someone who does not know you are there.	ᱛᱮᱸᱜᱚ ᱟᱠᱟᱱ ᱵᱮᱞᱴ ᱫᱚ ᱠᱚᱱᱴᱨᱚᱞ ᱨᱩᱢ ᱠᱷᱚᱱ ᱚᱱᱟ ᱦᱚᱲ ᱫᱚᱦᱲᱟ ᱮᱦᱚᱵ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ, ᱡᱟᱦᱟᱸ ᱵᱟᱭ ᱵᱟᱰᱟᱭ ᱟᱢ ᱚᱱᱰᱮ ᱢᱮᱱᱟᱢᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[12].stem	Your helper's arm is caught and the belt is running. First action?	ᱟᱢᱟᱜ ᱦᱮᱞᱯᱚᱨ ᱨᱮᱭᱟᱜ ᱛᱤ ᱥᱟᱵ ᱟᱠᱟᱱᱟ ᱟᱨ ᱵᱮᱞᱴ ᱪᱟᱞᱟᱣ ᱠᱟᱱᱟ। ᱯᱩᱭᱞᱩ ᱪᱮᱫ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[12].options[0].label	Pull the cord, stop the belt	ᱠᱚᱨᱰ ᱚᱨ ᱢᱮ, ᱵᱮᱞᱴ ᱛᱮᱸᱜᱚ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[12].options[1].label	Pull his arm free	ᱩᱱᱤᱭᱟᱜ ᱛᱤ ᱚᱨ ᱚᱰᱚᱠ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[12].options[2].label	Call the control room	ᱠᱚᱱᱴᱨᱚᱞ ᱨᱩᱢ ᱠᱷᱚᱵᱚᱨ ᱮᱢ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[12].why	Stop the machine, then help the person. Reaching in first puts two people in the pulley.	ᱯᱩᱭᱞᱩ ᱢᱮᱥᱤᱱ ᱛᱮᱸᱜᱚ ᱢᱮ, ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱦᱚᱲ ᱜᱚᱲᱚ ᱢᱮ। ᱯᱩᱭᱞᱩ ᱛᱤ ᱮᱢ ᱛᱮ ᱯᱩᱞᱤ ᱨᱮ ᱵᱟᱨᱭᱟ ᱦᱚᱲ ᱥᱟᱵᱚᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[13].stem	Whose lock goes on the isolator you are working behind?	ᱟᱢ ᱡᱟᱦᱟᱸ ᱟᱭᱥᱚᱞᱮᱴᱚᱨ ᱛᱟᱭᱚᱢ ᱨᱮ ᱠᱟᱹᱢᱤ ᱠᱟᱱᱟᱢ, ᱚᱱᱟ ᱨᱮ ᱚᱠᱚᱭ ᱨᱮᱭᱟᱜ ᱛᱟᱞᱟ ᱞᱟᱹᱜᱟᱣᱚᱜ-ᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[13].options[0].label	Your own, and you remove it	ᱟᱢᱟᱜ ᱱᱤᱡᱚᱨ, ᱟᱨ ᱟᱢᱜᱮ ᱚᱰᱚᱠᱟᱢ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[13].options[1].label	The supervisor's	ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱨᱮᱭᱟᱜ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[13].options[2].label	A tag is enough	ᱴᱮᱜ ᱜᱮ ᱠᱟᱹᱢᱤᱭᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[13].why	Only the person who is exposed puts the lock on, and only that person takes it off.	ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱨᱮᱱᱟᱜ ᱡᱤᱭᱚᱱ ᱡᱚᱠᱷᱚᱢ ᱨᱮ ᱢᱮᱱᱟᱜ-ᱟ, ᱩᱱᱤᱜᱮ ᱛᱟᱞᱟ ᱞᱟᱹᱜᱟᱣᱟ, ᱟᱨ ᱩᱱᱤᱜᱮ ᱚᱰᱚᱠᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].stem	The isolator is open and locked. What proves the belt is dead?	ᱟᱭᱥᱚᱞᱮᱴᱚᱨ ᱡᱷᱤᱡ ᱟᱨ ᱛᱟᱞᱟ ᱞᱟᱹᱜᱟᱣ ᱟᱠᱟᱱᱟ। ᱵᱮᱞᱴ ᱨᱮ ᱵᱤᱡᱩᱞᱤ ᱵᱟᱹᱱᱩᱜ-ᱟ ᱚᱱᱟ ᱪᱮᱫ ᱛᱮ ᱩᱫᱩᱜᱚᱜ-ᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].options[0].label	Press start and see it stay still	ᱥᱴᱟᱨᱴ ᱚᱛᱟ ᱢᱮ ᱟᱨ ᱧᱮᱞ ᱢᱮ ᱡᱮ ᱵᱮᱞᱴ ᱵᱟᱭ ᱦᱚᱲᱚᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].options[1].label	Look at the isolator again	ᱟᱭᱥᱚᱞᱮᱴᱚᱨ ᱫᱚᱦᱲᱟ ᱧᱮᱞ ᱢᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].options[2].label	The lock is proof enough	ᱛᱟᱞᱟ ᱜᱮ ᱥᱟᱠᱷᱭᱟᱛ ᱠᱟᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].options[3].label	The tag is proof enough	ᱴᱮᱜ ᱜᱮ ᱥᱟᱠᱷᱭᱟᱛ ᱠᱟᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[14].why	A lock on the wrong switch looks exactly like a lock on the right one. Only the test tells them apart.	ᱵᱷᱩᱞ ᱥᱩᱭᱤᱪ ᱨᱮ ᱞᱟᱹᱜᱟᱣ ᱟᱠᱟᱱ ᱛᱟᱞᱟ ᱫᱚ ᱴᱷᱤᱠ ᱥᱩᱭᱤᱪ ᱨᱮᱭᱟᱜ ᱞᱮᱠᱟ ᱜᱮ ᱧᱮᱞᱚᱜ-ᱟ। ᱠᱷᱟᱹᱞᱤ ᱡᱟᱸᱪ ᱜᱮ ᱵᱟᱨᱭᱟ ᱨᱮᱱᱟᱜ ᱯᱷᱟᱨᱟᱠ ᱩᱫᱩᱜᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[15].stem	Belt C4 is jammed. You isolate C3 out of habit. What have you done?	ᱵᱮᱞᱴ C4 ᱡᱟᱢ ᱮᱱᱟ। ᱚᱵᱷᱟᱭᱤᱥ ᱛᱮ ᱟᱢ C3 ᱟᱭᱥᱚᱞᱮᱴ ᱠᱮᱫᱟᱢ। ᱟᱢ ᱪᱮᱫ ᱠᱟᱫᱟᱢ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[15].options[0].label	Left C4 live	C4 ᱪᱟᱞᱩ ᱜᱮ ᱟᱲᱟᱜ ᱠᱮᱫᱟᱢ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[15].options[1].label	Made the area safe	ᱡᱟᱭᱜᱟ ᱨᱚᱠᱷᱟ ᱵᱮᱱᱟᱣ ᱠᱮᱫᱟᱢ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[15].options[2].label	Stopped both belts	ᱵᱟᱨᱭᱟ ᱵᱮᱞᱴ ᱛᱮᱸᱜᱚ ᱠᱮᱫᱟᱢ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[15].why	Read the plate on the isolator, every time. The belt you locked is not always the belt you are standing at.	ᱡᱟᱦᱟᱸ ᱫᱷᱟᱣ ᱦᱚᱸ ᱟᱭᱥᱚᱞᱮᱴᱚᱨ ᱨᱮᱭᱟᱜ ᱯᱞᱮᱴ ᱯᱟᱲᱦᱟᱣ ᱢᱮ। ᱡᱟᱦᱟᱸ ᱵᱮᱞᱴ ᱨᱮ ᱛᱟᱞᱟ ᱞᱟᱹᱜᱟᱣ ᱠᱮᱫᱟᱢ, ᱚᱱᱟ ᱜᱮ ᱟᱢ ᱡᱟᱦᱟᱡ ᱨᱮᱭᱟᱜ ᱵᱮᱞᱴ ᱵᱟᱝ ᱦᱩᱭᱩᱜ-ᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[16].stem	Why does a loose gamchha matter next to a running conveyor?	ᱪᱟᱞᱟᱣ ᱠᱚᱱᱣᱮᱭᱚᱨ ᱡᱟᱦᱟᱡ ᱨᱮ ᱞᱚᱦᱚᱨ ᱜᱟᱢᱪᱷᱟ ᱪᱮᱫ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱛᱷᱟ ᱠᱟᱱᱟ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[16].options[0].label	It can drag an arm into the pulley	ᱚᱱᱟ ᱛᱤ ᱯᱩᱞᱤ ᱵᱷᱤᱛᱨᱤ ᱚᱨ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[16].options[1].label	It looks untidy	ᱚᱱᱟ ᱧᱮᱞ ᱨᱮ ᱵᱟᱭ ᱥᱩᱦᱟᱣᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[16].options[2].label	It is against the dress code	ᱚᱱᱟ ᱰᱨᱮᱥ ᱠᱳᱰ ᱵᱤᱨᱩᱫᱷ ᱠᱟᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[16].why	Cloth reaches the nip before your hand does, and it does not let go.	ᱠᱤᱪᱷᱨᱤᱡ ᱟᱢᱟᱜ ᱛᱤ ᱠᱷᱚᱱ ᱞᱟᱦᱟ ᱯᱩᱞᱤ ᱨᱮ ᱥᱮᱴᱮᱨᱚᱜ-ᱟ, ᱟᱨ ᱚᱱᱟ ᱵᱟᱭ ᱟᱲᱟᱜᱟ।		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[17].stem	Nobody was hurt, but the belt started while you were beside it. Report it?	ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱵᱟᱭ ᱪᱚᱴ ᱮᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱟᱢ ᱡᱟᱦᱟᱡ ᱨᱮ ᱛᱮᱸᱜᱚ ᱟᱠᱟᱱ ᱚᱠᱛᱚ ᱵᱮᱞᱴ ᱮᱦᱚᱵ ᱮᱱᱟ। ᱠᱷᱚᱵᱚᱨ ᱮᱢᱟᱢ?		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[17].options[0].label	Yes, the same day	ᱦᱮᱸ, ᱚᱱᱟ ᱢᱟᱦᱟᱸ ᱜᱮ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[17].options[1].label	No, nothing happened	ᱵᱟᱝ, ᱛᱤᱱᱟᱹᱜ ᱦᱚᱸ ᱵᱟᱭ ᱦᱩᱭᱮᱱᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[17].options[2].label	Only if it happens again	ᱠᱷᱟᱹᱞᱤ ᱡᱩᱫᱤ ᱫᱚᱦᱲᱟ ᱦᱩᱭᱩᱜ-ᱟ		
+C:\Projects\hackathons\isih\src\quiz\bank.json	$.questions[17].why	The near miss you report today is the fatality that does not happen next month.	ᱛᱮᱦᱮᱸᱧ ᱟᱢ ᱡᱟᱦᱟᱸ ᱦᱩᱰᱤᱧ ᱫᱩᱨᱜᱷᱚᱴᱚᱱᱟ ᱠᱷᱚᱵᱚᱨ ᱮᱢᱟᱢ, ᱚᱱᱟ ᱜᱮ ᱮᱴᱟᱜ ᱪᱟᱸᱫᱚ ᱨᱮᱭᱟᱜ ᱜᱚᱡ ᱟᱴᱠᱟᱣᱟ।		

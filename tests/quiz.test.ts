@@ -190,3 +190,88 @@ test('the daily key rolls over at the local midnight, not at UTC', () => {
   assert.equal(dayKey(lateEvening), '2026-09-25');
   assert.equal(dayKey(justAfter), '2026-09-26');
 });
+
+// ── the screen ──────────────────────────────────────────────────────────────
+
+const { mountQuiz, quizCallout } = await import('../src/app/quiz.ts');
+const { Localizer } = await import('../src/app/ui/i18n.ts');
+
+function mount(language: 'en' | 'hi' | 'sat') {
+  window.document.body.innerHTML = '<div id="quiz"></div>';
+  const root = window.document.querySelector('#quiz') as unknown as HTMLElement;
+  const i18n = new Localizer(language);
+  const stop = mountQuiz(root, i18n, { onExit: () => {} });
+  return { root, i18n, stop };
+}
+
+const options = (root: HTMLElement) => [...root.querySelectorAll<HTMLButtonElement>('.quiz-option')];
+const langButton = (root: HTMLElement, code: string) =>
+  root.querySelector<HTMLButtonElement>(`.quiz-lang .lang-button[data-code="${code}"]`)!;
+
+test('the day\'s questions can be taken in Santali, picked on the quiz itself', () => {
+  window.localStorage.clear();
+  const { root, stop } = mount('sat');
+  // The picker on the module list is behind this screen and ninety seconds is
+  // not long enough to go back for it.
+  assert.ok(langButton(root, 'sat').classList.contains('on'));
+  const stem = root.querySelector('.quiz-stem')?.textContent ?? '';
+  assert.match(stem, /[\u1C50-\u1C7F]/, `the stem should be in Ol Chiki: ${stem}`);
+  for (const option of options(root)) {
+    assert.match(option.textContent ?? '', /[\u1C50-\u1C7F]/, 'an option is not in Ol Chiki');
+  }
+  stop();
+});
+
+test('switching language mid-question keeps the answer, and does not offer a second go', () => {
+  window.localStorage.clear();
+  const { root, stop } = mount('sat');
+  const before = options(root);
+  before[0]!.click();
+  assert.ok(root.querySelector('.quiz-verdict'), 'answering should show a verdict');
+
+  langButton(root, 'hi').click();
+  const after = options(root);
+  assert.equal(after.length, before.length);
+  assert.ok(
+    after.every((button) => button.disabled),
+    'the question was already answered, so a re-render must not re-enable it',
+  );
+  assert.equal(after.filter((b) => b.classList.contains('right')).length, 1, 'the right answer stays marked');
+  assert.match(root.querySelector('.quiz-why')?.textContent ?? '', /[\u0900-\u097F]/, 'the reason should now be Hindi');
+  stop();
+});
+
+test('a language switch on the result screen does not count as a second run', () => {
+  window.localStorage.clear();
+  const { root, stop } = mount('hi');
+  // Walk the whole set: answer, next, answer, next.
+  for (let i = 0; i < QUESTIONS_PER_DAY * 2 + 2; i++) {
+    const next = root.querySelector<HTMLButtonElement>('.quiz-next');
+    const open = options(root).filter((b) => !b.disabled);
+    if (open.length > 0) open[0]!.click();
+    else if (next) next.click();
+    else break;
+  }
+  assert.ok(root.querySelector('.quiz-result'), 'the run should have finished');
+  const recorded = loadQuizRecord();
+  assert.equal(recorded.streak, 1);
+
+  langButton(root, 'sat').click();
+  assert.ok(root.querySelector('.quiz-result'), 'the result should redraw, not vanish');
+  const after = loadQuizRecord();
+  assert.deepEqual(after, recorded, 'redrawing the result must not record the day again');
+  stop();
+});
+
+test('the call-out says what it is, and what it was once the day is done', () => {
+  window.localStorage.clear();
+  const i18n = new Localizer('hi');
+  const fresh = quizCallout(i18n, () => {});
+  assert.ok(!fresh.className.includes('done'));
+  assert.ok((fresh.textContent ?? '').length > 0);
+
+  recordQuizRun(dayKey(), 5, 6);
+  const done = quizCallout(i18n, () => {});
+  assert.ok(done.className.includes('done'), 'after a run today the call-out should go quiet');
+  assert.match(done.textContent ?? '', /5/, 'and should report the score it recorded');
+});

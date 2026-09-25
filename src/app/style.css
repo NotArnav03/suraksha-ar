@@ -798,7 +798,12 @@ button.verb:has(> .icon) { justify-content: flex-start; }
 .quiz-cta.done .quiz-cta-streak { background: var(--go-dim); color: var(--go); }
 
 .quiz { padding: 22px 16px calc(22px + env(safe-area-inset-bottom)); gap: 16px; overflow-y: auto; }
-.quiz-head { display: grid; gap: 4px; }
+.quiz-head { display: grid; gap: 6px; }
+/* Endonyms, nowhere near as loud as the ones on the start screen: this row is
+   an escape hatch for someone who opened the day's questions in the wrong
+   language, not a decision anybody needs to make here. */
+.quiz-lang { gap: 6px; margin: 2px 0 2px; }
+.quiz-lang .lang-button { flex: 1 1 auto; min-height: 40px; padding: 4px 8px; font-size: .88rem; }
 .quiz-counter { margin: 0; font-size: .92rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .quiz-timer { margin: 4px 0 10px; }
 .quiz-body { flex: 1; display: grid; gap: 14px; align-content: start; }
