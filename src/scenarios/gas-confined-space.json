@@ -281,7 +281,8 @@
       "goal": {
         "text": {
           "en": "Look around. Show what makes this job dangerous.",
-          "hi": "चारों ओर देखिए। दिखाइए कि यह काम ख़तरनाक क्यों है।"
+          "hi": "चारों ओर देखिए। दिखाइए कि यह काम ख़तरनाक क्यों है।",
+          "sat": "ᱪᱟᱨᱮᱥᱮᱫ ᱧᱮᱞ ᱢᱮ। ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱪᱮᱫ ᱛᱮ ᱡᱚᱠᱷᱚᱢ ᱠᱟᱱᱟ, ᱚᱱᱟ ᱩᱫᱩᱜ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/observe_hazards.goal.hi"
@@ -380,7 +381,8 @@
       "goal": {
         "text": {
           "en": "Your supervisor has told you to clean the sump. Satisfy yourself that this work is authorised.",
-          "hi": "सुपरवाइज़र ने सम्प साफ़ करने को कहा है। ख़ुद तसल्ली कीजिए कि यह काम अधिकृत है।"
+          "hi": "सुपरवाइज़र ने सम्प साफ़ करने को कहा है। ख़ुद तसल्ली कीजिए कि यह काम अधिकृत है।",
+          "sat": "ᱟᱢᱟᱜ ᱥᱩᱯᱚᱨᱣᱟᱭᱡᱚᱨ ᱥᱚᱢᱯ ᱥᱟᱯᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱹᱭ ᱟᱠᱟᱫ ᱢᱮᱭᱟᱭ। ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱨᱮᱭᱟᱜ ᱦᱩᱠᱩᱢ ᱢᱮᱱᱟᱜ-ᱟ ᱥᱮ ᱵᱟᱝ, ᱚᱱᱟ ᱟᱢᱜᱮ ᱯᱚᱠᱷᱟ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/check_permit.goal.hi"
@@ -484,7 +486,8 @@
       "goal": {
         "text": {
           "en": "There is no permit on the board for this sump. Decide what happens now.",
-          "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। तय कीजिए कि अब क्या होगा।"
+          "hi": "इस सम्प के लिए बोर्ड पर कोई परमिट नहीं है। तय कीजिए कि अब क्या होगा।",
+          "sat": "ᱱᱚᱶᱟ ᱥᱚᱢᱯ ᱞᱟᱹᱜᱤᱫ ᱵᱳᱨᱰ ᱨᱮ ᱡᱟᱦᱟᱱ ᱯᱟᱨᱢᱤᱴ ᱵᱟᱹᱱᱩᱜ-ᱟ। ᱱᱤᱛᱚᱜ ᱪᱮᱫ ᱦᱩᱭᱩᱜ-ᱟ, ᱚᱱᱟ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/permit_absent.goal.hi"
@@ -573,7 +576,8 @@
       "goal": {
         "text": {
           "en": "The permit on the board was issued for yesterday's shift. Decide what happens now.",
-          "hi": "बोर्ड पर लगा परमिट कल की पाली के लिए जारी हुआ था। तय कीजिए कि अब क्या होगा।"
+          "hi": "बोर्ड पर लगा परमिट कल की पाली के लिए जारी हुआ था। तय कीजिए कि अब क्या होगा।",
+          "sat": "ᱵᱳᱨᱰ ᱨᱮ ᱞᱟᱹᱜᱟᱣ ᱟᱠᱟᱱ ᱯᱟᱨᱢᱤᱴ ᱫᱚ ᱦᱚᱞᱟ ᱨᱮᱭᱟᱜ ᱥᱤᱯᱷᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ। ᱱᱤᱛᱚᱜ ᱪᱮᱫ ᱦᱩᱭᱩᱜ-ᱟ, ᱚᱱᱟ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/permit_expired.goal.hi"
@@ -659,7 +663,8 @@
       "goal": {
         "text": {
           "en": "This sump has been closed for weeks. Find out what the air inside it is before anyone goes near the opening.",
-          "hi": "यह सम्प हफ़्तों से बंद है। किसी के मुँह के पास जाने से पहले पता कीजिए कि अंदर की हवा कैसी है।"
+          "hi": "यह सम्प हफ़्तों से बंद है। किसी के मुँह के पास जाने से पहले पता कीजिए कि अंदर की हवा कैसी है।",
+          "sat": "ᱱᱚᱶᱟ ᱥᱚᱢᱯ ᱦᱟᱯᱛᱟ ᱦᱟᱯᱛᱟ ᱵᱚᱸᱫᱚ ᱛᱟᱦᱮᱸ ᱠᱟᱱᱟ। ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱠᱷᱩᱡᱽ ᱡᱟᱦᱟᱡ ᱥᱮᱱ ᱞᱟᱦᱟ ᱵᱷᱤᱛᱨᱤ ᱨᱮᱭᱟᱜ ᱦᱟᱣᱟ ᱪᱮᱫ ᱠᱟᱱᱟ ᱚᱱᱟ ᱵᱟᱰᱟᱭ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/gas_test.goal.hi"
@@ -816,7 +821,8 @@
       "goal": {
         "text": {
           "en": "The air in the sump is not fit to breathe. Make it fit, and be sure of it.",
-          "hi": "सम्प की हवा साँस लेने लायक नहीं है। उसे ठीक कीजिए, और उसकी पुष्टि कीजिए।"
+          "hi": "सम्प की हवा साँस लेने लायक नहीं है। उसे ठीक कीजिए, और उसकी पुष्टि कीजिए।",
+          "sat": "ᱥᱚᱢᱯ ᱵᱷᱤᱛᱨᱤ ᱨᱮᱭᱟᱜ ᱦᱟᱣᱟ ᱥᱟᱶᱥ ᱞᱟᱹᱜᱤᱫ ᱴᱷᱤᱠ ᱵᱟᱝ ᱠᱟᱱᱟ। ᱚᱱᱟ ᱴᱷᱤᱠ ᱵᱮᱱᱟᱣ ᱢᱮ, ᱟᱨ ᱯᱚᱠᱷᱟ ᱦᱚᱸ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/ventilate.goal.hi"
@@ -927,7 +933,8 @@
       "goal": {
         "text": {
           "en": "The air is better, but this is still a confined space. Get yourself ready to go in.",
-          "hi": "हवा बेहतर है, पर यह अब भी बंद जगह है। अंदर जाने के लिए ख़ुद को तैयार कीजिए।"
+          "hi": "हवा बेहतर है, पर यह अब भी बंद जगह है। अंदर जाने के लिए ख़ुद को तैयार कीजिए।",
+          "sat": "ᱦᱟᱣᱟ ᱰᱷᱮᱨ ᱴᱷᱤᱠ ᱮᱱᱟ, ᱢᱮᱱᱠᱷᱟᱱ ᱱᱚᱶᱟ ᱱᱤᱛᱚᱜ ᱦᱚᱸ ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱜᱮ ᱠᱟᱱᱟ। ᱵᱷᱤᱛᱨᱤ ᱵᱚᱞᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱜᱮ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/don_ppe.goal.hi"
@@ -1039,7 +1046,8 @@
       "goal": {
         "text": {
           "en": "Nobody enters a confined space alone. Put in place what has to be outside while you are in there.",
-          "hi": "बंद जगह में कोई अकेला नहीं उतरता। जब तक आप अंदर हैं, बाहर जो होना चाहिए, उसका इंतज़ाम कीजिए।"
+          "hi": "बंद जगह में कोई अकेला नहीं उतरता। जब तक आप अंदर हैं, बाहर जो होना चाहिए, उसका इंतज़ाम कीजिए।",
+          "sat": "ᱨᱩᱡᱩ ᱡᱟᱭᱜᱟ ᱨᱮ ᱡᱟᱦᱟᱸ ᱦᱚᱲ ᱮᱥᱠᱟᱨ ᱵᱟᱭ ᱵᱚᱞᱚᱜ-ᱟ। ᱟᱢ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱢᱮᱱᱟᱢ ᱚᱠᱛᱚ ᱵᱟᱦᱨᱮ ᱡᱟᱦᱟᱸ ᱡᱤᱱᱤᱥ ᱛᱟᱦᱮᱸᱱ ᱞᱟᱹᱠᱛᱤ, ᱚᱱᱟ ᱥᱟᱡᱟᱣ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/post_standby.goal.hi"
@@ -1140,7 +1148,8 @@
       "goal": {
         "text": {
           "en": "Everything you need is in place. Begin the work you were sent to do.",
-          "hi": "ज़रूरी सब कुछ तैयार है। जिस काम के लिए भेजा गया था, वह शुरू कीजिए।"
+          "hi": "ज़रूरी सब कुछ तैयार है। जिस काम के लिए भेजा गया था, वह शुरू कीजिए।",
+          "sat": "ᱡᱟᱦᱟᱸ ᱞᱟᱹᱠᱛᱤ ᱛᱟᱦᱮᱸᱠᱟᱱᱟ, ᱡᱚᱛᱚ ᱛᱮᱭᱟᱨ ᱢᱮᱱᱟᱜ-ᱟ। ᱟᱢ ᱡᱟᱦᱟᱸ ᱠᱟᱹᱢᱤ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞ ᱟᱠᱟᱱᱟᱢ, ᱚᱱᱟ ᱮᱦᱚᱵ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/entry.goal.hi"
@@ -1231,7 +1240,8 @@
       "goal": {
         "text": {
           "en": "The blower has stopped and your detector alarm is now one unbroken tone. Act.",
-          "hi": "ब्लोअर बंद हो गया है और डिटेक्टर लगातार एक ही सुर में बज रहा है। कार्रवाई कीजिए।"
+          "hi": "ब्लोअर बंद हो गया है और डिटेक्टर लगातार एक ही सुर में बज रहा है। कार्रवाई कीजिए।",
+          "sat": "ᱵᱞᱚᱣᱟᱨ ᱛᱮᱸᱜᱚ ᱮᱱᱟ ᱟᱨ ᱟᱢᱟᱜ ᱰᱤᱴᱮᱠᱴᱚᱨ ᱟᱞᱟᱨᱢ ᱱᱤᱛᱚᱜ ᱢᱤᱫ ᱞᱟᱹᱜᱟᱛᱟᱨ ᱟᱲᱟᱝ ᱨᱮ ᱢᱮᱱᱟᱜ-ᱟ। ᱠᱟᱹᱢᱤ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/evacuate.goal.hi"
@@ -1363,7 +1373,8 @@
       "goal": {
         "text": {
           "en": "The fitter in the next chamber is face down and not moving. Act.",
-          "hi": "बगल के चैंबर में फिटर औंधा पड़ा है और हिल नहीं रहा। कार्रवाई कीजिए।"
+          "hi": "बगल के चैंबर में फिटर औंधा पड़ा है और हिल नहीं रहा। कार्रवाई कीजिए।",
+          "sat": "ᱮᱴᱟᱜ ᱠᱚᱴᱷᱟ ᱨᱮᱱᱟᱜ ᱯᱷᱤᱴᱚᱨ ᱢᱚᱲᱟ ᱞᱟᱛᱟᱨ ᱛᱮ ᱜᱤᱛᱤᱡ ᱟᱠᱟᱱᱟᱭ ᱟᱨ ᱵᱟᱭ ᱦᱚᱲᱚᱜ ᱠᱟᱱᱟ। ᱠᱟᱹᱢᱤ ᱢᱮ।"
         },
         "audio": {
           "hi": "gas-confined-space/rescue_decision.goal.hi"

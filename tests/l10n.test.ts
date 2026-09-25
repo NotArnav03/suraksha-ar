@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
+import { readdirSync, readFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
@@ -67,4 +69,76 @@ test('Santali falls back through Hindi before English', () => {
 test('a string authored only in Santali is not lost to the fallback', () => {
   const onlySat = { en: '', sat: 'ᱥᱮᱴᱞᱤᱝ' } as LocalizedText;
   assert.equal(resolve(onlySat, ['sat', 'hi', 'en']), 'ᱥᱮᱴᱞᱤᱝ');
+});
+
+/**
+ * The whole app, not one scenario.
+ *
+ * All three drills, the daily question bank and the interface are now authored
+ * in all three languages, and the way that quietly comes undone is an edit that
+ * adds an English line and a Hindi one and moves on: the fallback chain serves
+ * the Hindi, nothing looks broken, and a Santali learner reads a language they
+ * did not pick. This is the test that notices.
+ *
+ * Three interface strings are a deliberate exception, named below.
+ */
+const SPEAKER_ONLY = ['startingAr', 'arRefused', 'arTimedOut'];
+
+function localizedStrings(value: unknown, path: string, out: Array<{ path: string; text: LocalizedText }>): void {
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => localizedStrings(item, `${path}[${i}]`, out));
+    return;
+  }
+  if (!value || typeof value !== 'object') return;
+  const record = value as Record<string, unknown>;
+  if (typeof record.en === 'string') {
+    out.push({ path, text: record as LocalizedText });
+    return;
+  }
+  for (const [key, child] of Object.entries(record)) localizedStrings(child, `${path}.${key}`, out);
+}
+
+test('every authored file carries all three languages, not English and Hindi', () => {
+  const dir = fileURLToPath(new URL('../src/scenarios', import.meta.url));
+  const files = readdirSync(dir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => join(dir, f));
+  files.push(fileURLToPath(new URL('../src/quiz/bank.json', import.meta.url)));
+
+  const missing: string[] = [];
+  for (const file of files) {
+    const json = JSON.parse(readFileSync(file, 'utf8'));
+    const strings: Array<{ path: string; text: LocalizedText }> = [];
+    localizedStrings(json, '$', strings);
+    assert.ok(strings.length > 0, `${file} has no localized strings at all`);
+    for (const { path, text } of strings) {
+      for (const language of ['hi', 'sat'] as const) {
+        const value = (text as Record<string, unknown>)[language];
+        if (typeof value !== 'string' || value.length === 0) {
+          missing.push(`${file.split(/[\\/]/).pop()} ${path} (${language})`);
+        }
+      }
+    }
+  }
+  assert.deepEqual(missing.slice(0, 10), [], `${missing.length} authored strings are missing a language`);
+});
+
+test('the interface table is complete too, apart from the three left for a speaker', () => {
+  const source = readFileSync(fileURLToPath(new URL('../src/app/ui/i18n.ts', import.meta.url)), 'utf8');
+  const table = source.slice(source.indexOf('const UI'), source.indexOf('export class Localizer'));
+  const entries = [...table.matchAll(/(?:^|\n)  (\w+): \{/g)];
+  assert.ok(entries.length > 30, `only found ${entries.length} interface strings, the scan is wrong`);
+
+  const withoutSantali: string[] = [];
+  for (const [i, match] of entries.entries()) {
+    const start = match.index! + match[0].length;
+    const end = i + 1 < entries.length ? entries[i + 1]!.index! : table.length;
+    const block = table.slice(start, end);
+    if (!/\bsat:/.test(block)) withoutSantali.push(match[1]!);
+  }
+  assert.deepEqual(
+    withoutSantali,
+    SPEAKER_ONLY,
+    'only the three AR-handshake lines are meant to be Hindi-only, and they are waiting on a speaker rather than a draft',
+  );
 });

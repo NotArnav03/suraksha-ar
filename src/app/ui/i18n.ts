@@ -119,7 +119,7 @@ const UI: Record<string, LocalizedText> = {
     sat: 'ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ, ᱢᱮᱱᱠᱷᱟᱱ ᱵᱟᱭ ᱴᱷᱤᱠ ᱚᱠᱛᱚ — ᱮᱴᱟᱜ ᱡᱤᱱᱤᱥ ᱯᱩᱭᱞᱩ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱾',
   },
   // No `sat` on these two, for the same reason as the three AR lines below.
-  rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम' },
+  rulesBehind: { en: 'The rules behind this drill', hi: 'इस अभ्यास के पीछे के नियम', sat: 'ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱛᱟᱭᱚᱢ ᱨᱮᱱᱟᱜ ᱱᱤᱭᱚᱢ ᱠᱚ' },
   // The six dimensions, named for the learner. Machine-cased identifiers
   // ("Ppe Discipline") were being printed straight onto a Hindi screen.
   // Why a certificate was withheld. English prose from certify() used to be
@@ -128,53 +128,62 @@ const UI: Record<string, LocalizedText> = {
   reason_moreVariants: {
     en: '{{passed}} of {{required}} drills passed, {{short}} more to go',
     hi: '{{required}} में से {{passed}} अभ्यास पास, {{short}} और बाकी',
+    sat: '{{required}} ᱠᱷᱚᱱ {{passed}} ᱟᱹᱣᱟᱛ ᱯᱟᱥ, ᱟᱨ {{short}} ᱵᱟᱠᱷᱮᱡ',
   },
   reason_aidedRuns: {
     en: '{{count}} guided or hinted run(s) do not count towards a certificate',
     hi: '{{count}} सहायता वाले अभ्यास प्रमाणपत्र में नहीं गिने जाते',
+    sat: '{{count}} ᱜᱚᱲᱚ ᱥᱟᱶ ᱨᱮᱱᱟᱜ ᱟᱹᱣᱟᱛ ᱥᱟᱠᱷᱭᱟᱛ ᱨᱮ ᱵᱟᱭ ᱞᱮᱠᱷᱟᱜ-ᱟ',
   },
   reason_fatalAttempt: {
     en: 'A drill ended in a fatal outcome',
     hi: 'एक अभ्यास जानलेवा परिणाम पर ख़त्म हुआ',
+    sat: 'ᱢᱤᱫ ᱟᱹᱣᱟᱛ ᱜᱚᱡ ᱨᱮᱭᱟᱜ ᱯᱷᱚᱲᱟᱣ ᱨᱮ ᱪᱟᱵᱟ ᱮᱱᱟ',
   },
   reason_belowMark: {
     en: 'Below the pass mark on {{dimension}}',
     hi: '{{dimension}} में पास अंक से कम',
+    sat: '{{dimension}} ᱨᱮ ᱯᱟᱥ ᱱᱚᱢᱵᱚᱨ ᱠᱷᱚᱱ ᱠᱚᱢ',
   },
   reason_belowMarkNeeds: {
     en: 'Below the pass mark on {{dimension}} (needs {{mark}})',
     hi: '{{dimension}} में पास अंक से कम ({{mark}} चाहिए)',
+    sat: '{{dimension}} ᱨᱮ ᱯᱟᱥ ᱱᱚᱢᱵᱚᱨ ᱠᱷᱚᱱ ᱠᱚᱢ ({{mark}} ᱞᱟᱹᱠᱛᱤ)',
   },
-  dim_hazard_recognition: { en: 'Hazard recognition', hi: 'ख़तरा पहचानना' },
-  dim_procedure_sequence: { en: 'Right steps, right order', hi: 'सही क्रम में सही कदम' },
-  dim_time_criticality: { en: 'Acting in time', hi: 'समय पर कार्रवाई' },
-  dim_ppe_discipline: { en: 'Protective equipment', hi: 'सुरक्षा उपकरण' },
-  dim_communication: { en: 'Telling the right people', hi: 'सही लोगों को बताना' },
-  dim_rescue_restraint: { en: 'Restraint in a rescue', hi: 'बचाव में संयम' },
-  hint: { en: 'Show me this step', hi: 'यह चरण दिखाइए' },
+  dim_hazard_recognition: { en: 'Hazard recognition', hi: 'ख़तरा पहचानना', sat: 'ᱡᱚᱠᱷᱚᱢ ᱵᱟᱰᱟᱭ' },
+  dim_procedure_sequence: { en: 'Right steps, right order', hi: 'सही क्रम में सही कदम', sat: 'ᱴᱷᱤᱠ ᱛᱷᱟᱨ ᱨᱮ ᱴᱷᱤᱠ ᱛᱤᱞᱟᱹ' },
+  dim_time_criticality: { en: 'Acting in time', hi: 'समय पर कार्रवाई', sat: 'ᱚᱠᱛᱚ ᱨᱮ ᱠᱟᱹᱢᱤ' },
+  dim_ppe_discipline: { en: 'Protective equipment', hi: 'सुरक्षा उपकरण', sat: 'ᱨᱚᱠᱷᱟ ᱡᱤᱱᱤᱥ' },
+  dim_communication: { en: 'Telling the right people', hi: 'सही लोगों को बताना', sat: 'ᱴᱷᱤᱠ ᱦᱚᱲ ᱠᱚ ᱛᱷᱮᱱ ᱞᱟᱹᱭ' },
+  dim_rescue_restraint: { en: 'Restraint in a rescue', hi: 'बचाव में संयम', sat: 'ᱵᱟᱸᱪᱟᱣ ᱨᱮ ᱨᱟᱹᱯᱟᱹ' },
+  hint: { en: 'Show me this step', hi: 'यह चरण दिखाइए', sat: 'ᱱᱚᱶᱟ ᱛᱤᱞᱟᱹ ᱩᱫᱩᱜ ᱤᱧ ᱢᱮ' },
   // The line under the QR. It was English on a Hindi screen, which is exactly
   // the moment a worker is deciding whether to trust the thing.
   credentialOk: {
     en: '{{bytes}} signed bytes · QR version {{version}} · verified offline on this device',
     hi: '{{bytes}} बाइट हस्ताक्षरित · QR संस्करण {{version}} · इसी फ़ोन पर, बिना इंटरनेट जाँचा गया',
+    sat: '{{bytes}} ᱫᱚᱥᱛᱚᱠᱚᱛ ᱵᱟᱭᱤᱴ · QR ᱵᱟᱨᱥᱟᱱ {{version}} · ᱱᱚᱶᱟ ᱯᱷᱚᱱ ᱨᱮ ᱵᱤᱱᱟᱹ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱡᱟᱸᱪ ᱦᱩᱭ ᱟᱠᱟᱱᱟ',
   },
   credentialBad: {
     en: '{{bytes}} signed bytes · QR version {{version}} · rejected: {{reason}}',
     hi: '{{bytes}} बाइट हस्ताक्षरित · QR संस्करण {{version}} · अस्वीकृत: {{reason}}',
+    sat: '{{bytes}} ᱫᱚᱥᱛᱚᱠᱚᱛ ᱵᱟᱭᱤᱴ · QR ᱵᱟᱨᱥᱟᱱ {{version}} · ᱵᱟᱛᱟᱣ ᱮᱱᱟ: {{reason}}',
   },
   // Said plainly, before the learner presses it and after: being stuck is not
   // a reason to hide what the drill costs.
   hintCost: {
     en: 'You were shown a step, so this run does not count towards a certificate.',
     hi: 'आपको एक चरण दिखाया गया, इसलिए यह प्रयास प्रमाणपत्र में नहीं गिना जाएगा।',
+    sat: 'ᱟᱢ ᱛᱷᱮᱱ ᱢᱤᱫ ᱛᱤᱞᱟᱹ ᱩᱫᱩᱜ ᱟᱠᱟᱱᱟ, ᱚᱱᱟᱛᱮ ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱥᱟᱠᱷᱭᱟᱛ ᱨᱮ ᱵᱟᱭ ᱞᱮᱠᱷᱟᱜ-ᱟ।',
   },
   guidedRun: {
     en: 'Guided run. It teaches the procedure; it does not count towards a certificate.',
     hi: 'निर्देशित अभ्यास। यह प्रक्रिया सिखाता है; प्रमाणपत्र में नहीं गिना जाता।',
+    sat: 'ᱜᱚᱲᱚ ᱥᱟᱶ ᱟᱹᱣᱟᱛ। ᱱᱚᱶᱟ ᱛᱚᱨᱤᱠᱟ ᱥᱮᱬᱟᱭ-ᱟ; ᱥᱟᱠᱷᱭᱟᱛ ᱨᱮ ᱵᱟᱭ ᱞᱮᱠᱷᱟᱜ-ᱟ।',
   },
-  modeGuided: { en: 'Show me', hi: 'मुझे दिखाइए' },
-  modeAssess: { en: 'Prove it', hi: 'अब मैं करके दिखाऊँ' },
-  rulesFollowed: { en: '{{count}} rules followed', hi: '{{count}} नियमों का पालन किया' },
+  modeGuided: { en: 'Show me', hi: 'मुझे दिखाइए', sat: 'ᱤᱧ ᱛᱷᱮᱱ ᱩᱫᱩᱜ ᱢᱮ' },
+  modeAssess: { en: 'Prove it', hi: 'अब मैं करके दिखाऊँ', sat: 'ᱱᱤᱛᱚᱜ ᱤᱧ ᱠᱟᱹᱢᱤ ᱠᱟᱛᱮ ᱩᱫᱩᱜᱟ' },
+  rulesFollowed: { en: '{{count}} rules followed', hi: '{{count}} नियमों का पालन किया', sat: '{{count}} ᱱᱤᱭᱚᱢ ᱢᱟᱱᱟᱣ ᱟᱠᱟᱱᱟ' },
   // No `sat` on these three: the fallback chain hands a Santali learner the
   // Hindi line, which is honest, where invented Santali would not be. They are
   // written to be replaced by a speaker, not by a translation engine. This is a
@@ -212,10 +221,12 @@ const UI: Record<string, LocalizedText> = {
   demoCertificate: {
     en: 'Demo: skip to a certificate',
     hi: 'डेमो: सीधे प्रमाणपत्र देखिए',
+    sat: 'ᱰᱮᱢᱳ: ᱥᱚᱡᱮ ᱥᱟᱠᱷᱭᱟᱛ ᱧᱮᱞ ᱢᱮ',
   },
   demoCertificateWarn: {
     en: 'For presentations only — this clears any saved drill progress and issues a real certificate for an ideal run.',
     hi: 'केवल प्रस्तुति के लिए — यह सहेजी गई अभ्यास प्रगति मिटा देगा और एक आदर्श प्रयास के लिए असली प्रमाणपत्र जारी करेगा।',
+    sat: 'ᱠᱷᱟᱹᱞᱤ ᱩᱫᱩᱜ ᱞᱟᱹᱜᱤᱫ। ᱱᱚᱶᱟ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱ ᱟᱹᱣᱟᱛ ᱨᱮᱭᱟᱜ ᱠᱟᱛᱷᱟ ᱢᱮᱴᱟᱣᱟ ᱟᱨ ᱢᱤᱫ ᱴᱷᱤᱠ ᱟᱹᱣᱟᱛ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱹᱨᱤ ᱥᱟᱠᱷᱭᱟᱛ ᱮᱢᱟ।',
   },
   chooseModule: {
     en: 'Choose a training module',

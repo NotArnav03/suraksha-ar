@@ -210,7 +210,8 @@
       "goal": {
         "text": {
           "en": "Look around. Show what is wrong here.",
-          "hi": "चारों ओर देखिए। दिखाइए कि यहाँ क्या ग़लत है।"
+          "hi": "चारों ओर देखिए। दिखाइए कि यहाँ क्या ग़लत है।",
+          "sat": "ᱪᱟᱨᱮᱥᱮᱫ ᱧᱮᱞ ᱢᱮ। ᱱᱚᱰᱮ ᱪᱮᱫ ᱵᱷᱩᱞ ᱢᱮᱱᱟᱜ-ᱟ, ᱚᱱᱟ ᱩᱫᱩᱜ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/hazard_ignition.goal.hi"
@@ -285,7 +286,8 @@
       "goal": {
         "text": {
           "en": "The electrical panel is on fire. Decide what you will fight it with.",
-          "hi": "बिजली का पैनल जल रहा है। तय कीजिए कि आप किससे आग बुझाएँगे।"
+          "hi": "बिजली का पैनल जल रहा है। तय कीजिए कि आप किससे आग बुझाएँगे।",
+          "sat": "ᱵᱤᱡᱩᱞᱤ ᱯᱮᱱᱮᱞ ᱨᱮ ᱥᱮᱸᱜᱮᱞ ᱞᱟᱹᱜ ᱟᱠᱟᱱᱟ। ᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱛᱮ ᱵᱩᱛᱟᱹᱢ, ᱚᱱᱟ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/select_extinguisher.goal.hi"
@@ -405,7 +407,8 @@
       "goal": {
         "text": {
           "en": "Water will not do on this fire. Decide again.",
-          "hi": "इस आग पर पानी काम नहीं आएगा। दोबारा तय कीजिए।"
+          "hi": "इस आग पर पानी काम नहीं आएगा। दोबारा तय कीजिए।",
+          "sat": "ᱱᱚᱶᱟ ᱥᱮᱸᱜᱮᱞ ᱨᱮ ᱫᱟᱜ ᱵᱟᱭ ᱠᱟᱹᱢᱤᱭᱟᱜ-ᱟ। ᱫᱚᱦᱲᱟ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/induced_failure.goal.hi"
@@ -478,7 +481,8 @@
       "goal": {
         "text": {
           "en": "You have the right extinguisher in your hands. Put the fire out.",
-          "hi": "सही अग्निशामक आपके हाथ में है। आग बुझाइए।"
+          "hi": "सही अग्निशामक आपके हाथ में है। आग बुझाइए।",
+          "sat": "ᱴᱷᱤᱠ ᱟᱜᱱᱤᱥᱟᱢᱚᱠ ᱟᱢᱟᱜ ᱛᱤ ᱨᱮ ᱢᱮᱱᱟᱜ-ᱟ। ᱥᱮᱸᱜᱮᱞ ᱵᱩᱛᱟᱹ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/apply_pass.goal.hi"
@@ -578,7 +582,8 @@
       "goal": {
         "text": {
           "en": "The smoke is thickening and you will have to leave. Get yourself ready.",
-          "hi": "धुआँ गाढ़ा हो रहा है और आपको निकलना होगा। ख़ुद को तैयार कीजिए।"
+          "hi": "धुआँ गाढ़ा हो रहा है और आपको निकलना होगा। ख़ुद को तैयार कीजिए।",
+          "sat": "ᱫᱷᱩᱸᱣᱟᱹ ᱢᱚᱴᱟ ᱦᱩᱭ ᱠᱟᱱᱟ ᱟᱨ ᱟᱢ ᱚᱰᱚᱠ ᱞᱟᱹᱠᱛᱤᱭᱟᱭ। ᱟᱢᱜᱮ ᱛᱮᱭᱟᱨ ᱦᱩᱭ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/don_scsr.goal.hi"
@@ -669,7 +674,8 @@
       "goal": {
         "text": {
           "en": "Get out.",
-          "hi": "बाहर निकलिए।"
+          "hi": "बाहर निकलिए।",
+          "sat": "ᱚᱰᱚᱠ ᱢᱮ।"
         },
         "audio": {
           "hi": "fire-explosion/evacuate.goal.hi"

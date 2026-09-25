@@ -21,7 +21,7 @@ src/quiz/        the daily ninety-second refresher: question bank and the day's 
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons; see docs/APK.md for the Android build
 docs/            RESEARCH (the landscape), CITATIONS (the regulation text), UI (the design system), NARRATION, APK
-tests/           147 tests, node's built-in runner
+tests/           149 tests, node's built-in runner
 ```
 
 ## Try it
@@ -30,7 +30,7 @@ Node 22.6+ (uses native TypeScript type stripping, so no build step and no bundl
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 147 tests
+npm test                # 149 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -107,16 +107,15 @@ No web fonts, no CDN. The app has to work with the radio off.
 
 `machinery-conveyor-loto`: a jammed belt conveyor at the coal handling plant. The learner spots the jam and the helper's loose gamchha, stops the belt if it is still running, and then the belt restarts and catches the helper. The fatal reflex is the machinery version of the second-victim one: grabbing a person caught in a machine before the machine is stopped. After that come isolating the *right* belt (the belt number varies, so a memorised tap sequence isolates the wrong one), padlock and tag, a try-start test, first aid, clearing the jam, and handing the belt back. Variants cover belt C3 or C4, running or tripped, and three shifts. Going to the helper before the lock-out does not end the drill, but it withholds the certificate, because rescue restraint has no partial credit.
 
-English and Hindi are authored throughout all three scenarios. Santali (Ol Chiki) covers the original prose of the gas and fire scenarios, but it is an **AI machine draft** rather than a reviewed translation: every line is recorded in `l10n/sat-review.tsv` against its English source, and none of it is fit to present to a worker until a Santali speaker has signed off each row.
+All three languages are authored everywhere: three scenarios, the daily question bank and the interface, with three deliberate exceptions. `npm run l10n` reports zero missing scenario strings. A test fails if an edit adds an English and a Hindi line and stops there, which is how this would come undone without anyone noticing, because the fallback chain would quietly serve the Hindi.
 
-The conveyor drill and the whole daily question bank now have Santali too, on the same terms. What is left is small and named: `npm run l10n` reports **17 scenario strings and 25 interface strings missing**, the `goal` lines in the gas and fire drills and some of the interface. A Santali learner is served Hindi for those, which the fallback chain handles silently and correctly, and which is still a gap rather than a feature. Three AR-handshake strings are deliberately left un-drafted rather than machine-translated at all, for the reason given above `startingAr` in `src/app/ui/i18n.ts`.
+The Santali is an **AI machine draft**, not a reviewed translation. All 352 lines are recorded in `l10n/sat-review.tsv` against their English source, none is signed off, and none of it is fit to present to a worker as training until a Santali speaker has been through it row by row. The three exceptions are the AR-handshake status lines, deliberately left Hindi-only rather than machine-drafted at all, for the reason given above `startingAr` in `src/app/ui/i18n.ts`: they are waiting on a speaker to write them, not on one to review a guess.
 
 ## Known gaps, read before pitching
 
 - **Regulation citations are pinpointed, but not yet reviewed by a professional.** Every `cite` now names a specific provision (Coal Mines Regulations 2017, Mines Vocational Training Rules 1966, OSH Code 2020 s.6), was checked against the source text, and is shown to the learner on the debrief. `docs/CITATIONS.md` records the verbatim text and the caveats: permit-to-work and the standby person are site procedures rather than stand-alone regulations, the CMR 2017 text came from a mirror rather than the Gazette, and the Mines Act 1952 was repealed by the OSH Code on 21 Nov 2025. `tests/citations.test.ts` rejects any citation without a pinpoint.
 - **No scenario has been reviewed by a certified instructor.** All three procedures are drawn from general practice, not a DGMS-certified sign-off.
-- **The Santali translation is an unreviewed AI draft.** Complete coverage for the gas and fire scenarios, but not verified; see `l10n/sat-review.tsv`. Do not present it as authoritative until a Santali speaker has checked it line by line.
-- **Santali is 126 strings behind the code.** The conveyor drill declares only `en` and `hi`; the assessment-mode goal lines and the debrief's reason strings were added in English and Hindi only. `npm run l10n` lists every one of them, and any new draft has to go through `l10n/sat-review.tsv` like the rest.
+- **The Santali is complete and entirely unreviewed.** 352 lines, all of them machine drafts, none signed off. `l10n/sat-review.tsv` is the sheet a speaker works through. Complete coverage makes this gap easier to miss, not smaller: the app now looks finished in a language nobody has checked.
 - **The admin dashboard has no backend.** It verifies real signed credentials and keeps a real roster, but only of whatever this one device has scanned; see the module comment in `src/admin/store.ts` for what a real multi-supervisor deployment still needs.
 - **Tier A has been demonstrated working on a real phone at the ISIH presentations.** Behaviour across the wider range of ARCore handsets has not been measured yet.
 - **The pass marks were tuned against guided prompts, and assessment mode has not been calibrated.** Removing the instructions makes every run harder, especially time-to-first-action, and nobody has yet run the unaided version with real workers. Treat the current thresholds as a starting point, not a standard, and expect them to move once there is data. There is also a risk in the other direction: a first-time smartphone user may fail a step because the two-tap verb sheet is unfamiliar rather than because the procedure is, which is what the guided run before it exists to prevent.
