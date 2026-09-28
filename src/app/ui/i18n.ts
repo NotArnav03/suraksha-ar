@@ -116,6 +116,8 @@ const UI: Record<string, LocalizedText> = {
   quizDoneTitle: { en: 'Done for today', hi: 'आज के लिए हो गया', sat: 'ᱛᱮᱦᱮᱸᱧ ᱞᱟᱹᱜᱤᱫ ᱪᱟᱵᱟ ᱮᱱᱟ' },
   quizScore: { en: '{{score}} of {{total}} right', hi: '{{total}} में से {{score}} सही', sat: '{{total}} ᱠᱷᱚᱱ {{score}} ᱴᱷᱤᱠ' },
   quizStreak: { en: '{{days}} days in a row', hi: 'लगातार {{days}} दिन', sat: 'ᱞᱟᱹᱜᱟᱛᱟᱨ {{days}} ᱢᱟᱦᱟᱸ' },
+  // English needs its own singular; Hindi and Santali read the same either way.
+  quizStreakOne: { en: '1 day in a row', hi: 'लगातार 1 दिन', sat: 'ᱞᱟᱹᱜᱟᱛᱟᱨ 1 ᱢᱟᱦᱟᱸ' },
   quizStreakShort: { en: '{{days}}d', hi: '{{days}}दि', sat: '{{days}}ᱢ' },
   quizNotAssessment: {
     en: 'A refresher, not an assessment. It does not count towards a certificate.',

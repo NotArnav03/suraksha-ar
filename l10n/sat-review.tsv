@@ -358,3 +358,4 @@ src/app/ui/i18n.ts	UI.cardSheetBody	Print this at full size, or show it on a sec
 src/app/ui/i18n.ts	UI.printCard	Print the card	ᱠᱟᱨᱰ ᱪᱷᱟᱯᱟ ᱢᱮ		
 src/app/ui/i18n.ts	UI.cardBack	Back	ᱨᱩᱣᱟᱹᱲ ᱢᱮ		
 src/app/main.ts	TIER_LABEL.B	Card AR	ᱠᱟᱨᱰ AR		
+src/app/ui/i18n.ts	UI.quizStreakOne	1 day in a row	ᱞᱟᱹᱜᱟᱛᱟᱨ 1 ᱢᱟᱦᱟᱸ		

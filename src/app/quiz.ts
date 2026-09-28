@@ -223,7 +223,7 @@ export function mountQuiz(root: HTMLElement, i18n: Localizer, hooks: QuizHooks):
       ),
     );
     const streak = el('p', 'quiz-streak');
-    streak.append(icon('calendar'), el('span', '', i18n.ui('quizStreak').replace('{{days}}', String(record.streak))));
+    streak.append(icon('calendar'), el('span', '', i18n.ui(record.streak === 1 ? 'quizStreakOne' : 'quizStreak').replace('{{days}}', String(record.streak))));
     card.append(streak);
     // Said on the screen, not only in the code: this is a refresher, and a
     // refresher that looked like an assessment would undermine the one that is.

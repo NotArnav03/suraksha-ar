@@ -850,6 +850,11 @@ button.verb:has(> .icon) { justify-content: flex-start; }
  */
 .ar-active {
   background: transparent;
+  /* The tokens below are redefined here, but `color` is inherited as the value
+     the body already computed from the page's palette. Without restating it,
+     the light theme's dark ink came through onto these dark panels. */
+  color: var(--ink);
+  color-scheme: dark;
   --panel: #24211b;
   --panel-2: #2e2a23;
   --line: #423b31;
