@@ -37,13 +37,15 @@ needs a real, live HTTPS URL to wrap**, not a local file build. That's
 npm run apk:init     # generates android/ from the live PWA manifest, creates a signing key
 ```
 
-This prints two passwords the first time it creates a signing key, so copy them,
-they are **not saved anywhere**:
+The first time it creates a signing key, it writes the password to
+`android/signing-password.env`, beside the keystore. `android/` is gitignored,
+so it is never committed; keep a second copy somewhere safe anyway. The first
+key this project had printed its password once and saved it nowhere, it was
+lost, and the app had to be uninstalled and re-signed with a new key
+(2026-09-29). Both keys' fingerprints stay in `assetlinks.json`.
 
 ```bash
-export BUBBLEWRAP_KEYSTORE_PASSWORD=...
-export BUBBLEWRAP_KEY_PASSWORD=...
-npm run apk:build
+cd android && set -a && . ./signing-password.env && set +a && npx bubblewrap build
 ```
 
 Output: `android/app-release-signed.apk` and `android/app-release-bundle.aab`.
