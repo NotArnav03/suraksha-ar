@@ -90,11 +90,19 @@ async function main() {
       organization: 'Suraksha AR - SIH26041',
       country: 'IN',
     });
-    console.log('\nSigning key created. This password is NOT saved anywhere - copy it now:');
-    console.log(`  BUBBLEWRAP_KEYSTORE_PASSWORD=${keystorePassword}`);
-    console.log(`  BUBBLEWRAP_KEY_PASSWORD=${keyPassword}`);
-    console.log('\nExport both, then run the actual build:');
-    console.log('  cd android && npx bubblewrap build');
+    // Kept beside the keystore, inside android/, which is gitignored. The first
+    // key this script made printed its password once and kept it nowhere; it
+    // was lost, and with it any way to update the installed app in place.
+    const secretPath = join(TARGET_DIR, 'signing-password.env');
+    await writeFile(
+      secretPath,
+      `# The password for android.keystore (alias ${KEY_ALIAS}). Never commit this; android/ is gitignored.\n` +
+        `BUBBLEWRAP_KEYSTORE_PASSWORD=${keystorePassword}\nBUBBLEWRAP_KEY_PASSWORD=${keyPassword}\n`,
+    );
+    console.log(`\nSigning key created. Its password is in ${secretPath} (gitignored).`);
+    console.log('Keep a copy somewhere safe as well: losing it means reinstalling the app from scratch.');
+    console.log('\nThen build:');
+    console.log('  cd android && set -a && . ./signing-password.env && set +a && npx bubblewrap build');
   }
 }
 

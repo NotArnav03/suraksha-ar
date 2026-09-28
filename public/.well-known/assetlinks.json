@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "com.suraksha.ar",
       "sha256_cert_fingerprints": [
-        "A9:23:A9:65:45:E1:63:86:DC:C3:81:7F:8F:63:04:53:E3:0F:BB:C9:05:7E:8F:27:B1:D3:30:30:59:8D:CB:66"
+        "A9:23:A9:65:45:E1:63:86:DC:C3:81:7F:8F:63:04:53:E3:0F:BB:C9:05:7E:8F:27:B1:D3:30:30:59:8D:CB:66",
+        "3C:B5:E7:22:1B:02:D0:33:AC:A8:B7:C7:7C:F4:81:E9:82:09:DE:1A:9F:A6:2A:28:22:2C:4C:CE:8A:EB:AC:24"
       ]
     }
   }
