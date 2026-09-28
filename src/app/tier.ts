@@ -25,8 +25,8 @@ export interface TierReport {
   };
 }
 
-/** Tiers whose renderer actually exists. Both of them, now that there are two. */
-export const IMPLEMENTED: Tier[] = ['A', 'B'];
+/** Tiers whose renderer actually exists. All three. */
+export const IMPLEMENTED: Tier[] = ['A', 'B', 'C'];
 
 async function hasImmersiveAr(): Promise<boolean> {
   const xr = (navigator as Navigator & { xr?: XRSystem }).xr;
@@ -64,12 +64,20 @@ export async function detectTier(force?: Tier): Promise<TierReport> {
   if (capabilities.webxrImmersiveAr && capabilities.webgl) {
     capable = 'A';
     reasons.push('WebXR immersive-ar is supported, so the drill can be placed in the room');
-  } else if (!capabilities.webxrImmersiveAr) {
+  } else if (capabilities.camera && capabilities.webgl && capabilities.secureContext) {
+    // No ARCore, but a camera and something to draw with: the drill stands on
+    // the printed card instead of the floor.
     capable = 'B';
-    reasons.push('no WebXR immersive-ar on this phone, so the drill runs flat');
+    reasons.push('no WebXR immersive-ar, but a camera and WebGL, so the drill can stand on the printed card');
   } else {
-    capable = 'B';
-    reasons.push('WebXR is present but there is no WebGL to draw with, so the drill runs flat');
+    capable = 'C';
+    reasons.push(
+      !capabilities.webgl
+        ? 'no WebGL to draw a 3D site with, so the drill runs flat'
+        : !capabilities.camera
+          ? 'no camera the browser can use, so the drill runs flat'
+          : 'the camera needs a secure context (https or localhost), so the drill runs flat',
+    );
   }
   if (capabilities.webxrImmersiveAr && !capabilities.secureContext) {
     reasons.push('AR also needs a secure context (https or localhost)');

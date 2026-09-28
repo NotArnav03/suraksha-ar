@@ -428,19 +428,9 @@ button:disabled { opacity: .38; pointer-events: none; }
 .tile:hover { border-color: var(--hazard); transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .tile:active { transform: scale(.96); border-color: var(--hazard); box-shadow: none; }
 .tile-icon.icon { width: 40px; height: 40px; color: var(--ink-2); }
-/* The prop a learner is asked to find reads as a hazard sign, because that is
-   what it is. Everything else stays in plain ink, so the warning means something. */
-.tile-icon.kind-hazard { color: var(--crit); }
-/* The one thing in the scene trying to hurt somebody gets a slow pulse.
-   Nothing else on this screen moves, so it is the eye's first stop. */
-.tile:has(.kind-hazard) {
-  border-color: var(--crit);
-  background: linear-gradient(170deg, var(--crit-dim), var(--panel-2));
-  animation: tile-in .3s cubic-bezier(.2, .8, .25, 1) both, hazard-breathe 2.8s ease-in-out .5s 5;
-}
-@keyframes hazard-breathe {
-  50% { box-shadow: var(--shadow-sm), 0 0 0 5px var(--crit-dim); border-color: var(--crit); }
-}
+/* Every tile is drawn alike, the hazards included. Picking out the thing that
+   could kill someone is the skill being assessed ("Tap on the two things here
+   that could kill someone today"); a red, pulsing tile did it for the learner. */
 .tile-label { font-size: .9rem; font-weight: 600; color: var(--ink-2); line-height: 1.3; }
 .tile.failed { border-color: var(--crit); opacity: .55; }
 .tile.failed .tile-icon { opacity: .55; }
@@ -927,6 +917,56 @@ button.verb:has(> .icon) { justify-content: flex-start; }
 }
 .ar-crosshair::before { top: 50%; left: 0; right: 0; height: 2px; transform: translateY(-1px); }
 .ar-crosshair::after { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-1px); }
+
+/*
+ * Card AR. The camera picture and the 3D canvas share one box, sized in script
+ * to cover the screen the way a camera app does, so both are cropped the same
+ * and the site stays on the card. Unlike Tier A there is no WebXR to route
+ * taps, so the full-screen HUD layer lets them through to the scene and only
+ * its own panels take them.
+ */
+.card-ar { overflow: hidden; }
+.card-stage { position: fixed; overflow: hidden; background: #000; }
+.card-stage video,
+.card-ar .card-stage canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill;
+}
+.card-ar .chrome { pointer-events: none; }
+.card-ar .chrome > * { pointer-events: auto; }
+.card-ar .chrome > .card-guide { pointer-events: none; }
+/* The card and the site on it need the upper half of the screen, so the
+   prompt panel scrolls inside a third of it rather than growing over them.
+   The learner can still swipe the handle to hide it altogether. */
+/* Only while open: an unscoped cap outranked .hud-collapsed and left an empty panel behind. */
+.card-ar .hud:not(.hud-collapsed) .hud-panel { max-height: 34vh; overflow-y: auto; padding-top: 10px; }
+.card-ar .prompt { font-size: 1.05rem; }
+.card-ar .checklist { margin-top: 10px; }
+.card-hint {
+  top: calc(8px + env(safe-area-inset-top)); left: 12px; right: 12px;
+  transform: none; max-width: none; padding: 10px 12px; font-size: .95rem;
+  display: flex; align-items: center; gap: 10px; text-align: left;
+}
+.card-hint p { margin: 0; flex: 1; }
+/* `display: flex` above outranks the browser's own rule for [hidden]. */
+.card-hint[hidden] { display: none; }
+.card-hint .ghost {
+  flex: 0 0 auto; max-width: 42%; min-height: 44px; padding: 6px 10px;
+  color: var(--hazard-ink); border: 1.5px solid var(--line); font-size: .88rem;
+}
+/* Where to aim: the card's outline, in the camera view left above the HUD. */
+.card-guide {
+  position: fixed; top: 26%; left: 50%; transform: translate(-50%, -50%);
+  width: min(48vw, 22vh); aspect-ratio: 1; z-index: 9;
+  border: 3px dashed var(--hazard); border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(0, 0, 0, .5);
+}
+
+.card-sheet { gap: 16px; }
+.card-sheet h1 { margin: 0; }
+.card-image {
+  display: block; width: 100%; max-width: 520px; margin: 0 auto;
+  background: #fff; border-radius: var(--radius); box-shadow: var(--shadow, 0 2px 10px rgba(0, 0, 0, .2));
+}
 
 /*
  * Motion is decoration everywhere it appears here, so all of it goes. The

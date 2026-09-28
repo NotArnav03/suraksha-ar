@@ -6,7 +6,7 @@ The product thesis: the gap in the problem statement is not training delivery, i
 
 ## Where the code is now
 
-The **drill engine**, the **assessment**, the **credential**, the **Tier A + Tier C clients**, an installable **offline PWA shell**, a **Trusted Web Activity Android APK**, and a **web compliance dashboard** are built. Tier B (marker tracking) is contracted but not implemented. Three scenarios are authored, one for each domain SIH26041 names (gas leaks, fire response and machinery hazards): `gas-confined-space`, `fire-explosion` and `machinery-conveyor-loto`, all reachable from an in-app module picker.
+The **drill engine**, the **assessment**, the **credential**, all **three client tiers** (markerless AR, Card AR on a printed card, and flat), an installable **offline PWA shell**, a **Trusted Web Activity Android APK**, and a **web compliance dashboard** are built. Three scenarios are authored, one for each domain SIH26041 names (gas leaks, fire response and machinery hazards): `gas-confined-space`, `fire-explosion` and `machinery-conveyor-loto`, all reachable from an in-app module picker.
 
 Live: **https://notarnav03.github.io/suraksha-ar/** (worker app) and **`/admin.html`** (compliance dashboard), redeployed automatically on every push to `main`.
 
@@ -14,14 +14,14 @@ Live: **https://notarnav03.github.io/suraksha-ar/** (worker app) and **`/admin.h
 src/engine/      scenario graph runtime, knows nothing about cameras or meshes
 src/assess/      event stream -> competency vector -> certification
 src/credential/  compact signed credential, offline QR verification
-src/app/         the web client: tier detection, shared HUD, module picker, Tier A/C worlds, the drawn pictogram set
+src/app/         the web client: tier detection, shared HUD, module picker, Tier A/B/C worlds, the drawn pictogram set
 src/admin/       compliance dashboard: verifies scanned credentials, recovers the drills behind them, no backend
 src/scenarios/   authored scenario content (JSON): gas-confined-space, fire-explosion, machinery-conveyor-loto
 src/quiz/        the daily ninety-second refresher: question bank and the day's deterministic set
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons; see docs/APK.md for the Android build
 docs/            RESEARCH (the landscape), CITATIONS (the regulation text), UI (the design system), NARRATION, APK
-tests/           149 tests, node's built-in runner
+tests/           158 tests, node's built-in runner
 ```
 
 ## Try it
@@ -30,7 +30,7 @@ Node 22.6+ (uses native TypeScript type stripping, so no build step and no bundl
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 149 tests
+npm test                # 158 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -45,7 +45,7 @@ npm run dev             # the client, on your LAN so a phone can reach it
 npm run build           # 69 kB gzipped on first load, + 133 kB three.js only on AR devices
 ```
 
-Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion|machinery` (deep-links past the module picker).
+Open the dev server's Network URL on an Android phone. Query flags: `?lang=en|hi|sat`, `?seed=N`, `?tier=A|B|C`, `?worker=ID`, `?scenario=gas-confined-space|fire-explosion|machinery` (deep-links past the module picker).
 
 Building the Android APK is a separate, one-time-setup process; see `docs/APK.md`.
 
@@ -87,7 +87,9 @@ A granted certification issues a **51-byte signed payload**: a 160-character str
 
 **Tier A** is markerless WebXR: hit-test a floor plane, tap once to anchor the work site in the learner's own room, then walk to the sump, crouch to look into it, and turn your back on the standby person to read the detector. The drill is performed with the body rather than the thumb, which is what the retention argument actually rests on.
 
-The HUD in Tier A is not a port. It is the same DOM, drawn by the same `Hud`, floating over the camera feed through WebXR's `dom-overlay`: prompt, checklist, countdown and consequence banner are literally the same code Tier B runs. three.js is dynamically imported only after a session is granted, so a phone that cannot run AR never downloads 133 kB it has no use for.
+The HUD in Tier A is not a port. It is the same DOM, drawn by the same `Hud`, floating over the camera feed through WebXR's `dom-overlay`: prompt, checklist, countdown and consequence banner are literally the same code Tiers B and C run. three.js is dynamically imported only after a session is granted, so a phone that cannot run AR never downloads 133 kB it has no use for.
+
+**Tier B is Card AR**, for the phones Tier A cannot serve: no ARCore, but a camera and WebGL. The learner lays a printed card on a table and the same site, the same props in the same arrangement, stands on it at tabletop scale. The tracker is ARToolKit, the engine inside AR.js, through its WASM port (`@ar-js-org/artoolkit5-js`), driven directly rather than through AR.js so it shares the app's own three.js. The card is the app mark made trackable: a square black frame around the yellow field with ᱨᱚᱠᱷᱟ above a solid bar, the bar there so the card reads differently at all four turns. `tools/make_mark.py` draws the printed sheet, the tracker's template and the test frames from one geometry, so they cannot drift apart, and `tests/card.test.ts` runs the real tracker on those frames under Node: position, orientation, a black-and-white print, dim and washed-out light, and a decoy square that must not match. The card is in the app too (**Show the card** on the start screen), full-size for a second phone or a laptop, with a Print button for the A4 sheet. A learner with no card taps **No card? Do this drill flat** and gets the same drill in Tier C. Taps are aimed where the finger is, with a fingertip of slack, because the smallest props are a couple of centimetres across on the card.
 
 **Tier C is not a consolation prize.** The learner still hunts the hazard among clutter, still picks a verb rather than a right answer, and is assessed on the identical event stream. The verb sheet is load-bearing: you touch the thing, then choose what you do to it, so climbing into a confined space is a deliberate named act and never a stray tap. `WorldEffect`s drive the world: the casualty is genuinely absent from the scene until a `spawn` fires, the blower greys out when it trips, and the alarm reaches a gloved hand through `navigator.vibrate`.
 
@@ -95,7 +97,7 @@ Tier detection reports **two** answers on the start screen: the best tier the de
 
 **The interface is drawn, not borrowed.** Every pictogram is an inline SVG in `src/app/ui/icons.ts`, in the language of safety signage: flat, one weight, inheriting the ink of whatever it sits on. Emoji used to do this job, which meant a gear for a conveyor, a biohazard trefoil for a pile of coal, and a wrench for "operate this control", a vendor's house style standing in for a sign a worker already knows. Objects a drill asks you to find (the isolator, the padlock, the pull cord, the tag) each get their own glyph, because a learner who cannot read the label has nothing else to go on.
 
-The rest of the surface is built to be picked up rather than admired. The ground carries the faint ruled grid of a mine plan; panels are lit from above, with a highlight along the top edge and a hard shadow for the edge plus a soft one for the air beneath. The primary action is built like the button on a starter panel: a lit top face, a darker bottom face, a solid edge underneath and four pixels of real travel, because through a glove a colour change alone reads as nothing having happened. Motion is rationed and all of it does something: the drill's prop grid deals itself out so the scene reads as being set in front of you, the hazard tile pulses five times and then stops, the countdown runs crawling barrier-tape stripes once time is against you, and the certificate lands like a stamp on a permit. Nothing loops forever, and `prefers-reduced-motion` strips all of it except the alarm and the tap receipt, which carry information. `docs/UI.md` is the full design system, including the rules that exist because of a specific bug.
+The rest of the surface is built to be picked up rather than admired. The ground carries the faint ruled grid of a mine plan; panels are lit from above, with a highlight along the top edge and a hard shadow for the edge plus a soft one for the air beneath. The primary action is built like the button on a starter panel: a lit top face, a darker bottom face, a solid edge underneath and four pixels of real travel, because through a glove a colour change alone reads as nothing having happened. Motion is rationed and all of it does something: the drill's prop grid deals itself out so the scene reads as being set in front of you, the countdown runs crawling barrier-tape stripes once time is against you, and the certificate lands like a stamp on a permit. Nothing loops forever, and `prefers-reduced-motion` strips all of it except the alarm and the tap receipt, which carry information. `docs/UI.md` is the full design system, including the rules that exist because of a specific bug.
 
 No web fonts, no CDN. The app has to work with the radio off.
 
@@ -119,6 +121,8 @@ The Santali is an **AI machine draft**, not a reviewed translation. All 352 line
 - **The admin dashboard has no backend.** It verifies real signed credentials and keeps a real roster, but only of whatever this one device has scanned; see the module comment in `src/admin/store.ts` for what a real multi-supervisor deployment still needs.
 - **Tier A has been demonstrated working on a real phone at the ISIH presentations.** Behaviour across the wider range of ARCore handsets has not been measured yet.
 - **The pass marks were tuned against guided prompts, and assessment mode has not been calibrated.** Removing the instructions makes every run harder, especially time-to-first-action, and nobody has yet run the unaided version with real workers. Treat the current thresholds as a starting point, not a standard, and expect them to move once there is data. There is also a risk in the other direction: a first-time smartphone user may fail a step because the two-tap verb sheet is unfamiliar rather than because the procedure is, which is what the guided run before it exists to prevent.
-- **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher, see `src/app/render/tierA.ts`'s `partsFor`), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate: two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
+- **Card AR has been run end to end on a Pixel 9, but not yet with a printed card in someone's hand.** On the phone, the camera stream was swapped for a canvas showing the card in perspective; everything after that was real: the video element, the tracker (found in every frame at 0.99 confidence), the pose, the render, and a tap on a 3D prop reaching the engine. Real lighting, real hand shake, glare on a laminated card and a budget phone's camera are all still to be tried. The calibration is ARToolKit's generic one, not each phone's, which keeps the site on the card in the picture but makes heights off the card approximate.
+- **artoolkit5-js is LGPL-3.0.** It ships unmodified as its own lazily loaded chunk (about 300 kB gzipped, fetched only when Card AR starts), which keeps it replaceable as the licence asks. Check that arrangement with whoever signs off licensing before a commercial deployment.
+- **Tier A uses primitive geometry, not models.** People, PPE, structures and the fire extinguishers are built from multiple shaped primitives now (a person reads as a person, an extinguisher reads as an extinguisher, see `partsFor` in `src/app/render/props3d.ts`, which both camera tiers build from), not boxes-per-kind, but they're still coloured geometry, not a site twin. Fixed slots rather than a random scatter is deliberate: two learners in different rooms must walk the same distances or their time-to-first-action numbers stop being comparable.
 - **Issuing happens in the browser** in the current demo, signed with a fixed demo key (`src/credential/demo-trust.ts`, chosen deliberately over a random-per-session key so a credential can be verified on a *different* device, see that file's comment), which is a shortcut and a loud one: a device that can sign its own credentials can award itself competence. Real issuance is server-side with a managed keystore, a published trust list and a rotation plan. The *verification* path is real.
 - **Speech synthesis is a stand-in for recorded narration.** The languages this has to reach (Santali, Ho, Mundari, Kurukh) have no synthetic voice worth using, and Ol Chiki is never spoken at all rather than being handed to a Devanagari voice. The app now plays a recorded clip wherever one exists and falls back to the synthetic voice everywhere else, so recording is the only step left: see `docs/NARRATION.md` and `node tools/narration.mjs --report`. Nothing has been recorded yet, and lines whose words change per variant deliberately stay synthetic.

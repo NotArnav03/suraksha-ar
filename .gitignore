@@ -14,3 +14,6 @@ android/
 # and another team's SIH 2024 deck. 7.5 MB of binaries that nothing in the build
 # reads, and the deck is not ours to redistribute from a public repo.
 research/
+
+# Python bytecode from tools/make_mark.py
+__pycache__/

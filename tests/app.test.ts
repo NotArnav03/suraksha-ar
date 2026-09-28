@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { Window } from 'happy-dom';
 
 /**
- * Wiring test for the Tier B client.
+ * Wiring test for the Tier C (flat) client.
  *
  * This drives the real renderer through a real DOM — finding tiles by their
  * labels, opening the verb sheet, pressing the verb — rather than calling
@@ -47,7 +47,7 @@ define('performance', { now: () => Date.now() });
 
 const { DrillController } = await import('../src/app/controller.ts');
 import type { Scheduler } from '../src/app/controller.ts';
-const { TierBRenderer } = await import('../src/app/render/tierB.ts');
+const { TierCRenderer, tileIcon } = await import('../src/app/render/tierC.ts');
 const { VERBS_BY_KIND } = await import('../src/app/render/contract.ts');
 const { VERB_ICON, VERB_LABEL } = await import('../src/app/render/verbs.ts');
 const { Localizer } = await import('../src/app/ui/i18n.ts');
@@ -111,7 +111,7 @@ async function mount(seed: number, lang: 'en' | 'hi' | 'sat' = 'en'): Promise<Ha
   const finished = { value: false };
   const controller = new DrillController(
     resolveVariant(scenario, seed),
-    new TierBRenderer(i18n),
+    new TierCRenderer(i18n),
     i18n,
     { onFinish: () => (finished.value = true) },
     manualScheduler(),
@@ -448,8 +448,43 @@ test('setting .hidden on every toggled element actually hides it, per the real s
   style.remove();
 });
 
+test('a hazard tile gives nothing away: no warning sign, no red, no pulse', async () => {
+  // "Tap on the two things here that could kill someone" is the skill being
+  // assessed. A hazard tile drawn as a red, pulsing warning triangle answered it.
+  const dir = fileURLToPath(new URL('../src/scenarios/', import.meta.url));
+  for (const file of ['gas-confined-space.json', 'fire-explosion.json', 'machinery-conveyor-loto.json']) {
+    const json = JSON.parse(await readFile(dir + file, 'utf8')) as { props: Array<{ id: string; kind: string }> };
+    for (const prop of json.props.filter((p) => p.kind === 'hazard')) {
+      const name = tileIcon(prop as never);
+      assert.notEqual(name, 'hazard', `${file} ${prop.id} is drawn as a warning sign`);
+      assert.notEqual(name, 'crate', `${file} ${prop.id} has no drawing of its own and falls back to a crate`);
+    }
+  }
+
+  const css = await readFile(fileURLToPath(new URL('../src/app/style.css', import.meta.url)), 'utf8');
+  assert.doesNotMatch(css, /kind-hazard/, 'style.css styles hazard tiles differently again');
+
+  const host = window.document.createElement('div');
+  const renderer = new TierCRenderer(new Localizer('en'));
+  await renderer.mount(host as never, { act() {}, acknowledge() {} });
+  const prop = (id: string, kind: string) => ({ id, role: null, kind, label: id, verbs: ['inspect'], visible: true });
+  renderer.present({
+    props: [prop('coal_jam', 'hazard'), prop('toolbox', 'equipment')],
+    narrationOnly: false,
+  } as never);
+  const tiles = [...host.querySelectorAll('.tile')];
+  assert.equal(tiles.length, 2);
+  assert.equal(tiles[0]!.className, tiles[1]!.className, 'the hazard tile carries a class the toolbox does not');
+  assert.equal(
+    tiles[0]!.querySelector('.icon')!.className,
+    tiles[1]!.querySelector('.icon')!.className,
+    'the hazard icon carries a class the toolbox icon does not',
+  );
+  renderer.dispose();
+});
+
 test('both tiers name every verb identically', () => {
-  // Tier A and Tier B import the same table by construction; this fails if
+  // Every tier imports the same table by construction; this fails if
   // either grows a private copy, which would mean the two tiers were asking
   // subtly different questions and their results were no longer comparable.
   for (const verbs of Object.values(VERBS_BY_KIND)) {
@@ -597,7 +632,7 @@ test('an ideal operator can finish every module by touching the screen', async (
       const finished = { value: false };
       const controller = new DrillController(
         variant,
-        new TierBRenderer(i18n),
+        new TierCRenderer(i18n),
         i18n,
         { onFinish: () => (finished.value = true) },
         manualScheduler(),
@@ -657,7 +692,7 @@ test('a prop removed from the scene stays removed when the next step is shown', 
   window.document.body.append(world as never, chrome as never);
   const i18n = new Localizer('en');
   i18n.speechEnabled = false;
-  const controller = new DrillController(resolveVariant(module, 1), new TierBRenderer(i18n), i18n, { onFinish: () => {} }, manualScheduler());
+  const controller = new DrillController(resolveVariant(module, 1), new TierCRenderer(i18n), i18n, { onFinish: () => {} }, manualScheduler());
   await controller.start(world, chrome);
 
   for (let guard = 0; controller.session.node.id !== 'rescue_decision' && guard < 20; guard++) {
@@ -692,7 +727,7 @@ test('assessment mode states the goal, and the hint hands over the step at the c
   i18n.speechEnabled = false;
   const controller = new DrillController(
     variant,
-    new TierBRenderer(i18n),
+    new TierCRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),
@@ -730,7 +765,7 @@ test('guided mode is unchanged: the step is named, and no hint is offered', asyn
   i18n.speechEnabled = false;
   const controller = new DrillController(
     resolveVariant(module, 1),
-    new TierBRenderer(i18n),
+    new TierCRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),
@@ -762,7 +797,7 @@ test('the checklist does not list the steps in assessment mode, until a hint is 
   i18n.speechEnabled = false;
   const controller = new DrillController(
     variant,
-    new TierBRenderer(i18n),
+    new TierCRenderer(i18n),
     i18n,
     { onFinish: () => {} },
     manualScheduler(),

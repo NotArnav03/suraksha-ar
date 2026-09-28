@@ -50,6 +50,9 @@ export type IconName =
   | 'crate'
   | 'cylinder'
   | 'rope'
+  | 'coal'
+  | 'cloth'
+  | 'flame'
   // the interface itself
   | 'speaker'
   | 'speaker-off'
@@ -111,6 +114,15 @@ const PATHS: Record<IconName, string> = {
   cylinder: '<rect x="7.5" y="6" width="7" height="14" rx="3"/><path d="M11 6V3.6"/><path d="M9.4 3.6h3.2"/><path d="M14.5 9.5h2.5a3 3 0 0 1 3 3v4"/>',
   // a retrieval line: rope to a hook
   rope: '<path d="M4 4.5c3.5 0 3.5 4 7 4s3.5-4 7-4"/><path d="M18 8.5v5"/><path d="M18 18.5a2.6 2.6 0 0 1-2.6-2.6c0-1.4 1.2-2.4 2.6-2.4s2.6 1 2.6 2.4"/>',
+  // Things a drill asks the learner to recognise as dangerous. Each is drawn as
+  // what it physically is, never as a warning sign: the tile must not announce
+  // the answer to "which of these could kill someone".
+  // a heap of coal lumps
+  coal: '<path d="M2.5 20h19"/><path d="M4 20l1.6-4.2 3.6-1.3 2.3 2.4L10.6 20"/><path d="M10.6 20l1.2-4.6 3.9-1.6 2.9 3 .9 3.2"/><path d="M7.6 14.8l1.9-4 3.4.4.6 3.3"/>',
+  // a checked cloth hanging from a rail, fringed at the hem
+  cloth: '<path d="M3.5 4h17"/><path d="M7 4v14.5l1.7-1.2 1.6 1.2 1.7-1.2 1.6 1.2 1.7-1.2 1.7 1.2V4"/><path d="M12 4v13.3"/><path d="M7 9.5h10"/><path d="M7 14h10"/>',
+  // a flame
+  flame: '<path d="M12 21.5c-3.9 0-6.5-2.6-6.5-6.1 0-3.7 3-5.7 3.4-9.4 2 1.3 3.1 3.3 3.1 5.1 1-.8 1.6-2.2 1.6-3.6 2.7 2 4.4 4.7 4.4 7.9 0 3.5-2.4 6.1-6 6.1Z"/><path d="M12 21.5c-1.6 0-2.7-1.1-2.7-2.7 0-1.7 1.4-2.6 2.7-4.2 1.3 1.6 2.7 2.5 2.7 4.2 0 1.6-1.1 2.7-2.7 2.7Z"/>',
   worker: '<circle cx="12" cy="6.5" r="3"/><path d="M6.5 5.2a5.8 5.8 0 0 1 11 0"/><path d="M12 9.5v7"/><path d="M12 16.5 8.5 21"/><path d="M12 16.5 15.5 21"/><path d="M6.5 12.5h11"/>',
   hazard:
     '<path d="M12 3.2 22 20H2Z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9v5.2" stroke="var(--on-hazard-ink, #12140f)" stroke-width="2.2"/><circle cx="12" cy="17.2" r="1.15" fill="var(--on-hazard-ink, #12140f)" stroke="none"/>',

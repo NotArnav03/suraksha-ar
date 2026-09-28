@@ -77,16 +77,20 @@ settles costs battery on the handset this is aimed at.
 
 ## Pictograms
 
-Every icon is an inline SVG in `src/app/ui/icons.ts` (47 of them), drawn in the
+Every icon is an inline SVG in `src/app/ui/icons.ts` (51 of them), drawn in the
 language of safety signage: flat, one stroke weight, `currentColor` so it
-inherits the ink of whatever it sits on, and no colour of its own except where a
-hazard demands red.
+inherits the ink of whatever it sits on, and no colour of its own.
+
+A hazard in the scene is drawn as what it is (the coal heap, the hanging
+gamchha, the flame), never as a warning sign and never in red. Finding it is
+the skill a drill assesses, so its tile carries nothing the toolbox's tile does
+not; `tests/app.test.ts` fails if that changes.
 
 This replaced emoji, which meant a gear for a conveyor, a biohazard trefoil for
 a pile of coal and a wrench for "operate this control": a vendor's house style
 standing in for a sign a worker already knows. Objects a drill asks you to find
 get their own glyph rather than a per-kind fallback (`PROP_ICON` in
-`render/tierB.ts` maps the isolator, padlock, pull cord, tag, self-rescuer and
+`render/tierC.ts` maps the isolator, padlock, pull cord, tag, self-rescuer and
 the rest), because a learner who cannot read the label has nothing else to go
 on.
 
@@ -105,7 +109,7 @@ worker acts on; the sign is what they recognise across the yard.
 
 ## Motion
 
-Sixteen keyframes, each with a job. Nothing loops forever.
+Every keyframe has a job. Nothing loops forever.
 
 | Animation | Where | What it is for |
 |---|---|---|
@@ -113,7 +117,6 @@ Sixteen keyframes, each with a job. Nothing loops forever.
 | `screen-in` | any `.screen` | the screen change is a movement, not a cut |
 | `sheen` | `.primary.big`, three passes | catches someone who has opened the app and stopped |
 | `tile-in` | `.tile`, staggered to 270ms | the scene is dealt out in front of you |
-| `hazard-breathe` | `.tile:has(.kind-hazard)`, five pulses | the one thing trying to hurt somebody is the eye's first stop |
 | `barber` | `.timer.urgent .timer-fill` | crawling barrier-tape stripes; a bar that only changes colour gets missed |
 | `alarm` | `.world.alarm-critical` | the alarm state, which is information |
 | `input-pulse` | after every action | a receipt that the tap arrived, identical for every verdict |

@@ -1,0 +1,284 @@
+import type { WorldEffect } from '../../engine/types.ts';
+import type { Localizer } from '../ui/i18n.ts';
+import { icon, type IconName } from '../ui/icons.ts';
+import { VERB_ICON, VERB_LABEL } from './verbs.ts';
+import type {
+  Feedback,
+  NodeView,
+  PropView,
+  RendererHooks,
+  Tier,
+  WorldRenderer,
+} from './contract.ts';
+
+/**
+ * Tier C: the flat world.
+ *
+ * This is the tier that runs on anything: no ARCore, no camera, no printed
+ * card, sometimes no gyroscope. It is also where a learner lands when they
+ * refuse the camera or have no card to hand. It is deliberately not a
+ * consolation prize. The learner still has to find the hazard among the clutter,
+ * still has to choose a verb rather than tap a right answer, and still gets
+ * assessed on exactly the same event stream — so a certificate earned here is
+ * the same certificate.
+ *
+ * The verb menu is the load-bearing idea. Entering a confined space is two
+ * deliberate touches on a named action, never an accidental tap on scenery, so
+ * "went in without testing" is a decision the learner made and can be shown.
+ */
+
+const KIND_ICON: Record<PropView['kind'], IconName> = {
+  structure: 'opening',
+  signage: 'sign',
+  instrument: 'gauge',
+  equipment: 'crate',
+  ppe: 'helmet',
+  person: 'worker',
+  // Never the warning triangle: a tile that looks like a hazard sign answers
+  // "which of these is the hazard" for the learner. Each hazard prop has its
+  // own drawing in PROP_ICON; this is only the fallback for a new one.
+  hazard: 'crate',
+};
+
+/**
+ * Some props are individual enough that their kind cannot carry them. Every
+ * lock, radio, isolator and start button in the conveyor drill is `equipment`,
+ * and a learner who cannot read the label was being shown the same glyph for
+ * all four. The drill asks them to find a specific object, so the object gets
+ * its own sign.
+ */
+const PROP_ICON: Record<string, IconName> = {
+  // gas / confined space
+  vent_fan: 'blower',
+  radio: 'radio',
+  scba: 'cylinder',
+  harness: 'shackle',
+  retrieval_line: 'rope',
+  gas_readout: 'gauge',
+  toolbox: 'crate',
+  wheelbarrow: 'crate',
+  // fire
+  fire_panel: 'flame',
+  electrical_panel: 'isolator',
+  ext_dcp: 'extinguisher',
+  ext_water: 'extinguisher',
+  ext_co2: 'extinguisher',
+  scsr: 'cylinder',
+  exit_arrow: 'exit',
+  exit_marker: 'exit',
+  // conveyor lock-out
+  coal_jam: 'coal',
+  loose_gamchha: 'cloth',
+  conveyor_tail: 'machine',
+  pull_cord: 'pullcord',
+  isolator_c3: 'isolator',
+  isolator_c4: 'isolator',
+  padlock: 'lock-closed',
+  danger_tag: 'tag',
+  start_button: 'startstop',
+  control_radio: 'radio',
+};
+
+/** The pictogram on a prop's tile. Exported so a test can hold every hazard prop to a drawing of itself. */
+export function tileIcon(prop: Pick<PropView, 'id' | 'kind'>): IconName {
+  return PROP_ICON[prop.id] ?? KIND_ICON[prop.kind];
+}
+
+export class TierCRenderer implements WorldRenderer {
+  readonly tier: Tier = 'C';
+  readonly label = 'Flat interactive — any Android 10+, no camera required';
+
+  #i18n: Localizer;
+  #host: HTMLElement | null = null;
+  #grid = document.createElement('div');
+  #sheet = document.createElement('div');
+  #hooks: RendererHooks | null = null;
+  #visible = new Set<string>();
+  /** props whose starting visibility has been applied; after that only effects change it */
+  #seeded = new Set<string>();
+  #props: PropView[] = [];
+  #alarm: 'none' | 'warning' | 'critical' = 'none';
+  #gasReadout: { species: string; value: number; unit: string } | null = null;
+  #readoutBox = document.createElement('div');
+  #failed = new Set<string>();
+
+  constructor(i18n: Localizer) {
+    this.#i18n = i18n;
+  }
+
+  async mount(host: HTMLElement, hooks: RendererHooks): Promise<void> {
+    this.#host = host;
+    this.#hooks = hooks;
+    this.#grid.className = 'world-grid';
+    this.#readoutBox.className = 'readout';
+    this.#readoutBox.hidden = true;
+    this.#sheet.className = 'sheet';
+    this.#sheet.hidden = true;
+    this.#sheet.addEventListener('click', (event) => {
+      if (event.target === this.#sheet) this.#closeSheet();
+    });
+    host.append(this.#readoutBox, this.#grid, this.#sheet);
+  }
+
+  present(view: NodeView): void {
+    this.#props = view.props;
+    for (const prop of view.props) {
+      // A spawned prop stays out of the scene until an effect brings it in;
+      // everything else is present from the start, clutter included. Only the
+      // first time, though: re-adding it on every step undid any `despawn`.
+      if (this.#seeded.has(prop.id)) continue;
+      this.#seeded.add(prop.id);
+      if (prop.visible) this.#visible.add(prop.id);
+    }
+
+    this.#grid.replaceChildren();
+    if (view.narrationOnly) {
+      this.#grid.classList.add('muted');
+    } else {
+      this.#grid.classList.remove('muted');
+    }
+
+    for (const prop of view.props) {
+      if (!this.#visible.has(prop.id)) continue;
+      this.#grid.append(this.#tile(prop, view.narrationOnly));
+    }
+  }
+
+  #tile(prop: PropView, disabled: boolean): HTMLElement {
+    const tile = document.createElement('button');
+    tile.className = 'tile';
+    tile.disabled = disabled;
+    if (this.#failed.has(prop.id)) tile.classList.add('failed');
+
+    // No `kind-*` class: the tile for the hazard must carry nothing, visible or
+    // styleable, that the tile for a toolbox does not.
+    const glyph = icon(tileIcon(prop), 'tile-icon');
+
+    const label = document.createElement('span');
+    label.className = 'tile-label';
+    label.textContent = prop.label;
+
+    tile.append(glyph, label);
+    tile.addEventListener('click', () => this.#openSheet(prop));
+    return tile;
+  }
+
+  /** Two touches, never one: choose the thing, then choose what you do to it. */
+  #openSheet(prop: PropView): void {
+    this.#sheet.replaceChildren();
+    const card = document.createElement('div');
+    card.className = 'sheet-card';
+
+    const title = document.createElement('h2');
+    title.textContent = prop.label;
+    card.append(title);
+
+    for (const verb of prop.verbs) {
+      const button = document.createElement('button');
+      button.className = `verb verb-${verb}`;
+      const text = document.createElement('span');
+      text.textContent = this.#i18n.text(VERB_LABEL[verb]);
+      button.append(icon(VERB_ICON[verb], 'verb-icon'), text);
+      button.addEventListener('click', () => {
+        this.#closeSheet();
+        this.#hooks?.act({ verb, target: prop.id });
+      });
+      card.append(button);
+    }
+
+    const cancel = document.createElement('button');
+    cancel.className = 'ghost';
+    cancel.textContent = this.#i18n.ui('cancel');
+    cancel.addEventListener('click', () => this.#closeSheet());
+    card.append(cancel);
+
+    this.#sheet.append(card);
+    this.#sheet.hidden = false;
+  }
+
+  #closeSheet(): void {
+    this.#sheet.hidden = true;
+  }
+
+  /**
+   * `WorldEffect.role` is a role name ("fire"), but `#visible`/`#failed` are
+   * keyed by prop id ("fire_panel") — same bug as Tier A had, same fix: a
+   * scenario whose bindings happen to map a role to an identically-named id
+   * (gas-confined-space's `"casualty": "casualty"`) masks this by
+   * coincidence; fire-explosion's `"fire": "fire_panel"` doesn't share it,
+   * and the fire tile never appeared in the grid at all.
+   */
+  #idForRole(role: string): string {
+    return this.#props.find((p) => p.role === role)?.id ?? role;
+  }
+
+  effect(effect: WorldEffect): void {
+    switch (effect.type) {
+      case 'spawn':
+        this.#visible.add(this.#idForRole(effect.role));
+        break;
+      case 'despawn':
+        this.#visible.delete(this.#idForRole(effect.role));
+        break;
+      case 'fail_equipment':
+        this.#failed.add(this.#idForRole(effect.role));
+        break;
+      case 'set_gas':
+        this.#gasReadout = {
+          species: effect.species,
+          value: Number(effect.value),
+          unit: effect.unit,
+        };
+        this.#renderReadout();
+        break;
+      case 'alarm':
+        this.#alarm = effect.level;
+        this.#host?.classList.toggle('alarm-warning', effect.level === 'warning');
+        this.#host?.classList.toggle('alarm-critical', effect.level === 'critical');
+        this.#renderReadout();
+        break;
+      case 'haptic':
+        this.#vibrate(effect.pattern);
+        break;
+      case 'ambient':
+        break;
+    }
+  }
+
+  /**
+   * Haptics carry the alarm on a phone held in a gloved hand in a noisy yard,
+   * where neither the screen nor the speaker is reliable. Absent on iOS and on
+   * desktop, which is why it is never the only channel.
+   */
+  #vibrate(pattern: 'pulse' | 'sos' | 'continuous'): void {
+    if (!('vibrate' in navigator)) return;
+    const patterns: Record<typeof pattern, number[]> = {
+      pulse: [120, 90, 120],
+      sos: [90, 60, 90, 60, 90, 200, 240, 60, 240, 60, 240],
+      continuous: [700],
+    };
+    navigator.vibrate(patterns[pattern]);
+  }
+
+  #renderReadout(): void {
+    if (!this.#gasReadout) {
+      this.#readoutBox.hidden = true;
+      return;
+    }
+    const { species, value, unit } = this.#gasReadout;
+    this.#readoutBox.hidden = false;
+    this.#readoutBox.className = `readout ${this.#alarm}`;
+    this.#readoutBox.textContent = `${species} ${value}${unit}`;
+  }
+
+  feedback(_feedback: Feedback): void {
+    // The consequence banner belongs to the shared HUD. If this tier drew its
+    // own, tiers would stop showing learners the same thing.
+  }
+
+  dispose(): void {
+    this.#grid.remove();
+    this.#sheet.remove();
+    this.#readoutBox.remove();
+  }
+}

@@ -51,6 +51,26 @@ const UI: Record<string, LocalizedText> = {
     hi: 'अभी सतह नहीं मिली — फ़ोन को धीरे-धीरे फ़र्श पर घुमाइए',
     sat: 'ᱚᱛᱟᱨ ᱵᱟᱭ ᱧᱟᱢ ᱟᱠᱟᱱᱟ — ᱯᱷᱚᱱ ᱠᱚ ᱥᱟᱱᱛ ᱠᱟᱛᱮ ᱟᱛᱟᱨ ᱨᱮ ᱦᱟᱛᱟᱣ ᱢᱮ',
   },
+  // Card AR (Tier B). The Santali here is a machine draft like the rest,
+  // recorded in l10n/sat-review.tsv for a speaker to check.
+  cardFind: {
+    en: 'Point the camera at the card and hold still until the work site stands on it',
+    hi: 'कैमरा कार्ड पर रखिए और तब तक स्थिर रहिए जब तक साइट उस पर न दिखे',
+    sat: 'ᱠᱮᱢᱨᱟ ᱠᱟᱨᱰ ᱪᱮᱛᱟᱱ ᱫᱚᱦᱚᱭ ᱢᱮ ᱟᱨ ᱠᱟᱹᱢᱤ ᱡᱟᱭᱜᱟ ᱧᱮᱞᱚᱜ ᱦᱟᱹᱵᱤᱡ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱸᱱ ᱢᱮ',
+  },
+  cardNoCard: {
+    en: 'No card? Do this drill flat',
+    hi: 'कार्ड नहीं है? यही अभ्यास फ्लैट मोड में कीजिए',
+    sat: 'ᱠᱟᱨᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱯᱷᱞᱮᱴ ᱢᱳᱰ ᱨᱮ ᱠᱟᱹᱢᱤ ᱢᱮ',
+  },
+  showCard: { en: 'Show the card', hi: 'कार्ड दिखाइए', sat: 'ᱠᱟᱨᱰ ᱩᱫᱩᱜ ᱢᱮ' },
+  cardSheetBody: {
+    en: 'Print this at full size, or show it on a second screen. Lay it flat, start the drill, and point the camera at it.',
+    hi: 'इसे पूरे आकार में छापिए, या किसी दूसरी स्क्रीन पर दिखाइए। इसे सीधा रखिए, अभ्यास शुरू कीजिए और कैमरा उस पर रखिए।',
+    sat: 'ᱱᱚᱶᱟ ᱯᱩᱨᱟᱹ ᱢᱟᱯ ᱨᱮ ᱪᱷᱟᱯᱟ ᱢᱮ, ᱟᱨᱵᱟᱝ ᱮᱴᱟᱜ ᱥᱠᱨᱤᱱ ᱨᱮ ᱩᱫᱩᱜ ᱢᱮ। ᱥᱚᱡᱮ ᱫᱚᱦᱚᱭ ᱢᱮ, ᱟᱹᱣᱟᱛ ᱮᱛᱦᱚᱵ ᱢᱮ ᱟᱨ ᱠᱮᱢᱨᱟ ᱚᱱᱰᱮ ᱫᱚᱦᱚᱭ ᱢᱮ।',
+  },
+  printCard: { en: 'Print the card', hi: 'कार्ड छापिए', sat: 'ᱠᱟᱨᱰ ᱪᱷᱟᱯᱟ ᱢᱮ' },
+  cardBack: { en: 'Back', hi: 'वापस', sat: 'ᱨᱩᱣᱟᱹᱲ ᱢᱮ' },
   tapToContinue: {
     en: 'Tap anywhere to continue',
     hi: 'आगे बढ़ने के लिए कहीं भी टैप कीजिए',

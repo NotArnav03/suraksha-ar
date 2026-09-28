@@ -7,9 +7,9 @@ the code is holding that a type checker will not hold for you. `README.md` is
 the pitch and the reasoning behind the design; read that first if you want to
 know *why*. `docs/UI.md` covers the interface layer specifically.
 
-Verified 2026-09-23. The code has not changed since `caaf242`; anything after it on `main` is documentation.
+Verified 2026-09-29, with Card AR (Tier B) and the new app mark.
 
-- `npm test` → **149 passing, 0 failing** (16 files)
+- `npm test` → **158 passing, 0 failing** (17 files)
 - `npm run check` (`tsc --noEmit`) → clean
 - `npm run build` → two pages, `index.html` and `admin.html`
 - CI: `.github/workflows/deploy-pages.yml` runs tests, typecheck and build on
@@ -25,15 +25,15 @@ Verified 2026-09-23. The code has not changed since `caaf242`; anything after it
 A phone-only AR safety-training simulator that replaces multiple-choice quizzes
 with a scored behavioural drill, and replaces the paper certificate with a
 signed, offline-verifiable QR credential. Three authored scenarios (JSON) run
-through one shared assessment engine and render in two tiers, markerless AR
-(Tier A) and flat interactive (Tier B), so the same drill and the same
-certificate are available on whatever Android device a worker actually owns.
+through one shared assessment engine and render in three tiers: markerless AR
+(Tier A, ARCore phones), Card AR (Tier B, any phone with a camera and WebGL:
+the site stands on a printed card the camera tracks) and flat interactive
+(Tier C, anything), so the same drill and the same certificate are available
+on whatever Android device a worker actually owns.
 
-A marker-tracked middle tier used to sit between them. It was contracted and
-never built, and carrying an empty slot in the type made every tier list read as
-two thirds finished, so it has been dropped. The flat tier, previously Tier C,
-is Tier B now. `?tier=C` is still accepted as an alias, because links and notes
-with the old letter are in circulation.
+For four days (25 to 29 September 2026) the flat tier was lettered B, because
+the marker tier had been contracted and never built. Card AR now fills that
+slot, so the flat tier is C again, as older links already assume.
 
 Two framing points that matter when you are deciding what to build next:
 
@@ -87,8 +87,12 @@ src/
     style.css       the whole design system (see docs/UI.md)
     render/
       contract.ts     WorldRenderer, the tier boundary itself
-      tierB.ts        flat 2D renderer (tile grid plus verb sheet)
       tierA.ts        markerless WebXR renderer (three.js)
+      tierB.ts        Card AR renderer: camera, tracker, the site on the card (three.js)
+      tierC.ts        flat 2D renderer (tile grid plus verb sheet)
+      props3d.ts      the site as three.js geometry, shared by Tiers A and B
+      card-tracker.ts ARToolKit wrapper: RGBA pixels in, card pose out (no DOM)
+      card-marker.ts  generated: the card's template, frame ratio and camera calibration
       overlay-taps.ts tap arbitration inside a WebXR dom-overlay (§5.3)
       verbs.ts        shared verb icons and labels; both tiers must agree
     ui/
@@ -112,13 +116,16 @@ src/
     run.ts          headless drill runner: scripts, tracing, certification runs
     credential.ts   end-to-end: drill -> certify -> issue -> scan -> verify
 
-tests/           149 tests, node's built-in runner (§9)
+tests/           158 tests, node's built-in runner (§9)
 tools/
   phone.mjs       drive a phone's Chrome over USB via adb and CDP (§3)
   translate.mjs   machine-draft missing Santali, for human review (§8)
   narration.mjs   what needs recording, and the manifest for it
   build_apk.mjs, patch_bubblewrap_windows.mjs   the TWA Android build (docs/APK.md)
-  make_icon.mjs, make_placeholders.mjs          PWA icons, placeholder assets
+  make_mark.py    the app mark: PWA and APK icons, the printed card, its tracker template, card test frames
+  make_placeholders.mjs                         placeholder assets
+  fonts/          Noto Sans Ol Chiki Bold (SIL OFL 1.1) for the mark
+  ar/             ARToolKit's generic camera calibration
 public/          PWA manifest, service worker, icons, glTF props
 l10n/            ai-santali-drafts.json, sat-review.tsv (the sign-off sheet)
 docs/            RESEARCH, CITATIONS, UI, NARRATION, APK, asset specs
@@ -140,7 +147,7 @@ scripts.** Vite is used only to bundle the two browser pages.
 
 ```bash
 npm install
-npm test        # 149 tests, a few seconds
+npm test        # 158 tests, a few seconds
 npm run check   # tsc --noEmit
 npm run dev     # Vite dev server
 npm run build   # production bundle -> dist/
@@ -191,8 +198,8 @@ Three things that will waste your time otherwise:
 3. `main.ts` picks the variant: `?seed=N` resolves that exact seed through
    `resolveVariant`, otherwise `distinctVariants` plus `nextVariant()` chooses
    the next one the learner has not passed.
-4. A renderer is constructed for the served tier (`TierARenderer` or
-   `TierBRenderer`) and handed, with the resolved variant, to a new
+4. A renderer is constructed for the served tier (`TierARenderer`,
+   `TierBRenderer` or `TierCRenderer`) and handed, with the resolved variant, to a new
    `DrillController`.
 5. `DrillController` constructs the `DrillSession` and a `Hud`. It is the
    **only** object permitted to call `session.dispatch()`, `acknowledge()` or
@@ -229,7 +236,7 @@ once, by `Hud`, and every renderer's `feedback()` is a deliberate no-op with a
 comment saying so. A renderer that drew its own countdown could quietly give its
 learners more time, and two credentials that cost different amounts of time are
 not the same credential. Verb wording is centralised in `render/verbs.ts` for
-the same reason: if Tier A said "Enter" where Tier B said "Climb in", the tiers
+the same reason: if Tier A said "Enter" where Tier C said "Climb in", the tiers
 would be asking subtly different questions.
 
 ### 5.2 `resolveVariant` rebuilds every node kind field by field
@@ -444,7 +451,7 @@ voice lists).
 |---|---|---|
 | `engine.test.ts` | 17 | validation, variant resolution and splicing, the ideal operator through every branch, sequence errors, timeouts via `tick()`, hesitation accounting, observe-node error rules |
 | `credential.test.ts` | 16 | base64url, binary codec round trip and rejections, issue/verify, refusal to issue for an ungranted certification, single-byte tamper, unknown issuer, expiry and near-expiry, worst-not-mean, QR ceiling |
-| `app.test.ts` | 19 | end-to-end DOM drill flow: pass and named fatal, checklist, spawned props, live language switch, every expected action reachable through the real UI, `.hidden` honoured by the real stylesheet, cross-tier verb agreement, a Hindi debrief carrying no English reasons |
+| `app.test.ts` | 20 | end-to-end DOM drill flow: pass and named fatal, a hazard tile that gives nothing away, checklist, spawned props, live language switch, every expected action reachable through the real UI, `.hidden` honoured by the real stylesheet, cross-tier verb agreement, a Hindi debrief carrying no English reasons |
 | `assess.test.ts` | 10 | scoring math, fatal flooring, severity weighting, hesitation, null vs zero, contribution traceability, distinct-variant certification, worst-vs-mean |
 | `overlay-taps.test.ts` | 9 | dual-channel tap arbitration in isolation |
 | `machinery.test.ts` | 8 | the conveyor drill end to end, including the second-victim grab and isolating the wrong belt |
@@ -458,8 +465,9 @@ voice lists).
 | `citations.test.ts` | 4 | every citation has a pinpoint and matches the recorded text |
 | `l10n.test.ts` | 6 | every declared language resolves every scenario string; fallback chains terminate; and every authored file plus the interface table carries all three languages, with only the three AR lines exempt |
 | `replay.test.ts` | 4 | a signed credential turned back into the exact drills it was earned on |
+| `card.test.ts` | 8 | the real Card AR tracker on frames drawn from the printed card: position, all four turns, black-and-white print, dim and washed-out light, a decoy square, print vs template ratio, the repaired projection, and the behind-the-camera pose turned back round |
 
-`npm test` should exit `149 pass`, `0 fail`. This suite is the only thing
+`npm test` should exit `158 pass`, `0 fail`. This suite is the only thing
 standing between a scenario-JSON edit and a broken drill on a real phone.
 
 ## 10. Where to start for common tasks

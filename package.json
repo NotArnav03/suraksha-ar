@@ -26,7 +26,7 @@
     "l10n": "node tools/translate.mjs --report",
     "l10n:draft": "node tools/translate.mjs --dry-run",
     "l10n:apply": "node tools/translate.mjs --apply",
-    "icons": "node tools/make_icon.mjs",
+    "mark": "python tools/make_mark.py",
     "apk:patch": "node tools/patch_bubblewrap_windows.mjs",
     "apk:init": "node tools/build_apk.mjs",
     "apk:build": "cd android && npx bubblewrap build"
@@ -42,6 +42,7 @@
     "vite": "^6.4.3"
   },
   "dependencies": {
+    "@ar-js-org/artoolkit5-js": "^0.3.2",
     "qrcode": "^1.5.4",
     "three": "^0.185.1"
   }

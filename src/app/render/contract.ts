@@ -11,7 +11,13 @@ import type { Verdict } from '../../engine/runtime.ts';
  * certificate stops meaning the same thing on different handsets.
  */
 
-export type Tier = 'A' | 'B';
+/**
+ * A: markerless WebXR, the site anchored on the learner's floor (ARCore phones).
+ * B: Card AR, the site standing on a printed card the camera tracks (any phone
+ *    with a camera and WebGL, no ARCore needed).
+ * C: the flat world, tiles and a verb sheet (anything at all).
+ */
+export type Tier = 'A' | 'B' | 'C';
 
 /** What a learner may plausibly do to a thing. The verb is a deliberate choice,
  *  which is why entering a confined space can never be an accidental tap. */

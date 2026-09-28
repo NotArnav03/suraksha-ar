@@ -351,3 +351,10 @@ C:\Projects\hackathons\isih\src\app\ui\i18n.ts	UI.modeAssess	Prove it	ᱱᱤᱛ�
 C:\Projects\hackathons\isih\src\app\ui\i18n.ts	UI.rulesFollowed	{{count}} rules followed	{{count}} ᱱᱤᱭᱚᱢ ᱢᱟᱱᱟᱣ ᱟᱠᱟᱱᱟ		
 C:\Projects\hackathons\isih\src\app\ui\i18n.ts	UI.demoCertificate	Demo: skip to a certificate	ᱰᱮᱢᱳ: ᱥᱚᱡᱮ ᱥᱟᱠᱷᱭᱟᱛ ᱧᱮᱞ ᱢᱮ		
 C:\Projects\hackathons\isih\src\app\ui\i18n.ts	UI.demoCertificateWarn	For presentations only — this clears any saved drill progress and issues a real certificate for an ideal run.	ᱠᱷᱟᱹᱞᱤ ᱩᱫᱩᱜ ᱞᱟᱹᱜᱤᱫ। ᱱᱚᱶᱟ ᱥᱟᱸᱪᱟᱣ ᱟᱠᱟᱱ ᱟᱹᱣᱟᱛ ᱨᱮᱭᱟᱜ ᱠᱟᱛᱷᱟ ᱢᱮᱴᱟᱣᱟ ᱟᱨ ᱢᱤᱫ ᱴᱷᱤᱠ ᱟᱹᱣᱟᱛ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱹᱨᱤ ᱥᱟᱠᱷᱭᱟᱛ ᱮᱢᱟ।		
+src/app/ui/i18n.ts	UI.cardFind	Point the camera at the card and hold still until the work site stands on it	ᱠᱮᱢᱨᱟ ᱠᱟᱨᱰ ᱪᱮᱛᱟᱱ ᱫᱚᱦᱚᱭ ᱢᱮ ᱟᱨ ᱠᱟᱹᱢᱤ ᱡᱟᱭᱜᱟ ᱧᱮᱞᱚᱜ ᱦᱟᱹᱵᱤᱡ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱸᱱ ᱢᱮ		
+src/app/ui/i18n.ts	UI.cardNoCard	No card? Do this drill flat	ᱠᱟᱨᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱯᱷᱞᱮᱴ ᱢᱳᱰ ᱨᱮ ᱠᱟᱹᱢᱤ ᱢᱮ		
+src/app/ui/i18n.ts	UI.showCard	Show the card	ᱠᱟᱨᱰ ᱩᱫᱩᱜ ᱢᱮ		
+src/app/ui/i18n.ts	UI.cardSheetBody	Print this at full size, or show it on a second screen. Lay it flat, start the drill, and point the camera at it.	ᱱᱚᱶᱟ ᱯᱩᱨᱟᱹ ᱢᱟᱯ ᱨᱮ ᱪᱷᱟᱯᱟ ᱢᱮ, ᱟᱨᱵᱟᱝ ᱮᱴᱟᱜ ᱥᱠᱨᱤᱱ ᱨᱮ ᱩᱫᱩᱜ ᱢᱮ। ᱥᱚᱡᱮ ᱫᱚᱦᱚᱭ ᱢᱮ, ᱟᱹᱣᱟᱛ ᱮᱛᱦᱚᱵ ᱢᱮ ᱟᱨ ᱠᱮᱢᱨᱟ ᱚᱱᱰᱮ ᱫᱚᱦᱚᱭ ᱢᱮ।		
+src/app/ui/i18n.ts	UI.printCard	Print the card	ᱠᱟᱨᱰ ᱪᱷᱟᱯᱟ ᱢᱮ		
+src/app/ui/i18n.ts	UI.cardBack	Back	ᱨᱩᱣᱟᱹᱲ ᱢᱮ		
+src/app/main.ts	TIER_LABEL.B	Card AR	ᱠᱟᱨᱰ AR		

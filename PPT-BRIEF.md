@@ -33,9 +33,10 @@ audit. Read both before a Q&A.
 
 ### Detailed explanation of the proposed solution
 
-- A phone-only AR simulator, no headset. Each authored scenario runs in two
-  renderer tiers off one engine, markerless AR on a phone that supports it and a
-  flat interactive world on one that does not, so it works on any Android 10+
+- A phone-only AR simulator, no headset. Each authored scenario runs in three
+  renderer tiers off one engine: markerless AR on an ARCore phone, Card AR (the
+  site stands on a printed card the camera tracks) on any phone with a camera,
+  and a flat interactive world on anything else, so it works on any Android 10+
   handset a worker already owns.
 - The learner performs the procedure: checks the permit, tests the atmosphere,
   isolates the belt, decides whether to go in after a colleague. No multiple
@@ -128,10 +129,10 @@ state-backed VR effort 40 km from the problem without disparaging it.
 
 ### Diagram: tiered rendering
 
-**Scenario Graph** fans out to **Tier A, markerless AR** and **Tier B, flat
-interactive**, and both converge on **Competency Engine**, then **Signed
-Credential**. The point of the diagram is the convergence: two ways to see the
-world, one way to be assessed.
+**Scenario Graph** fans out to **Tier A, markerless AR**, **Tier B, Card AR**
+and **Tier C, flat interactive**, and all three converge on **Competency
+Engine**, then **Signed Credential**. The point of the diagram is the
+convergence: three ways to see the world, one way to be assessed.
 
 ### Diagram: the decision tree, from the real drill
 

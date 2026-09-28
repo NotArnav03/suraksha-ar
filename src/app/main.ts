@@ -11,7 +11,7 @@ import { distinctVariants, resolveVariant } from '../engine/variant.ts';
 import { ScenarioError, validateScenario } from '../engine/validate.ts';
 import { DrillSession } from '../engine/runtime.ts';
 import { DrillController, rafScheduler } from './controller.ts';
-import { TierBRenderer } from './render/tierB.ts';
+import { TierCRenderer } from './render/tierC.ts';
 import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
 import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
@@ -41,17 +41,15 @@ const app = document.querySelector<HTMLElement>('#app')!;
 const params = new URLSearchParams(location.search);
 const workerId = params.get('worker') ?? 'JH/CHP/2291';
 /**
- * `?tier=` picks a renderer by hand, for demos and for testing the flat drill on
- * a phone that would otherwise get AR.
+ * `?tier=` picks a renderer by hand, for demos and for testing Card AR or the
+ * flat drill on a phone that would otherwise get full AR.
  *
- * `C` is accepted as an alias for `B`. The flat tier was Tier C while a
- * marker-tracked tier sat between them; that middle tier was never built and
- * has been dropped, so the flat tier is Tier B now. Links, notes and QR codes
- * with the old letter are still in circulation, and silently serving them the
- * right drill beats a demo falling back to AR because of one stale character.
+ * Between 25 and 29 September 2026 the flat tier was briefly lettered B, while
+ * Card AR did not exist. It is C again, as it was before that, so the older
+ * `?tier=C` links still land on the flat drill.
  */
 const requestedTier = params.get('tier')?.toUpperCase();
-const forcedTier = (requestedTier === 'C' ? 'B' : requestedTier) as Tier | undefined;
+const forcedTier = (['A', 'B', 'C'].includes(requestedTier ?? '') ? requestedTier : undefined) as Tier | undefined;
 // `?mode=assess` comes from the dashboard's replay links: an auditor opening the
 // drill a credential was earned on should get it the way the worker did.
 const urlMode = params.get('mode') === 'assess' ? 'assess' : params.get('mode') === 'guided' ? 'guided' : null;
@@ -195,10 +193,48 @@ async function requestArSession(overlay: HTMLElement): Promise<ArAttempt> {
   return { session: null, reason: refused ? 'refused' : 'timeout' };
 }
 
+type CameraAttempt =
+  | { stream: MediaStream; reason: null }
+  | { stream: null; reason: 'unsupported' | 'refused' | 'timeout' };
+
+/**
+ * The rear camera, for Card AR, asked for the same way and guarded the same
+ * way as the AR session above: a prompt the learner may refuse, and a request
+ * that on some phones never answers at all.
+ */
+async function requestCamera(): Promise<CameraAttempt> {
+  if (!navigator.mediaDevices?.getUserMedia) return { stream: null, reason: 'unsupported' };
+
+  let refused = false;
+  const request = navigator.mediaDevices
+    .getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false,
+    })
+    .catch(() => {
+      refused = true;
+      return null;
+    });
+
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const expiry = new Promise<null>((resolve) => {
+    timer = setTimeout(() => resolve(null), AR_HANDSHAKE_TIMEOUT_MS);
+  });
+  const stream = await Promise.race([request, expiry]);
+  clearTimeout(timer);
+  if (stream) return { stream, reason: null };
+
+  // A camera granted after the drill has gone flat is a live camera nobody is
+  // looking through, and a privacy light the learner cannot explain.
+  void request.then((late) => late?.getTracks().forEach((track) => track.stop()));
+  return { stream: null, reason: refused ? 'refused' : 'timeout' };
+}
+
 async function rendererFor(
   tier: Tier,
   overlay: HTMLElement,
   onSessionEnd: () => void,
+  onNoCard: () => void,
 ): Promise<{ renderer: WorldRenderer; note: string | null }> {
   if (tier === 'A') {
     const attempt = await requestArSession(overlay);
@@ -215,11 +251,26 @@ async function rendererFor(
     // true; "refused" when the phone never answered is a lie that sends someone
     // hunting through permission settings that were never the problem.
     return {
-      renderer: new TierBRenderer(i18n),
+      renderer: new TierCRenderer(i18n),
       note: i18n.ui(attempt.reason === 'timeout' ? 'arTimedOut' : 'arRefused'),
     };
   }
-  return { renderer: new TierBRenderer(i18n), note: null };
+  if (tier === 'B') {
+    const attempt = await requestCamera();
+    if (attempt.stream) {
+      // three.js and the tracker's WASM are only fetched once a camera exists.
+      const { TierBRenderer } = await import('./render/tierB.ts');
+      return {
+        renderer: new TierBRenderer(i18n, { stream: attempt.stream, overlay, onNoCard }),
+        note: null,
+      };
+    }
+    return {
+      renderer: new TierCRenderer(i18n),
+      note: i18n.ui(attempt.reason === 'timeout' ? 'arTimedOut' : 'arRefused'),
+    };
+  }
+  return { renderer: new TierCRenderer(i18n), note: null };
 }
 
 /**
@@ -256,7 +307,8 @@ function screen(className: string): HTMLElement {
 
 const TIER_LABEL: Record<Tier, LocalizedText> = {
   A: { en: 'Markerless AR', hi: 'मार्करलेस AR', sat: 'ᱢᱟᱨᱠᱚᱨᱞᱮᱥ AR' },
-  B: { en: 'Flat interactive', hi: 'फ्लैट मोड', sat: 'ᱯᱷᱞᱮᱴ ᱢᱳᱰ' },
+  B: { en: 'Card AR', hi: 'कार्ड AR', sat: 'ᱠᱟᱨᱰ AR' },
+  C: { en: 'Flat interactive', hi: 'फ्लैट मोड', sat: 'ᱯᱷᱞᱮᱴ ᱢᱳᱰ' },
 };
 
 const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: IconName }> = {
@@ -267,7 +319,7 @@ const CAPABILITY_LABEL: Record<string, LocalizedText & { icon: IconName }> = {
   secureContext: { en: 'Secure connection', hi: 'सुरक्षित कनेक्शन', sat: 'ᱨᱚᱠᱷᱟ ᱠᱟᱱᱮᱠᱥᱚᱱ', icon: 'shield' },
 };
 
-const TIER_ICON: Record<Tier, IconName> = { A: 'headset', B: 'phone' };
+const TIER_ICON: Record<Tier, IconName> = { A: 'headset', B: 'marker', C: 'phone' };
 
 /** A button's words, in their own span, so the pictogram beside them sizes independently. */
 function labelSpan(text: string): HTMLSpanElement {
@@ -485,6 +537,17 @@ function startScreen(report: TierReport): void {
   });
   actions.append(begin, assess, reset);
 
+  // Card AR needs the card. It is in the app, not only on paper: shown full
+  // screen on a second phone or a laptop it tracks as well as a print does,
+  // and printed from here it comes out at the size the tracker expects.
+  if (report.serving === 'B') {
+    const show = document.createElement('button');
+    show.className = 'big';
+    show.replaceChildren(icon('marker'), labelSpan(i18n.ui('showCard')));
+    show.addEventListener('click', () => cardScreen(report));
+    actions.append(show);
+  }
+
   // A presentation shortcut, not a second product: reuses the exact
   // headless-ideal-operator path `?demo=credential` already used, so the
   // certificate this produces is genuinely earned and genuinely signed —
@@ -531,7 +594,43 @@ function startScreen(report: TierReport): void {
   root.append(hero, welcome, langRow, tierBox, progress, actions, demoNote, prefs);
 }
 
-async function drillScreen(report: TierReport, mode: 'guided' | 'assess' = 'guided'): Promise<void> {
+/** The card itself, to print or to hold up on a second screen. */
+function cardScreen(report: TierReport): void {
+  const root = screen('start card-sheet');
+  const heading = document.createElement('h1');
+  heading.textContent = i18n.ui('showCard');
+  const body = document.createElement('p');
+  body.className = 'lede';
+  body.textContent = i18n.ui('cardSheetBody');
+  const image = document.createElement('img');
+  image.className = 'card-image';
+  // Just the marker and its border: on a second screen it should fill the
+  // glass. The Print button below opens the full A4 sheet instead.
+  image.src = './card-screen.svg';
+  image.alt = 'Suraksha AR card';
+
+  const actions = document.createElement('div');
+  actions.className = 'start-actions';
+  const print = document.createElement('button');
+  print.className = 'primary big';
+  print.textContent = i18n.ui('printCard');
+  // The sheet itself, not this screen: it is laid out in millimetres, so it
+  // prints at the size the tracker's scale assumes.
+  print.addEventListener('click', () => void window.open('./card.svg', '_blank'));
+  const back = document.createElement('button');
+  back.className = 'ghost';
+  back.textContent = i18n.ui('cardBack');
+  back.addEventListener('click', () => startScreen(report));
+  actions.append(print, back);
+
+  root.append(heading, body, image, actions);
+}
+
+async function drillScreen(
+  report: TierReport,
+  mode: 'guided' | 'assess' = 'guided',
+  tier: Tier = report.serving,
+): Promise<void> {
   const root = screen('drill');
   const world = document.createElement('div');
   world.className = 'world';
@@ -543,7 +642,7 @@ async function drillScreen(report: TierReport, mode: 'guided' | 'assess' = 'guid
   // empty for as long as the handshake takes. Tell the learner what is being
   // waited on rather than showing them nothing.
   let waiting: HTMLElement | null = null;
-  if (report.serving === 'A') {
+  if (tier === 'A' || tier === 'B') {
     waiting = document.createElement('p');
     waiting.className = 'reason starting';
     waiting.textContent = i18n.ui('startingAr');
@@ -555,12 +654,22 @@ async function drillScreen(report: TierReport, mode: 'guided' | 'assess' = 'guid
   // holds that canvas, and the overlay spec's normal-DOM-event guarantee is only
   // reliable for content outside the surface the browser is actively compositing
   // as the XR view. Pass `chrome` (sibling of `world`), never `root`.
-  const { renderer, note } = await rendererFor(report.serving, chrome, () => {
-    // The learner backed out of AR with the system gesture. Ending the drill is
-    // the honest response: a half-finished run must not be scored as a run.
-    controller?.stop();
-    startScreen(report);
-  });
+  const { renderer, note } = await rendererFor(
+    tier,
+    chrome,
+    () => {
+      // The learner backed out of AR with the system gesture. Ending the drill is
+      // the honest response: a half-finished run must not be scored as a run.
+      controller?.stop();
+      startScreen(report);
+    },
+    () => {
+      // No card to hand. The run so far is dropped, not scored, and the same
+      // drill starts again flat: nothing in the card run had counted yet.
+      controller?.stop();
+      void drillScreen(report, mode, 'C');
+    },
+  );
 
   waiting?.remove();
 
@@ -572,6 +681,7 @@ async function drillScreen(report: TierReport, mode: 'guided' | 'assess' = 'guid
     chrome.append(line);
   }
   if (renderer.tier === 'A') root.classList.add('ar-active');
+  if (renderer.tier === 'B') root.classList.add('ar-active', 'card-ar');
 
   const variant = nextVariant();
   controller = new DrillController(variant, renderer, i18n, {
