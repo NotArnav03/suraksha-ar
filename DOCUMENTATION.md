@@ -9,7 +9,7 @@ know *why*. `docs/UI.md` covers the interface layer specifically.
 
 Verified 2026-09-29, with Card AR (Tier B) and the new app mark.
 
-- `npm test` → **158 passing, 0 failing** (17 files)
+- `npm test` → **162 passing, 0 failing** (18 files)
 - `npm run check` (`tsc --noEmit`) → clean
 - `npm run build` → two pages, `index.html` and `admin.html`
 - CI: `.github/workflows/deploy-pages.yml` runs tests, typecheck and build on
@@ -116,7 +116,7 @@ src/
     run.ts          headless drill runner: scripts, tracing, certification runs
     credential.ts   end-to-end: drill -> certify -> issue -> scan -> verify
 
-tests/           158 tests, node's built-in runner (§9)
+tests/           162 tests, node's built-in runner (§9)
 tools/
   phone.mjs       drive a phone's Chrome over USB via adb and CDP (§3)
   translate.mjs   machine-draft missing Santali, for human review (§8)
@@ -147,7 +147,7 @@ scripts.** Vite is used only to bundle the two browser pages.
 
 ```bash
 npm install
-npm test        # 158 tests, a few seconds
+npm test        # 162 tests, a few seconds
 npm run check   # tsc --noEmit
 npm run dev     # Vite dev server
 npm run build   # production bundle -> dist/
@@ -466,8 +466,9 @@ voice lists).
 | `l10n.test.ts` | 6 | every declared language resolves every scenario string; fallback chains terminate; and every authored file plus the interface table carries all three languages, with only the three AR lines exempt |
 | `replay.test.ts` | 4 | a signed credential turned back into the exact drills it was earned on |
 | `card.test.ts` | 8 | the real Card AR tracker on frames drawn from the printed card: position, all four turns, black-and-white print, dim and washed-out light, a decoy square, print vs template ratio, the repaired projection, and the behind-the-camera pose turned back round |
+| `tier.test.ts` | 4 | which modes the start-screen switcher offers for each set of phone capabilities, and that flat is always one of them |
 
-`npm test` should exit `158 pass`, `0 fail`. This suite is the only thing
+`npm test` should exit `162 pass`, `0 fail`. This suite is the only thing
 standing between a scenario-JSON edit and a broken drill on a real phone.
 
 ## 10. Where to start for common tasks

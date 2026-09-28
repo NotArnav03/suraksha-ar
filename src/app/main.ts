@@ -14,7 +14,7 @@ import { DrillController, rafScheduler } from './controller.ts';
 import { TierCRenderer } from './render/tierC.ts';
 import type { Tier, WorldRenderer } from './render/contract.ts';
 import { clearAttempts, loadAttempts, renderResults, saveAttempt } from './results.ts';
-import { detectTier, IMPLEMENTED, type TierReport } from './tier.ts';
+import { detectTier, IMPLEMENTED, supportedTiers, type TierReport } from './tier.ts';
 import { Localizer, LANGUAGES, type LangCode } from './ui/i18n.ts';
 import { icon, type IconName } from './ui/icons.ts';
 import { mountQuiz, quizCallout } from './quiz.ts';
@@ -471,6 +471,33 @@ function startScreen(report: TierReport): void {
     tierHead.append(badge);
   }
   tierBox.append(tierHead);
+
+  // Every mode this phone can run, one tap away. A worker with no floor space
+  // can take the card, one with no card the flat drill, and a demo can show all
+  // three on one phone. Scoring is the same in every tier, so this changes how
+  // the drill is seen and touched, never what the certificate means.
+  const supported = supportedTiers(report.capabilities);
+  const switcher = document.createElement('div');
+  switcher.className = 'lang tier-switch';
+  switcher.setAttribute('role', 'group');
+  switcher.setAttribute('aria-label', i18n.ui('switchTier'));
+  for (const tier of ['A', 'B', 'C'] as const) {
+    const button = document.createElement('button');
+    button.className = `lang-button${tier === report.serving ? ' on' : ''}`;
+    button.setAttribute('aria-pressed', String(tier === report.serving));
+    button.disabled = !supported.includes(tier);
+    button.replaceChildren(icon(TIER_ICON[tier]), labelSpan(i18n.text(TIER_LABEL[tier])));
+    button.addEventListener('click', () => {
+      if (tier === report.serving) return;
+      // Into the address as well, so a reload keeps the mode the learner chose.
+      const url = new URL(location.href);
+      url.searchParams.set('tier', tier);
+      history.replaceState(null, '', url);
+      startScreen({ ...report, serving: tier });
+    });
+    switcher.append(button);
+  }
+  tierBox.append(switcher);
 
   const caps = document.createElement('ul');
   caps.className = 'caps';

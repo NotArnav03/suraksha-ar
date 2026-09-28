@@ -359,3 +359,4 @@ src/app/ui/i18n.ts	UI.printCard	Print the card	ᱠᱟᱨᱰ ᱪᱷᱟᱯᱟ ᱢ�
 src/app/ui/i18n.ts	UI.cardBack	Back	ᱨᱩᱣᱟᱹᱲ ᱢᱮ		
 src/app/main.ts	TIER_LABEL.B	Card AR	ᱠᱟᱨᱰ AR		
 src/app/ui/i18n.ts	UI.quizStreakOne	1 day in a row	ᱞᱟᱹᱜᱟᱛᱟᱨ 1 ᱢᱟᱦᱟᱸ		
+src/app/ui/i18n.ts	UI.switchTier	Switch mode	ᱢᱳᱰ ᱵᱚᱫᱚᱞ ᱢᱮ		

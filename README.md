@@ -21,7 +21,7 @@ src/quiz/        the daily ninety-second refresher: question bank and the day's 
 src/cli/         headless runner and the end-to-end credential demo
 public/          PWA manifest, service worker, icons; see docs/APK.md for the Android build
 docs/            RESEARCH (the landscape), CITATIONS (the regulation text), UI (the design system), NARRATION, APK
-tests/           158 tests, node's built-in runner
+tests/           162 tests, node's built-in runner
 ```
 
 ## Try it
@@ -30,7 +30,7 @@ Node 22.6+ (uses native TypeScript type stripping, so no build step and no bundl
 
 ```bash
 npm install             # devDependencies only: typescript + @types/node
-npm test                # 158 tests
+npm test                # 162 tests
 npm run check           # tsc --noEmit
 
 npm run run:correct     # an ideal operator walks the gas/confined-space drill
@@ -93,7 +93,7 @@ The HUD in Tier A is not a port. It is the same DOM, drawn by the same `Hud`, fl
 
 **Tier C is not a consolation prize.** The learner still hunts the hazard among clutter, still picks a verb rather than a right answer, and is assessed on the identical event stream. The verb sheet is load-bearing: you touch the thing, then choose what you do to it, so climbing into a confined space is a deliberate named act and never a stray tap. `WorldEffect`s drive the world: the casualty is genuinely absent from the scene until a `spawn` fires, the blower greys out when it trips, and the alarm reaches a gloved hand through `navigator.vibrate`.
 
-Tier detection reports **two** answers on the start screen: the best tier the device supports, and the tier actually being served. Conflating them is how a pitch ends up claiming AR coverage it does not have.
+Tier detection reports **two** answers on the start screen: the best tier the device supports, and the tier actually being served. Conflating them is how a pitch ends up claiming AR coverage it does not have. Under them sit three buttons, one per tier, and any tier the phone can run is one tap away: an ARCore phone can run all three, so a learner with no floor space can take the card and one with no card the flat drill. Scoring is identical in every tier, so switching changes how the drill is seen and touched, never what the certificate means.
 
 **The interface is drawn, not borrowed.** Every pictogram is an inline SVG in `src/app/ui/icons.ts`, in the language of safety signage: flat, one weight, inheriting the ink of whatever it sits on. Emoji used to do this job, which meant a gear for a conveyor, a biohazard trefoil for a pile of coal, and a wrench for "operate this control", a vendor's house style standing in for a sign a worker already knows. Objects a drill asks you to find (the isolator, the padlock, the pull cord, the tag) each get their own glyph, because a learner who cannot read the label has nothing else to go on.
 

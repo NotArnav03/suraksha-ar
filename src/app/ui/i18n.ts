@@ -64,6 +64,7 @@ const UI: Record<string, LocalizedText> = {
     sat: 'ᱠᱟᱨᱰ ᱵᱟᱹᱱᱩᱜᱼᱟ? ᱱᱚᱶᱟ ᱟᱹᱣᱟᱛ ᱯᱷᱞᱮᱴ ᱢᱳᱰ ᱨᱮ ᱠᱟᱹᱢᱤ ᱢᱮ',
   },
   showCard: { en: 'Show the card', hi: 'कार्ड दिखाइए', sat: 'ᱠᱟᱨᱰ ᱩᱫᱩᱜ ᱢᱮ' },
+  switchTier: { en: 'Switch mode', hi: 'मोड बदलिए', sat: 'ᱢᱳᱰ ᱵᱚᱫᱚᱞ ᱢᱮ' },
   cardSheetBody: {
     en: 'Print this at full size, or show it on a second screen. Lay it flat, start the drill, and point the camera at it.',
     hi: 'इसे पूरे आकार में छापिए, या किसी दूसरी स्क्रीन पर दिखाइए। इसे सीधा रखिए, अभ्यास शुरू कीजिए और कैमरा उस पर रखिए।',
