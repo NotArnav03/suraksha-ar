@@ -855,6 +855,10 @@ button.verb:has(> .icon) { justify-content: flex-start; }
      the light theme's dark ink came through onto these dark panels. */
   color: var(--ink);
   color-scheme: dark;
+  /* The page background is transparent here, but selected pills print their
+     label in --bg, so it has to be dark too or the light theme puts white on white. */
+  --bg: #1a1814;
+  --bg-2: #201d18;
   --panel: #24211b;
   --panel-2: #2e2a23;
   --line: #423b31;
